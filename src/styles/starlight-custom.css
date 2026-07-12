@@ -58,3 +58,25 @@
   --sl-color-gray-6: #e5e7eb;
   --sl-color-black: #ffffff;
 }
+
+/* Ambient gradient background for docs — matches landing page */
+:root {
+  --starlight-ambient-bg: radial-gradient(ellipse at top, rgba(14, 165, 233, 0.08), transparent 60%),
+    radial-gradient(ellipse at bottom right, rgba(99, 102, 241, 0.08), transparent 60%),
+    radial-gradient(ellipse at bottom left, rgba(6, 182, 212, 0.06), transparent 60%);
+}
+
+body {
+  background: var(--starlight-ambient-bg), var(--sl-color-bg);
+  background-attachment: fixed;
+  min-height: 100vh;
+}
+
+/* Ensure content sits above background */
+.header,
+.sidebar,
+.content-panel,
+.pagination {
+  position: relative;
+  z-index: 1;
+}

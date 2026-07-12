@@ -3,7 +3,6 @@ import { ScalarComponent } from '@scalar/astro';
 import ApiExplorerConfig from '../../components/svelte/ApiExplorerConfig.svelte';
 import ScalarSidebarCTAs from '../../components/svelte/ScalarSidebarCTAs.svelte';
 import ScalarSidebarAuth from '../../components/svelte/ScalarSidebarAuth.svelte';
-import ApiVersionSelector from '../../components/svelte/ApiVersionSelector.svelte';
 import GitHubDropdown from '../../components/svelte/GitHubDropdown.svelte';
 import '../../styles/global.css';
 export const prerender = true;
@@ -84,11 +83,14 @@ export const prerender = true;
     <!-- Config bar (sticky) -->
     <ApiExplorerConfig client:load />
 
-    <div class="api-version-bar">
-      <ApiVersionSelector client:load />
+    <div class="ambient-bg" aria-hidden="true">
+      <div class="ambient-blob ambient-blob-1"></div>
+      <div class="ambient-blob ambient-blob-2"></div>
+      <div class="ambient-blob ambient-blob-3"></div>
     </div>
 
-    <ScalarComponent
+    <div class="scalar-wrapper">
+      <ScalarComponent
       renderMode="client"
       configuration={{
         spec: { url: 'http://localhost:3001/api/v1/openapi/aggregated.json' },
@@ -106,11 +108,57 @@ export const prerender = true;
         ],
       }}
     />
+    </div>
 
     <ScalarSidebarCTAs client:load />
     <ScalarSidebarAuth client:load />
 
     <style>
+      .scalar-wrapper {
+        position: relative;
+        z-index: 1;
+      }
+
+      .ambient-bg {
+        position: fixed;
+        inset: 0;
+        z-index: 0;
+        overflow: hidden;
+        pointer-events: none;
+      }
+
+      .ambient-blob {
+        position: absolute;
+        border-radius: 50%;
+        filter: blur(120px);
+        opacity: 0.15;
+      }
+
+      .ambient-blob-1 {
+        width: 600px;
+        height: 600px;
+        background: #0ea5e9;
+        top: -200px;
+        left: -100px;
+      }
+
+      .ambient-blob-2 {
+        width: 500px;
+        height: 500px;
+        background: #6366f1;
+        bottom: -150px;
+        right: -100px;
+      }
+
+      .ambient-blob-3 {
+        width: 400px;
+        height: 400px;
+        background: #06b6d4;
+        top: 40%;
+        left: 50%;
+        transform: translateX(-50%);
+      }
+
       .api-nav {
         position: sticky;
         top: 0;

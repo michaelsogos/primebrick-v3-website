@@ -52,10 +52,10 @@ export const translations = {
     frontend: {
       badge: 'Design-Free',
       title: 'Your frontend. Your components. Our conventions.',
-      text: 'Primebrick is opinionated about architecture but design-free about UI. Use any component library — vanilla, Svelte, React, or our own Primebrick UI Library. The micro-frontend architecture lets you build any page with any component, while the framework enforces best practices.',
+      text: 'Primebrick is opinionated about architecture but design-free about UI. Use any component library — vanilla HTML, Svelte, or our own Primebrick UI Library. The micro-frontend architecture lets you build any page with any component, while the framework enforces best practices.',
       cards: [
         { title: 'Everything is an entity', text: 'Settings, configurations, metadata — all entities. The same CRUD, RBAC, and validation patterns apply everywhere.' },
-        { title: 'Opinionated but design-free', text: 'Best practices enforced by the framework. But you choose the UI: vanilla HTML, Svelte, React, or our Primebrick UI Library.' },
+        { title: 'Opinionated but design-free', text: 'Best practices enforced by the framework. But you choose the UI: vanilla HTML, Svelte, or our Primebrick UI Library.' },
         { title: 'Primebrick UI Library', text: 'Our own component library with best practices built in. Use it directly or as a reference for your own components.' },
         { title: 'Micro-frontend architecture', text: 'Like microservices, but for the frontend. Each page is independent, deployable, and can use different component stacks.' },
       ],
@@ -179,10 +179,10 @@ export const translations = {
     frontend: {
       badge: 'Design-Free',
       title: 'Il tuo frontend. I tuoi componenti. Le nostre convenzioni.',
-      text: 'Primebrick è opinionato sull\'architettura ma design-free sull\'UI. Usa qualsiasi libreria di componenti — vanilla, Svelte, React, o la nostra Primebrick UI Library. L\'architettura a micro-frontend ti permette di costruire qualsiasi pagina con qualsiasi componente, mentre il framework applica le best practice.',
+      text: 'Primebrick è opinionato sull\'architettura ma design-free sull\'UI. Usa qualsiasi libreria di componenti — vanilla, Svelte, o la nostra Primebrick UI Library. L\'architettura a micro-frontend ti permette di costruire qualsiasi pagina con qualsiasi componente, mentre il framework applica le best practice.',
       cards: [
         { title: 'Tutto è un\'entità', text: 'Impostazioni, configurazioni, metadati — tutto entità. Gli stessi pattern CRUD, RBAC e validazione si applicano ovunque.' },
-        { title: 'Opinionato ma design-free', text: 'Best practice applicate dal framework. Ma scegli tu l\'UI: HTML vanilla, Svelte, React, o la nostra Primebrick UI Library.' },
+        { title: 'Opinionato ma design-free', text: 'Best practice applicate dal framework. Ma scegli tu l\'UI: HTML vanilla, Svelte, o la nostra Primebrick UI Library.' },
         { title: 'Primebrick UI Library', text: 'La nostra libreria di componenti con best practice integrate. Usala direttamente o come riferimento per i tuoi componenti.' },
         { title: 'Architettura a micro-frontend', text: 'Come i microservizi, ma per il frontend. Ogni pagina è indipendente, deployable, e può usare stack di componenti diversi.' },
       ],
@@ -306,10 +306,10 @@ export const translations = {
     frontend: {
       badge: 'Design-Free',
       title: 'Ihr Frontend. Ihre Komponenten. Unsere Konventionen.',
-      text: 'Primebrick ist opinionated bei der Architektur, aber design-free beim UI. Nutzen Sie jede Komponentenbibliothek — vanilla, Svelte, React, oder unsere eigene Primebrick UI Library. Die Micro-Frontend-Architektur lässt Sie jede Seite mit jeder Komponente bauen, während das Framework Best Practices durchsetzt.',
+      text: 'Primebrick ist opinionated bei der Architektur, aber design-free beim UI. Nutzen Sie jede Komponentenbibliothek — vanilla, Svelte, oder unsere eigene Primebrick UI Library. Die Micro-Frontend-Architektur lässt Sie jede Seite mit jeder Komponente bauen, während das Framework Best Practices durchsetzt.',
       cards: [
         { title: 'Alles ist eine Entität', text: 'Einstellungen, Konfigurationen, Metadaten — alles Entitäten. Die gleichen CRUD-, RBAC- und Validierungsmuster gelten überall.' },
-        { title: 'Opinionated aber design-free', text: 'Best Practices vom Framework durchgesetzt. Aber Sie wählen das UI: vanilla HTML, Svelte, React, oder unsere Primebrick UI Library.' },
+        { title: 'Opinionated aber design-free', text: 'Best Practices vom Framework durchgesetzt. Aber Sie wählen das UI: vanilla HTML, Svelte, oder unsere Primebrick UI Library.' },
         { title: 'Primebrick UI Library', text: 'Unsere eigene Komponentenbibliothek mit eingebauten Best Practices. Direkt nutzen oder als Referenz für eigene Komponenten.' },
         { title: 'Micro-Frontend-Architektur', text: 'Wie Microservices, aber fürs Frontend. Jede Seite ist unabhängig, deploybar und kann verschiedene Komponenten-Stacks nutzen.' },
       ],
@@ -433,10 +433,10 @@ export const translations = {
     frontend: {
       badge: 'Design-Free',
       title: 'Tu frontend. Tus componentes. Nuestras convenciones.',
-      text: 'Primebrick es opinionated sobre arquitectura pero design-free sobre UI. Usa cualquier librería de componentes — vanilla, Svelte, React, o nuestra propia Primebrick UI Library. La arquitectura de micro-frontend te permite construir cualquier página con cualquier componente, mientras el framework aplica las mejores prácticas.',
+      text: 'Primebrick es opinionated sobre arquitectura pero design-free sobre UI. Usa cualquier librería de componentes — vanilla, Svelte, o nuestra propia Primebrick UI Library. La arquitectura de micro-frontend te permite construir cualquier página con cualquier componente, mientras el framework aplica las mejores prácticas.',
       cards: [
         { title: 'Todo es una entidad', text: 'Ajustes, configuraciones, metadatos — todo entidades. Los mismos patrones CRUD, RBAC y validación se aplican en todas partes.' },
-        { title: 'Opinionated pero design-free', text: 'Mejores prácticas aplicadas por el framework. Pero tú eliges la UI: HTML vanilla, Svelte, React, o nuestra Primebrick UI Library.' },
+        { title: 'Opinionated pero design-free', text: 'Mejores prácticas aplicadas por el framework. Pero tú eliges la UI: HTML vanilla, Svelte, o nuestra Primebrick UI Library.' },
         { title: 'Primebrick UI Library', text: 'Nuestra propia librería de componentes con mejores prácticas integradas. Úsala directamente o como referencia para tus propios componentes.' },
         { title: 'Arquitectura de micro-frontend', text: 'Como microservicios, pero para el frontend. Cada página es independiente, desplegable, y puede usar diferentes stacks de componentes.' },
       ],
@@ -560,10 +560,10 @@ export const translations = {
     frontend: {
       badge: 'Design-Free',
       title: 'O teu frontend. Os teus componentes. As nossas convenções.',
-      text: 'Primebrick é opinionated sobre arquitetura mas design-free sobre UI. Usa qualquer biblioteca de componentes — vanilla, Svelte, React, ou a nossa própria Primebrick UI Library. A arquitetura de micro-frontend permite-te construir qualquer página com qualquer componente, enquanto o framework aplica as melhores práticas.',
+      text: 'Primebrick é opinionated sobre arquitetura mas design-free sobre UI. Usa qualquer biblioteca de componentes — vanilla, Svelte, ou a nossa própria Primebrick UI Library. A arquitetura de micro-frontend permite-te construir qualquer página com qualquer componente, enquanto o framework aplica as melhores práticas.',
       cards: [
         { title: 'Tudo é uma entidade', text: 'Definições, configurações, metadados — tudo entidades. Os mesmos padrões CRUD, RBAC e validação aplicam-se em todo o lado.' },
-        { title: 'Opinionated mas design-free', text: 'Melhores práticas aplicadas pelo framework. Mas tu escolhes a UI: HTML vanilla, Svelte, React, ou a nossa Primebrick UI Library.' },
+        { title: 'Opinionated mas design-free', text: 'Melhores práticas aplicadas pelo framework. Mas tu escolhes a UI: HTML vanilla, Svelte, ou a nossa Primebrick UI Library.' },
         { title: 'Primebrick UI Library', text: 'A nossa própria biblioteca de componentes com melhores práticas integradas. Usa-a diretamente ou como referência para os teus componentes.' },
         { title: 'Arquitetura de micro-frontend', text: 'Como microserviços, mas para o frontend. Cada página é independente, deployable, e pode usar stacks de componentes diferentes.' },
       ],
@@ -687,10 +687,10 @@ export const translations = {
     frontend: {
       badge: 'Design-Free',
       title: 'Votre frontend. Vos composants. Nos conventions.',
-      text: 'Primebrick est opinionated sur l\'architecture mais design-free sur l\'UI. Utilisez n\'importe quelle bibliothèque de composants — vanilla, Svelte, React, ou notre propre Primebrick UI Library. L\'architecture micro-frontend vous permet de construire n\'importe quelle page avec n\'importe quel composant, tandis que le framework applique les meilleures pratiques.',
+      text: 'Primebrick est opinionated sur l\'architecture mais design-free sur l\'UI. Utilisez n\'importe quelle bibliothèque de composants — vanilla, Svelte, ou notre propre Primebrick UI Library. L\'architecture micro-frontend vous permet de construire n\'importe quelle page avec n\'importe quel composant, tandis que le framework applique les meilleures pratiques.',
       cards: [
         { title: 'Tout est une entité', text: 'Paramètres, configurations, métadonnées — tout est entité. Les mêmes patterns CRUD, RBAC et validation s\'appliquent partout.' },
-        { title: 'Opinionated mais design-free', text: 'Meilleures pratiques appliquées par le framework. Mais vous choisissez l\'UI : HTML vanilla, Svelte, React, ou notre Primebrick UI Library.' },
+        { title: 'Opinionated mais design-free', text: 'Meilleures pratiques appliquées par le framework. Mais vous choisissez l\'UI : HTML vanilla, Svelte, ou notre Primebrick UI Library.' },
         { title: 'Primebrick UI Library', text: 'Notre propre bibliothèque de composants avec les meilleures pratiques intégrées. Utilisez-la directement ou comme référence pour vos propres composants.' },
         { title: 'Architecture micro-frontend', text: 'Comme les microservices, mais pour le frontend. Chaque page est indépendante, déployable, et peut utiliser différentes stacks de composants.' },
       ],

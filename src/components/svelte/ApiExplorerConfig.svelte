@@ -47,6 +47,15 @@
   }
 
   const specUrl = $derived(`${config.baseUrl}/api/v1/openapi/aggregated.json`);
+
+  let selectedVersion = $state('v1');
+  const versions = ['v1', 'v2'];
+
+  function handleVersionChange(e: Event) {
+    const target = e.target as HTMLSelectElement;
+    selectedVersion = target.value;
+    window.dispatchEvent(new CustomEvent('primebrick-api-version', { detail: { version: selectedVersion } }));
+  }
 </script>
 
 <!-- Config bar — uses CSS variables that work in both light and dark mode -->
@@ -93,6 +102,14 @@
         <p class="api-config-hint">
           Stored in localStorage. The platform also supports user access tokens and OAuth2 client credentials.
         </p>
+      </div>
+      <div class="config-field">
+        <label for="api-version">API Version</label>
+        <select id="api-version" value={selectedVersion} onchange={handleVersionChange}>
+          {#each versions as v}
+            <option value={v}>{v}</option>
+          {/each}
+        </select>
       </div>
       <div class="api-config-actions">
         <button onclick={save} class="api-config-save-btn">
@@ -231,6 +248,41 @@
     border-color: var(--scalar-border-color, #334155);
     background: var(--scalar-background-2, #1e293b);
     color: var(--scalar-color-1, #f1f5f9);
+  }
+
+  .config-field select {
+    width: 100%;
+    border: 1px solid var(--scalar-border-color, #e5e7eb);
+    background: var(--scalar-background-2, #fff);
+    color: var(--scalar-color-1, #111827);
+    padding: 0.5rem 0.75rem;
+    border-radius: 0.5rem;
+    font-size: 0.875rem;
+    outline: none;
+    transition: border-color 0.2s;
+    cursor: pointer;
+  }
+
+  .config-field select:focus {
+    border-color: var(--scalar-color-accent, #0ea5e9);
+  }
+
+  :global([data-theme="dark"]) .config-field select {
+    border-color: var(--scalar-border-color, #334155);
+    background: var(--scalar-background-2, #1e293b);
+    color: var(--scalar-color-1, #f1f5f9);
+  }
+
+  .config-field label {
+    display: block;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--scalar-color-1, #374151);
+    margin-bottom: 0.25rem;
+  }
+
+  :global([data-theme="dark"]) .config-field label {
+    color: var(--scalar-color-1, #d1d5db);
   }
 
   .api-config-hint {

@@ -62,7 +62,7 @@
     if (injected) return;
 
     // Try to find Scalar's sidebar — look for various possible selectors
-    const sidebar = document.querySelector('.scalar-sidebar') as HTMLElement | null;
+    const sidebar = document.querySelector('.t-doc__sidebar') as HTMLElement | null;
     if (!sidebar) return;
 
     // Check if already injected
@@ -103,6 +103,27 @@
     // Add styles
     const style = document.createElement('style');
     style.textContent = `
+      .t-doc__sidebar {
+        display: flex !important;
+        flex-direction: column !important;
+        height: 100dvh !important;
+        max-height: 100dvh !important;
+        position: sticky !important;
+        top: 0 !important;
+        overflow: hidden !important;
+      }
+      .t-doc__sidebar > *:not(.pb-sidebar-ctas):not(.pb-sidebar-auth):not(style) {
+        flex: 1 1 auto;
+        overflow-y: auto;
+        min-height: 0;
+      }
+      .pb-sidebar-ctas {
+        flex-shrink: 0 !important;
+        position: sticky !important;
+        bottom: 0 !important;
+        background: var(--scalar-background-1, #0f0f0f) !important;
+        z-index: 10 !important;
+      }
       .pb-sidebar-ctas {
         padding: 0.75rem;
         border-top: 1px solid var(--scalar-border-color, #e5e7eb);

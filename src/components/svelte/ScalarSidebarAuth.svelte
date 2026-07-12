@@ -5,7 +5,7 @@
   function injectAuthLink() {
     if (injected) return;
 
-    const sidebar = document.querySelector('.scalar-sidebar') as HTMLElement | null;
+    const sidebar = document.querySelector('.t-doc__sidebar') as HTMLElement | null;
     if (!sidebar) return;
 
     if (sidebar.querySelector('.pb-sidebar-auth')) {
@@ -24,6 +24,13 @@
 
     const style = document.createElement('style');
     style.textContent = `
+      .pb-sidebar-auth {
+        flex-shrink: 0 !important;
+        position: sticky !important;
+        bottom: 0 !important;
+        background: var(--scalar-background-1, #0f0f0f) !important;
+        z-index: 10 !important;
+      }
       .pb-sidebar-auth {
         padding: 0.5rem 0.75rem;
         border-top: 1px solid var(--scalar-border-color, #e5e7eb);
@@ -51,7 +58,12 @@
     `;
 
     sidebar.appendChild(style);
-    sidebar.appendChild(container);
+    const ctas = sidebar.querySelector('.pb-sidebar-ctas');
+    if (ctas) {
+      sidebar.insertBefore(container, ctas);
+    } else {
+      sidebar.appendChild(container);
+    }
 
     const btn = container.querySelector('.pb-sidebar-auth-btn');
     if (btn) {

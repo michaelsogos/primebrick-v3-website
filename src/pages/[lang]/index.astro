@@ -99,15 +99,15 @@ const apiExplorerPath = '/api-explorer';
 
     <!-- KPI Stats -->
     <section class="relative z-10 px-6 py-8">
-      <div class="mx-auto max-w-4xl grid grid-cols-3 gap-8 text-center">
-        <div class="group">
-          <div class="text-3xl font-bold bg-gradient-to-r from-sky-400 to-cyan-400 bg-clip-text text-transparent">{t.stats.license}</div>
+      <div class="mx-auto max-w-4xl grid grid-cols-3 gap-6 text-center">
+        <div class="group rounded-2xl border border-slate-800/50 bg-slate-900/30 p-6 backdrop-blur-sm transition-all hover:border-sky-500/30 hover:bg-slate-900/50">
+          <div class="text-2xl font-bold bg-gradient-to-r from-sky-400 to-cyan-400 bg-clip-text text-transparent sm:text-3xl">{t.stats.license}</div>
         </div>
-        <div class="group">
-          <div class="text-3xl font-bold bg-gradient-to-r from-indigo-400 to-purple-400 bg-clip-text text-transparent">{t.stats.deploy}</div>
+        <div class="group rounded-2xl border border-slate-800/50 bg-slate-900/30 p-6 backdrop-blur-sm transition-all hover:border-indigo-500/30 hover:bg-slate-900/50">
+          <div class="text-2xl font-bold bg-gradient-to-r from-indigo-400 to-purple-400 bg-clip-text text-transparent sm:text-3xl">{t.stats.deploy}</div>
         </div>
-        <div class="group">
-          <div class="text-3xl font-bold bg-gradient-to-r from-cyan-400 to-sky-400 bg-clip-text text-transparent">{t.stats.lockin}</div>
+        <div class="group rounded-2xl border border-slate-800/50 bg-slate-900/30 p-6 backdrop-blur-sm transition-all hover:border-cyan-500/30 hover:bg-slate-900/50">
+          <div class="text-2xl font-bold bg-gradient-to-r from-cyan-400 to-sky-400 bg-clip-text text-transparent sm:text-3xl">{t.stats.lockin}</div>
         </div>
       </div>
     </section>
@@ -327,34 +327,61 @@ const apiExplorerPath = '/api-explorer';
                     </div>
                     <span class="ml-2 text-[10px] text-slate-500 font-mono">entity.schema.ts — Primebrick IDE</span>
                   </div>
-                  <div class="flex">
-                    <!-- File tree sidebar -->
-                    <div class="w-32 border-r border-slate-700/50 bg-slate-900/50 p-2 text-[10px] font-mono text-slate-400">
-                      <div class="text-sky-400">📁 src/</div>
-                      <div class="pl-3">📄 entity.ts</div>
-                      <div class="pl-3 text-sky-400">📄 schema.ts</div>
-                      <div class="pl-3">📄 router.ts</div>
-                      <div class="pl-3">📄 ui.tsx</div>
-                      <div class="text-slate-500">📁 tests/</div>
-                      <div class="text-slate-500">📁 migrations/</div>
+                  <div class="flex h-64">
+                    <!-- Left: File tree sidebar -->
+                    <div class="w-28 border-r border-slate-700/50 bg-slate-900/50 p-2 text-[10px] font-mono text-slate-400 overflow-hidden">
+                      <div class="text-sky-400 mb-1">EXPLORER</div>
+                      <div class="text-slate-500">v PRIMEBRICK</div>
+                      <div class="pl-2 text-slate-400">📁 src</div>
+                      <div class="pl-4 text-sky-400">📄 schema.ts</div>
+                      <div class="pl-4 text-slate-400">📄 router.ts</div>
+                      <div class="pl-4 text-slate-400">📄 ui.svelte</div>
+                      <div class="pl-2 text-slate-400">📁 tests</div>
+                      <div class="pl-2 text-slate-400">📁 migrations</div>
+                      <div class="pl-4 text-slate-500">00004_create_customers.sql</div>
                     </div>
-                    <!-- Code editor -->
-                    <div class="flex-1 p-3 text-[10px] font-mono leading-relaxed">
+                    <!-- Center: Code editor -->
+                    <div class="flex-1 border-r border-slate-700/50 p-3 text-[10px] font-mono leading-relaxed overflow-hidden">
+                      <div class="text-slate-500 mb-1">schema.ts</div>
                       <div class="text-slate-500">// Entity definition</div>
                       <div><span class="text-purple-400">export const</span> <span class="text-sky-400">Customer</span> = <span class="text-slate-300">entity</span>(&#123;&#123;</div>
                       <div class="pl-4"><span class="text-cyan-400">name</span>: <span class="text-amber-400">string</span>().required(),</div>
                       <div class="pl-4"><span class="text-cyan-400">email</span>: <span class="text-amber-400">string</span>().unique(),</div>
-                      <div class="pl-4"><span class="text-cyan-400">status</span>: <span class="text-amber-400">enum</span>([<span class="text-green-400">'active'</span>]).default(<span class="text-green-400">'active'</span>),</div>
+                      <div class="pl-4"><span class="text-cyan-400">status</span>: <span class="text-amber-400">enum</span>([<span class="text-green-400">'active'</span>]),</div>
                       <div>&#125;&#125;);</div>
-                      <div class="mt-2 text-slate-500">// AI: Generating migration, API, UI...</div>
+                      <div class="mt-2 text-slate-500">// AI generated:</div>
+                      <div class="text-cyan-400">&#10003; Migration + API + RBAC + UI + Tests</div>
                     </div>
-                  </div>
-                  <!-- AI prompt panel -->
-                  <div class="border-t border-slate-700/50 bg-slate-900/80 p-2">
-                    <div class="flex items-center gap-2 text-[10px] font-mono">
-                      <span class="text-cyan-400">AI&gt;</span>
-                      <span class="text-slate-300">Generate entity with CRUD, RBAC, and tests</span>
-                      <span class="inline-block h-3 w-1.5 animate-pulse bg-cyan-400"></span>
+                    <!-- Right: AI chat sidebar -->
+                    <div class="w-44 bg-slate-900/50 p-2 text-[10px] font-mono overflow-hidden">
+                      <div class="text-cyan-400 mb-1 flex items-center gap-1">
+                        <span>&#129302;</span> AI ASSISTANT
+                      </div>
+                      <div class="space-y-2">
+                        <div class="rounded bg-slate-800/50 p-1.5 text-slate-300">
+                          <div class="text-cyan-400 text-[9px]">User:</div>
+                          Generate Customer entity with CRUD
+                        </div>
+                        <div class="rounded bg-sky-500/10 p-1.5 text-slate-300">
+                          <div class="text-sky-400 text-[9px]">AI:</div>
+                          Creating entity with:
+                          <div class="pl-1 text-slate-400 text-[9px] mt-0.5">
+                            &#10003; Schema defined<br />
+                            &#10003; Migration created<br />
+                            &#10003; 6 API endpoints<br />
+                            &#10003; RBAC configured<br />
+                            &#10003; UI pages generated<br />
+                            &#10003; 12 tests scaffolded
+                          </div>
+                        </div>
+                        <div class="rounded border border-cyan-500/30 bg-cyan-500/5 p-1.5">
+                          <div class="text-[9px] text-cyan-300">Review &amp; Approve:</div>
+                          <div class="flex gap-1 mt-1">
+                            <span class="rounded bg-green-500/20 px-1.5 py-0.5 text-[9px] text-green-300">&#10003; Approve</span>
+                            <span class="rounded bg-red-500/20 px-1.5 py-0.5 text-[9px] text-red-300">&#10007; Reject</span>
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -369,35 +396,86 @@ const apiExplorerPath = '/api-explorer';
                       <span class="h-2.5 w-2.5 rounded-full bg-green-500/70"></span>
                     </div>
                     <div class="ml-2 flex-1 rounded bg-slate-800/50 px-2 py-0.5 text-[10px] text-slate-500 font-mono">
-                      🔒 primebrick.dev/agent/build
+                      &#128274; primebrick.dev/agent/cowork
                     </div>
                   </div>
-                  <!-- Chat interface -->
-                  <div class="p-3 space-y-2">
-                    <div class="flex justify-end">
-                      <div class="max-w-[80%] rounded-lg rounded-br-sm bg-sky-500/20 px-3 py-1.5 text-[10px] text-slate-200">
-                        Create a Customer entity with name, email, and status fields
-                      </div>
-                    </div>
-                    <div class="flex justify-start">
-                      <div class="max-w-[80%] rounded-lg rounded-bl-sm bg-slate-800/50 px-3 py-1.5 text-[10px] text-slate-300">
-                        <div class="text-cyan-400 font-semibold mb-1">🤖 AI Agent</div>
-                        I'll create the Customer entity with:
-                        <div class="mt-1 pl-2 text-slate-400">
-                          • Schema: name, email, status<br />
-                          • Migration: 00000000000004_create_customers<br />
-                          • API: 6 CRUD endpoints<br />
-                          • RBAC: customers.* permissions<br />
-                          • UI: list, detail, form pages
+                  <div class="flex h-64">
+                    <!-- Left: Session history sidebar -->
+                    <div class="w-36 border-r border-slate-700/50 bg-slate-900/50 p-2 text-[10px] font-mono overflow-hidden">
+                      <div class="text-cyan-400 mb-1">SESSIONS</div>
+                      <div class="space-y-1">
+                        <div class="rounded bg-sky-500/10 p-1.5 text-sky-300">
+                          <div class="font-semibold">Customer Entity</div>
+                          <div class="text-[9px] text-slate-500">2 min ago</div>
+                        </div>
+                        <div class="rounded p-1.5 text-slate-400 hover:bg-slate-800/50">
+                          <div>Order Entity</div>
+                          <div class="text-[9px] text-slate-500">1 hour ago</div>
+                        </div>
+                        <div class="rounded p-1.5 text-slate-400 hover:bg-slate-800/50">
+                          <div>Auth Module</div>
+                          <div class="text-[9px] text-slate-500">Yesterday</div>
+                        </div>
+                        <div class="rounded p-1.5 text-slate-400 hover:bg-slate-800/50">
+                          <div>RBAC Refactor</div>
+                          <div class="text-[9px] text-slate-500">3 days ago</div>
+                        </div>
+                        <div class="mt-2 rounded border border-dashed border-slate-700 p-1.5 text-center text-[9px] text-slate-500">
+                          + New Session
                         </div>
                       </div>
                     </div>
-                    <!-- Plan approval -->
-                    <div class="rounded-lg border border-cyan-500/30 bg-cyan-500/5 p-2">
-                      <div class="text-[10px] text-cyan-300 font-semibold mb-1">Plan ready — Review and approve:</div>
-                      <div class="flex gap-2">
-                        <button class="rounded bg-green-500/20 px-2 py-1 text-[10px] text-green-300 font-semibold">✓ Approve</button>
-                        <button class="rounded bg-red-500/20 px-2 py-1 text-[10px] text-red-300 font-semibold">✗ Reject</button>
+                    <!-- Center: Chat -->
+                    <div class="flex-1 border-r border-slate-700/50 p-2 text-[10px] overflow-hidden">
+                      <div class="space-y-2">
+                        <div class="flex justify-end">
+                          <div class="max-w-[85%] rounded-lg rounded-br-sm bg-sky-500/20 px-2.5 py-1.5 text-slate-200">
+                            Create a Customer entity with name, email, and status fields
+                          </div>
+                        </div>
+                        <div class="flex justify-start">
+                          <div class="max-w-[85%] rounded-lg rounded-bl-sm bg-slate-800/50 px-2.5 py-1.5 text-slate-300">
+                            <div class="text-cyan-400 font-semibold mb-1 text-[9px]">&#129302; AI Agent</div>
+                            I'll create the Customer entity. Here's my plan:
+                            <div class="mt-1 pl-2 text-slate-400 text-[9px]">
+                              1. Schema: name, email, status<br />
+                              2. Migration: 00004_create_customers<br />
+                              3. API: 6 CRUD endpoints<br />
+                              4. RBAC: customers.* permissions<br />
+                              5. UI: list, detail, form pages<br />
+                              6. Tests: 12 scaffolds
+                            </div>
+                          </div>
+                        </div>
+                        <!-- Tool plan CTA -->
+                        <div class="rounded-lg border border-cyan-500/30 bg-cyan-500/5 p-2">
+                          <div class="text-[10px] text-cyan-300 font-semibold mb-1">Plan ready — 14 files to create/modify:</div>
+                          <div class="flex gap-1.5">
+                            <button class="rounded bg-green-500/20 px-2 py-1 text-[9px] text-green-300 font-semibold">&#10003; Approve &amp; Execute</button>
+                            <button class="rounded bg-red-500/20 px-2 py-1 text-[9px] text-red-300 font-semibold">&#10007; Reject</button>
+                            <button class="rounded bg-slate-700/50 px-2 py-1 text-[9px] text-slate-300 font-semibold">&#128065; Preview Diff</button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <!-- Right: Changed files list -->
+                    <div class="w-40 bg-slate-900/50 p-2 text-[10px] font-mono overflow-hidden">
+                      <div class="text-cyan-400 mb-1">CHANGED FILES (14)</div>
+                      <div class="space-y-0.5">
+                        <div class="text-green-400">+ src/entities/customer.ts</div>
+                        <div class="text-green-400">+ src/modules/customer/router.ts</div>
+                        <div class="text-green-400">+ src/modules/customer/ui.svelte</div>
+                        <div class="text-green-400">+ db-meta/patches/00004.sql</div>
+                        <div class="text-green-400">+ tests/customer.test.ts</div>
+                        <div class="text-green-400">+ tests/customer-e2e.test.ts</div>
+                        <div class="text-amber-400">~ src/openapi/openapi.ts</div>
+                        <div class="text-amber-400">~ src/index.ts</div>
+                        <div class="text-amber-400">~ src/modules/auth/permissions.ts</div>
+                        <div class="text-slate-500">... 5 more</div>
+                      </div>
+                      <div class="mt-2 border-t border-slate-700/50 pt-1.5">
+                        <div class="text-[9px] text-slate-500">+847 -0 lines</div>
+                        <div class="text-[9px] text-green-400">All tests passing (12/12)</div>
                       </div>
                     </div>
                   </div>
