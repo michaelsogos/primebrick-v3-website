@@ -1,0 +1,11 @@
+{
+  "extends": "astro/tsconfigs/strict",
+  "include": ["scripts/**/*", "astro.config.mjs"],
+  "compilerOptions": {
+    "module": "nodenext",
+    "moduleResolution": "nodenext",
+    "target": "esnext",
+    "allowJs": true,
+    "checkJs": false
+  }
+}
