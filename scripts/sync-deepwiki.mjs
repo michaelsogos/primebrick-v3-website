@@ -1,11 +1,7 @@
 #!/usr/bin/env node
 /**
  * Sync DeepWiki content to Astro content collections.
- * Calls Devin MCP (https://mcp.devin.ai/mcp) with API key.
- * Uses ask_question tool (read_wiki_structure/contents have a known bug).
- *
- * Optimization: ONE ask_question call per repo (not N+1).
- * Asks for the complete wiki as a single markdown document, then splits by ## headings.
+ * Uses read_wiki_contents (instant, returns full pre-generated wiki).
  *
  * Usage: node scripts/sync-deepwiki.mjs
  * Requires: DEVIN_API_KEY environment variable
@@ -128,51 +124,28 @@ function slugify(text) {
 }
 
 /**
- * Clean AI response: remove preamble and footer.
+ * Parse read_wiki_contents response into separate pages.
+ * The response uses "# Page: <Title>" as page separators.
+ * Returns array of { title, content }.
  */
-function cleanMarkdownResponse(text) {
-  let cleaned = text;
-
-  // Remove preamble before the first markdown heading
-  const firstHeading = cleaned.search(/^#{1,6}\s/m);
-  if (firstHeading > 0) cleaned = cleaned.slice(firstHeading);
-
-  // Remove footer
-  const footerIdx = cleaned.indexOf('Wiki pages you might want to explore:');
-  if (footerIdx >= 0) cleaned = cleaned.slice(0, footerIdx).trimEnd();
-
-  const searchIdx = cleaned.indexOf('View this search on DeepWiki:');
-  if (searchIdx >= 0) cleaned = cleaned.slice(0, searchIdx).trimEnd();
-
-  return cleaned.trim();
-}
-
-/**
- * Split a markdown document by ## (h2) headings into separate pages.
- * Content before the first ## becomes the overview.
- */
-function splitByHeadings(markdown) {
+function parseWikiPages(text) {
   const pages = [];
-  const lines = markdown.split('\n');
-  let currentTitle = 'Overview';
-  let currentContent = [];
+  // Split by "# Page:" marker
+  const sections = text.split(/^# Page:\s+/m);
 
-  for (const line of lines) {
-    const h2Match = line.match(/^##\s+(.+)/);
-    if (h2Match) {
-      // Save previous section
-      if (currentContent.length > 0) {
-        pages.push({ title: currentTitle, content: currentContent.join('\n').trim() });
-      }
-      currentTitle = h2Match[1].trim();
-      currentContent = [];
-    } else {
-      currentContent.push(line);
+  for (const section of sections) {
+    if (!section.trim()) continue;
+
+    // First line after "# Page: " is the title
+    const newlineIdx = section.indexOf('\n');
+    if (newlineIdx < 0) continue;
+
+    const title = section.slice(0, newlineIdx).trim();
+    const content = section.slice(newlineIdx + 1).trim();
+
+    if (title && content) {
+      pages.push({ title, content });
     }
-  }
-  // Save last section
-  if (currentContent.length > 0) {
-    pages.push({ title: currentTitle, content: currentContent.join('\n').trim() });
   }
 
   return pages;
@@ -185,21 +158,34 @@ async function syncRepo(repo) {
 
   const timestamp = new Date().toISOString();
 
-  // Single ask_question call: get the entire wiki as one markdown document
-  let fullContent;
+  // Single read_wiki_contents call — instant, returns full pre-generated wiki
+  let wikiText;
   try {
-    console.log(`  Fetching complete wiki for ${repo.name}...`);
-    fullContent = await callMcpTool('ask_question', {
-      repoName: repo.name,
-      question: `Output the complete wiki documentation for this repository as a single markdown document. Use ## for each major documentation section (Overview, Architecture, Components, API, Database, Authentication, etc.) and ### for subsections. Include code examples where relevant. Do not include any preamble or explanation — start directly with the markdown content. Be comprehensive but factual — only include information that is actually present in the repository.`,
-    });
+    console.log(`  Fetching wiki contents for ${repo.name}...`);
+    wikiText = await callMcpTool('read_wiki_contents', { repoName: repo.name });
   } catch (err) {
     console.error(`  Failed to fetch wiki for ${repo.name}: ${err.message}`);
+    console.error(`  Skipping — visit https://app.devin.ai/wiki/${repo.name} to check wiki status.`);
     return;
   }
 
-  const cleaned = cleanMarkdownResponse(fullContent);
-  const pages = splitByHeadings(cleaned);
+  const pages = parseWikiPages(wikiText);
+
+  if (pages.length === 0) {
+    // Fallback: write the entire response as a single file
+    console.warn(`  No page markers found — writing single file.`);
+    writeFileSync(join(targetDir, '_full.md'), `---
+title: "${repo.slug} — Full DeepWiki"
+source: deepwiki
+repo: "${repo.name}"
+last_synced_at: "${timestamp}"
+---
+
+${wikiText}
+`, 'utf-8');
+    console.log(`  Wrote 1 file to ${repo.dir}`);
+    return;
+  }
 
   let pagesWritten = 0;
   for (const page of pages) {
@@ -208,11 +194,9 @@ async function syncRepo(repo) {
 title: "${page.title.replace(/"/g, '\\"')}"
 source: deepwiki
 repo: "${repo.name}"
-deepwiki_topic: "${page.title.replace(/"/g, '\\"')}"
+deepwiki_page: "${page.title.replace(/"/g, '\\"')}"
 last_synced_at: "${timestamp}"
 ---
-
-## ${page.title}
 
 ${page.content}
 `;
@@ -220,19 +204,7 @@ ${page.content}
     pagesWritten++;
   }
 
-  // Also write the full document as a fallback
-  writeFileSync(join(targetDir, '_full.md'), `---
-title: "${repo.slug} — Full DeepWiki"
-source: deepwiki
-repo: "${repo.name}"
-last_synced_at: "${timestamp}"
----
-
-${cleaned}
-`, 'utf-8');
-  pagesWritten++;
-
-  console.log(`  Wrote ${pagesWritten} files to ${repo.dir} (from 1 API call)`);
+  console.log(`  Wrote ${pagesWritten} pages to ${repo.dir}`);
 }
 
 // Main
