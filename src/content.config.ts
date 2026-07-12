@@ -1,16 +1,18 @@
 import { defineCollection, z } from 'astro:content';
 import { glob } from 'astro/loaders';
+import { docsLoader } from '@astrojs/starlight/loaders';
+import { docsSchema } from '@astrojs/starlight/schema';
 
 const docsCollection = defineCollection({
-  loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/docs' }),
-  schema: z.object({
-    title: z.string(),
-    description: z.string().optional(),
-    source: z.enum(['deepwiki', 'manual', 'handwritten']),
-    repo: z.string().optional(),
-    deepwiki_page_id: z.string().optional(),
-    last_synced_at: z.string().optional(),
-    draft: z.boolean().default(false),
+  loader: docsLoader(),
+  schema: docsSchema({
+    extend: z.object({
+      source: z.enum(['deepwiki', 'manual', 'handwritten']).optional(),
+      repo: z.string().optional(),
+      deepwiki_page_id: z.string().optional(),
+      deepwiki_topic: z.string().optional(),
+      last_synced_at: z.string().optional(),
+    }),
   }),
 });
 
