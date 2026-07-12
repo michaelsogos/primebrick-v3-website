@@ -26,8 +26,10 @@ const REPOS = [
 
 const API_KEY = process.env.DEVIN_API_KEY;
 if (!API_KEY) {
-  console.error('ERROR: DEVIN_API_KEY environment variable required');
-  process.exit(1);
+  console.warn('WARNING: DEVIN_API_KEY not set — skipping DeepWiki sync.');
+  console.warn('         Set it as a build secret in Cloudflare dashboard to enable DeepWiki sync.');
+  console.warn('         Only in-repo docs will be synced. DeepWiki content will be missing.');
+  process.exit(0);
 }
 
 const MCP_URL = 'https://mcp.devin.ai/mcp';
