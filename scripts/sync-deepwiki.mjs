@@ -129,7 +129,7 @@ function slugify(text) {
     .replace(/^-+|-+$/g, '');
 }
 
-function syncRepo(repo) {
+async function syncRepo(repo) {
   const targetDir = join(projectRoot, repo.dir);
   rmSync(targetDir, { recursive: true, force: true });
   mkdirSync(targetDir, { recursive: true });
