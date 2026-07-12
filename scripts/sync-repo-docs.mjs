@@ -98,12 +98,6 @@ function syncRepo(repo) {
     console.log(`  Copied README.md as overview.md`);
   }
 
-  // Copy AGENTS.md as architecture reference
-  const agents = join(cloneDir, 'AGENTS.md');
-  if (existsSync(agents)) {
-    processMarkdownFile(agents, join(targetDir, 'agents-guide.md'), repo.slug);
-    console.log(`  Copied AGENTS.md as agents-guide.md`);
-  }
 }
 
 function findMarkdownFiles(dir) {
