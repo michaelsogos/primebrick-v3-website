@@ -1,7 +1,9 @@
 #!/usr/bin/env node
 /**
- * Sync in-repo docs/ folders to Astro content collections.
- * Shallow-clones each repo (depth 1), copies docs/ + README.md + AGENTS.md.
+ * Sync README.md from each repo to Astro content collections.
+ * Shallow-clones each repo (depth 1), copies README.md only.
+ * NOTE: docs/ folders are NOT copied — they contain AI agent instructions,
+ * not human-facing documentation. Human docs come from DeepWiki sync.
  *
  * Usage: node scripts/sync-repo-docs.mjs
  *
@@ -9,13 +11,11 @@
  */
 import { execSync } from 'node:child_process';
 import {
-  cpSync,
   mkdirSync,
   rmSync,
   readFileSync,
   writeFileSync,
   existsSync,
-  readdirSync,
 } from 'node:fs';
 import { join, dirname, basename } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -79,41 +79,15 @@ function syncRepo(repo) {
   rmSync(targetDir, { recursive: true, force: true });
   mkdirSync(targetDir, { recursive: true });
 
-  // Copy docs/ folder if it exists
-  const docsDir = join(cloneDir, 'docs');
-  if (existsSync(docsDir)) {
-    const mdFiles = findMarkdownFiles(docsDir);
-    for (const mdFile of mdFiles) {
-      const relativePath = mdFile.slice(docsDir.length);
-      const destPath = join(targetDir, relativePath);
-      processMarkdownFile(mdFile, destPath, repo.slug);
-    }
-    console.log(`  Copied ${mdFiles.length} files from docs/`);
-  }
-
-  // Copy README.md as overview
+  // Copy README.md as overview (human-facing project overview)
+  // NOTE: We do NOT copy docs/ folders — those contain AI agent instructions,
+  // not human-facing documentation. Human docs come from DeepWiki sync.
   const readme = join(cloneDir, 'README.md');
   if (existsSync(readme)) {
     processMarkdownFile(readme, join(targetDir, 'overview.md'), repo.slug);
     console.log(`  Copied README.md as overview.md`);
   }
 
-}
-
-function findMarkdownFiles(dir) {
-  const results = [];
-  const entries = readdirSync(dir, { withFileTypes: true });
-  for (const entry of entries) {
-    const fullPath = join(dir, entry.name);
-    if (entry.isDirectory()) {
-      // Skip hidden directories and .obsidian
-      if (entry.name.startsWith('.') || entry.name === 'node_modules') continue;
-      results.push(...findMarkdownFiles(fullPath));
-    } else if (entry.name.endsWith('.md') || entry.name.endsWith('.mdx')) {
-      results.push(fullPath);
-    }
-  }
-  return results;
 }
 
 // Main
