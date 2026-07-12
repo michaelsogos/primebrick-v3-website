@@ -36,12 +36,25 @@
   --sl-color-bg: #ffffff;
   --sl-color-bg-nav: #f8fafc;
   --sl-color-bg-sidebar: #f8fafc;
-  --sl-color-bg-inline-code: #f1f5f9;
+  --sl-color-bg-inline-code: #f3f4f6;
   --sl-color-bg-accent: #0ea5e9;
   --sl-color-text: #1f2937;
+  --sl-color-heading: #0f172a;
   --sl-color-text-accent: #0ea5e9;
   --sl-color-text-invert: #ffffff;
+  --sl-color-code-text: #1f2937;
+  --sl-color-code-bg: #f8fafc;
+  --sl-color-border: #e5e7eb;
   --sl-color-hairline: #e5e7eb;
   --sl-color-hairline-light: #f3f4f6;
   --sl-color-hairline-shade: #f9fafb;
+  /* Light gray scale — darkest to lightest for light mode */
+  --sl-color-white: #0f172a;
+  --sl-color-gray-1: #0f172a;
+  --sl-color-gray-2: #1f2937;
+  --sl-color-gray-3: #374151;
+  --sl-color-gray-4: #6b7280;
+  --sl-color-gray-5: #9ca3af;
+  --sl-color-gray-6: #e5e7eb;
+  --sl-color-black: #ffffff;
 }

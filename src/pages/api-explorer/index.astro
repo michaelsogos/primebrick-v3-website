@@ -1,7 +1,9 @@
 ---
 import { ScalarComponent } from '@scalar/astro';
 import ApiExplorerConfig from '../../components/svelte/ApiExplorerConfig.svelte';
-import ClientCTABar from '../../components/svelte/ClientCTABar.svelte';
+import ScalarSidebarCTAs from '../../components/svelte/ScalarSidebarCTAs.svelte';
+import ScalarSidebarAuth from '../../components/svelte/ScalarSidebarAuth.svelte';
+import ApiVersionSelector from '../../components/svelte/ApiVersionSelector.svelte';
 import GitHubDropdown from '../../components/svelte/GitHubDropdown.svelte';
 import '../../styles/global.css';
 export const prerender = true;
@@ -15,6 +17,48 @@ export const prerender = true;
     <meta name="description" content="Primebrick API Explorer — interactive OpenAPI documentation with live try-it, API key auth, and multi-language code generation." />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <title>API Explorer — Primebrick</title>
+    <script is:inline>
+      // Set dark theme by default on <html> and sync with Scalar's theme toggle
+      (function() {
+        const stored = localStorage.getItem('starlight-theme');
+        const theme = stored === 'light' ? 'light' : 'dark';
+        document.documentElement.setAttribute('data-theme', theme);
+
+        // Observe Scalar's theme changes and sync to <html>
+        const observer = new MutationObserver(function(mutations) {
+          mutations.forEach(function(mutation) {
+            if (mutation.attributeName === 'data-theme') {
+              const target = mutation.target;
+              if (target.getAttribute && target.getAttribute('data-theme')) {
+                document.documentElement.setAttribute('data-theme', target.getAttribute('data-theme'));
+              }
+            }
+          });
+        });
+
+        // Wait for Scalar to render, then observe its container
+        function findAndObserveScalar() {
+          const scalarContainer = document.querySelector('[data-theme]') || document.querySelector('.scalar-app') || document.querySelector('#scalar');
+          if (scalarContainer && scalarContainer !== document.documentElement) {
+            observer.observe(scalarContainer, { attributes: true, attributeFilter: ['data-theme'] });
+          } else {
+            setTimeout(findAndObserveScalar, 500);
+          }
+        }
+        findAndObserveScalar();
+
+        // Also listen for theme toggle clicks
+        document.addEventListener('click', function(e) {
+          const themeToggle = e.target.closest && e.target.closest('[aria-label*="theme"], .theme-toggle, .scalar-theme-toggle');
+          if (themeToggle) {
+            setTimeout(() => {
+              const scalarTheme = document.querySelector('.scalar-app')?.getAttribute('data-theme') || 'dark';
+              document.documentElement.setAttribute('data-theme', scalarTheme);
+            }, 100);
+          }
+        });
+      })();
+    </script>
   </head>
   <body class="min-h-screen antialiased">
     <!-- Sticky nav — theme-aware via data-theme attribute -->
@@ -26,7 +70,6 @@ export const prerender = true;
         <div class="api-nav-links">
           <a href="/getting-started/introduction/" target="_blank" rel="noopener" class="api-nav-link">Docs</a>
           <a href="/api-explorer" class="api-nav-link api-nav-link-active">API Explorer</a>
-          <a href="/api-explorer/authentication" class="api-nav-link">Authentication</a>
           <GitHubDropdown client:load />
           <a
             href="https://opensource.org/license/MIT"
@@ -38,11 +81,12 @@ export const prerender = true;
       </div>
     </nav>
 
-    <!-- Client CTA bar -->
-    <ClientCTABar client:load />
-
     <!-- Config bar (sticky) -->
     <ApiExplorerConfig client:load />
+
+    <div class="api-version-bar">
+      <ApiVersionSelector client:load />
+    </div>
 
     <ScalarComponent
       renderMode="client"
@@ -62,6 +106,9 @@ export const prerender = true;
         ],
       }}
     />
+
+    <ScalarSidebarCTAs client:load />
+    <ScalarSidebarAuth client:load />
 
     <style>
       .api-nav {

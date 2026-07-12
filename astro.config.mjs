@@ -31,6 +31,7 @@ export default defineConfig({
         Header: './src/components/astro/StarlightHeader.astro',
         SiteTitle: './src/components/astro/StarlightSiteTitle.astro',
         SocialIcons: './src/components/astro/StarlightSocialIcons.astro',
+        ThemeProvider: './src/components/astro/StarlightThemeProvider.astro',
       },
       sidebar: [
         {

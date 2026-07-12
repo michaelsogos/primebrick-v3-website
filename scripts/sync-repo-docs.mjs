@@ -33,14 +33,70 @@ const REPOS = [
 
 const TMP_DIR = join(projectRoot, '.tmp-repo-sync');
 
-function addFrontmatter(content, title, repoSlug) {
+/**
+ * Assign a sidebar order based on a title or filename.
+ * This controls the display order in Starlight's autogenerate sidebar,
+ * which otherwise sorts alphabetically.
+ *
+ * Logical reading sequence:
+ *   1. Overview / Introduction / Home / Getting Started / Quickstart / README
+ *   2. Architecture / AGENTS
+ *   3. Components / Modules / Services
+ *   4. Database / Data Model
+ *   5. API / Endpoints
+ *   6. Authentication / Security
+ *   7. Configuration
+ *   8. Deployment / Infrastructure
+ *   9. Testing
+ *  10. Development / Contributing
+ * 100+. Everything else (alphabetical among themselves)
+ */
+function getSidebarOrder(title) {
+  const lower = (title || '').toLowerCase();
+  if (lower.includes('overview') || lower.includes('introduction') || lower.includes('home')) return 1;
+  if (lower.includes('architecture')) return 2;
+  if (lower.includes('component') || lower.includes('module') || lower.includes('service')) return 3;
+  if (lower.includes('database') || lower.includes('data model') || lower.includes('data-model')) return 4;
+  if (lower.includes('api') || lower.includes('endpoint')) return 5;
+  if (lower.includes('auth') || lower.includes('security')) return 6;
+  if (lower.includes('config')) return 7;
+  if (lower.includes('deploy') || lower.includes('infra')) return 8;
+  if (lower.includes('test')) return 9;
+  if (lower.includes('develop') || lower.includes('contribut')) return 10;
+  return 100; // everything else goes last
+}
+
+/**
+ * Determine the sidebar order for a manual doc file.
+ * README.md -> overview.md (order 1, always first)
+ * AGENTS.md -> agents.md (order 2)
+ * getting-started / quickstart files -> order 1 or 2
+ * Other docs/ files -> order based on title via getSidebarOrder
+ */
+function getManualSidebarOrder(filename, title) {
+  const lower = (filename || '').toLowerCase();
+  // README is always copied as overview.md — it should be first
+  if (lower === 'readme' || lower === 'overview') return 1;
+  // AGENTS.md should come right after README
+  if (lower === 'agents') return 2;
+  // getting-started / quickstart files get priority
+  if (lower.includes('getting-started') || lower.includes('quickstart') || lower.includes('quick-start')) {
+    return 1;
+  }
+  return getSidebarOrder(title);
+}
+
+function addFrontmatter(content, title, repoSlug, sidebarOrder) {
   if (content.startsWith('---')) {
     return content;
   }
+  const order = sidebarOrder !== undefined ? sidebarOrder : getSidebarOrder(title);
   return `---
 title: "${title}"
 source: manual
 repo: "${repoSlug}"
+sidebar:
+  order: ${order}
 ---
 
 ${content}`;
@@ -53,7 +109,8 @@ function processMarkdownFile(srcPath, destPath, repoSlug) {
     .split(/[-_]/)
     .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
     .join(' ');
-  content = addFrontmatter(content, title, repoSlug);
+  const order = getManualSidebarOrder(filename, title);
+  content = addFrontmatter(content, title, repoSlug, order);
   mkdirSync(dirname(destPath), { recursive: true });
   writeFileSync(destPath, content, 'utf-8');
 }

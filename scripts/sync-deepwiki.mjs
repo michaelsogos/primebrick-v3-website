@@ -124,6 +124,39 @@ function slugify(text) {
 }
 
 /**
+ * Assign a sidebar order based on the wiki page title/structure.
+ * This controls the display order in Starlight's autogenerate sidebar,
+ * which otherwise sorts alphabetically.
+ *
+ * Logical reading sequence:
+ *   1. Overview / Introduction / Home
+ *   2. Architecture
+ *   3. Components / Modules / Services
+ *   4. Database / Data Model
+ *   5. API / Endpoints
+ *   6. Authentication / Security
+ *   7. Configuration
+ *   8. Deployment / Infrastructure
+ *   9. Testing
+ *  10. Development / Contributing
+ * 100+. Everything else (alphabetical among themselves)
+ */
+function getSidebarOrder(title) {
+  const lower = (title || '').toLowerCase();
+  if (lower.includes('overview') || lower.includes('introduction') || lower.includes('home')) return 1;
+  if (lower.includes('architecture')) return 2;
+  if (lower.includes('component') || lower.includes('module') || lower.includes('service')) return 3;
+  if (lower.includes('database') || lower.includes('data model') || lower.includes('data-model')) return 4;
+  if (lower.includes('api') || lower.includes('endpoint')) return 5;
+  if (lower.includes('auth') || lower.includes('security')) return 6;
+  if (lower.includes('config')) return 7;
+  if (lower.includes('deploy') || lower.includes('infra')) return 8;
+  if (lower.includes('test')) return 9;
+  if (lower.includes('develop') || lower.includes('contribut')) return 10;
+  return 100; // everything else goes last
+}
+
+/**
  * Parse read_wiki_contents response into separate pages.
  * The response uses "# Page: <Title>" as page separators.
  * Returns array of { title, content }.
@@ -179,6 +212,8 @@ title: "${repo.slug} — Full DeepWiki"
 source: deepwiki
 repo: "${repo.name}"
 last_synced_at: "${timestamp}"
+sidebar:
+  order: 1
 ---
 
 ${wikiText}
@@ -190,12 +225,15 @@ ${wikiText}
   let pagesWritten = 0;
   for (const page of pages) {
     const slug = slugify(page.title);
+    const order = getSidebarOrder(page.title);
     const md = `---
 title: "${page.title.replace(/"/g, '\\"')}"
 source: deepwiki
 repo: "${repo.name}"
 deepwiki_page: "${page.title.replace(/"/g, '\\"')}"
 last_synced_at: "${timestamp}"
+sidebar:
+  order: ${order}
 ---
 
 ${page.content}

@@ -48,6 +48,11 @@
       {#each LANGUAGES as lang}
         <a
           href={getLangPath(lang.code)}
+          onclick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            window.location.href = getLangPath(lang.code);
+          }}
           class="block px-4 py-2 text-sm transition-colors {currentLang === lang.code
             ? 'text-sky-400 bg-slate-800'
             : 'text-slate-300 hover:text-sky-400 hover:bg-slate-800'}"
