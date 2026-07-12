@@ -1,49 +1,75 @@
 ---
 /**
  * Cloud provider logos.
- * Uses Simple Icons (simpleicons.org) for brands that are available there.
- * AWS and Azure were removed from Simple Icons (likely at the brands' request),
- * so we use text-only badges for those — safer for trademark compliance.
+ * Uses thesvg (MIT licensed package) for accurate brand SVG paths.
+ * AWS: MIT license (SVG representation)
+ * Azure: brand-use license (subject to Microsoft brand guidelines)
+ * Google Cloud, Alibaba Cloud, Docker, Kubernetes: from simple-icons (CC0)
  *
- * Simple Icons is CC0 licensed, but trademarks belong to respective owners.
- * Usage here is nominative fair use: indicating deployment compatibility,
+ * Usage is nominative fair use: indicating deployment compatibility,
  * not claiming endorsement or partnership.
  *
  * IMPORTANT: Do not modify the SVG paths or brand colors.
  */
 import { siGooglecloud, siAlibabacloud, siDocker, siKubernetes } from 'simple-icons';
+import awsIcon from 'thesvg/aws';
+import azureIcon from 'thesvg/azure';
+
+// Handle both default and named exports
+const aws = (awsIcon as any).default ?? awsIcon;
+const azure = (azureIcon as any).default ?? azureIcon;
+
+// Extract path data from thesvg icons (they may have multiple paths)
+function extractPaths(svg: string): string[] {
+  const matches = svg.match(/d="([^"]+)"/g);
+  if (!matches) return [];
+  return matches.map((m) => m.replace(/d="/, '').replace(/"$/, ''));
+}
+
+const awsPaths = extractPaths(aws.svg);
+const azurePaths = extractPaths(azure.svg);
 
 const svgIcons = [
-  { name: 'Google Cloud', path: siGooglecloud.path, color: `#${siGooglecloud.hex}` },
-  { name: 'Alibaba Cloud', path: siAlibabacloud.path, color: `#${siAlibabacloud.hex}` },
-  { name: 'Docker', path: siDocker.path, color: `#${siDocker.hex}` },
-  { name: 'Kubernetes', path: siKubernetes.path, color: `#${siKubernetes.hex}` },
-];
-
-const textOnly = [
-  { name: 'AWS', color: '#FF9900' },
-  { name: 'Azure', color: '#0078D4' },
+  {
+    name: 'AWS',
+    paths: awsPaths,
+    color: `#${aws.hex}`,
+    viewBox: '0 0 24 24',
+  },
+  {
+    name: 'Azure',
+    paths: azurePaths,
+    color: `#${azure.hex}`,
+    viewBox: '0 0 256 199',
+  },
+  {
+    name: 'Google Cloud',
+    paths: [siGooglecloud.path],
+    color: `#${siGooglecloud.hex}`,
+    viewBox: '0 0 24 24',
+  },
+  {
+    name: 'Alibaba Cloud',
+    paths: [siAlibabacloud.path],
+    color: `#${siAlibabacloud.hex}`,
+    viewBox: '0 0 24 24',
+  },
+  {
+    name: 'Docker',
+    paths: [siDocker.path],
+    color: `#${siDocker.hex}`,
+    viewBox: '0 0 24 24',
+  },
+  {
+    name: 'Kubernetes',
+    paths: [siKubernetes.path],
+    color: `#${siKubernetes.hex}`,
+    viewBox: '0 0 24 24',
+  },
 ];
 ---
 
 <div class="flex flex-wrap items-center justify-center gap-8 md:gap-12">
-  {/* Text-only badges for brands not in Simple Icons (AWS, Azure) */}
-  {textOnly.map((p) => (
-    <div
-      class="group flex flex-col items-center gap-2 transition-all duration-300 hover:scale-110"
-      title={p.name}
-    >
-      <div
-        class="flex h-12 min-w-[48px] items-center justify-center rounded-xl border border-slate-700/50 bg-slate-900/50 px-3 text-sm font-bold opacity-50 transition-all duration-300 group-hover:opacity-100 group-hover:border-slate-600"
-        style={`color: ${p.color};`}
-      >
-        {p.name}
-      </div>
-      <span class="text-xs text-slate-500 transition-colors duration-300 group-hover:text-slate-300">{p.name}</span>
-    </div>
-  ))}
-
-  {/* SVG icons from Simple Icons for brands that are available */}
   {svgIcons.map((p) => (
     <div
       class="group flex flex-col items-center gap-2 transition-all duration-300 hover:scale-110"
@@ -51,13 +77,15 @@ const textOnly = [
     >
       <svg
         class="h-10 w-10 opacity-40 grayscale transition-all duration-300 group-hover:opacity-100 group-hover:grayscale-0"
-        viewBox="0 0 24 24"
+        viewBox={p.viewBox}
         fill="currentColor"
         style={`color: ${p.color};`}
         role="img"
         aria-label={p.name}
       >
-        <path d={p.path} />
+        {p.paths.map((path: string) => (
+          <path d={path} />
+        ))}
       </svg>
       <span class="text-xs text-slate-500 transition-colors duration-300 group-hover:text-slate-300">{p.name}</span>
     </div>

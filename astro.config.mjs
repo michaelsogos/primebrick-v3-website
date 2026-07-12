@@ -50,6 +50,7 @@ export default defineConfig({
           items: [
             { slug: 'api/introduction', translations: { it: 'Introduzione', de: 'Einführung', es: 'Introducción', pt: 'Introdução', fr: 'Introduction' } },
             { slug: 'api/authentication', translations: { it: 'Autenticazione', de: 'Authentifizierung', es: 'Autenticación', pt: 'Autenticação', fr: 'Authentification' } },
+            { slug: 'api/authentication-how-to', translations: { it: 'Autenticazione - Guida', de: 'Authentifizierung - Anleitung', es: 'Autenticación - Guía', pt: 'Autenticação - Guia', fr: 'Authentification - Guide' } },
             { slug: 'api/rbac', translations: {} },
             { slug: 'api/microservice-standard', translations: { it: 'Standard microservizi', de: 'Mikroservice-Standard', es: 'Estándar de microservicios', pt: 'Padrão de microsserviços', fr: 'Standard microservices' } },
             { slug: 'api/error-handling', translations: { it: 'Gestione errori', de: 'Fehlerbehandlung', es: 'Manejo de errores', pt: 'Tratamento de erros', fr: 'Gestion des erreurs' } },

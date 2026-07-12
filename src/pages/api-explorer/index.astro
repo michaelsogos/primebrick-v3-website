@@ -14,16 +14,18 @@ export const prerender = true;
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <title>API Explorer — Primebrick</title>
   </head>
-  <body class="min-h-screen bg-slate-950 text-slate-100 antialiased">
-    <nav class="border-b border-slate-800 px-6 py-4">
+  <body class="min-h-screen antialiased">
+    <nav class="border-b border-slate-800 bg-slate-950 px-6 py-4 dark:border-slate-800">
       <div class="mx-auto flex max-w-6xl items-center justify-between">
-        <a href="/en/" class="text-xl font-bold text-sky-400">Primebrick</a>
+        <a href="/en/" class="flex items-center gap-2 text-xl font-bold">
+          <span class="bg-gradient-to-r from-sky-400 to-indigo-400 bg-clip-text text-transparent">Primebrick</span>
+        </a>
         <div class="flex items-center gap-6 text-sm">
-          <a href="/docs" class="text-slate-300 hover:text-sky-400 transition-colors">Docs</a>
+          <a href="/getting-started/introduction/" class="text-slate-300 hover:text-sky-400 transition-colors dark:text-slate-300">Docs</a>
           <a href="/api-explorer" class="text-sky-400">API Explorer</a>
           <a
             href="https://github.com/michaelsogos/primebrick-v3-website"
-            class="text-slate-300 hover:text-sky-400 transition-colors"
+            class="text-slate-300 hover:text-sky-400 transition-colors dark:text-slate-300"
             target="_blank"
             rel="noopener"
           >
@@ -31,7 +33,7 @@ export const prerender = true;
           </a>
           <a
             href="https://github.com/michaelsogos/primebrick-v3-website/blob/main/LICENSE"
-            class="text-slate-300 hover:text-sky-400 transition-colors"
+            class="text-slate-300 hover:text-sky-400 transition-colors dark:text-slate-300"
             target="_blank"
             rel="noopener"
           >
