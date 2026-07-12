@@ -1,7 +1,9 @@
 ---
 import { translations, LANGUAGES, type LangCode } from '../../i18n/translations';
 import LanguageSwitcher from '../../components/svelte/LanguageSwitcher.svelte';
+import GitHubDropdown from '../../components/svelte/GitHubDropdown.svelte';
 import CloudLogos from '../../components/CloudLogos.astro';
+import GitHubIcon from '../../components/GitHubIcon.astro';
 import '../../styles/global.css';
 
 export const prerender = true;
@@ -48,18 +50,11 @@ const apiExplorerPath = '/api-explorer';
           <span class="bg-gradient-to-r from-sky-400 to-indigo-400 bg-clip-text text-transparent">Primebrick</span>
         </a>
         <div class="flex items-center gap-6 text-sm">
-          <a href={docsPath} class="text-slate-300 hover:text-sky-400 transition-colors">{t.nav.docs}</a>
-          <a href={apiExplorerPath} class="text-slate-300 hover:text-sky-400 transition-colors">{t.nav.apiExplorer}</a>
+          <a href={docsPath} class="text-slate-300 hover:text-sky-400 transition-colors" target="_blank" rel="noopener">{t.nav.docs}</a>
+          <a href={apiExplorerPath} class="text-slate-300 hover:text-sky-400 transition-colors" target="_blank" rel="noopener">{t.nav.apiExplorer}</a>
+          <GitHubDropdown client:load />
           <a
-            href="https://github.com/michaelsogos/primebrick-v3-website"
-            class="text-slate-300 hover:text-sky-400 transition-colors"
-            target="_blank"
-            rel="noopener"
-          >
-            {t.nav.github}
-          </a>
-          <a
-            href="https://github.com/michaelsogos/primebrick-v3-website/blob/main/LICENSE"
+            href="https://opensource.org/license/MIT"
             class="text-slate-300 hover:text-sky-400 transition-colors"
             target="_blank"
             rel="noopener"
@@ -87,15 +82,18 @@ const apiExplorerPath = '/api-explorer';
         <div class="mt-10 flex flex-wrap items-center justify-center gap-4">
           <a
             href="https://github.com/michaelsogos/primebrick-v3-website"
-            class="group relative rounded-xl bg-gradient-to-r from-sky-500 to-indigo-500 px-7 py-3.5 text-sm font-semibold text-white shadow-lg shadow-sky-500/25 transition-all hover:shadow-xl hover:shadow-sky-500/40 hover:scale-105"
+            class="group relative inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-sky-500 to-indigo-500 px-7 py-3.5 text-sm font-semibold text-white shadow-lg shadow-sky-500/25 transition-all hover:shadow-xl hover:shadow-sky-500/40 hover:scale-105"
             target="_blank"
             rel="noopener"
           >
+            <GitHubIcon class="h-4 w-4" />
             {t.hero.ctaGithub}
           </a>
           <a
             href={docsPath}
             class="rounded-xl border border-slate-700 bg-slate-900/50 px-7 py-3.5 text-sm font-semibold text-slate-200 backdrop-blur-sm transition-all hover:border-sky-500 hover:text-sky-400 hover:scale-105"
+            target="_blank"
+            rel="noopener"
           >
             {t.hero.ctaArchitecture}
           </a>
@@ -108,7 +106,7 @@ const apiExplorerPath = '/api-explorer';
       <div class="mx-auto max-w-5xl">
         <div class="grid gap-8 lg:grid-cols-2 lg:gap-12">
           <!-- Left: sticky text -->
-          <div class="lg:sticky lg:top-8 lg:self-start">
+          <div class="lg:sticky lg:top-24 lg:self-start">
             <h2 class="text-3xl font-bold text-white sm:text-4xl">
               <span class="bg-gradient-to-r from-sky-400 to-cyan-400 bg-clip-text text-transparent">From schema to production</span>
             </h2>
@@ -155,24 +153,69 @@ const apiExplorerPath = '/api-explorer';
               <div class="text-slate-300">
                 <span class="text-sky-400">&rarr;</span> status: enum [active, inactive]
               </div>
+              <div class="text-slate-300">
+                <span class="text-sky-400">&rarr;</span> phone: string (optional)
+              </div>
+              <div class="text-slate-300">
+                <span class="text-sky-400">&rarr;</span> createdAt: timestamp (auto)
+              </div>
               <div class="text-slate-500 mt-2"># AI generates everything...</div>
               <div class="text-cyan-400">&#10003; Database migration created</div>
+              <div class="text-slate-400 pl-4 text-xs">  &rarr; 00000000000003_create_customers_table.sql</div>
               <div class="text-cyan-400">&#10003; API CRUD endpoints (6 routes)</div>
+              <div class="text-slate-400 pl-4 text-xs">  &rarr; GET    /api/v1/customers</div>
+              <div class="text-slate-400 pl-4 text-xs">  &rarr; GET    /api/v1/customers/:id</div>
+              <div class="text-slate-400 pl-4 text-xs">  &rarr; POST   /api/v1/customers</div>
+              <div class="text-slate-400 pl-4 text-xs">  &rarr; PUT    /api/v1/customers/:id</div>
+              <div class="text-slate-400 pl-4 text-xs">  &rarr; DELETE /api/v1/customers/:id</div>
+              <div class="text-slate-400 pl-4 text-xs">  &rarr; POST   /api/v1/customers/bulk</div>
               <div class="text-cyan-400">&#10003; RBAC permissions configured</div>
+              <div class="text-slate-400 pl-4 text-xs">  &rarr; customers.read.* (guest, collaborator)</div>
+              <div class="text-slate-400 pl-4 text-xs">  &rarr; customers.create.* (collaborator)</div>
+              <div class="text-slate-400 pl-4 text-xs">  &rarr; customers.* (administrator)</div>
               <div class="text-cyan-400">&#10003; Backoffice UI pages generated</div>
+              <div class="text-slate-400 pl-4 text-xs">  &rarr; /admin/customers (list, detail, form)</div>
               <div class="text-cyan-400">&#10003; Test scaffolding (12 tests)</div>
-              <div class="text-slate-500 mt-2"># Deploy</div>
+              <div class="text-slate-400 pl-4 text-xs">  &rarr; unit: 4 | integration: 6 | e2e: 2</div>
+              <div class="text-cyan-400">&#10003; OpenAPI spec updated</div>
+              <div class="text-slate-400 pl-4 text-xs">  &rarr; /api/v1/openapi/aggregated.json</div>
+              <div class="text-slate-500 mt-2"># Review the generated code</div>
+              <div class="text-green-400">$ primebrick review --diff</div>
+              <div class="text-slate-300">
+                <span class="text-sky-400">&rarr;</span> 14 files changed, 847 insertions(+), 0 deletions(-)
+              </div>
+              <div class="text-slate-500 mt-2"># Deploy to production</div>
               <div class="text-green-400">$ primebrick deploy --env production</div>
               <div class="text-slate-300">
-                <span class="text-sky-400">&rarr;</span> Building... <span class="text-green-400">&#10003;</span>
+                <span class="text-sky-400">&rarr;</span> Building TypeScript... <span class="text-green-400">&#10003;</span>
+              </div>
+              <div class="text-slate-300">
+                <span class="text-sky-400">&rarr;</span> Running tests... <span class="text-green-400">12/12 passed &#10003;</span>
               </div>
               <div class="text-slate-300">
                 <span class="text-sky-400">&rarr;</span> Migrating database... <span class="text-green-400">&#10003;</span>
               </div>
               <div class="text-slate-300">
-                <span class="text-sky-400">&rarr;</span> Deploying to Cloudflare... <span class="text-green-400">&#10003;</span>
+                <span class="text-sky-400">&rarr;</span> Registering microservice... <span class="text-green-400">&#10003;</span>
+              </div>
+              <div class="text-slate-300">
+                <span class="text-sky-400">&rarr;</span> Deploying to Cloudflare Workers... <span class="text-green-400">&#10003;</span>
+              </div>
+              <div class="text-slate-300">
+                <span class="text-sky-400">&rarr;</span> Health check passed... <span class="text-green-400">&#10003;</span>
               </div>
               <div class="text-green-400 mt-2">&#128640; Live at https://api.primebrick.dev/v1/customers</div>
+              <div class="text-slate-500 mt-2"># Verify the deployment</div>
+              <div class="text-green-400">$ curl https://api.primebrick.dev/v1/customers | jq .</div>
+              <div class="text-slate-300">
+                <span class="text-sky-400">&rarr;</span> status: 200 OK
+              </div>
+              <div class="text-slate-300">
+                <span class="text-sky-400">&rarr;</span> count: 42 customers
+              </div>
+              <div class="text-slate-300">
+                <span class="text-sky-400">&rarr;</span> response time: 18ms
+              </div>
               <div class="flex items-center gap-1 mt-2">
                 <span class="text-green-400">$</span>
                 <span class="inline-block h-4 w-2 animate-pulse bg-sky-400"></span>
@@ -341,15 +384,16 @@ const apiExplorerPath = '/api-explorer';
         <div class="mt-8 flex items-center justify-center gap-4 text-sm">
           <a
             href="https://github.com/michaelsogos/primebrick-v3-website"
-            class="text-sky-400 hover:text-sky-300 transition-colors"
+            class="inline-flex items-center gap-1.5 text-sky-400 hover:text-sky-300 transition-colors"
             target="_blank"
             rel="noopener"
           >
+            <GitHubIcon class="h-4 w-4" />
             {t.openSource.githubLink} &rarr;
           </a>
           <span class="text-slate-600">|</span>
           <a
-            href="https://github.com/michaelsogos/primebrick-v3-website/blob/main/LICENSE"
+            href="https://opensource.org/license/MIT"
             class="text-sky-400 hover:text-sky-300 transition-colors"
             target="_blank"
             rel="noopener"
@@ -370,15 +414,18 @@ const apiExplorerPath = '/api-explorer';
           <div class="mt-8 flex flex-wrap items-center justify-center gap-4">
             <a
               href="https://github.com/michaelsogos/primebrick-v3-website"
-              class="rounded-xl bg-gradient-to-r from-sky-500 to-indigo-500 px-7 py-3.5 text-sm font-semibold text-white shadow-lg shadow-sky-500/25 transition-all hover:shadow-xl hover:shadow-sky-500/40 hover:scale-105"
+              class="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-sky-500 to-indigo-500 px-7 py-3.5 text-sm font-semibold text-white shadow-lg shadow-sky-500/25 transition-all hover:shadow-xl hover:shadow-sky-500/40 hover:scale-105"
               target="_blank"
               rel="noopener"
             >
+              <GitHubIcon class="h-4 w-4" />
               {t.finalCta.ctaGithub}
             </a>
             <a
               href={docsPath}
               class="rounded-xl border border-slate-700 bg-slate-900/50 px-7 py-3.5 text-sm font-semibold text-slate-200 backdrop-blur-sm transition-all hover:border-sky-500 hover:text-sky-400 hover:scale-105"
+              target="_blank"
+              rel="noopener"
             >
               {t.finalCta.ctaDocs}
             </a>
@@ -393,10 +440,11 @@ const apiExplorerPath = '/api-explorer';
         <span>&copy; 2026 {t.footer.copyright}</span>
         <a
           href="https://github.com/michaelsogos/primebrick-v3-website"
-          class="hover:text-sky-400 transition-colors"
+          class="inline-flex items-center gap-1.5 hover:text-sky-400 transition-colors"
           target="_blank"
           rel="noopener"
         >
+          <GitHubIcon class="h-4 w-4" />
           GitHub
         </a>
       </div>

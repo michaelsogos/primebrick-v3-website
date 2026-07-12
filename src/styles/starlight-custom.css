@@ -3,3 +3,45 @@
   --sl-color-accent-low: #0c4a6e;
   --sl-color-accent-high: #7dd3fc;
 }
+
+/* Dark mode — match landing page (slate-950 background, sky/indigo accents) */
+:root,
+:root[data-theme='dark'] {
+  --sl-color-bg: #020617;
+  --sl-color-bg-nav: #0f172a;
+  --sl-color-bg-sidebar: #0f172a;
+  --sl-color-bg-inline-code: #1e293b;
+  --sl-color-bg-accent: #38bdf8;
+  --sl-color-hairline: #1e293b;
+  --sl-color-hairline-light: #334155;
+  --sl-color-hairline-shade: #020617;
+  --sl-color-text: #cbd5e1;
+  --sl-color-text-accent: #38bdf8;
+  --sl-color-text-invert: #0c4a6e;
+  --sl-color-white: #f8fafc;
+  --sl-color-gray-1: #f1f5f9;
+  --sl-color-gray-2: #cbd5e1;
+  --sl-color-gray-3: #94a3b8;
+  --sl-color-gray-4: #64748b;
+  --sl-color-gray-5: #334155;
+  --sl-color-gray-6: #1e293b;
+  --sl-color-black: #020617;
+}
+
+/* Light mode — align with API explorer light mode */
+:root[data-theme='light'] {
+  --sl-color-accent: #0ea5e9;
+  --sl-color-accent-low: #e0f2fe;
+  --sl-color-accent-high: #0c4a6e;
+  --sl-color-bg: #ffffff;
+  --sl-color-bg-nav: #f8fafc;
+  --sl-color-bg-sidebar: #f8fafc;
+  --sl-color-bg-inline-code: #f1f5f9;
+  --sl-color-bg-accent: #0ea5e9;
+  --sl-color-text: #1f2937;
+  --sl-color-text-accent: #0ea5e9;
+  --sl-color-text-invert: #ffffff;
+  --sl-color-hairline: #e5e7eb;
+  --sl-color-hairline-light: #f3f4f6;
+  --sl-color-hairline-shade: #f9fafb;
+}

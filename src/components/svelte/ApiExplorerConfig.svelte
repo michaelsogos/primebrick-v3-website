@@ -109,6 +109,9 @@
 <style>
   /* Use light/dark agnostic styles that work with Scalar's theme switching */
   .api-config-bar {
+    position: sticky;
+    top: 3.75rem;
+    z-index: 40;
     border-bottom: 1px solid var(--scalar-border-color, #e5e7eb);
     background: var(--scalar-background-1, #f9fafb);
     padding: 0.75rem 1rem;

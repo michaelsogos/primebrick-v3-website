@@ -15,7 +15,6 @@ export default defineConfig({
     svelte(),
     starlight({
       title: 'Primebrick',
-      logo: { src: './src/assets/logo.svg' },
       defaultLocale: 'root',
       locales: {
         root: { label: 'English', lang: 'en' },
@@ -26,8 +25,13 @@ export default defineConfig({
         fr: { label: 'Français', lang: 'fr' },
       },
       social: [
-        { label: 'GitHub', href: 'https://github.com/michaelsogos/primebrick-v3-website', icon: 'github' },
+        { label: 'GitHub', href: 'https://github.com/michaelsogos', icon: 'github' },
       ],
+      components: {
+        Header: './src/components/astro/StarlightHeader.astro',
+        SiteTitle: './src/components/astro/StarlightSiteTitle.astro',
+        SocialIcons: './src/components/astro/StarlightSocialIcons.astro',
+      },
       sidebar: [
         {
           label: 'Getting Started',

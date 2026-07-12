@@ -1,4 +1,19 @@
 ---
+// Root page — Cloudflare _redirects file handles / → /en/ 302 redirect.
+// This page exists only as a fallback if _redirects is not processed.
 export const prerender = true;
-return Astro.redirect('/en/');
 ---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="refresh" content="0;url=/en/" />
+    <meta name="robots" content="noindex" />
+    <link rel="canonical" href="https://primebrick.dev/en/" />
+    <title>Primebrick</title>
+  </head>
+  <body>
+    <script>window.location.replace('/en/');</script>
+    <a href="/en/">Redirecting to Primebrick…</a>
+  </body>
+</html>

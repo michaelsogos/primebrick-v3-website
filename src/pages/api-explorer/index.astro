@@ -1,6 +1,8 @@
 ---
 import { ScalarComponent } from '@scalar/astro';
 import ApiExplorerConfig from '../../components/svelte/ApiExplorerConfig.svelte';
+import ClientCTABar from '../../components/svelte/ClientCTABar.svelte';
+import GitHubDropdown from '../../components/svelte/GitHubDropdown.svelte';
 import '../../styles/global.css';
 export const prerender = true;
 ---
@@ -15,34 +17,31 @@ export const prerender = true;
     <title>API Explorer — Primebrick</title>
   </head>
   <body class="min-h-screen antialiased">
-    <nav class="border-b border-slate-800 bg-slate-950 px-6 py-4 dark:border-slate-800">
-      <div class="mx-auto flex max-w-6xl items-center justify-between">
-        <a href="/en/" class="flex items-center gap-2 text-xl font-bold">
-          <span class="bg-gradient-to-r from-sky-400 to-indigo-400 bg-clip-text text-transparent">Primebrick</span>
+    <!-- Sticky nav — theme-aware via data-theme attribute -->
+    <nav class="api-nav">
+      <div class="api-nav-inner">
+        <a href="/en/" class="api-nav-logo">
+          <span class="gradient-text">Primebrick</span>
         </a>
-        <div class="flex items-center gap-6 text-sm">
-          <a href="/getting-started/introduction/" class="text-slate-300 hover:text-sky-400 transition-colors dark:text-slate-300">Docs</a>
-          <a href="/api-explorer" class="text-sky-400">API Explorer</a>
+        <div class="api-nav-links">
+          <a href="/getting-started/introduction/" target="_blank" rel="noopener" class="api-nav-link">Docs</a>
+          <a href="/api-explorer" class="api-nav-link api-nav-link-active">API Explorer</a>
+          <a href="/api-explorer/authentication" class="api-nav-link">Authentication</a>
+          <GitHubDropdown client:load />
           <a
-            href="https://github.com/michaelsogos/primebrick-v3-website"
-            class="text-slate-300 hover:text-sky-400 transition-colors dark:text-slate-300"
+            href="https://opensource.org/license/MIT"
             target="_blank"
             rel="noopener"
+            class="api-nav-link">MIT License</a
           >
-            GitHub
-          </a>
-          <a
-            href="https://github.com/michaelsogos/primebrick-v3-website/blob/main/LICENSE"
-            class="text-slate-300 hover:text-sky-400 transition-colors dark:text-slate-300"
-            target="_blank"
-            rel="noopener"
-          >
-            MIT License
-          </a>
         </div>
       </div>
     </nav>
 
+    <!-- Client CTA bar -->
+    <ClientCTABar client:load />
+
+    <!-- Config bar (sticky) -->
     <ApiExplorerConfig client:load />
 
     <ScalarComponent
@@ -63,5 +62,79 @@ export const prerender = true;
         ],
       }}
     />
+
+    <style>
+      .api-nav {
+        position: sticky;
+        top: 0;
+        z-index: 50;
+        border-bottom: 1px solid #e5e7eb;
+        background: #ffffff;
+        padding: 0 1.5rem;
+        transition: background 0.2s, border-color 0.2s;
+      }
+
+      :global([data-theme='dark']) .api-nav {
+        border-bottom-color: #1e293b;
+        background: #020617;
+      }
+
+      .api-nav-inner {
+        max-width: 72rem;
+        margin: 0 auto;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        height: 3.75rem;
+      }
+
+      .api-nav-logo {
+        font-size: 1.25rem;
+        font-weight: 700;
+        text-decoration: none;
+      }
+
+      .gradient-text {
+        background: linear-gradient(to right, #38bdf8, #818cf8);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        color: transparent;
+      }
+
+      .api-nav-links {
+        display: flex;
+        align-items: center;
+        gap: 1.5rem;
+        font-size: 0.875rem;
+      }
+
+      .api-nav-link {
+        color: #374151;
+        text-decoration: none;
+        transition: color 0.2s;
+      }
+
+      .api-nav-link:hover {
+        color: #0ea5e9;
+      }
+
+      :global([data-theme='dark']) .api-nav-link {
+        color: #d1d5db;
+      }
+
+      :global([data-theme='dark']) .api-nav-link:hover {
+        color: #38bdf8;
+      }
+
+      .api-nav-link-active {
+        color: #0ea5e9;
+        font-weight: 600;
+      }
+
+      :global([data-theme='dark']) .api-nav-link-active {
+        color: #38bdf8;
+      }
+    </style>
   </body>
 </html>
