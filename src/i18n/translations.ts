@@ -18,6 +18,7 @@ export const translations = {
   en: {
     nav: { features: 'Features', docs: 'Docs', apiExplorer: 'API Explorer', github: 'GitHub', license: 'MIT License' },
     hero: {
+      badge: 'MIT Licensed • Open Source • Multi-Cloud',
       headline: 'The opinionated backoffice framework for serious teams',
       subheadline: 'Primebrick v3 is an open-source framework that defines infrastructure, architecture, and coding rules according to best practices. MIT license: use it in commercial projects, no strings attached.',
       ctaGithub: 'See on GitHub',
@@ -27,7 +28,25 @@ export const translations = {
     multicloud: {
       title: 'Multi-cloud, truly.',
       text: 'Your infrastructure, your rules. No vendor lock-in: Primebrick runs identically from your laptop to the enterprise datacenter, from K8s cluster to the public cloud closest to your users.',
-      providers: ['AWS', 'GCP', 'Azure', 'Alibaba Cloud', 'Docker Swarm', 'Kubernetes / On-prem'],
+    },
+    ai: {
+      badge: 'AI-Native',
+      title: 'AI that ships features in minutes, not days.',
+      text: 'Primebrick integrates AI directly into the development workflow. Describe a feature in natural language and the AI generates the schema, API endpoints, UI pages, and tests — all following the framework conventions. What used to take days of boilerplate now takes minutes.',
+      cards: [
+        { title: 'Schema-to-page in minutes', text: 'Describe your entity, get the database migration, API CRUD, RBAC permissions, and backoffice UI generated automatically.' },
+        { title: 'Convention-aware', text: 'The AI knows Primebrick patterns: it generates code that follows your architecture, not generic boilerplate.' },
+        { title: 'Tests included', text: 'Every generated feature comes with test scaffolding. Ship with confidence, not with hope.' },
+      ],
+    },
+    agentic: {
+      badge: 'Agentic Development',
+      title: 'Two ways to build. Both are first-class.',
+      text: 'Primebrick supports the full spectrum of development workflows. Use your IDE of choice for deep, hands-on coding. Or let AI agents build features directly from the web app — no local environment needed.',
+      cards: [
+        { title: 'IDE Mode', subtitle: 'VS Code, Cursor, Windsurf', text: 'Clone, run locally, debug with breakpoints, full control. The traditional developer experience with all the framework conventions enforced by tooling.' },
+        { title: 'Agentic Mode', subtitle: 'In-browser AI agents', text: 'Describe what you want, approve the plan, and AI agents build it directly in the web app. No local setup, no environment config. From idea to deployed feature without leaving the browser.' },
+      ],
     },
     concept: {
       title: 'A backoffice that starts with its own rules.',
@@ -79,6 +98,7 @@ export const translations = {
   it: {
     nav: { features: 'Funzionalità', docs: 'Docs', apiExplorer: 'API Explorer', github: 'GitHub', license: 'Licenza MIT' },
     hero: {
+      badge: 'Licenza MIT • Open Source • Multi-Cloud',
       headline: 'Il framework backoffice opinionato per team seri',
       subheadline: 'Primebrick v3 è un framework open-source che definisce infrastruttura, architettura e regole di codifica secondo le best practice. Licenza MIT: usalo in progetti commerciali, senza vincoli.',
       ctaGithub: 'Vedi su GitHub',
@@ -88,7 +108,25 @@ export const translations = {
     multicloud: {
       title: 'Multi-cloud, davvero.',
       text: 'La tua infrastruttura, le tue regole. Nessun vendor lock-in: Primebrick gira identico dal tuo laptop al datacenter aziendale, dal cluster K8s al cloud pubblico più vicino ai tuoi utenti.',
-      providers: ['AWS', 'GCP', 'Azure', 'Alibaba Cloud', 'Docker Swarm', 'Kubernetes / On-prem'],
+    },
+    ai: {
+      badge: 'AI-Native',
+      title: 'AI che distribuisce funzionalità in minuti, non giorni.',
+      text: 'Primebrick integra l\'AI direttamente nel flusso di sviluppo. Descrivi una funzionalità in linguaggio naturale e l\'AI genera lo schema, gli endpoint API, le pagine UI e i test — tutto seguendo le convenzioni del framework. Ciò che prima richiedeva giorni di boilerplate ora richiede minuti.',
+      cards: [
+        { title: 'Da schema a pagina in minuti', text: 'Descrivi la tua entità, ottieni la migrazione del database, il CRUD API, i permessi RBAC e l\'UI backoffice generati automaticamente.' },
+        { title: 'Conosce le convenzioni', text: 'L\'AI conosce i pattern di Primebrick: genera codice che segue la tua architettura, non boilerplate generico.' },
+        { title: 'Test inclusi', text: 'Ogni funzionalità generata include lo scaffolding dei test. Distribuisci con fiducia, non con speranza.' },
+      ],
+    },
+    agentic: {
+      badge: 'Sviluppo Agentic',
+      title: 'Due modi per costruire. Entrambi first-class.',
+      text: 'Primebrick supporta l\'intero spettro dei flussi di sviluppo. Usa il tuo IDE preferito per codifica approfondita e hands-on. Oppure lascia che gli agenti AI costruiscano funzionalità direttamente dall\'app web — senza ambiente locale.',
+      cards: [
+        { title: 'Modalità IDE', subtitle: 'VS Code, Cursor, Windsurf', text: 'Clona, esegui localmente, debug con breakpoint, pieno controllo. L\'esperienza sviluppatore tradizionale con tutte le convenzioni del framework applicate dal tooling.' },
+        { title: 'Modalità Agentic', subtitle: 'Agenti AI nel browser', text: 'Descrivi cosa vuoi, approva il piano, e gli agenti AI lo costruiscono direttamente nell\'app web. Nessun setup locale, nessuna config di ambiente. Dall\'idea alla funzionalità deployata senza lasciare il browser.' },
+      ],
     },
     concept: {
       title: 'Un backoffice che inizia con le proprie regole.',
@@ -140,6 +178,7 @@ export const translations = {
   de: {
     nav: { features: 'Funktionen', docs: 'Doku', apiExplorer: 'API Explorer', github: 'GitHub', license: 'MIT-Lizenz' },
     hero: {
+      badge: 'MIT-Lizenziert • Open Source • Multi-Cloud',
       headline: 'Das Opinionated Backoffice-Framework für ernsthafte Teams',
       subheadline: 'Primebrick v3 ist ein Open-Source-Framework, das Infrastruktur, Architektur und Codierungsregeln nach Best Practices definiert. MIT-Lizenz: kommerzielle Nutzung ohne Einschränkungen.',
       ctaGithub: 'Auf GitHub ansehen',
@@ -149,7 +188,25 @@ export const translations = {
     multicloud: {
       title: 'Multi-cloud, wirklich.',
       text: 'Ihre Infrastruktur, Ihre Regeln. Kein Vendor Lock-in: Primebrick läuft identisch vom Laptop bis zum Enterprise-Rechenzentrum, vom K8s-Cluster zur öffentlichen Cloud.',
-      providers: ['AWS', 'GCP', 'Azure', 'Alibaba Cloud', 'Docker Swarm', 'Kubernetes / On-prem'],
+    },
+    ai: {
+      badge: 'KI-Nativ',
+      title: 'KI liefert Features in Minuten, nicht Tagen.',
+      text: 'Primebrick integriert KI direkt in den Entwicklungsworkflow. Beschreiben Sie ein Feature in natürlicher Sprache und die KI generiert das Schema, die API-Endpunkte, die UI-Seiten und die Tests — alles nach den Framework-Konventionen. Was früher Tage Boilerplate kostete, dauert jetzt Minuten.',
+      cards: [
+        { title: 'Schema-zu-Seite in Minuten', text: 'Beschreiben Sie Ihre Entität, erhalten Sie die Datenbank-Migration, API-CRUD, RBAC-Berechtigungen und Backoffice-UI automatisch generiert.' },
+        { title: 'Konventionsbewusst', text: 'Die KI kennt Primebrick-Patterns: Sie generiert Code, der Ihrer Architektur folgt, nicht generischen Boilerplate.' },
+        { title: 'Tests inklusive', text: 'Jedes generierte Feature kommt mit Test-Scaffolding. Liefern Sie mit Zuversicht, nicht mit Hoffnung.' },
+      ],
+    },
+    agentic: {
+      badge: 'Agentic Entwicklung',
+      title: 'Zwei Wege zum Bauen. Beide erstklassig.',
+      text: 'Primebrick unterstützt das volle Spektrum der Entwicklungs-Workflows. Nutzen Sie Ihre IDE der Wahl für tiefes, hands-on Coding. Oder lassen Sie KI-Agenten Features direkt aus der Web-App bauen — ohne lokale Umgebung.',
+      cards: [
+        { title: 'IDE-Modus', subtitle: 'VS Code, Cursor, Windsurf', text: 'Klonen, lokal ausführen, mit Breakpoints debuggen, volle Kontrolle. Das traditionelle Entwicklererlebnis mit allen Framework-Konventionen durch Tooling erzwungen.' },
+        { title: 'Agentic-Modus', subtitle: 'KI-Agenten im Browser', text: 'Beschreiben Sie, was Sie wollen, genehmigen Sie den Plan, und KI-Agenten bauen es direkt in der Web-App. Kein lokales Setup, keine Umgebungskonfiguration. Von der Idee zum deployten Feature ohne den Browser zu verlassen.' },
+      ],
     },
     concept: {
       title: 'Ein Backoffice, das mit eigenen Regeln beginnt.',
@@ -201,6 +258,7 @@ export const translations = {
   es: {
     nav: { features: 'Características', docs: 'Docs', apiExplorer: 'API Explorer', github: 'GitHub', license: 'Licencia MIT' },
     hero: {
+      badge: 'Licencia MIT • Open Source • Multi-Cloud',
       headline: 'El framework backoffice opinionated para equipos serios',
       subheadline: 'Primebrick v3 es un framework open-source que define infraestructura, arquitectura y reglas de codificación según las mejores prácticas. Licencia MIT: úsalo en proyectos comerciales sin ataduras.',
       ctaGithub: 'Ver en GitHub',
@@ -210,7 +268,25 @@ export const translations = {
     multicloud: {
       title: 'Multi-cloud, de verdad.',
       text: 'Tu infraestructura, tus reglas. Sin vendor lock-in: Primebrick funciona igual desde tu laptop hasta el datacenter empresarial, del cluster K8s a la nube pública más cercana.',
-      providers: ['AWS', 'GCP', 'Azure', 'Alibaba Cloud', 'Docker Swarm', 'Kubernetes / On-prem'],
+    },
+    ai: {
+      badge: 'AI-Nativo',
+      title: 'IA que entrega funcionalidades en minutos, no días.',
+      text: 'Primebrick integra IA directamente en el flujo de desarrollo. Describe una funcionalidad en lenguaje natural y la IA genera el esquema, los endpoints API, las páginas UI y los tests — todo siguiendo las convenciones del framework. Lo que antes tomaba días de boilerplate ahora toma minutos.',
+      cards: [
+        { title: 'De esquema a página en minutos', text: 'Describe tu entidad, obtén la migración de base de datos, CRUD API, permisos RBAC y UI de backoffice generados automáticamente.' },
+        { title: 'Conoce las convenciones', text: 'La IA conoce los patrones de Primebrick: genera código que sigue tu arquitectura, no boilerplate genérico.' },
+        { title: 'Tests incluidos', text: 'Cada funcionalidad generada incluye scaffolding de tests. Entrega con confianza, no con esperanza.' },
+      ],
+    },
+    agentic: {
+      badge: 'Desarrollo Agentic',
+      title: 'Dos formas de construir. Ambas first-class.',
+      text: 'Primebrick soporta todo el espectro de flujos de desarrollo. Usa tu IDE preferido para codificación profunda y hands-on. O deja que los agentes IA construyan funcionalidades directamente desde la app web — sin entorno local.',
+      cards: [
+        { title: 'Modo IDE', subtitle: 'VS Code, Cursor, Windsurf', text: 'Clona, ejecuta localmente, depura con breakpoints, control total. La experiencia de desarrollador tradicional con todas las convenciones del framework aplicadas por el tooling.' },
+        { title: 'Modo Agentic', subtitle: 'Agentes IA en el navegador', text: 'Describe lo que quieres, aprueba el plan, y los agentes IA lo construyen directamente en la app web. Sin setup local, sin config de entorno. De la idea a la funcionalidad desplegada sin salir del navegador.' },
+      ],
     },
     concept: {
       title: 'Un backoffice que empieza con sus propias reglas.',
@@ -262,6 +338,7 @@ export const translations = {
   pt: {
     nav: { features: 'Funcionalidades', docs: 'Docs', apiExplorer: 'API Explorer', github: 'GitHub', license: 'Licença MIT' },
     hero: {
+      badge: 'Licença MIT • Open Source • Multi-Cloud',
       headline: 'O framework backoffice opinionated para equipas sérias',
       subheadline: 'Primebrick v3 é um framework open-source que define infraestrutura, arquitetura e regras de codificação segundo as melhores práticas. Licença MIT: use em projetos comerciais, sem amarras.',
       ctaGithub: 'Ver no GitHub',
@@ -270,8 +347,26 @@ export const translations = {
     stats: { license: 'Licença MIT', deploy: '6+ destinos', lockin: 'Zero vendor lock-in' },
     multicloud: {
       title: 'Multi-cloud, a sério.',
-      text: 'A sua infraestrutura, as suas regras. Sem vendor lock-in: Primebrick corre igual do laptop ao datacenter empresarial, do cluster K8s à nuvem pública mais próxima dos utilizadores.',
-      providers: ['AWS', 'GCP', 'Azure', 'Alibaba Cloud', 'Docker Swarm', 'Kubernetes / On-prem'],
+      text: 'A sua infrastrutura, as suas regras. Sem vendor lock-in: Primebrick corre igual do laptop ao datacenter empresarial, do cluster K8s à nuvem pública mais próxima dos utilizadores.',
+    },
+    ai: {
+      badge: 'AI-Nativo',
+      title: 'IA que entrega funcionalidades em minutos, não dias.',
+      text: 'Primebrick integra IA diretamente no fluxo de desenvolvimento. Descreve uma funcionalidade em linguagem natural e a IA gera o schema, os endpoints API, as páginas UI e os testes — tudo seguindo as convenções do framework. O que antes levava dias de boilerplate agora leva minutos.',
+      cards: [
+        { title: 'De schema a página em minutos', text: 'Descreve a tua entidade, obténs a migração de base de dados, CRUD API, permissões RBAC e UI de backoffice gerados automaticamente.' },
+        { title: 'Conhece as convenções', text: 'A IA conhece os padrões do Primebrick: gera código que segue a tua arquitetura, não boilerplate genérico.' },
+        { title: 'Testes incluídos', text: 'Cada funcionalidade gerada inclui scaffolding de testes. Entrega com confiança, não com esperança.' },
+      ],
+    },
+    agentic: {
+      badge: 'Desenvolvimento Agentic',
+      title: 'Duas formas de construir. Ambas first-class.',
+      text: 'Primebrick suporta todo o espetro de fluxos de desenvolvimento. Usa o teu IDE preferido para codificação profunda e hands-on. Ou deixa que os agentes IA construam funcionalidades diretamente da app web — sem ambiente local.',
+      cards: [
+        { title: 'Modo IDE', subtitle: 'VS Code, Cursor, Windsurf', text: 'Clona, executa localmente, depura com breakpoints, controlo total. A experiência de desenvolvedor tradicional com todas as convenções do framework aplicadas pelo tooling.' },
+        { title: 'Modo Agentic', subtitle: 'Agentes IA no navegador', text: 'Descreve o que queres, aprova o plano, e os agentes IA constroem-no diretamente na app web. Sem setup local, sem config de ambiente. Da ideia à funcionalidade deployada sem sair do navegador.' },
+      ],
     },
     concept: {
       title: 'Um backoffice que começa com as suas próprias regras.',
@@ -323,6 +418,7 @@ export const translations = {
   fr: {
     nav: { features: 'Fonctionnalités', docs: 'Docs', apiExplorer: 'API Explorer', github: 'GitHub', license: 'Licence MIT' },
     hero: {
+      badge: 'Licence MIT • Open Source • Multi-Cloud',
       headline: 'Le framework backoffice opinionated pour les équipes sérieuses',
       subheadline: 'Primebrick v3 est un framework open-source qui définit l\'infrastructure, l\'architecture et les règles de codage selon les meilleures pratiques. Licence MIT : utilisation commerciale sans contraintes.',
       ctaGithub: 'Voir sur GitHub',
@@ -332,7 +428,25 @@ export const translations = {
     multicloud: {
       title: 'Multi-cloud, vraiment.',
       text: 'Votre infrastructure, vos règles. Pas de vendor lock-in : Primebrick fonctionne identiquement de votre laptop au datacenter d\'entreprise, du cluster K8s au cloud public le plus proche.',
-      providers: ['AWS', 'GCP', 'Azure', 'Alibaba Cloud', 'Docker Swarm', 'Kubernetes / On-prem'],
+    },
+    ai: {
+      badge: 'AI-Natif',
+      title: 'L\'IA livre des fonctionnalités en minutes, pas en jours.',
+      text: 'Primebrick intègre l\'IA directement dans le flux de développement. Décrivez une fonctionnalité en langage naturel et l\'IA génère le schéma, les endpoints API, les pages UI et les tests — tout en suivant les conventions du framework. Ce qui prenait des jours de boilerplate prend maintenant des minutes.',
+      cards: [
+        { title: 'Du schéma à la page en minutes', text: 'Décrivez votre entité, obtenez la migration de base de données, le CRUD API, les permissions RBAC et l\'UI backoffice générés automatiquement.' },
+        { title: 'Connaît les conventions', text: 'L\'IA connaît les patterns Primebrick : elle génère du code qui suit votre architecture, pas du boilerplate générique.' },
+        { title: 'Tests inclus', text: 'Chaque fonctionnalité générée inclut le scaffolding des tests. Livrez avec confiance, pas avec espoir.' },
+      ],
+    },
+    agentic: {
+      badge: 'Développement Agentic',
+      title: 'Deux façons de construire. Les deux sont first-class.',
+      text: 'Primebrick supporte tout le spectre des flux de développement. Utilisez votre IDE de choix pour du codage approfondi et hands-on. Ou laissez les agents IA construire des fonctionnalités directement depuis l\'app web — sans environnement local.',
+      cards: [
+        { title: 'Mode IDE', subtitle: 'VS Code, Cursor, Windsurf', text: 'Cloner, exécuter localement, déboguer avec des breakpoints, contrôle total. L\'expérience développeur traditionnelle avec toutes les conventions du framework appliquées par l\'outillage.' },
+        { title: 'Mode Agentic', subtitle: 'Agents IA dans le navigateur', text: 'Décrivez ce que vous voulez, approuvez le plan, et les agents IA le construisent directement dans l\'app web. Pas de setup local, pas de config d\'environnement. De l\'idée à la fonctionnalité déployée sans quitter le navigateur.' },
+      ],
     },
     concept: {
       title: 'Un backoffice qui commence par ses propres règles.',

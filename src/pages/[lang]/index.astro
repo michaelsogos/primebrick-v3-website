@@ -1,6 +1,7 @@
 ---
 import { translations, LANGUAGES, type LangCode } from '../../i18n/translations';
 import LanguageSwitcher from '../../components/svelte/LanguageSwitcher.svelte';
+import CloudLogos from '../../components/CloudLogos.astro';
 import '../../styles/global.css';
 
 export const prerender = true;
@@ -16,7 +17,7 @@ const langCode = (lang ?? 'en') as LangCode;
 const t = translations[langCode] ?? translations.en;
 const isEn = langCode === 'en';
 const docsPath = isEn ? '/docs' : `/${langCode}/docs`;
-const apiExplorerPath = isEn ? '/api-explorer' : `/api-explorer`;
+const apiExplorerPath = '/api-explorer';
 ---
 
 <!doctype html>
@@ -33,10 +34,19 @@ const apiExplorerPath = isEn ? '/api-explorer' : `/api-explorer`;
     <link rel="alternate" hreflang="x-default" href="https://primebrick.dev/" />
   </head>
   <body class="min-h-screen bg-slate-950 text-slate-100 antialiased">
+    <!-- Ambient gradient background -->
+    <div class="pointer-events-none fixed inset-0 overflow-hidden">
+      <div class="absolute -top-40 left-1/2 h-[500px] w-[800px] -translate-x-1/2 rounded-full bg-sky-500/10 blur-[120px]"></div>
+      <div class="absolute top-1/3 -right-40 h-[400px] w-[400px] rounded-full bg-indigo-500/10 blur-[100px]"></div>
+      <div class="absolute bottom-0 -left-40 h-[400px] w-[400px] rounded-full bg-cyan-500/10 blur-[100px]"></div>
+    </div>
+
     <!-- Navigation -->
-    <nav class="border-b border-slate-800 px-6 py-4">
-      <div class="mx-auto flex max-w-6xl items-center justify-between">
-        <a href={isEn ? '/' : `/${langCode}/`} class="text-xl font-bold text-sky-400">Primebrick</a>
+    <nav class="relative z-10 border-b border-slate-800/50 backdrop-blur-sm">
+      <div class="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
+        <a href={isEn ? '/' : `/${langCode}/`} class="flex items-center gap-2 text-xl font-bold">
+          <span class="bg-gradient-to-r from-sky-400 to-indigo-400 bg-clip-text text-transparent">Primebrick</span>
+        </a>
         <div class="flex items-center gap-6 text-sm">
           <a href={docsPath} class="text-slate-300 hover:text-sky-400 transition-colors">{t.nav.docs}</a>
           <a href={apiExplorerPath} class="text-slate-300 hover:text-sky-400 transition-colors">{t.nav.apiExplorer}</a>
@@ -62,18 +72,22 @@ const apiExplorerPath = isEn ? '/api-explorer' : `/api-explorer`;
     </nav>
 
     <!-- Hero -->
-    <section class="px-6 py-24">
+    <section class="relative z-10 px-6 pt-24 pb-20">
       <div class="mx-auto max-w-4xl text-center">
-        <h1 class="text-4xl font-bold tracking-tight text-white sm:text-5xl lg:text-6xl">
-          {t.hero.headline}
+        <div class="mb-6 inline-flex items-center gap-2 rounded-full border border-slate-700/50 bg-slate-900/50 px-4 py-1.5 text-xs font-medium text-slate-400 backdrop-blur-sm">
+          <span class="h-1.5 w-1.5 rounded-full bg-sky-400 animate-pulse"></span>
+          {t.hero.badge}
+        </div>
+        <h1 class="text-5xl font-bold tracking-tight text-white sm:text-6xl lg:text-7xl">
+          <span class="bg-gradient-to-b from-white to-slate-400 bg-clip-text text-transparent">{t.hero.headline}</span>
         </h1>
-        <p class="mx-auto mt-6 max-w-2xl text-lg text-slate-400">
+        <p class="mx-auto mt-6 max-w-2xl text-lg text-slate-400 sm:text-xl">
           {t.hero.subheadline}
         </p>
         <div class="mt-10 flex flex-wrap items-center justify-center gap-4">
           <a
             href="https://github.com/michaelsogos/primebrick-v3-website"
-            class="rounded-lg bg-sky-500 px-6 py-3 text-sm font-semibold text-white hover:bg-sky-400 transition-colors"
+            class="group relative rounded-xl bg-gradient-to-r from-sky-500 to-indigo-500 px-7 py-3.5 text-sm font-semibold text-white shadow-lg shadow-sky-500/25 transition-all hover:shadow-xl hover:shadow-sky-500/40 hover:scale-105"
             target="_blank"
             rel="noopener"
           >
@@ -81,74 +95,126 @@ const apiExplorerPath = isEn ? '/api-explorer' : `/api-explorer`;
           </a>
           <a
             href={docsPath}
-            class="rounded-lg border border-slate-700 px-6 py-3 text-sm font-semibold text-slate-200 hover:border-sky-500 hover:text-sky-400 transition-colors"
+            class="rounded-xl border border-slate-700 bg-slate-900/50 px-7 py-3.5 text-sm font-semibold text-slate-200 backdrop-blur-sm transition-all hover:border-sky-500 hover:text-sky-400 hover:scale-105"
           >
             {t.hero.ctaArchitecture}
           </a>
         </div>
-        <!-- Stats bar -->
-        <div class="mt-12 flex flex-wrap items-center justify-center gap-8 text-sm text-slate-500">
-          <span class="flex items-center gap-2">
-            <span class="h-2 w-2 rounded-full bg-sky-400"></span>
-            {t.stats.license}
-          </span>
-          <span class="flex items-center gap-2">
-            <span class="h-2 w-2 rounded-full bg-sky-400"></span>
-            {t.stats.deploy}
-          </span>
-          <span class="flex items-center gap-2">
-            <span class="h-2 w-2 rounded-full bg-sky-400"></span>
-            {t.stats.lockin}
-          </span>
+      </div>
+    </section>
+
+    <!-- Multi-cloud with logos -->
+    <section class="relative z-10 px-6 py-16">
+      <div class="mx-auto max-w-5xl text-center">
+        <h2 class="text-2xl font-bold text-white sm:text-3xl">{t.multicloud.title}</h2>
+        <p class="mx-auto mt-4 max-w-2xl text-slate-400">{t.multicloud.text}</p>
+        <div class="mt-10">
+          <CloudLogos />
         </div>
       </div>
     </section>
 
-    <!-- Multi-cloud -->
-    <section class="px-6 py-16">
-      <div class="mx-auto max-w-4xl text-center">
-        <h2 class="text-3xl font-bold text-white">{t.multicloud.title}</h2>
-        <p class="mx-auto mt-4 max-w-2xl text-lg text-slate-400">{t.multicloud.text}</p>
-        <div class="mt-8 flex flex-wrap items-center justify-center gap-3">
-          {t.multicloud.providers.map((provider) => (
-            <span class="rounded-lg border border-slate-700 bg-slate-900/50 px-4 py-2 text-sm text-slate-300">{provider}</span>
-          ))}
-        </div>
-      </div>
-    </section>
-
-    <!-- Concept -->
-    <section class="px-6 py-16">
+    <!-- AI Section -->
+    <section class="relative z-10 px-6 py-24">
       <div class="mx-auto max-w-5xl">
         <div class="text-center">
-          <h2 class="text-3xl font-bold text-white">{t.concept.title}</h2>
-          <p class="mx-auto mt-4 max-w-2xl text-lg text-slate-400">{t.concept.text}</p>
+          <div class="mb-4 inline-flex items-center gap-2 rounded-full border border-indigo-500/30 bg-indigo-500/10 px-4 py-1.5 text-xs font-medium text-indigo-300">
+            <svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
+            </svg>
+            {t.ai.badge}
+          </div>
+          <h2 class="text-3xl font-bold text-white sm:text-4xl">{t.ai.title}</h2>
+          <p class="mx-auto mt-4 max-w-2xl text-lg text-slate-400">{t.ai.text}</p>
         </div>
-        <div class="mt-12 grid gap-6 sm:grid-cols-2">
-          {t.concept.cards.map((card, i) => (
-            <div class="rounded-xl border border-slate-800 bg-slate-900/50 p-6">
-              <div class="flex items-center gap-3">
-                <span class="text-2xl font-bold text-sky-400">{i + 1}</span>
-                <h3 class="text-lg font-semibold text-white">{card.title}</h3>
+        <div class="mt-12 grid gap-6 md:grid-cols-3">
+          {t.ai.cards.map((card, i) => (
+            <div class="group relative rounded-2xl border border-slate-800/50 bg-slate-900/30 p-6 backdrop-blur-sm transition-all hover:border-indigo-500/30 hover:bg-slate-900/50">
+              <div class="mb-4 flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-indigo-500/20 to-sky-500/20 text-indigo-400">
+                {i === 0 && (
+                  <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" /></svg>
+                )}
+                {i === 1 && (
+                  <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11" /></svg>
+                )}
+                {i === 2 && (
+                  <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                )}
               </div>
-              <p class="mt-3 text-sm text-slate-400">{card.text}</p>
+              <h3 class="text-lg font-semibold text-white">{card.title}</h3>
+              <p class="mt-2 text-sm text-slate-400">{card.text}</p>
             </div>
           ))}
         </div>
       </div>
     </section>
 
-    <!-- Bricks -->
-    <section class="px-6 py-16">
+    <!-- Agentic Development Section -->
+    <section class="relative z-10 px-6 py-24">
       <div class="mx-auto max-w-5xl">
         <div class="text-center">
-          <h2 class="text-3xl font-bold text-white">{t.bricks.title}</h2>
+          <div class="mb-4 inline-flex items-center gap-2 rounded-full border border-cyan-500/30 bg-cyan-500/10 px-4 py-1.5 text-xs font-medium text-cyan-300">
+            <svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="3" />
+              <path d="M12 1v6m0 6v6m11-7h-6m-6 0H1m18.36-7.36l-4.24 4.24m-6.52 6.52l-4.24 4.24m12.72 0l-4.24-4.24m-6.52-6.52L4.64 4.64" />
+            </svg>
+            {t.agentic.badge}
+          </div>
+          <h2 class="text-3xl font-bold text-white sm:text-4xl">{t.agentic.title}</h2>
+          <p class="mx-auto mt-4 max-w-2xl text-lg text-slate-400">{t.agentic.text}</p>
+        </div>
+        <div class="mt-12 grid gap-6 md:grid-cols-2">
+          {t.agentic.cards.map((card, i) => (
+            <div class={`group relative overflow-hidden rounded-2xl border p-8 backdrop-blur-sm transition-all hover:scale-[1.02] ${i === 0 ? 'border-slate-800/50 bg-slate-900/30 hover:border-sky-500/30' : 'border-slate-800/50 bg-slate-900/30 hover:border-cyan-500/30'}`}>
+              <div class={`mb-2 text-xs font-mono ${i === 0 ? 'text-sky-400' : 'text-cyan-400'}`}>
+                {i === 0 ? '// TRADITIONAL' : '// AI-POWERED'}
+              </div>
+              <h3 class="text-2xl font-bold text-white">{card.title}</h3>
+              <p class={`mt-1 text-sm font-medium ${i === 0 ? 'text-sky-400' : 'text-cyan-400'}`}>{card.subtitle}</p>
+              <p class="mt-4 text-slate-400">{card.text}</p>
+              <div class={`absolute -bottom-10 -right-10 h-32 w-32 rounded-full blur-3xl ${i === 0 ? 'bg-sky-500/5' : 'bg-cyan-500/5'} transition-all group-hover:opacity-100`}></div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- Concept (Bento grid) -->
+    <section class="relative z-10 px-6 py-24">
+      <div class="mx-auto max-w-5xl">
+        <div class="text-center">
+          <h2 class="text-3xl font-bold text-white sm:text-4xl">{t.concept.title}</h2>
+          <p class="mx-auto mt-4 max-w-2xl text-lg text-slate-400">{t.concept.text}</p>
+        </div>
+        <div class="mt-12 grid gap-4 sm:grid-cols-2 sm:gap-6">
+          {t.concept.cards.map((card, i) => (
+            <div class={`group rounded-2xl border border-slate-800/50 bg-slate-900/30 p-6 backdrop-blur-sm transition-all hover:border-sky-500/30 hover:bg-slate-900/50 ${i === 0 || i === 3 ? 'sm:col-span-2' : ''}`}>
+              <div class="flex items-start gap-4">
+                <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-sky-500/20 to-indigo-500/20 text-lg font-bold text-sky-400">
+                  {i + 1}
+                </span>
+                <div>
+                  <h3 class="text-lg font-semibold text-white">{card.title}</h3>
+                  <p class="mt-2 text-sm text-slate-400">{card.text}</p>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- Bricks (Bento grid) -->
+    <section class="relative z-10 px-6 py-24">
+      <div class="mx-auto max-w-5xl">
+        <div class="text-center">
+          <h2 class="text-3xl font-bold text-white sm:text-4xl">{t.bricks.title}</h2>
           <p class="mx-auto mt-4 max-w-2xl text-lg text-slate-400">{t.bricks.text}</p>
         </div>
-        <div class="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <div class="mt-12 grid gap-4 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3">
           {t.bricks.cards.map((brick) => (
-            <div class="rounded-xl border border-slate-800 bg-slate-900/50 p-6">
-              <code class="text-xs font-mono text-sky-400">{brick.label}</code>
+            <div class="group relative rounded-2xl border border-slate-800/50 bg-slate-900/30 p-6 backdrop-blur-sm transition-all hover:border-sky-500/30 hover:bg-slate-900/50 hover:scale-[1.02]">
+              <code class="text-xs font-mono text-sky-400/70">{brick.label}</code>
               <h3 class="mt-2 text-lg font-semibold text-white">{brick.title}</h3>
               <p class="mt-2 text-sm text-slate-400">{brick.text}</p>
             </div>
@@ -158,27 +224,27 @@ const apiExplorerPath = isEn ? '/api-explorer' : `/api-explorer`;
     </section>
 
     <!-- For Devs + For CTOs -->
-    <section class="px-6 py-16">
-      <div class="mx-auto grid max-w-5xl gap-8 lg:grid-cols-2">
-        <div class="rounded-xl border border-slate-800 bg-slate-900/50 p-8">
-          <h2 class="text-2xl font-bold text-sky-400">{t.forDevs.title}</h2>
+    <section class="relative z-10 px-6 py-24">
+      <div class="mx-auto grid max-w-5xl gap-6 lg:grid-cols-2">
+        <div class="rounded-2xl border border-slate-800/50 bg-slate-900/30 p-8 backdrop-blur-sm">
+          <h2 class="text-2xl font-bold bg-gradient-to-r from-sky-400 to-cyan-400 bg-clip-text text-transparent">{t.forDevs.title}</h2>
           <p class="mt-4 text-slate-400">{t.forDevs.text}</p>
-          <ul class="mt-4 space-y-2 text-slate-300">
+          <ul class="mt-6 space-y-3 text-slate-300">
             {t.forDevs.bullets.map((bullet) => (
-              <li class="flex items-start gap-2">
-                <span class="mt-1 text-sky-400">&#10003;</span>
+              <li class="flex items-start gap-3">
+                <span class="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-sky-500/20 text-xs text-sky-400">&#10003;</span>
                 <span>{bullet}</span>
               </li>
             ))}
           </ul>
         </div>
-        <div class="rounded-xl border border-slate-800 bg-slate-900/50 p-8">
-          <h2 class="text-2xl font-bold text-sky-400">{t.forCtos.title}</h2>
+        <div class="rounded-2xl border border-slate-800/50 bg-slate-900/30 p-8 backdrop-blur-sm">
+          <h2 class="text-2xl font-bold bg-gradient-to-r from-indigo-400 to-purple-400 bg-clip-text text-transparent">{t.forCtos.title}</h2>
           <p class="mt-4 text-slate-400">{t.forCtos.text}</p>
-          <ul class="mt-4 space-y-2 text-slate-300">
+          <ul class="mt-6 space-y-3 text-slate-300">
             {t.forCtos.bullets.map((bullet) => (
-              <li class="flex items-start gap-2">
-                <span class="mt-1 text-sky-400">&#10003;</span>
+              <li class="flex items-start gap-3">
+                <span class="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-indigo-500/20 text-xs text-indigo-400">&#10003;</span>
                 <span>{bullet}</span>
               </li>
             ))}
@@ -188,11 +254,11 @@ const apiExplorerPath = isEn ? '/api-explorer' : `/api-explorer`;
     </section>
 
     <!-- Open Source -->
-    <section class="px-6 py-16">
+    <section class="relative z-10 px-6 py-24">
       <div class="mx-auto max-w-3xl text-center">
-        <h2 class="text-3xl font-bold text-white">{t.openSource.title}</h2>
+        <h2 class="text-3xl font-bold text-white sm:text-4xl">{t.openSource.title}</h2>
         <p class="mt-4 text-lg text-slate-400">{t.openSource.text}</p>
-        <div class="mt-6 flex items-center justify-center gap-4 text-sm">
+        <div class="mt-8 flex items-center justify-center gap-4 text-sm">
           <a
             href="https://github.com/michaelsogos/primebrick-v3-website"
             class="text-sky-400 hover:text-sky-300 transition-colors"
@@ -215,32 +281,35 @@ const apiExplorerPath = isEn ? '/api-explorer' : `/api-explorer`;
     </section>
 
     <!-- Final CTA -->
-    <section class="px-6 py-24">
+    <section class="relative z-10 px-6 py-32">
       <div class="mx-auto max-w-3xl text-center">
-        <h2 class="text-3xl font-bold text-white">{t.finalCta.title}</h2>
-        <p class="mx-auto mt-4 max-w-2xl text-lg text-slate-400">{t.finalCta.text}</p>
-        <div class="mt-8 flex flex-wrap items-center justify-center gap-4">
-          <a
-            href="https://github.com/michaelsogos/primebrick-v3-website"
-            class="rounded-lg bg-sky-500 px-6 py-3 text-sm font-semibold text-white hover:bg-sky-400 transition-colors"
-            target="_blank"
-            rel="noopener"
-          >
-            {t.finalCta.ctaGithub}
-          </a>
-          <a
-            href={docsPath}
-            class="rounded-lg border border-slate-700 px-6 py-3 text-sm font-semibold text-slate-200 hover:border-sky-500 hover:text-sky-400 transition-colors"
-          >
-            {t.finalCta.ctaDocs}
-          </a>
+        <div class="relative rounded-3xl border border-slate-800/50 bg-gradient-to-b from-slate-900/50 to-slate-950/50 p-12 backdrop-blur-sm">
+          <div class="absolute inset-0 -z-10 rounded-3xl bg-gradient-to-r from-sky-500/5 to-indigo-500/5 blur-2xl"></div>
+          <h2 class="text-3xl font-bold text-white sm:text-4xl">{t.finalCta.title}</h2>
+          <p class="mx-auto mt-4 max-w-2xl text-lg text-slate-400">{t.finalCta.text}</p>
+          <div class="mt-8 flex flex-wrap items-center justify-center gap-4">
+            <a
+              href="https://github.com/michaelsogos/primebrick-v3-website"
+              class="rounded-xl bg-gradient-to-r from-sky-500 to-indigo-500 px-7 py-3.5 text-sm font-semibold text-white shadow-lg shadow-sky-500/25 transition-all hover:shadow-xl hover:shadow-sky-500/40 hover:scale-105"
+              target="_blank"
+              rel="noopener"
+            >
+              {t.finalCta.ctaGithub}
+            </a>
+            <a
+              href={docsPath}
+              class="rounded-xl border border-slate-700 bg-slate-900/50 px-7 py-3.5 text-sm font-semibold text-slate-200 backdrop-blur-sm transition-all hover:border-sky-500 hover:text-sky-400 hover:scale-105"
+            >
+              {t.finalCta.ctaDocs}
+            </a>
+          </div>
         </div>
       </div>
     </section>
 
     <!-- Footer -->
-    <footer class="border-t border-slate-800 px-6 py-8">
-      <div class="mx-auto flex max-w-6xl items-center justify-between text-sm text-slate-500">
+    <footer class="relative z-10 border-t border-slate-800/50 px-6 py-8">
+      <div class="mx-auto flex max-w-7xl items-center justify-between text-sm text-slate-500">
         <span>&copy; 2026 {t.footer.copyright}</span>
         <a
           href="https://github.com/michaelsogos/primebrick-v3-website"
