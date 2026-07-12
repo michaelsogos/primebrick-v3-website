@@ -1,0 +1,33 @@
+---
+title: "Primebrick Docs"
+description: "Primebrick documentation home — getting started, API reference, and deep technical guides."
+source: handwritten
+---
+
+import { Card, CardGrid, LinkCard } from '@astrojs/starlight/components';
+
+Primebrick is an opinionated, open-source backoffice framework built with TypeScript, Express, SvelteKit, PostgreSQL, Casdoor, and NATS. It is MIT-licensed, multi-cloud, and designed to avoid vendor lock-in.
+
+<CardGrid stagger>
+
+  <Card title="Getting Started" icon="rocket">
+    Learn what Primebrick is, get a local environment running in minutes, and understand the layered architecture.
+  </Card>
+
+  <Card title="API Reference" icon="document-search">
+    Explore the REST API: authentication, RBAC, the microservice standard, and error handling.
+  </Card>
+
+  <Card title="DeepWiki" icon="seti:book">
+    Auto-generated, exhaustive technical documentation for every Primebrick repository.
+  </Card>
+
+</CardGrid>
+
+## Quick links
+
+<LinkCard title="Introduction" href="./getting-started/introduction/" description="What Primebrick is and why it exists." />
+<LinkCard title="Quick Start" href="./getting-started/quick-start/" description="Clone, install, and run Primebrick locally." />
+<LinkCard title="Architecture" href="./getting-started/architecture/" description="The layered architecture and how the pieces fit together." />
+<LinkCard title="API Overview" href="./api/introduction/" description="Base URLs, OpenAPI spec, and error format." />
+<LinkCard title="API Explorer" href="/api-explorer/" description="Interactive OpenAPI explorer with live try-it." />

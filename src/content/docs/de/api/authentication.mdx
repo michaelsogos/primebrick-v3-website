@@ -1,0 +1,162 @@
+---
+title: "Authentifizierung"
+description: "Casdoor IDP, OIDC, JWT und drei Anmeldetypen: Benutzer-Token, OAuth2 Client-Token, API-Schlüssel."
+source: handwritten
+---
+
+# Authentifizierung
+
+Primebrick verwendet **Casdoor** als Identity Provider (IDP) mit **OIDC** (OpenID Connect) als Protokoll. Die Authentifizierung erfolgt über **JWT** (JSON Web Tokens).
+
+## Überblick
+
+Es gibt **drei Anmeldetypen**, die unterschiedliche Use-Cases abdecken:
+
+| Anmeldetyp | Use-Case | Token-Art |
+|-----------|----------|-----------|
+| **Benutzer-Token** | Interaktive Benutzer (Frontend) | JWT (OIDC Authorization Code) |
+| **OAuth2 Client-Token** | Service-to-Service | JWT (Client Credentials) |
+| **API-Schlüssel** | API-Explorer, Automatisierung | Statischer Schlüssel |
+
+## 1. Benutzer-Token
+
+Der häufigste Anmeldetyp für interaktive Benutzer. Der Login-Flow verwendet den **OIDC Authorization Code Flow**:
+
+```text
+┌──────────┐     ┌──────────┐     ┌──────────┐
+│ Frontend │────▶│ Casdoor  │────▶│ Backend  │
+│ (Browser)│     │  (IDP)   │     │  (API)   │
+└──────────┘     └──────────┘     └──────────┘
+     │               │                │
+     │  1. Login      │                │
+     │──────────────▶│                │
+     │               │                │
+     │  2. Auth Code  │                │
+     │◀──────────────│                │
+     │               │                │
+     │  3. Token      │                │
+     │──────────────▶│                │
+     │◀──────────────│                │
+     │               │                │
+     │  4. API-Call   │                │
+     │──────────────────────────────▶│
+     │  (mit JWT)     │                │
+     │◀──────────────────────────────│
+```
+
+### Token-Übertragung
+
+Das JWT wird im `Authorization`-Header übertragen:
+
+```http
+Authorization: Bearer eyJhbGciOiJSUzI1NiIs...
+```
+
+### Token-Validierung
+
+Das Backend validiert das JWT bei jedem Request:
+
+1. **Signatur prüfen**: Überprüfung mit dem öffentlichen Schlüssel von Casdoor.
+2. **Ablauf prüfen**: `exp`-Claim muss in der Zukunft liegen.
+3. **Issuer prüfen**: `iss`-Claim muss mit der Casdoor-URL übereinstimmen.
+4. **Audience prüfen**: `aud`-Claim muss mit der Backend-Client-ID übereinstimmen.
+
+## 2. OAuth2 Client-Token
+
+Für Service-to-Service-Kommunikation wird der **OAuth2 Client Credentials Flow** verwendet. Dabei authentifiziert sich ein Service mit seiner Client-ID und seinem Client-Secret direkt bei Casdoor.
+
+```bash
+# Token anfordern
+curl -X POST https://casdoor.example.com/oauth/token \
+  -H "Content-Type: application/x-www-form-urlencoded" \
+  -d "grant_type=client_credentials" \
+  -d "client_id=SERVICE_CLIENT_ID" \
+  -d "client_secret=SERVICE_CLIENT_SECRET"
+```
+
+Response:
+
+```json
+{
+  "access_token": "eyJhbGciOiJSUzI1NiIs...",
+  "token_type": "Bearer",
+  "expires_in": 3600
+}
+```
+
+Das erhaltene JWT wird wie beim Benutzer-Token im `Authorization`-Header übertragen.
+
+## 3. API-Schlüssel
+
+API-Schlüssel sind statische Schlüssel, die für Automatisierung und den **API-Explorer** verwendet werden. Sie sind einfacher zu handhaben als JWT-Tokens, da kein Token-Refresh erforderlich ist.
+
+### Übertragung
+
+API-Schlüssel werden im `X-API-Key`-Header übertragen:
+
+```http
+X-API-Key: pbk_live_abc123def456...
+```
+
+### API-Explorer
+
+Der API-Explorer verwendet API-Schlüssel zur Authentifizierung. Dies ermöglicht das Testen von Endpunkten ohne einen vollständigen OIDC-Login-Flow.
+
+So konfigurieren Sie den API-Schlüssel im API-Explorer:
+
+1. Öffnen Sie den [API-Explorer](/api-explorer/).
+2. Klicken Sie auf **Authentication**.
+3. Wählen Sie **API Key** als Authentifizierungsmethode.
+4. Geben Sie Ihren API-Schlüssel ein.
+5. Wählen Sie die Ziel-Server-URL aus.
+
+### API-Schlüssel verwalten
+
+API-Schlüssel werden in Casdoor verwaltet:
+
+1. Melden Sie sich bei Casdoor an.
+2. Navigieren Sie zu **Applications** → **Primebrick API**.
+3. Erstellen Sie einen neuen API-Schlüssel unter **Tokens**.
+4. Kopieren Sie den Schlüssel (er wird nur einmal angezeigt).
+
+## Casdoor IDP
+
+**Casdoor** ist der zentrale Identity Provider für Primebrick. Es implementiert OIDC und bietet:
+
+- **Benutzerverwaltung**: Benutzer, Gruppen, Organisationen.
+- **Rollenverwaltung**: Rollen mit Berechtigungen.
+- **OIDC-Flows**: Authorization Code, Client Credentials, Password, Refresh Token.
+- **JWT-Ausstellung**: RS256-signierte JWT-Tokens.
+- **Web-UI**: Admin-Oberfläche für Benutzer- und Rollenverwaltung.
+
+## JWT-Struktur
+
+Die von Casdoor ausgestellten JWT-Tokens enthalten folgende Claims:
+
+```json
+{
+  "iss": "https://casdoor.example.com",
+  "sub": "user_123",
+  "aud": "primebrick-api",
+  "exp": 1735689600,
+  "iat": 1735603200,
+  "roles": ["admin"],
+  "permissions": ["user.read", "user.write"]
+}
+```
+
+| Claim | Beschreibung |
+|-------|-------------|
+| `iss` | Issuer – Casdoor-URL |
+| `sub` | Subject – Benutzer-ID |
+| `aud` | Audience – Ziel-API |
+| `exp` | Expiration – Ablaufzeit |
+| `iat` | Issued At – Ausstellungszeit |
+| `roles` | Rollen des Benutzers |
+| `permissions` | Berechtigungen des Benutzers |
+
+## Nächste Schritte
+
+- [RBAC](/de/api/rbac/) – Wie Berechtigungen geprüft werden.
+- [Microservice-Standard](/de/api/microservice-standard/) – Service-Registrierung und Proxy.
+- [Fehlerbehandlung](/de/api/error-handling/) – Fehler-Responses.

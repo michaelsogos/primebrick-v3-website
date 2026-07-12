@@ -1,0 +1,50 @@
+---
+title: "Documentación de Primebrick"
+description: "Documentación de Primebrick — visión general, primeros pasos, referencia API y DeepWiki."
+source: handwritten
+---
+
+import { Card, CardGrid } from '@astrojs/starlight/components';
+
+# Documentación de Primebrick
+
+Bienvenido a la documentación oficial de **Primebrick**, un framework backoffice de código abierto y opinionado, publicado bajo la **licencia MIT**.
+
+Primebrick ofrece una plataforma completa para construir aplicaciones backoffice con soporte multi-cloud, arquitectura de microservicios y sin vendor lock-in.
+
+## ¿Por dónde empezar?
+
+<CardGrid stagger>
+  <Card title="Primeros pasos" icon="rocket">
+    Conoce los fundamentos de Primebrick: introducción, inicio rápido y visión general de la arquitectura.
+  </Card>
+  <Card title="Referencia API" icon="api">
+    Documentación detallada de la API REST: autenticación, RBAC, estándar de microservicios y manejo de errores.
+  </Card>
+  <Card title="DeepWiki" icon="open-book">
+    Documentación wiki generada automáticamente para todos los repositorios de Primebrick.
+  </Card>
+  <Card title="API Explorer" icon="seti:swagger">
+    Explorador OpenAPI interactivo con función try-it para probar los endpoints en vivo.
+  </Card>
+</CardGrid>
+
+## Secciones principales
+
+### Primeros pasos
+
+- [Introducción](/es/getting-started/introduction/) — ¿Qué es Primebrick y qué problemas resuelve?
+- [Inicio rápido](/es/getting-started/quick-start/) — Empieza en pocos minutos.
+- [Arquitectura](/es/getting-started/architecture/) — Visión técnica general de los componentes.
+
+### Referencia API
+
+- [Introducción API](/es/api/introduction/) — URLs base y estructura de endpoints.
+- [Autenticación](/es/api/authentication/) — Casdoor IDP, OIDC, JWT y claves API.
+- [RBAC](/es/api/rbac/) — Permisos wildcard y asignación de roles.
+- [Estándar de microservicios](/es/api/microservice-standard/) — Autoregistro, heartbeats y proxy.
+- [Manejo de errores](/es/api/error-handling/) — RFC 7807 Problem Details y códigos de error.
+
+## Licencia
+
+Primebrick es software de código abierto bajo la **licencia MIT**. El código fuente está disponible en [GitHub](https://github.com/michaelsogos/primebrick-v3-website).

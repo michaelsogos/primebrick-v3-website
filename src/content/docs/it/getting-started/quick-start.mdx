@@ -1,0 +1,165 @@
+---
+title: "Avvio rapido"
+description: "Come clonare, installare ed eseguire Primebrick in pochi minuti. Prerequisiti: Node.js 20+, pnpm, Docker."
+source: handwritten
+---
+
+# Avvio rapido
+
+Questa guida ti accompagna nell'avvio di un ambiente di sviluppo Primebrick completo in pochi minuti.
+
+## Prerequisiti
+
+Prima di iniziare, assicurati di avere installati i seguenti strumenti:
+
+| Strumento | Versione minima | Note |
+|-----------|----------------|------|
+| **Node.js** | 20+ | Verifica con `node --version` |
+| **pnpm** | 9+ | Verifica con `pnpm --version` |
+| **Docker** | 24+ | Necessario per i servizi di infrastruttura (database, NATS, Casdoor) |
+| **Git** | 2.40+ | Per clonare i repository |
+
+### Installazione dei prerequisiti
+
+Se non hai ancora `pnpm`, puoi installarlo con:
+
+```bash
+npm install -g pnpm
+```
+
+Verifica che Docker sia in esecuzione:
+
+```bash
+docker info
+```
+
+## 1. Clonare i repository
+
+Primebrick è composto da più repository. Per un ambiente di sviluppo completo, clona il
+monorepo principale o i singoli repository:
+
+```bash
+# Clona il backend
+git clone https://github.com/michaelsogos/primebrick-be-v3.git
+
+# Clona il frontend
+git clone https://github.com/michaelsogos/primebrick-fe-v3.git
+
+# Clona i microservizi (opzionale per iniziare)
+git clone https://github.com/michaelsogos/primebrick-us-v3.git
+```
+
+## 2. Installare le dipendenze
+
+Entra in ogni repository e installa le dipendenze con `pnpm`:
+
+```bash
+cd primebrick-be-v3
+pnpm install
+
+cd ../primebrick-fe-v3
+pnpm install
+```
+
+## 3. Avviare i servizi di infrastruttura
+
+Il backend richiede alcuni servizi di infrastruttura (database, NATS, Casdoor). Questi sono
+definiti in un file `docker-compose.yml` e possono essere avviati con Docker:
+
+```bash
+cd primebrick-be-v3
+docker compose up -d
+```
+
+Questo avvia in background:
+
+- **PostgreSQL** — database principale
+- **NATS** — message broker per la comunicazione tra microservizi
+- **Casdoor** — Identity Provider per autenticazione OIDC
+
+Verifica che tutti i servizi siano attivi:
+
+```bash
+docker compose ps
+```
+
+## 4. Configurare le variabili d'ambiente
+
+Copia il file `.env.example` in `.env` e modifica i valori se necessario:
+
+```bash
+cp .env.example .env
+```
+
+Le variabili principali includono:
+
+```bash
+# Database
+DATABASE_URL=postgresql://primebrick:primebrick@localhost:5432/primebrick
+
+# NATS
+NATS_URL=nats://localhost:4222
+
+# Casdoor
+CASDOOR_ENDPOINT=http://localhost:8000
+CASDOOR_CLIENT_ID=xxx
+CASDOOR_CLIENT_SECRET=xxx
+```
+
+## 5. Eseguire le migrazioni del database
+
+Applica lo schema del database eseguendo le migrazioni:
+
+```bash
+pnpm run db:migrate
+```
+
+## 6. Avviare il backend
+
+```bash
+pnpm run dev
+```
+
+Il backend sarà disponibile su `http://localhost:3001`.
+
+Verifica che l'API risponda:
+
+```bash
+curl http://localhost:3001/api/v1/health
+```
+
+## 7. Avviare il frontend
+
+In un nuovo terminale:
+
+```bash
+cd primebrick-fe-v3
+pnpm run dev
+```
+
+Il frontend sarà disponibile su `http://localhost:5173`.
+
+## Verifica dell'installazione
+
+Apri il browser su `http://localhost:5173`. Dovresti vedere la pagina di login di Primebrick.
+Usa le credenziali di default di Casdoor per accedere al backoffice.
+
+## Risoluzione dei problemi
+
+### Docker non avvia i servizi
+
+Assicurati che Docker Desktop sia in esecuzione e che le porte `5432` (PostgreSQL), `4222`
+(NATS) e `8000` (Casdoor) non siano già occupate da altri processi.
+
+### Il backend non si connette al database
+
+Verifica che PostgreSQL sia attivo e che la `DATABASE_URL` nel file `.env` sia corretta.
+
+### Errore "pnpm not found"
+
+Installa pnpm globalmente con `npm install -g pnpm` o usa `corepack enable pnpm`.
+
+## Prossimi passi
+
+- [Architettura](/it/getting-started/architecture/) — Comprendi la struttura del progetto
+- [Introduzione API](/it/api/introduction/) — Inizia a esplorare l'API REST

@@ -1,0 +1,132 @@
+---
+title: "Authentification"
+description: "Authentification API avec Casdoor IDP, OIDC, JWT. Trois types de credentials : jeton utilisateur, jeton client OAuth2, clés API."
+source: handwritten
+---
+
+# Authentification
+
+Primebrick utilise **Casdoor** comme Identity Provider (IdP) externe. L'authentification est basée
+sur le protocole **OIDC** (OpenID Connect) et les jetons émis sont des **JWT** (JSON Web Token).
+
+## Vue d'ensemble
+
+Il existe **trois types de credentials** pour s'authentifier auprès de l'API de Primebrick :
+
+| Type | Cas d'usage | Header |
+|------|-------------|--------|
+| **Jeton utilisateur** | Applications frontend (utilisateurs réels) | `Authorization: Bearer <jwt>` |
+| **Jeton client OAuth2** | Communications service-to-service | `Authorization: Bearer <jwt>` |
+| **Clé API** | Scripts, intégrations, API Explorer | `X-API-Key: <api-key>` |
+
+Les trois mécanismes sont validés par le backend, qui vérifie l'identité et les permissions
+associées au credential avant de traiter la requête.
+
+## 1. Jeton utilisateur (JWT)
+
+Le flux primaire d'authentification pour les applications frontend est le **flux OIDC
+Authorization Code**. L'utilisateur est redirigé vers Casdoor pour se connecter, et reçoit en échange
+un JWT qui est envoyé à chaque requête API.
+
+### Flux
+
+1. Le frontend redirige l'utilisateur vers la page de connexion de Casdoor
+2. L'utilisateur saisit ses identifiants sur Casdoor
+3. Casdoor redirige le frontend avec un authorization code
+4. Le frontend échange l'authorization code contre un JWT (access token)
+5. Le frontend envoie le JWT à chaque requête API
+
+### Utilisation
+
+```bash
+curl -H "Authorization: Bearer eyJhbGciOiJSUzI1NiIs..." \
+  http://localhost:3001/api/v1/users
+```
+
+Le backend valide le JWT en vérifiant :
+
+- La **signature** en utilisant les clés publiques de Casdoor (JWKS)
+- L'**expiration** (claim `exp`)
+- L'**émetteur** (claim `iss`) correspond à Casdoor
+- L'**audience** (claim `aud`) correspond à l'application Primebrick
+
+### Refresh token
+
+Les JWT ont une expiration limitée (généralement 1 heure). Le frontend utilise le refresh
+token pour obtenir un nouveau JWT sans demander à l'utilisateur de se reconnecter.
+
+## 2. Jeton client OAuth2 (client_credentials)
+
+Pour les communications **service-to-service** où il n'y a pas d'utilisateur humain impliqué,
+Primebrick prend en charge le flux **OAuth2 client_credentials**. C'est le mécanisme recommandé pour :
+
+- Les microservices qui appellent l'API du backend
+- Les intégrations server-side automatisées
+- Les jobs et processus batch
+
+### Flux
+
+```bash
+# Requête d'un jeton client
+curl -X POST https://casdoor.example.com/api/login/oauth/access_token \
+  -d "grant_type=client_credentials" \
+  -d "client_id=SERVICE_CLIENT_ID" \
+  -d "client_secret=SERVICE_CLIENT_SECRET"
+```
+
+La réponse contient un JWT qui peut être utilisé comme bearer token :
+
+```bash
+curl -H "Authorization: Bearer <jwt>" \
+  http://localhost:3001/api/v1/users
+```
+
+Les jetons client ont des permissions associées au **service account** correspondant, non à un
+utilisateur humain.
+
+## 3. Clés API
+
+Les clés API sont un mécanisme d'authentification simple pour les scripts, les intégrations légères et
+l'**API Explorer**. Une clé API est une chaîne statique associée à un utilisateur ou un service account.
+
+### Utilisation
+
+```bash
+curl -H "X-API-Key: pbk_live_abc123def456..." \
+  http://localhost:3001/api/v1/users
+```
+
+### Caractéristiques
+
+- **N'expirent pas** automatiquement (doivent être révoquées manuellement)
+- **Identifient un utilisateur ou un service account** avec ses permissions RBAC correspondantes
+- **Sont idéales pour les scripts** et les intégrations où le flux OIDC est excessif
+
+### Gestion des clés API
+
+Les clés API peuvent être créées et révoquées depuis l'interface d'administration de Primebrick. Il est
+recommandé de :
+
+- Utiliser des clés séparées pour chaque intégration
+- Révoquer les clés qui ne sont plus utilisées
+- Ne pas partager les clés entre différents services
+
+## API Explorer et clés API
+
+L'**API Explorer** (basé sur Scalar) prend en charge l'authentification via les clés API. Cela permet
+de tester les endpoints de manière interactive sans avoir à gérer le flux OIDC complet. Configurez
+votre clé API dans l'interface de Scalar et les requêtes "try it" incluront automatiquement le
+header `X-API-Key`.
+
+## Endpoints publics
+
+Certains endpoints ne nécessitent pas d'authentification :
+
+- `GET /api/v1/health` — health check
+- `GET /api/v1/openapi.json` — spécification OpenAPI du backend
+- `GET /api/v1/openapi/aggregated.json` — spécification OpenAPI agrégée
+
+## Étapes suivantes
+
+- [RBAC](/fr/api/rbac/) — Comment les permissions sont vérifiées après l'authentification
+- [Gestion des erreurs](/fr/api/error-handling/) — Erreurs d'authentification et format standard

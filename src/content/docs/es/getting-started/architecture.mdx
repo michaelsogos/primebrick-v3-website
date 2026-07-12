@@ -1,0 +1,143 @@
+---
+title: "Arquitectura"
+description: "Arquitectura de Primebrick: Backend (Express API), Frontend (SvelteKit), Microservicios, DAL y SDK."
+source: handwritten
+---
+
+import { Card, CardGrid } from '@astrojs/starlight/components';
+
+# Arquitectura
+
+Primebrick adopta una arquitectura de componentes modulares, diseñada para ser escalable,
+portable y sin vendor lock-in. Cada componente tiene responsabilidades bien definidas y
+se comunica con los demás a través de protocolos estándar.
+
+## Visión general
+
+```text
+┌─────────────┐     ┌──────────────────┐     ┌─────────────────┐
+│  Frontend   │────▶│   Backend (API)  │────▶│   Base de datos │
+│  SvelteKit  │     │   Express        │     │   PostgreSQL    │
+└─────────────┘     └───────┬──────────┘     └─────────────────┘
+                            │
+                    ┌───────┴──────────┐
+                    │   Proxy / NATS   │
+                    └───────┬──────────┘
+                            │
+              ┌─────────────┼─────────────┐
+              ▼             ▼             ▼
+        ┌──────────┐  ┌──────────┐  ┌──────────┐
+        │ Microsrv │  │ Microsrv │  │ Microsrv │
+        │   US     │  │   ...    │  │   ...    │
+        └──────────┘  └──────────┘  └──────────┘
+```
+
+## Componentes
+
+<CardGrid stagger>
+  <Card title="Backend" icon="seti:express">
+    API REST en Express que actúa como único punto de entrada para el frontend. Gestiona
+    autenticación, autorización (RBAC), proxy hacia microservicios y persistencia de datos.
+  </Card>
+  <Card title="Frontend" icon="seti:svelte">
+    Aplicación SvelteKit que proporciona la interfaz de usuario del backoffice. Consume la
+    API REST del backend a través del SDK generado automáticamente.
+  </Card>
+  <Card title="Microservicios" icon="seti:docker">
+    Servicios autónomos que implementan lógica de negocio específica. Se autoregistran en
+    el backend y se comunican mediante NATS o llamadas HTTP proxadas.
+  </Card>
+  <Card title="DAL" icon="seti:database">
+    Data Access Layer — librería compartida que abstrae el acceso a datos. Proporciona un ORM
+    tipado con soporte multi-base de datos y migraciones.
+  </Card>
+  <Card title="SDK" icon="seti:typescript">
+    SDK generado automáticamente a partir de las especificaciones OpenAPI. Proporciona clientes
+    tipados para consumir la API del backend desde el frontend o desde servicios externos.
+  </Card>
+  <Card title="Casdoor" icon="seti:auth">
+    Identity Provider externo para autenticación OIDC. Gestiona usuarios, organizaciones,
+    roles y aplicaciones. El backend valida los tokens JWT emitidos por Casdoor.
+  </Card>
+</CardGrid>
+
+## Backend (Express API)
+
+El backend es el corazón del sistema. Está construido con **Express** y proporciona:
+
+- **API REST** bajo el prefijo `/api/v1/`
+- **Autenticación OIDC** mediante Casdoor (JWT bearer token)
+- **Autorización RBAC** con permisos wildcard (`modulo.accion.granularidad`)
+- **Proxy para microservicios** con balanceo round-robin
+- **Service registry** para el autoregistro de microservicios
+- **Endpoint OpenAPI agregado** que combina las especificaciones del backend y de todos los
+  microservicios online
+
+El backend es el único componente expuesto directamente al frontend. Los microservicios nunca
+son accesibles directamente desde el cliente.
+
+## Frontend (SvelteKit)
+
+El frontend es una aplicación **SvelteKit** que proporciona:
+
+- **UI de backoffice** preconfigurada con login, dashboards y gestión de datos
+- **Cliente tipado** generado por el SDK a partir del OpenAPI agregado
+- **Gestión de autenticación** integrada con Casdoor (flujo OIDC authorization code)
+- **Routing** basado en el sistema de archivos de SvelteKit
+
+El frontend se comunica exclusivamente con el backend a través de la API REST. No accede
+directamente a la base de datos, a los microservicios ni a Casdoor.
+
+## Microservicios
+
+Los microservicios son servicios autónomos que implementan lógica de negocio específica (p. ej.
+generación de documentos, procesamiento batch, integraciones externas). Cada microservicio:
+
+- Se **autoregistra** en el backend al iniciarse
+- Envía un **heartbeat** periódico para señalar que está activo
+- Expone una **API REST** documentada con OpenAPI
+- Es **proxado** por el backend a través del prefijo `/ws/:serviceCode/`
+
+El backend mantiene un **service registry** con la lista de microservicios online y enruta las
+peticiones con balanceo **round-robin** cuando hay múltiples instancias del mismo servicio.
+
+La comunicación asíncrona entre componentes se realiza mediante **NATS**, un message broker
+ligero y de alto rendimiento.
+
+## DAL (Data Access Layer)
+
+El DAL es una **librería compartida** que abstrae el acceso a los datos. Proporciona:
+
+- **ORM tipado** con soporte para PostgreSQL (y otras bases de datos relacionales)
+- **Migraciones** versionadas y reproducibles
+- **Repository pattern** para aislar la lógica de persistencia
+- **Transacciones** declarativas
+
+El DAL es utilizado tanto por el backend como por los microservicios, garantizando un acceso a
+los datos consistente y tipado en todo el sistema.
+
+## SDK
+
+El SDK es **generado automáticamente** a partir del endpoint OpenAPI agregado del backend.
+Proporciona:
+
+- **Cliente TypeScript** tipado para todas las APIs del backend y de los microservicios
+- **Validación** de tipos en tiempo de compilación
+- **Regeneración** sencilla cuando la API cambia
+
+Esto elimina la necesidad de escribir clientes API a mano y garantiza que el frontend esté
+siempre alineado con el backend.
+
+## Flujo de una petición típica
+
+1. El usuario interactúa con el **Frontend** (SvelteKit)
+2. El Frontend envía una petición HTTP al **Backend** a través del SDK tipado
+3. El Backend valida el **JWT** con Casdoor y verifica los **permisos RBAC**
+4. Si la petición es para un microservicio, el Backend la **proxia** al servicio apropiado
+5. El microservicio procesa la petición, accediendo a la base de datos a través del **DAL**
+6. La respuesta recorre la cadena de vuelta hasta el Frontend
+
+## Próximos pasos
+
+- [Introducción API](/es/api/introduction/) — Detalles de la API REST del backend
+- [Autenticación](/es/api/authentication/) — Cómo funciona la autenticación OIDC

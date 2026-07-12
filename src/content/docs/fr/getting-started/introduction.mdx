@@ -1,0 +1,64 @@
+---
+title: "Introduction"
+description: "Qu'est-ce que Primebrick — un framework backoffice open source opinionated, licence MIT, multi-cloud, sans vendor lock-in."
+source: handwritten
+---
+
+# Introduction
+
+## Qu'est-ce que Primebrick ?
+
+**Primebrick** est un framework backoffice **open source** et **opinionated**. Il fournit une
+architecture complète et prédéfinie pour construire des applications de gestion de données (backoffice,
+panneaux d'administration, dashboards internes) sans avoir à réécrire à chaque fois les mêmes
+composants fondamentaux : authentification, autorisation, API REST, couche d'accès aux données et frontend.
+
+Primebrick est distribué sous la **licence MIT**, l'une des licences open source les plus
+permissives. Vous pouvez l'utiliser librement dans des projets personnels, commerciaux ou d'entreprise,
+le modifier et le distribuer sans restrictions significatives.
+
+## Pourquoi "opinionated" ?
+
+Un framework "opinionated" prend des décisions architecturales pour vous. Au lieu d'offrir un ensemble
+générique d'outils à composer, Primebrick définit :
+
+- **Stack technologique fixe** : Express pour le backend, SvelteKit pour le frontend, NATS pour la
+  communication entre microservices.
+- **Conventions strictes** : structure de l'API, format des erreurs, standard d'enregistrement des
+  microservices, modèle d'autorisation.
+- **Composants pré-intégrés** : Casdoor comme Identity Provider, DAL comme couche d'accès aux données,
+  SDK pour la génération de clients typés.
+
+Cette approche réduit drastiquement le temps de configuration et garantit que tous les projets
+Primebrick suivent les mêmes conventions, simplifiant la maintenance, l'intégration de nouveaux
+développeurs et les contributions de la communauté.
+
+## Multi-cloud, sans vendor lock-in
+
+L'un des principes fondamentaux de Primebrick est l'**absence de vendor lock-in**. Tout le
+stack est conçu pour fonctionner partout :
+
+- **Cloud public** : AWS, Google Cloud, Azure, Cloudflare Workers
+- **Cloud privé** : toute infrastructure Kubernetes ou Docker
+- **On-premise** : serveurs traditionnels avec Docker ou bare metal
+
+Il n'existe aucune dépendance à des services gérés spécifiques d'un fournisseur. La base de données, le
+message broker (NATS), l'Identity Provider (Casdoor) et le runtime sont tous des composants open source
+auto-hébergeables. Vous pouvez déplacer une installation Primebrick d'un cloud à l'autre sans réécrire
+le code de l'application.
+
+## Ce que comprend Primebrick
+
+| Composant | Description |
+|-----------|-------------|
+| **Backend** | API REST en Express avec authentification OIDC, RBAC et proxy pour microservices |
+| **Frontend** | Application SvelteKit avec UI de backoffice préconfigurée |
+| **Microservices** | Standard pour services autonomes avec auto-enregistrement et heartbeat |
+| **DAL** | Data Access Layer — ORM abstrait avec support multi-base de données |
+| **SDK** | Génération automatique de clients typés à partir des spécifications OpenAPI |
+| **Casdoor** | Identity Provider pour authentification OIDC, gestion des utilisateurs et des rôles |
+
+## Étapes suivantes
+
+- [Démarrage rapide](/fr/getting-started/quick-start/) — Configurez un environnement de développement en quelques minutes
+- [Architecture](/fr/getting-started/architecture/) — Comprenez comment les composants interagissent

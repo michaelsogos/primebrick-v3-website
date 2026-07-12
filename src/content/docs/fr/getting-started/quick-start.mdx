@@ -1,0 +1,165 @@
+---
+title: "Démarrage rapide"
+description: "Comment cloner, installer et exécuter Primebrick en quelques minutes. Prérequis : Node.js 20+, pnpm, Docker."
+source: handwritten
+---
+
+# Démarrage rapide
+
+Ce guide vous accompagne dans la mise en place d'un environnement de développement Primebrick complet en quelques minutes.
+
+## Prérequis
+
+Avant de commencer, assurez-vous d'avoir installé les outils suivants :
+
+| Outil | Version minimale | Notes |
+|-------|------------------|-------|
+| **Node.js** | 20+ | Vérifiez avec `node --version` |
+| **pnpm** | 9+ | Vérifiez avec `pnpm --version` |
+| **Docker** | 24+ | Nécessaire pour les services d'infrastructure (base de données, NATS, Casdoor) |
+| **Git** | 2.40+ | Pour cloner les dépôts |
+
+### Installation des prérequis
+
+Si vous n'avez pas encore `pnpm`, vous pouvez l'installer avec :
+
+```bash
+npm install -g pnpm
+```
+
+Vérifiez que Docker est en cours d'exécution :
+
+```bash
+docker info
+```
+
+## 1. Cloner les dépôts
+
+Primebrick est composé de plusieurs dépôts. Pour un environnement de développement complet, clonez le
+monorepo principal ou les dépôts individuels :
+
+```bash
+# Cloner le backend
+git clone https://github.com/michaelsogos/primebrick-be-v3.git
+
+# Cloner le frontend
+git clone https://github.com/michaelsogos/primebrick-fe-v3.git
+
+# Cloner les microservices (facultatif pour commencer)
+git clone https://github.com/michaelsogos/primebrick-us-v3.git
+```
+
+## 2. Installer les dépendances
+
+Entrez dans chaque dépôt et installez les dépendances avec `pnpm` :
+
+```bash
+cd primebrick-be-v3
+pnpm install
+
+cd ../primebrick-fe-v3
+pnpm install
+```
+
+## 3. Démarrer les services d'infrastructure
+
+Le backend nécessite certains services d'infrastructure (base de données, NATS, Casdoor). Ceux-ci sont
+définis dans un fichier `docker-compose.yml` et peuvent être démarrés avec Docker :
+
+```bash
+cd primebrick-be-v3
+docker compose up -d
+```
+
+Cela démarre en arrière-plan :
+
+- **PostgreSQL** — base de données principale
+- **NATS** — message broker pour la communication entre microservices
+- **Casdoor** — Identity Provider pour l'authentification OIDC
+
+Vérifiez que tous les services sont actifs :
+
+```bash
+docker compose ps
+```
+
+## 4. Configurer les variables d'environnement
+
+Copiez le fichier `.env.example` en `.env` et modifiez les valeurs si nécessaire :
+
+```bash
+cp .env.example .env
+```
+
+Les variables principales incluent :
+
+```bash
+# Base de données
+DATABASE_URL=postgresql://primebrick:primebrick@localhost:5432/primebrick
+
+# NATS
+NATS_URL=nats://localhost:4222
+
+# Casdoor
+CASDOOR_ENDPOINT=http://localhost:8000
+CASDOOR_CLIENT_ID=xxx
+CASDOOR_CLIENT_SECRET=xxx
+```
+
+## 5. Exécuter les migrations de la base de données
+
+Appliquez le schéma de la base de données en exécutant les migrations :
+
+```bash
+pnpm run db:migrate
+```
+
+## 6. Démarrer le backend
+
+```bash
+pnpm run dev
+```
+
+Le backend sera disponible sur `http://localhost:3001`.
+
+Vérifiez que l'API répond :
+
+```bash
+curl http://localhost:3001/api/v1/health
+```
+
+## 7. Démarrer le frontend
+
+Dans un nouveau terminal :
+
+```bash
+cd primebrick-fe-v3
+pnpm run dev
+```
+
+Le frontend sera disponible sur `http://localhost:5173`.
+
+## Vérification de l'installation
+
+Ouvrez le navigateur sur `http://localhost:5173`. Vous devriez voir la page de connexion de Primebrick.
+Utilisez les identifiants par défaut de Casdoor pour accéder au backoffice.
+
+## Résolution des problèmes
+
+### Docker ne démarre pas les services
+
+Assurez-vous que Docker Desktop est en cours d'exécution et que les ports `5432` (PostgreSQL), `4222`
+(NATS) et `8000` (Casdoor) ne sont pas déjà occupés par d'autres processus.
+
+### Le backend ne se connecte pas à la base de données
+
+Vérifiez que PostgreSQL est actif et que la `DATABASE_URL` dans le fichier `.env` est correcte.
+
+### Erreur "pnpm not found"
+
+Installez pnpm globalement avec `npm install -g pnpm` ou utilisez `corepack enable pnpm`.
+
+## Étapes suivantes
+
+- [Architecture](/fr/getting-started/architecture/) — Comprenez la structure du projet
+- [Introduction à l'API](/fr/api/introduction/) — Commencez à explorer l'API REST

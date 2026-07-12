@@ -1,0 +1,138 @@
+---
+title: "Standard de microservices"
+description: "Le contrat que tout microservice Primebrick doit respecter : enregistrement, heartbeats, proxy, NATS et OpenAPI."
+source: handwritten
+---
+
+## Vue d'ensemble
+
+Tout microservice Primebrick suit un **contrat standard** appliqué par `@primebrick/sdk`. Cela garantit un comportement uniforme entre tous les services — quelle que soit la logique métier qu'ils implémentent — et permet au backend de les gérer de manière générique.
+
+## Le contrat standard
+
+Un microservice conforme doit :
+
+1. **S'auto-enregistrer** auprès du backend au démarrage
+2. **Envoyer des heartbeats** à intervalles réguliers
+3. **Exposer OpenAPI** sur `/api/openapi.json`
+4. **Utiliser NATS** pour la messagerie inter-services
+5. **Renvoyer RFC 7807 Problem Details** pour toutes les erreurs
+
+## Auto-enregistrement
+
+Au démarrage, un microservice s'enregistre auprès du backend en utilisant le SDK :
+
+```typescript
+import { Microservice } from '@primebrick/sdk';
+
+const service = new Microservice({
+  serviceCode: 'billing',
+  baseUrl: 'http://localhost:3002',
+  healthEndpoint: '/health',
+  openapiEndpoint: '/api/openapi.json',
+  natsUrl: 'nats://localhost:4222',
+});
+
+await service.start();
+```
+
+Le payload d'enregistrement inclut :
+
+| Champ | Description |
+|-------|-------------|
+| `serviceCode` | Identifiant unique du service (ex. `billing`) |
+| `baseUrl` | URL où l'instance est accessible |
+| `healthEndpoint` | Chemin du health check |
+| `openapiEndpoint` | Chemin de la spécification OpenAPI |
+
+## Heartbeats et détection des instances obsolètes
+
+Chaque instance enregistrée envoie un **heartbeat** au backend à un intervalle configurable (par défaut : toutes les 15 secondes).
+
+Le backend suit le dernier heartbeat de chaque instance. Si une instance n'envoie pas de heartbeat dans le **seuil d'obsolescence** (par défaut : 60 secondes), elle est :
+
+1. Marquée comme **obsolète** (stale) dans le service registry
+2. Retirée de la rotation du **proxy round-robin**
+3. Exclue de la **spécification OpenAPI agrégée**
+
+Cela garantit que les instances plantées ou inaccessibles soient détectées automatiquement sans intervention manuelle.
+
+## Proxy round-robin
+
+Le backend expose un proxy transparent sur **`/ws/:serviceCode`** qui transfère les requêtes vers les instances enregistrées du microservice demandé.
+
+```text
+GET  /ws/billing/invoices        → proxied vers le microservice billing
+POST /ws/inventory/items         → proxied vers le microservice inventory
+```
+
+Lorsque plusieurs instances d'un service sont en ligne, le proxy distribue les requêtes en utilisant l'équilibrage **round-robin**. Les clients n'ont pas besoin de savoir combien d'instances existent ni où elles se trouvent — ils se connectent toujours au backend et le proxy gère le routage.
+
+## Messagerie NATS
+
+Les microservices communiquent entre eux et avec le backend via **NATS**. Le SDK fournit des helpers pour les patterns courants :
+
+```typescript
+// Publier un événement
+await service.nats.publish('billing.invoice.created', { invoiceId: 123 });
+
+// S'abonner aux événements
+service.nats.subscribe('inventory.item.updated', async (msg) => {
+  await updatePricing(msg.data.itemId);
+});
+
+// Request/reply (style synchrone sur NATS)
+const result = await service.nats.request('inventory.check-stock', {
+  itemId: 'SKU-001',
+  quantity: 10,
+});
+```
+
+NATS découple les services : un service peut publier des événements sans savoir qui les consomme, et plusieurs instances peuvent s'abonner au même subject pour un scalabilité horizontale.
+
+## Exposition OpenAPI
+
+Chaque microservice doit exposer sa spécification OpenAPI sur :
+
+```text
+GET /api/openapi.json
+```
+
+Le backend récupère la spécification de chaque service en ligne et la fusionne dans la **spécification agrégée** sur `/api/v1/openapi/aggregated.json`. Les chemins des microservices sont préfixés avec `/ws/:serviceCode` pour qu'ils correspondent au proxy.
+
+Si un service est hors ligne, sa spécification est simplement omise de l'agrégation.
+
+## Gestion des erreurs RFC 7807
+
+Toutes les erreurs — du backend et des microservices — utilisent **RFC 7807 Problem Details**. Le SDK fournit un helper pour produire des erreurs conformes :
+
+```typescript
+import { ProblemError } from '@primebrick/sdk';
+
+throw new ProblemError({
+  type: 'https://primebrick.dev/errors/invoice-not-found',
+  title: 'Invoice not found',
+  status: 404,
+  detail: `Invoice ${invoiceId} does not exist.`,
+  instance: `/ws/billing/invoices/${invoiceId}`,
+});
+```
+
+Voir [Gestion des erreurs](./error-handling/) pour le format complet.
+
+## Liste de vérification
+
+Un microservice est conforme lorsqu'il :
+
+- [x] S'enregistre via `@primebrick/sdk` au démarrage
+- [x] Envoie des heartbeats et gère la détection d'obsolescence
+- [x] Est accessible via le proxy `/ws/:serviceCode`
+- [x] Utilise NATS pour la messagerie inter-services
+- [x] Expose OpenAPI sur `/api/openapi.json`
+- [x] Renvoie RFC 7807 Problem Details pour toutes les erreurs
+
+## Étapes suivantes
+
+- [Architecture](/fr/getting-started/architecture/) — comment les microservices s'intègrent dans l'ensemble.
+- [Gestion des erreurs](/fr/api/error-handling/) — le format d'erreurs que tout service doit utiliser.
+- [Introduction à l'API](/fr/api/introduction/) — la spécification OpenAPI agrégée.

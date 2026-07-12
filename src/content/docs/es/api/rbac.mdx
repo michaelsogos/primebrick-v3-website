@@ -1,0 +1,135 @@
+---
+title: "RBAC"
+description: "RBAC con permisos wildcard (modulo.accion.granularidad), asignación de roles con Casdoor, admin bypass."
+source: handwritten
+---
+
+# RBAC — Role-Based Access Control
+
+Primebrick implementa un modelo de control de acceso basado en roles (**RBAC**) con permisos
+estructurados según una notación **wildcard**. La autorización se gestiona en colaboración con
+**Casdoor**, que mantiene la asignación de roles entre usuarios, roles y permisos.
+
+## Permisos wildcard
+
+Los permisos en Primebrick siguen el formato **`modulo.accion.granularidad`**:
+
+```text
+modulo.accion.granularidad
+  │       │        │
+  │       │        └── nivel de granularidad (opcional, puede ser *)
+  │       └── acción específica (read, write, delete, ...)
+  └── módulo o recurso (users, documents, settings, ...)
+```
+
+### Ejemplos
+
+| Permiso | Significado |
+|---------|-------------|
+| `users.read` | Puede leer los usuarios |
+| `users.read.*` | Puede leer los usuarios a cualquier nivel de granularidad |
+| `users.write` | Puede modificar los usuarios |
+| `users.delete` | Puede eliminar los usuarios |
+| `documents.read.own` | Puede leer solo sus propios documentos |
+| `documents.read.department` | Puede leer los documentos de su departamento |
+| `documents.read.*` | Puede leer todos los documentos |
+| `*.*.*` | Acceso completo (admin bypass) |
+
+### Wildcards
+
+El carácter `*` funciona como wildcard y puede aparecer en cualquier posición:
+
+- `users.*` — todas las acciones sobre el módulo `users`
+- `*.read` — acción `read` sobre todos los módulos
+- `*.*.*` o `*` — acceso completo a todo
+
+### Granularidad
+
+El tercer nivel (`granularidad`) define **el ámbito** del permiso. Los valores comunes son:
+
+| Granularidad | Descripción |
+|--------------|-------------|
+| `own` | Solo los recursos creados por el usuario |
+| `department` | Los recursos del departamento del usuario |
+| `organization` | Los recursos de la organización del usuario |
+| `*` | Todos los recursos, sin restricciones |
+
+Si se omite la granularidad, se asume `*` (sin restricciones).
+
+## Asignación de roles con Casdoor
+
+**Casdoor** gestiona la asignación entre usuarios, roles y permisos. El flujo es el siguiente:
+
+1. Un **usuario** es asignado a uno o más **roles** en Casdoor
+2. Cada **rol** tiene un conjunto de **permisos** asociados
+3. Cuando el usuario se autentica, el JWT contiene los roles asignados
+4. El backend extrae los permisos de los roles y verifica el acceso
+
+### Estructura en Casdoor
+
+```text
+Usuario: m.rossi@example.com
+  └── Roles: [admin, editor]
+        ├── admin → [*.*.*]
+        └── editor → [documents.read.*, documents.write.own, users.read]
+```
+
+### Token JWT
+
+El JWT emitido por Casdoor incluye los roles del usuario en el claim correspondiente. El backend
+resuelve los roles en los permisos correspondientes y los almacena en el contexto de la petición
+para las comprobaciones de autorización.
+
+## Verificación de permisos en el backend
+
+El backend verifica los permisos en cada petición. La lógica de verificación compara el permiso
+requerido por el endpoint con los permisos efectivos del usuario:
+
+```typescript
+// Ejemplo conceptual de la verificación
+function hasPermission(userPermissions: string[], required: string): boolean {
+  return userPermissions.some(p => matchWildcard(p, required));
+}
+
+// Verifica si "users.read.*" cubre "users.read.own"
+hasPermission(['users.read.*'], 'users.read.own'); // true
+
+// Verifica si "*.read" cubre "documents.read"
+hasPermission(['*.read'], 'documents.read'); // true
+```
+
+El matching de wildcards sigue reglas estándar: `*` en una posición corresponde a
+cualquier valor en esa posición.
+
+## Admin bypass
+
+Los usuarios con el rol **admin** (o con el permiso `*.*.*`) tienen **acceso completo**
+a todos los recursos y todas las acciones, omitiendo todas las comprobaciones de autorización.
+
+Esto se implementa como primera verificación en el middleware de autorización:
+
+```text
+SI el usuario tiene el permiso *.*.*:
+  → permite el acceso (bypass completo)
+EN OTRO CASO:
+  → verifica el permiso específico requerido por el endpoint
+```
+
+## Endpoints y permisos requeridos
+
+Cada endpoint del backend declara el permiso requerido. Por ejemplo:
+
+| Endpoint | Permiso requerido |
+|----------|-------------------|
+| `GET /api/v1/users` | `users.read` |
+| `POST /api/v1/users` | `users.write` |
+| `DELETE /api/v1/users/:id` | `users.delete` |
+| `GET /api/v1/ws/document-service/documents` | `documents.read` |
+
+Si el usuario no tiene el permiso requerido, el backend devuelve un error **403 Forbidden**
+con un Problem Details que indica el permiso faltante (ver [Manejo de errores](/es/api/error-handling/)).
+
+## Próximos pasos
+
+- [Autenticación](/es/api/authentication/) — Cómo obtener las credenciales para la API
+- [Manejo de errores](/es/api/error-handling/) — Formato de los errores de autorización

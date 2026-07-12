@@ -1,0 +1,291 @@
+---
+title: "Fehlerbehandlung"
+description: "RFC 7807 Problem Details, stabile Fehlercodes und das Impact-Feld."
+source: handwritten
+---
+
+# Fehlerbehandlung
+
+Primebrick verwendet **RFC 7807 – Problem Details for HTTP APIs** als Standardformat für Fehler-Responses. Dies sorgt für einheitliche, maschinenlesbare und stabile Fehlermeldungen.
+
+## RFC 7807 – Problem Details
+
+RFC 7807 definiert ein standardisiertes JSON-Format für Fehler-Responses mit dem Content-Type `application/problem+json`.
+
+### Content-Type
+
+```http
+Content-Type: application/problem+json
+```
+
+### Standard-Felder
+
+| Feld | Typ | Beschreibung |
+|------|-----|-------------|
+| `type` | string (URI) | URI, die den Fehlertyp identifiziert |
+| `title` | string | Kurze, menschenlesbare Zusammenfassung |
+| `status` | number | HTTP-Statuscode |
+| `detail` | string | Detaillierte, menschenlesbare Beschreibung |
+| `instance` | string (URI) | URI der spezifischen Fehlerinstanz |
+| `code` | string | Stabiler Fehlercode (Primebrick-Erweiterung) |
+| `impact` | string | Auswirkung auf den Client (Primebrick-Erweiterung) |
+
+### Beispiel
+
+```json
+{
+  "type": "https://primebrick.dev/errors/validation",
+  "title": "Validierungsfehler",
+  "status": 422,
+  "detail": "Das Feld 'email' muss eine gültige E-Mail-Adresse sein.",
+  "instance": "/api/v1/ws/users/users",
+  "code": "VALIDATION_ERROR",
+  "impact": "retry_with_correct_data",
+  "errors": [
+    {
+      "field": "email",
+      "code": "INVALID_EMAIL",
+      "message": "Die E-Mail-Adresse 'foo@bar' ist ungültig."
+    }
+  ]
+}
+```
+
+## Stabile Fehlercodes
+
+Primebrick verwendet **stabile Fehlercodes** (`code`-Feld), die sich nicht ändern und in Client-Anwendungen für die Fehlerbehandlung verwendet werden können.
+
+### Konvention
+
+Fehlercodes folgen dem Format `KATEGORIE_SPEZIFISCHER_FEHLER`:
+
+- Großbuchstaben
+- Unterstriche als Trennzeichen
+- Präfix für die Kategorie
+
+### Häufige Fehlercodes
+
+| Code | HTTP-Status | Beschreibung |
+|------|-------------|-------------|
+| `AUTH_TOKEN_INVALID` | 401 | JWT-Token ist ungültig oder abgelaufen |
+| `AUTH_TOKEN_MISSING` | 401 | Kein Authentifizierungs-Token übergeben |
+| `AUTH_API_KEY_INVALID` | 401 | API-Schlüssel ist ungültig |
+| `RBAC_PERMISSION_DENIED` | 403 | Erforderliche Berechtigung fehlt |
+| `RBAC_ADMIN_REQUIRED` | 403 | Admin-Rolle erforderlich |
+| `RESOURCE_NOT_FOUND` | 404 | Angeforderte Ressource nicht gefunden |
+| `VALIDATION_ERROR` | 422 | Eingabevalidierung fehlgeschlagen |
+| `CONFLICT` | 409 | Ressourcenkonflikt (z. B. Duplikat) |
+| `RATE_LIMIT_EXCEEDED` | 429 | Ratenbegrenzung überschritten |
+| `SERVICE_UNAVAILABLE` | 503 | Microservice nicht erreichbar |
+| `INTERNAL_ERROR` | 500 | Unerwarteter Serverfehler |
+
+### Stabilitätsgarantie
+
+Fehlercodes sind **stabil** und werden nicht geändert. Dies ermöglicht Client-Anwendungen, zuverlässig auf spezifische Fehler zu reagieren:
+
+```typescript
+try {
+  await api.users.create({ email: 'invalid' });
+} catch (error) {
+  if (error.code === 'VALIDATION_ERROR') {
+    // Validierungsfehler behandeln
+    showValidationErrors(error.errors);
+  } else if (error.code === 'CONFLICT') {
+    // Duplikat behandeln
+    showConflictMessage();
+  } else {
+    // Unerwarteter Fehler
+    showGenericError();
+  }
+}
+```
+
+## Impact-Feld
+
+Das `impact`-Feld ist eine Primebrick-Erweiterung, die dem Client mitteilt, **welche Auswirkung** der Fehler hat und wie er reagieren sollte.
+
+### Mögliche Werte
+
+| Impact-Wert | Bedeutung | Client-Aktion |
+|-------------|-----------|---------------|
+| `retry_with_correct_data` | Eingabedaten korrigieren und erneut versuchen | Validierungsfehler anzeigen, erneut senden |
+| `retry_after_auth` | Authentifizierung erforderlich | Login-Flow starten |
+| `retry_after_permission` | Berechtigung erforderlich | Admin kontaktieren |
+| `retry_later` | Temporärer Fehler, später erneut versuchen | Warten und retry |
+| `do_not_retry` | Permanenter Fehler, nicht erneut versuchen | Fehler anzeigen, nicht retry |
+| `contact_support` | Support kontaktieren | Support-Ticket erstellen |
+
+### Beispiel
+
+```json
+{
+  "type": "https://primebrick.dev/errors/service-unavailable",
+  "title": "Service nicht verfügbar",
+  "status": 503,
+  "detail": "Der Microservice 'billing' ist derzeit nicht erreichbar.",
+  "code": "SERVICE_UNAVAILABLE",
+  "impact": "retry_later",
+  "serviceCode": "billing"
+}
+```
+
+Der Client kann anhand des `impact`-Feldes entscheiden, ob ein Retry sinnvoll ist:
+
+```typescript
+if (error.impact === 'retry_later') {
+  await sleep(5000);
+  return retry(request);
+} else if (error.impact === 'do_not_retry') {
+  throw error; // Nicht erneut versuchen
+}
+```
+
+## Fehler nach HTTP-Statuscode
+
+### 400 – Bad Request
+
+```json
+{
+  "type": "https://primebrick.dev/errors/bad-request",
+  "title": "Ungültige Anfrage",
+  "status": 400,
+  "detail": "Die Anfrage ist malformed oder enthält ungültige Parameter.",
+  "code": "BAD_REQUEST",
+  "impact": "retry_with_correct_data"
+}
+```
+
+### 401 – Unauthorized
+
+```json
+{
+  "type": "https://primebrick.dev/errors/unauthorized",
+  "title": "Nicht authentifiziert",
+  "status": 401,
+  "detail": "Ein gültiger Authentifizierungs-Token ist erforderlich.",
+  "code": "AUTH_TOKEN_MISSING",
+  "impact": "retry_after_auth"
+}
+```
+
+### 403 – Forbidden
+
+```json
+{
+  "type": "https://primebrick.dev/errors/forbidden",
+  "title": "Zugriff verweigert",
+  "status": 403,
+  "detail": "Sie haben nicht die erforderliche Berechtigung 'users.write'.",
+  "code": "RBAC_PERMISSION_DENIED",
+  "impact": "retry_after_permission",
+  "required_permission": "users.write"
+}
+```
+
+### 404 – Not Found
+
+```json
+{
+  "type": "https://primebrick.dev/errors/not-found",
+  "title": "Nicht gefunden",
+  "status": 404,
+  "detail": "Die Ressource mit ID '123' wurde nicht gefunden.",
+  "code": "RESOURCE_NOT_FOUND",
+  "impact": "do_not_retry",
+  "resource": "user",
+  "resourceId": "123"
+}
+```
+
+### 422 – Unprocessable Entity
+
+```json
+{
+  "type": "https://primebrick.dev/errors/validation",
+  "title": "Validierungsfehler",
+  "status": 422,
+  "detail": "Die übergebenen Daten konnten nicht validiert werden.",
+  "code": "VALIDATION_ERROR",
+  "impact": "retry_with_correct_data",
+  "errors": [
+    {
+      "field": "email",
+      "code": "INVALID_EMAIL",
+      "message": "Die E-Mail-Adresse ist ungültig."
+    },
+    {
+      "field": "age",
+      "code": "MIN_VALUE",
+      "message": "Das Alter muss mindestens 18 sein.",
+      "min": 18
+    }
+  ]
+}
+```
+
+### 503 – Service Unavailable
+
+```json
+{
+  "type": "https://primebrick.dev/errors/service-unavailable",
+  "title": "Service nicht verfügbar",
+  "status": 503,
+  "detail": "Der Microservice 'billing' ist derzeit nicht erreichbar. Bitte versuchen Sie es später erneut.",
+  "code": "SERVICE_UNAVAILABLE",
+  "impact": "retry_later",
+  "serviceCode": "billing"
+}
+```
+
+## Best Practices für Clients
+
+### 1. Fehlercodes verwenden
+
+Verwenden Sie immer das `code`-Feld für die Fehlerbehandlung, nicht `title` oder `detail` (diese können sich ändern):
+
+```typescript
+// ✓ Richtig – stabiler Code
+if (error.code === 'VALIDATION_ERROR') { ... }
+
+// ✗ Falsch – instabil
+if (error.title === 'Validierungsfehler') { ... }
+```
+
+### 2. Impact-Feld beachten
+
+Verwenden Sie das `impact`-Feld, um die Retry-Logik zu steuern:
+
+```typescript
+switch (error.impact) {
+  case 'retry_with_correct_data':
+    showFormErrors(error.errors);
+    break;
+  case 'retry_after_auth':
+    redirectToLogin();
+    break;
+  case 'retry_later':
+    scheduleRetry(5000);
+    break;
+  case 'do_not_retry':
+    showError(error.detail);
+    break;
+}
+```
+
+### 3. Validierungsfehler strukturiert auswerten
+
+Bei `VALIDATION_ERROR` enthält das `errors`-Array detaillierte Feld-Fehler:
+
+```typescript
+if (error.code === 'VALIDATION_ERROR') {
+  for (const fieldError of error.errors) {
+    setFieldError(fieldError.field, fieldError.message);
+  }
+}
+```
+
+## Nächste Schritte
+
+- [API-Einführung](/de/api/introduction/) – Endpunkt-Struktur.
+- [Authentifizierung](/de/api/authentication/) – Token-Validierung.
+- [RBAC](/de/api/rbac/) – Berechtigungsprüfung und 403-Fehler.

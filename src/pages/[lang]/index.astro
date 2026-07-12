@@ -1,0 +1,256 @@
+---
+import { translations, LANGUAGES, type LangCode } from '../../i18n/translations';
+import LanguageSwitcher from '../../components/svelte/LanguageSwitcher.svelte';
+import '../../styles/global.css';
+
+export const prerender = true;
+
+export function getStaticPaths() {
+  return LANGUAGES.map((lang) => ({
+    params: { lang: lang.code === 'en' ? 'en' : lang.code },
+  }));
+}
+
+const { lang } = Astro.params;
+const langCode = (lang ?? 'en') as LangCode;
+const t = translations[langCode] ?? translations.en;
+const isEn = langCode === 'en';
+const docsPath = isEn ? '/docs' : `/${langCode}/docs`;
+const apiExplorerPath = isEn ? '/api-explorer' : `/api-explorer`;
+---
+
+<!doctype html>
+<html lang={langCode}>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={t.hero.subheadline.slice(0, 160)} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>Primebrick — {t.hero.headline}</title>
+    {LANGUAGES.map((l) => (
+      <link rel="alternate" hreflang={l.hreflang} href={`https://primebrick.dev${l.code === 'en' ? '/' : `/${l.code}/`}`} />
+    ))}
+    <link rel="alternate" hreflang="x-default" href="https://primebrick.dev/" />
+  </head>
+  <body class="min-h-screen bg-slate-950 text-slate-100 antialiased">
+    <!-- Navigation -->
+    <nav class="border-b border-slate-800 px-6 py-4">
+      <div class="mx-auto flex max-w-6xl items-center justify-between">
+        <a href={isEn ? '/' : `/${langCode}/`} class="text-xl font-bold text-sky-400">Primebrick</a>
+        <div class="flex items-center gap-6 text-sm">
+          <a href={docsPath} class="text-slate-300 hover:text-sky-400 transition-colors">{t.nav.docs}</a>
+          <a href={apiExplorerPath} class="text-slate-300 hover:text-sky-400 transition-colors">{t.nav.apiExplorer}</a>
+          <a
+            href="https://github.com/michaelsogos/primebrick-v3-website"
+            class="text-slate-300 hover:text-sky-400 transition-colors"
+            target="_blank"
+            rel="noopener"
+          >
+            {t.nav.github}
+          </a>
+          <a
+            href="https://github.com/michaelsogos/primebrick-v3-website/blob/main/LICENSE"
+            class="text-slate-300 hover:text-sky-400 transition-colors"
+            target="_blank"
+            rel="noopener"
+          >
+            {t.nav.license}
+          </a>
+          <LanguageSwitcher client:load currentLang={langCode} />
+        </div>
+      </div>
+    </nav>
+
+    <!-- Hero -->
+    <section class="px-6 py-24">
+      <div class="mx-auto max-w-4xl text-center">
+        <h1 class="text-4xl font-bold tracking-tight text-white sm:text-5xl lg:text-6xl">
+          {t.hero.headline}
+        </h1>
+        <p class="mx-auto mt-6 max-w-2xl text-lg text-slate-400">
+          {t.hero.subheadline}
+        </p>
+        <div class="mt-10 flex flex-wrap items-center justify-center gap-4">
+          <a
+            href="https://github.com/michaelsogos/primebrick-v3-website"
+            class="rounded-lg bg-sky-500 px-6 py-3 text-sm font-semibold text-white hover:bg-sky-400 transition-colors"
+            target="_blank"
+            rel="noopener"
+          >
+            {t.hero.ctaGithub}
+          </a>
+          <a
+            href={docsPath}
+            class="rounded-lg border border-slate-700 px-6 py-3 text-sm font-semibold text-slate-200 hover:border-sky-500 hover:text-sky-400 transition-colors"
+          >
+            {t.hero.ctaArchitecture}
+          </a>
+        </div>
+        <!-- Stats bar -->
+        <div class="mt-12 flex flex-wrap items-center justify-center gap-8 text-sm text-slate-500">
+          <span class="flex items-center gap-2">
+            <span class="h-2 w-2 rounded-full bg-sky-400"></span>
+            {t.stats.license}
+          </span>
+          <span class="flex items-center gap-2">
+            <span class="h-2 w-2 rounded-full bg-sky-400"></span>
+            {t.stats.deploy}
+          </span>
+          <span class="flex items-center gap-2">
+            <span class="h-2 w-2 rounded-full bg-sky-400"></span>
+            {t.stats.lockin}
+          </span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Multi-cloud -->
+    <section class="px-6 py-16">
+      <div class="mx-auto max-w-4xl text-center">
+        <h2 class="text-3xl font-bold text-white">{t.multicloud.title}</h2>
+        <p class="mx-auto mt-4 max-w-2xl text-lg text-slate-400">{t.multicloud.text}</p>
+        <div class="mt-8 flex flex-wrap items-center justify-center gap-3">
+          {t.multicloud.providers.map((provider) => (
+            <span class="rounded-lg border border-slate-700 bg-slate-900/50 px-4 py-2 text-sm text-slate-300">{provider}</span>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- Concept -->
+    <section class="px-6 py-16">
+      <div class="mx-auto max-w-5xl">
+        <div class="text-center">
+          <h2 class="text-3xl font-bold text-white">{t.concept.title}</h2>
+          <p class="mx-auto mt-4 max-w-2xl text-lg text-slate-400">{t.concept.text}</p>
+        </div>
+        <div class="mt-12 grid gap-6 sm:grid-cols-2">
+          {t.concept.cards.map((card, i) => (
+            <div class="rounded-xl border border-slate-800 bg-slate-900/50 p-6">
+              <div class="flex items-center gap-3">
+                <span class="text-2xl font-bold text-sky-400">{i + 1}</span>
+                <h3 class="text-lg font-semibold text-white">{card.title}</h3>
+              </div>
+              <p class="mt-3 text-sm text-slate-400">{card.text}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- Bricks -->
+    <section class="px-6 py-16">
+      <div class="mx-auto max-w-5xl">
+        <div class="text-center">
+          <h2 class="text-3xl font-bold text-white">{t.bricks.title}</h2>
+          <p class="mx-auto mt-4 max-w-2xl text-lg text-slate-400">{t.bricks.text}</p>
+        </div>
+        <div class="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {t.bricks.cards.map((brick) => (
+            <div class="rounded-xl border border-slate-800 bg-slate-900/50 p-6">
+              <code class="text-xs font-mono text-sky-400">{brick.label}</code>
+              <h3 class="mt-2 text-lg font-semibold text-white">{brick.title}</h3>
+              <p class="mt-2 text-sm text-slate-400">{brick.text}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- For Devs + For CTOs -->
+    <section class="px-6 py-16">
+      <div class="mx-auto grid max-w-5xl gap-8 lg:grid-cols-2">
+        <div class="rounded-xl border border-slate-800 bg-slate-900/50 p-8">
+          <h2 class="text-2xl font-bold text-sky-400">{t.forDevs.title}</h2>
+          <p class="mt-4 text-slate-400">{t.forDevs.text}</p>
+          <ul class="mt-4 space-y-2 text-slate-300">
+            {t.forDevs.bullets.map((bullet) => (
+              <li class="flex items-start gap-2">
+                <span class="mt-1 text-sky-400">&#10003;</span>
+                <span>{bullet}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+        <div class="rounded-xl border border-slate-800 bg-slate-900/50 p-8">
+          <h2 class="text-2xl font-bold text-sky-400">{t.forCtos.title}</h2>
+          <p class="mt-4 text-slate-400">{t.forCtos.text}</p>
+          <ul class="mt-4 space-y-2 text-slate-300">
+            {t.forCtos.bullets.map((bullet) => (
+              <li class="flex items-start gap-2">
+                <span class="mt-1 text-sky-400">&#10003;</span>
+                <span>{bullet}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- Open Source -->
+    <section class="px-6 py-16">
+      <div class="mx-auto max-w-3xl text-center">
+        <h2 class="text-3xl font-bold text-white">{t.openSource.title}</h2>
+        <p class="mt-4 text-lg text-slate-400">{t.openSource.text}</p>
+        <div class="mt-6 flex items-center justify-center gap-4 text-sm">
+          <a
+            href="https://github.com/michaelsogos/primebrick-v3-website"
+            class="text-sky-400 hover:text-sky-300 transition-colors"
+            target="_blank"
+            rel="noopener"
+          >
+            {t.openSource.githubLink} &rarr;
+          </a>
+          <span class="text-slate-600">|</span>
+          <a
+            href="https://github.com/michaelsogos/primebrick-v3-website/blob/main/LICENSE"
+            class="text-sky-400 hover:text-sky-300 transition-colors"
+            target="_blank"
+            rel="noopener"
+          >
+            {t.openSource.licenseLink} &rarr;
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Final CTA -->
+    <section class="px-6 py-24">
+      <div class="mx-auto max-w-3xl text-center">
+        <h2 class="text-3xl font-bold text-white">{t.finalCta.title}</h2>
+        <p class="mx-auto mt-4 max-w-2xl text-lg text-slate-400">{t.finalCta.text}</p>
+        <div class="mt-8 flex flex-wrap items-center justify-center gap-4">
+          <a
+            href="https://github.com/michaelsogos/primebrick-v3-website"
+            class="rounded-lg bg-sky-500 px-6 py-3 text-sm font-semibold text-white hover:bg-sky-400 transition-colors"
+            target="_blank"
+            rel="noopener"
+          >
+            {t.finalCta.ctaGithub}
+          </a>
+          <a
+            href={docsPath}
+            class="rounded-lg border border-slate-700 px-6 py-3 text-sm font-semibold text-slate-200 hover:border-sky-500 hover:text-sky-400 transition-colors"
+          >
+            {t.finalCta.ctaDocs}
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="border-t border-slate-800 px-6 py-8">
+      <div class="mx-auto flex max-w-6xl items-center justify-between text-sm text-slate-500">
+        <span>&copy; 2026 {t.footer.copyright}</span>
+        <a
+          href="https://github.com/michaelsogos/primebrick-v3-website"
+          class="hover:text-sky-400 transition-colors"
+          target="_blank"
+          rel="noopener"
+        >
+          GitHub
+        </a>
+      </div>
+    </footer>
+  </body>
+</html>

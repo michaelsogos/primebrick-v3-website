@@ -1,0 +1,143 @@
+---
+title: "Arquitetura"
+description: "Arquitetura do Primebrick: Backend (Express API), Frontend (SvelteKit), Microsserviços, DAL e SDK."
+source: handwritten
+---
+
+import { Card, CardGrid } from '@astrojs/starlight/components';
+
+# Arquitetura
+
+Primebrick adota uma arquitetura de componentes modulares, projetada para ser escalável,
+portável e sem vendor lock-in. Cada componente tem responsabilidades bem definidas e
+se comunica com os outros através de protocolos padrão.
+
+## Visão geral
+
+```text
+┌─────────────┐     ┌──────────────────┐     ┌─────────────────┐
+│  Frontend   │────▶│   Backend (API)  │────▶│   Banco de dados│
+│  SvelteKit  │     │   Express        │     │   PostgreSQL    │
+└─────────────┘     └───────┬──────────┘     └─────────────────┘
+                            │
+                    ┌───────┴──────────┐
+                    │   Proxy / NATS   │
+                    └───────┬──────────┘
+                            │
+              ┌─────────────┼─────────────┐
+              ▼             ▼             ▼
+        ┌──────────┐  ┌──────────┐  ┌──────────┐
+        │ Microsrv │  │ Microsrv │  │ Microsrv │
+        │   US     │  │   ...    │  │   ...    │
+        └──────────┘  └──────────┘  └──────────┘
+```
+
+## Componentes
+
+<CardGrid stagger>
+  <Card title="Backend" icon="seti:express">
+    API REST em Express que atua como único ponto de entrada para o frontend. Gerencia
+    autenticação, autorização (RBAC), proxy para microsserviços e persistência de dados.
+  </Card>
+  <Card title="Frontend" icon="seti:svelte">
+    Aplicação SvelteKit que fornece a interface de usuário do backoffice. Consome a
+    API REST do backend através do SDK gerado automaticamente.
+  </Card>
+  <Card title="Microsserviços" icon="seti:docker">
+    Serviços autônomos que implementam lógica de negócio específica. Autorregistram-se no
+    backend e se comunicam através de NATS ou chamadas HTTP proxied.
+  </Card>
+  <Card title="DAL" icon="seti:database">
+    Data Access Layer — biblioteca compartilhada que abstrai o acesso a dados. Fornece um ORM
+    tipado com suporte multi-banco de dados e migrações.
+  </Card>
+  <Card title="SDK" icon="seti:typescript">
+    SDK gerado automaticamente a partir das especificações OpenAPI. Fornece clientes
+    tipados para consumir a API do backend do frontend ou de serviços externos.
+  </Card>
+  <Card title="Casdoor" icon="seti:auth">
+    Identity Provider externo para autenticação OIDC. Gerencia usuários, organizações,
+    roles e aplicações. O backend valida os tokens JWT emitidos pelo Casdoor.
+  </Card>
+</CardGrid>
+
+## Backend (Express API)
+
+O backend é o coração do sistema. É construído com **Express** e fornece:
+
+- **API REST** sob o prefixo `/api/v1/`
+- **Autenticação OIDC** através do Casdoor (JWT bearer token)
+- **Autorização RBAC** com permissões wildcard (`modulo.acao.granularidade`)
+- **Proxy para microsserviços** com balanceamento round-robin
+- **Service registry** para o autorregistro de microsserviços
+- **Endpoint OpenAPI agregado** que combina as especificações do backend e de todos os
+  microsserviços online
+
+O backend é o único componente exposto diretamente ao frontend. Os microsserviços nunca
+são acessíveis diretamente do cliente.
+
+## Frontend (SvelteKit)
+
+O frontend é uma aplicação **SvelteKit** que fornece:
+
+- **UI de backoffice** pré-configurada com login, dashboards e gestão de dados
+- **Cliente tipado** gerado pelo SDK a partir do OpenAPI agregado
+- **Gestão de autenticação** integrada com o Casdoor (fluxo OIDC authorization code)
+- **Routing** baseado no sistema de arquivos do SvelteKit
+
+O frontend se comunica exclusivamente com o backend através da API REST. Não acessa
+diretamente o banco de dados, os microsserviços ou o Casdoor.
+
+## Microsserviços
+
+Os microsserviços são serviços autônomos que implementam lógica de negócio específica (ex.
+geração de documentos, processamento batch, integrações externas). Cada microsserviço:
+
+- **Autorregistra-se** no backend ao iniciar
+- Envia um **heartbeat** periódico para sinalizar que está ativo
+- Expõe uma **API REST** documentada com OpenAPI
+- É **proxied** pelo backend através do prefixo `/ws/:serviceCode/`
+
+O backend mantém um **service registry** com a lista de microsserviços online e roteia as
+requisições com balanceamento **round-robin** quando há múltiplas instâncias do mesmo serviço.
+
+A comunicação assíncrona entre componentes ocorre através do **NATS**, um message broker
+leve e de alto desempenho.
+
+## DAL (Data Access Layer)
+
+O DAL é uma **biblioteca compartilhada** que abstrai o acesso aos dados. Fornece:
+
+- **ORM tipado** com suporte para PostgreSQL (e outros bancos de dados relacionais)
+- **Migrações** versionadas e reproduzíveis
+- **Repository pattern** para isolar a lógica de persistência
+- **Transações** declarativas
+
+O DAL é utilizado tanto pelo backend quanto pelos microsserviços, garantindo um acesso aos
+dados consistente e tipado em todo o sistema.
+
+## SDK
+
+O SDK é **gerado automaticamente** a partir do endpoint OpenAPI agregado do backend.
+Fornece:
+
+- **Cliente TypeScript** tipado para todas as APIs do backend e dos microsserviços
+- **Validação** de tipos em tempo de compilação
+- **Regeneração** simples quando a API muda
+
+Isso elimina a necessidade de escrever clientes API manualmente e garante que o frontend
+esteja sempre alinhado com o backend.
+
+## Fluxo de uma requisição típica
+
+1. O usuário interage com o **Frontend** (SvelteKit)
+2. O Frontend envia uma requisição HTTP ao **Backend** através do SDK tipado
+3. O Backend valida o **JWT** com o Casdoor e verifica as **permissões RBAC**
+4. Se a requisição é para um microsserviço, o Backend a **proxia** para o serviço apropriado
+5. O microsserviço processa a requisição, acessando o banco de dados através do **DAL**
+6. A resposta percorre a cadeia de volta até o Frontend
+
+## Próximos passos
+
+- [Introdução à API](/pt/api/introduction/) — Detalhes da API REST do backend
+- [Autenticação](/pt/api/authentication/) — Como funciona a autenticação OIDC

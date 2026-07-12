@@ -1,0 +1,64 @@
+---
+title: "Documentazione Primebrick"
+description: "Panoramica della documentazione di Primebrick — framework backoffice open source opinionato."
+source: handwritten
+---
+
+import { Card, CardGrid } from '@astrojs/starlight/components';
+
+# Documentazione Primebrick
+
+**Primebrick** è un framework backoffice open source opinionato, distribuito sotto licenza **MIT**.
+Nato per eliminare il vendor lock-in, Primebrick ti permette di costruire applicazioni backoffice
+complete e portarle su qualsiasi cloud — o on-premise — senza riscrivere una riga di codice.
+
+## Da dove iniziare
+
+<CardGrid stagger>
+  <Card title="Inizia Qui" icon="rocket">
+    Scopri cos'è Primebrick, l'architettura del progetto e come avviare il tuo primo ambiente
+    in pochi minuti.
+  </Card>
+  <Card title="Riferimento API" icon="api">
+    Esplora l'API REST di Primebrick: autenticazione, RBAC, standard per microservizi e
+    gestione degli errori.
+  </Card>
+  <Card title="DeepWiki" icon="open-book">
+    Documentazione generata automaticamente dai repository del progetto: Backend, Frontend,
+    Microservizi, DAL e SDK.
+  </Card>
+</CardGrid>
+
+## Sezioni della documentazione
+
+### Inizia Qui
+
+La sezione [Inizia Qui](/it/getting-started/introduction/) introduce i concetti fondamentali di
+Primebrick: la filosofia del progetto, i prerequisiti e l'architettura generale. Se sei alla prima
+esperienza con Primebrick, questo è il punto di partenza consigliato.
+
+- [Introduzione](/it/getting-started/introduction/) — Cos'è Primebrick e quali problemi risolve
+- [Avvio rapido](/it/getting-started/quick-start/) — Clona, installa ed esegui in pochi minuti
+- [Architettura](/it/getting-started/architecture/) — Backend, Frontend, Microservizi, DAL e SDK
+
+### Riferimento API
+
+La sezione [Riferimento API](/it/api/introduction/) descrive in dettaglio l'API REST di Primebrick,
+incluse le convenzioni per autenticazione, autorizzazione, microservizi e gestione degli errori.
+
+- [Introduzione API](/it/api/introduction/) — URL di base e struttura degli endpoint
+- [Autenticazione](/it/api/authentication/) — Casdoor IDP, OIDC, JWT e chiavi API
+- [RBAC](/it/api/rbac/) — Permessi wildcard e role mappings
+- [Standard microservizi](/it/api/microservice-standard/) — Autoregistrazione, heartbeat e proxy
+- [Gestione errori](/it/api/error-handling/) — RFC 7807 Problem Details
+
+### DeepWiki
+
+Le sezioni **Backend**, **Frontend**, **Microservizi**, **DAL** e **SDK** contengono documentazione
+generata automaticamente dai rispettivi repository tramite DeepWiki. Questi documenti riflettono
+lo stato attuale del codice e vengono sincronizzati regolarmente.
+
+## Licenza
+
+Primebrick è distribuito sotto licenza **MIT**. Sei libero di utilizzarlo, modificarlo e
+distribuirlo, anche in progetti commerciali.

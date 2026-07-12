@@ -1,7 +1,7 @@
 import { defineCollection, z } from 'astro:content';
 import { glob } from 'astro/loaders';
-import { docsLoader } from '@astrojs/starlight/loaders';
-import { docsSchema } from '@astrojs/starlight/schema';
+import { docsLoader, i18nLoader } from '@astrojs/starlight/loaders';
+import { docsSchema, i18nSchema } from '@astrojs/starlight/schema';
 
 const docsCollection = defineCollection({
   loader: docsLoader(),
@@ -16,6 +16,11 @@ const docsCollection = defineCollection({
   }),
 });
 
+const i18nCollection = defineCollection({
+  loader: i18nLoader(),
+  schema: i18nSchema(),
+});
+
 const marketingCollection = defineCollection({
   loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/marketing' }),
   schema: z.object({
@@ -27,5 +32,6 @@ const marketingCollection = defineCollection({
 
 export const collections = {
   docs: docsCollection,
+  i18n: i18nCollection,
   marketing: marketingCollection,
 };

@@ -1,0 +1,155 @@
+---
+title: "Architektur"
+description: "Technischer Überblick über Backend, Frontend, Microservices, DAL und SDK."
+source: handwritten
+---
+
+# Architektur
+
+Primebrick folgt einer modularen Architektur mit klar getrennten Komponenten. Jede Komponente hat eine definierte Verantwortung und kommuniziert über standardisierte Schnittstellen.
+
+## Überblick
+
+```text
+┌─────────────────────────────────────────────────────────┐
+│                    Frontend (SvelteKit)                  │
+│                      Port 5173 (dev)                     │
+└──────────────────────┬──────────────────────────────────┘
+                       │ REST API
+┌──────────────────────▼──────────────────────────────────┐
+│                   Backend (Express API)                  │
+│                      Port 3001 (dev)                     │
+│  ┌─────────┐  ┌──────────┐  ┌────────────────────────┐  │
+│  │  Auth   │  │   RBAC   │  │  Microservice-Proxy    │  │
+│  │ Guard   │  │  Guard   │  │   (Round-Robin)         │  │
+│  └─────────┘  └──────────┘  └───────────┬────────────┘  │
+└───────────────┬──────────────────────────┼──────────────┘
+                │                          │
+       ┌────────▼────────┐        ┌────────▼────────┐
+       │   PostgreSQL    │        │      NATS       │
+       │   (über DAL)    │        │  Message Broker │
+       └─────────────────┘        └────────┬────────┘
+                                          │
+                          ┌───────────────▼───────────────┐
+                          │       Microservices           │
+                          │  (Selbstregistrierung +       │
+                          │   Heartbeats)                 │
+                          └───────────────────────────────┘
+```
+
+## Backend (Express API)
+
+Das Backend ist die zentrale Komponente der Primebrick-Architektur. Es basiert auf **Express.js** und stellt die REST-API unter `/api/v1/` bereit.
+
+### Hauptverantwortungen
+
+- **Authentifizierung**: Validierung von JWT-Tokens und API-Schlüsseln über Casdoor IDP.
+- **Autorisierung (RBAC)**: Prüfung von Wildcard-Berechtigungen für jeden Request.
+- **Microservice-Proxy**: Round-Robin-Proxy für die Weiterleitung von Requests an registrierte Microservices.
+- **Service Registry**: Verwaltung der registrierten Microservices mit Heartbeat-Überwachung.
+- **OpenAPI-Aggregation**: Zusammenführung der OpenAPI-Specs aller online Microservices.
+
+### Technologie-Stack
+
+- **Express.js** – HTTP-Framework
+- **TypeScript** – Typsicherheit
+- **Prisma** – ORM (über DAL)
+- **Casdoor SDK** – OIDC-Integration
+- **NATS** – Message Broker für Service-Kommunikation
+
+## Frontend (SvelteKit)
+
+Das Frontend ist eine **SvelteKit**-Anwendung, die die Benutzeroberfläche für das Backoffice bereitstellt.
+
+### Hauptverantwortungen
+
+- **UI-Komponenten**: Backoffice-Oberfläche mit Tabellen, Formularen und Dashboards.
+- **Authentifizierung**: Login-Flow über Casdoor OIDC.
+- **API-Kommunikation**: REST-Aufrufe an das Backend mit Token-Verwaltung.
+- **RBAC-UI**: Dynamische Anzeige von UI-Elementen basierend auf Berechtigungen.
+
+### Technologie-Stack
+
+- **SvelteKit** – Full-Stack-Framework
+- **TypeScript** – Typsicherheit
+- **Tailwind CSS** – Styling
+- **Vite** – Build-Tool
+
+## Microservices
+
+Microservices sind eigenständige Dienste, die spezifische Geschäftslogik implementieren. Sie folgen dem Primebrick Microservice-Standard.
+
+### Eigenschaften
+
+- **Selbstregistrierung**: Microservices melden sich beim Backend an.
+- **Heartbeats**: Regelmäßige Lebenszeichen an die Service Registry.
+- **OpenAPI**: Jeder Microservice stellt eine OpenAPI-Spec bereit.
+- **Proxy-Erreichbarkeit**: Microservices sind über `/ws/:serviceCode` erreichbar.
+
+Siehe [Microservice-Standard](/de/api/microservice-standard/) für Details.
+
+## DAL (Data Access Layer)
+
+Die DAL ist eine eigenständige Bibliothek, die den Datenzugriff abstrahiert.
+
+### Hauptverantwortlichkeiten
+
+- **ORM-Abstraktion**: Einheitliche Schnittstelle über Prisma.
+- **Migrationen**: Datenbank-Schema-Migrationen.
+- **Multi-Datenbank-Support**: Unterstützung für PostgreSQL und andere Datenbanken.
+- **Transaktionen**: Transaktionsverwaltung über mehrere Operationen.
+
+### Verwendung
+
+```typescript
+import { DAL } from '@primebrick/dal';
+
+const dal = new DAL({
+  databaseUrl: process.env.DATABASE_URL,
+});
+
+// Modelle verwenden
+const users = await dal.models.User.findMany();
+```
+
+## SDK
+
+Das Primebrick SDK stellt Client-Bibliotheken und Typdefinitionen für die Integration mit der Primebrick-Plattform bereit.
+
+### Hauptverantwortlichkeiten
+
+- **Typdefinitionen**: TypeScript-Typen für alle API-Endpunkte.
+- **Client-Bibliotheken**: HTTP-Client mit Authentifizierung und Retry-Logik.
+- **Hilfsfunktionen**: Utilities für RBAC, Authentifizierung und Service-Kommunikation.
+
+### Verwendung
+
+```typescript
+import { PrimebrickClient } from '@primebrick/sdk';
+
+const client = new PrimebrickClient({
+  baseUrl: 'http://localhost:3001',
+  apiKey: 'your-api-key',
+});
+
+const result = await client.api.v1.users.get();
+```
+
+## Identity Provider (Casdoor)
+
+**Casdoor** dient als Identity Provider (IDP) und implementiert OIDC (OpenID Connect).
+
+### Funktionen
+
+- **Benutzerverwaltung**: Benutzer, Gruppen und Organisationen.
+- **Rollenverwaltung**: Rollen und Berechtigungen.
+- **OIDC-Flows**: Authorization Code, Client Credentials, Password.
+- **JWT-Ausstellung**: JWT-Tokens für API-Authentifizierung.
+
+Siehe [Authentifizierung](/de/api/authentication/) für Details.
+
+## Nächste Schritte
+
+- [API-Einführung](/de/api/introduction/) – Endpunkt-Struktur und Basis-URLs.
+- [Authentifizierung](/de/api/authentication/) – Casdoor, OIDC und JWT.
+- [Microservice-Standard](/de/api/microservice-standard/) – Selbstregistrierung und Proxy.

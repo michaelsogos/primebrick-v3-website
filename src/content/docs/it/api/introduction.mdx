@@ -1,0 +1,131 @@
+---
+title: "Introduzione API"
+description: "Introduzione all'API REST di Primebrick: URL di base, endpoint sotto /api/v1/, convenzioni."
+source: handwritten
+---
+
+# Introduzione API
+
+L'API REST di Primebrick è l'interfaccia primaria per interagire con il sistema. Tutte le
+richieste passano attraverso il backend Express, che funge da gateway unico per il frontend,
+i microservizi e i client esterni.
+
+## URL di base
+
+L'URL di base dell'API dipende dall'ambiente:
+
+| Ambiente | URL di base |
+|----------|-------------|
+| Sviluppo locale | `http://localhost:3001/api/v1` |
+| Staging | `https://api.staging.primebrick.dev/api/v1` |
+| Produzione | `https://api.primebrick.dev/api/v1` |
+
+Tutti gli endpoint sono serviti sotto il prefisso **`/api/v1/`**. La versione dell'API fa parte
+dell'URL, garantendo che eventuali cambiamenti non retrocompatibili vengano introdotti sotto
+un nuovo prefisso (es. `/api/v2/`) senza interrompere i client esistenti.
+
+## Struttura degli endpoint
+
+### Endpoint del backend
+
+Gli endpoint nativi del backend seguono la struttura:
+
+```text
+GET    /api/v1/users              — Lista utenti
+POST   /api/v1/users              — Crea utente
+GET    /api/v1/users/:id          — Dettaglio utente
+PUT    /api/v1/users/:id          — Aggiorna utente
+DELETE /api/v1/users/:id          — Elimina utente
+```
+
+### Endpoint dei microservizi
+
+Gli endpoint esposti dai microservizi sono accessibili tramite il proxy del backend, sotto
+il prefisso **`/ws/:serviceCode/`**:
+
+```text
+GET    /api/v1/ws/document-service/documents       — Lista documenti
+POST   /api/v1/ws/document-service/documents       — Crea documento
+GET    /api/v1/ws/document-service/documents/:id   — Dettaglio documento
+```
+
+Il `serviceCode` identifica il microservizio. Il backend instrada la richiesta al
+microservizio corrispondente con bilanciamento round-robin se ci sono più istanze.
+
+## Endpoint pubblici
+
+Alcuni endpoint non richiedono autenticazione:
+
+| Endpoint | Descrizione |
+|----------|-------------|
+| `GET /api/v1/health` | Health check del backend |
+| `GET /api/v1/openapi.json` | Specifica OpenAPI del backend |
+| `GET /api/v1/openapi/aggregated.json` | Specifica OpenAPI aggregata (backend + microservizi online) |
+
+L'endpoint OpenAPI aggregato è pubblico per consentire all'API Explorer di funzionare
+senza autenticazione.
+
+## Convenzioni
+
+### Formato delle risposte
+
+Le risposte successful restituiscono il payload direttamente in formato JSON:
+
+```json
+{
+  "id": "usr_abc123",
+  "username": "mrossi",
+  "email": "m.rossi@example.com",
+  "createdAt": "2025-01-15T10:30:00Z"
+}
+```
+
+Le risposte di errore seguono lo standard **RFC 7807 Problem Details** (vedi
+[Gestione errori](/it/api/error-handling/)).
+
+### Paginazione
+
+Gli endpoint che restituiscono liste supportano la paginazione tramite i query parameter
+`page` e `pageSize`:
+
+```text
+GET /api/v1/users?page=2&pageSize=20
+```
+
+La risposta include i metadati di paginazione:
+
+```json
+{
+  "data": [...],
+  "pagination": {
+    "page": 2,
+    "pageSize": 20,
+    "totalItems": 150,
+    "totalPages": 8
+  }
+}
+```
+
+### Filtri e ordinamento
+
+Molti endpoint supportano filtri e ordinamento tramite query parameter:
+
+```text
+GET /api/v1/users?role=admin&sortBy=createdAt&sortOrder=desc
+```
+
+## API Explorer
+
+Primebrick include un **API Explorer** interattivo basato su Scalar, accessibile dalla
+pagina [API Explorer](/api-explorer/). L'explorer:
+
+- Carica la specifica OpenAPI aggregata client-side
+- Permette di configurare l'URL del backend (dev, staging, produzione)
+- Supporta l'autenticazione con bearer token, API key o OAuth2
+- Permette di testare gli endpoint direttamente dal browser
+
+## Prossimi passi
+
+- [Autenticazione](/it/api/authentication/) — Come autenticarsi con l'API
+- [RBAC](/it/api/rbac/) — Modello di autorizzazione e permessi
+- [Gestione errori](/it/api/error-handling/) — Formato standard degli errori

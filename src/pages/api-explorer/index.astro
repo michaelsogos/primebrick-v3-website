@@ -1,5 +1,6 @@
 ---
 import { ScalarComponent } from '@scalar/astro';
+import ApiExplorerConfig from '../../components/svelte/ApiExplorerConfig.svelte';
 import '../../styles/global.css';
 export const prerender = true;
 ---
@@ -9,16 +10,15 @@ export const prerender = true;
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Primebrick API Explorer — interactive OpenAPI documentation with live try-it and multi-language code generation." />
+    <meta name="description" content="Primebrick API Explorer — interactive OpenAPI documentation with live try-it, API key auth, and multi-language code generation." />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <title>API Explorer — Primebrick</title>
   </head>
   <body class="min-h-screen bg-slate-950 text-slate-100 antialiased">
     <nav class="border-b border-slate-800 px-6 py-4">
       <div class="mx-auto flex max-w-6xl items-center justify-between">
-        <a href="/" class="text-xl font-bold text-sky-400">Primebrick</a>
+        <a href="/en/" class="text-xl font-bold text-sky-400">Primebrick</a>
         <div class="flex items-center gap-6 text-sm">
-          <a href="/features" class="text-slate-300 hover:text-sky-400 transition-colors">Features</a>
           <a href="/docs" class="text-slate-300 hover:text-sky-400 transition-colors">Docs</a>
           <a href="/api-explorer" class="text-sky-400">API Explorer</a>
           <a
@@ -29,9 +29,19 @@ export const prerender = true;
           >
             GitHub
           </a>
+          <a
+            href="https://github.com/michaelsogos/primebrick-v3-website/blob/main/LICENSE"
+            class="text-slate-300 hover:text-sky-400 transition-colors"
+            target="_blank"
+            rel="noopener"
+          >
+            MIT License
+          </a>
         </div>
       </div>
     </nav>
+
+    <ApiExplorerConfig client:load />
 
     <ScalarComponent
       renderMode="client"

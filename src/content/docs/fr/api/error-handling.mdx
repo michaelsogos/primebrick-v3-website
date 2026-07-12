@@ -1,0 +1,179 @@
+---
+title: "Gestion des erreurs"
+description: "RFC 7807 Problem Details — le format d'erreur standard pour toutes les APIs de Primebrick."
+source: handwritten
+---
+
+## Vue d'ensemble
+
+Primebrick utilise **RFC 7807 Problem Details for HTTP APIs** comme format d'erreur universel. Chaque erreur — du backend et de chaque microservice — renvoie la même structure JSON. Cela fournit aux clients une manière unique et prévisible de parser et gérer les erreurs.
+
+## Format de réponse d'erreur
+
+Chaque réponse d'erreur est un objet JSON avec les champs suivants :
+
+| Champ | Type | Requis | Description |
+|-------|------|--------|-------------|
+| `type` | string (URI) | Oui | Un identifiant stable du type d'erreur |
+| `title` | string | Oui | Un résumé court et lisible par les humains |
+| `status` | number | Oui | Le code de statut HTTP |
+| `detail` | string | Non | Une explication lisible par les humains spécifique à cette occurrence |
+| `instance` | string | Non | Le chemin de la requête qui a déclenché l'erreur |
+| `impact` | string[] | Non | Quels éléments ou fonctionnalités de l'UI sont affectés (pour usage frontend) |
+
+### Exemple
+
+```json
+{
+  "type": "https://primebrick.dev/errors/permission-denied",
+  "title": "Permission denied",
+  "status": 403,
+  "detail": "You do not have permission to read customers.",
+  "instance": "/api/v1/customers",
+  "impact": ["customers-list", "customer-detail"]
+}
+```
+
+## Codes d'erreur stables
+
+Le champ `type` est un **code d'erreur stable** sous forme d'URI. Il ne change pas entre les versions pour la même condition d'erreur. Les clients peuvent faire un switch en toute sécurité sur la valeur de `type` :
+
+```typescript
+switch (error.type) {
+  case 'https://primebrick.dev/errors/permission-denied':
+    showAccessDeniedBanner();
+    break;
+  case 'https://primebrick.dev/errors/not-found':
+    showNotFoundPage();
+    break;
+  case 'https://primebrick.dev/errors/validation':
+    showValidationErrors(error.detail);
+    break;
+}
+```
+
+## Champ impact
+
+Le tableau optionnel `impact` indique au **frontend quels éléments de l'UI sont affectés** par l'erreur. Cela permet à l'UI de se dégrader de manière élégante — désactivant ou montrant un état d'erreur uniquement pour les composants affectés plutôt que de montrer une erreur globale.
+
+```json
+{
+  "type": "https://primebrick.dev/errors/service-unavailable",
+  "title": "Service unavailable",
+  "status": 503,
+  "detail": "The billing microservice is currently offline.",
+  "instance": "/ws/billing/invoices",
+  "impact": ["billing-widget", "invoice-export-button"]
+}
+```
+
+Le frontend peut utiliser cela pour afficher un message d'erreur ciblé sur le widget de billing tout en laissant le reste de la page fonctionnel.
+
+## Erreurs courantes
+
+### 400 — Erreur de validation
+
+```json
+{
+  "type": "https://primebrick.dev/errors/validation",
+  "title": "Validation error",
+  "status": 400,
+  "detail": "Field 'email' must be a valid email address.",
+  "instance": "/api/v1/customers"
+}
+```
+
+### 401 — Non autorisé
+
+```json
+{
+  "type": "https://primebrick.dev/errors/unauthorized",
+  "title": "Unauthorized",
+  "status": 401,
+  "detail": "Authentication is required to access this resource.",
+  "instance": "/api/v1/customers"
+}
+```
+
+### 403 — Permission refusée
+
+```json
+{
+  "type": "https://primebrick.dev/errors/permission-denied",
+  "title": "Permission denied",
+  "status": 403,
+  "detail": "You do not have permission to delete customers.",
+  "instance": "/api/v1/customers/42",
+  "impact": ["customer-delete-button"]
+}
+```
+
+### 404 — Introuvable
+
+```json
+{
+  "type": "https://primebrick.dev/errors/not-found",
+  "title": "Resource not found",
+  "status": 404,
+  "detail": "Customer 42 does not exist.",
+  "instance": "/api/v1/customers/42"
+}
+```
+
+### 409 — Conflit
+
+```json
+{
+  "type": "https://primebrick.dev/errors/conflict",
+  "title": "Conflict",
+  "status": 409,
+  "detail": "A customer with this email already exists.",
+  "instance": "/api/v1/customers"
+}
+```
+
+### 503 — Service indisponible
+
+```json
+{
+  "type": "https://primebrick.dev/errors/service-unavailable",
+  "title": "Service unavailable",
+  "status": 503,
+  "detail": "The billing microservice is currently offline. Please try again later.",
+  "instance": "/ws/billing/invoices",
+  "impact": ["billing-widget", "invoice-list"]
+}
+```
+
+## Produire des erreurs dans le code
+
+Le SDK fournit un helper `ProblemError` pour que les services produisent des erreurs conformes de manière cohérente :
+
+```typescript
+import { ProblemError } from '@primebrick/sdk';
+
+// Erreur simple
+throw new ProblemError({
+  type: 'https://primebrick.dev/errors/not-found',
+  title: 'Customer not found',
+  status: 404,
+  detail: `Customer ${id} does not exist.`,
+  instance: `/api/v1/customers/${id}`,
+});
+
+// Avec impact (pour les erreurs avec connaissance du frontend)
+throw new ProblemError({
+  type: 'https://primebrick.dev/errors/permission-denied',
+  title: 'Permission denied',
+  status: 403,
+  detail: 'You cannot export billing data.',
+  instance: '/ws/billing/export',
+  impact: ['billing-export-button'],
+});
+```
+
+## Étapes suivantes
+
+- [Introduction à l'API](/fr/api/introduction/) — URLs de base et la spécification OpenAPI.
+- [Standard de microservices](/fr/api/microservice-standard/) — comment les services produisent ces erreurs.
+- [API Explorer](/api-explorer/) — voir les erreurs en action avec des requêtes en direct.
