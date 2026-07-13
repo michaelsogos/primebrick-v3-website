@@ -20,8 +20,8 @@ const { lang } = Astro.params;
 const langCode = (lang ?? 'en') as LangCode;
 const t = translations[langCode] ?? translations.en;
 const isEn = langCode === 'en';
-const docsPath = isEn ? '/getting-started/introduction/' : `/${langCode}/getting-started/introduction/`;
-const apiExplorerPath = '/api-explorer';
+const docsPath = 'https://docs.primebrick.dev';
+const apiExplorerPath = 'https://docs.primebrick.dev/api';
 ---
 
 <!doctype html>
