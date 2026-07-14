@@ -1,10 +1,10 @@
 // SSR contact endpoint — opts out of prerendering.
 // Flow: verify Turnstile → validate/sanitize → send via Brevo → JSON response.
 // Secrets (TURNSTILE_SECRET_KEY, BREVO_API_KEY) are read from the Cloudflare
-// Worker runtime env via `cloudflare:workers` (Astro v6+ / adapter v14+ API).
+// Worker runtime env via dynamic import of `cloudflare:workers` (Astro v6+ /
+// adapter v14+ API). Dynamic import avoids the ERR_UNSUPPORTED_ESM_URL_SCHEME
+// build-time error in hybrid Astro sites (astro issue #15237).
 // Uses only Web APIs (fetch, Request, Response) — no Node.js APIs.
-
-import { env } from 'cloudflare:workers';
 
 export const prerender = false;
 
@@ -64,6 +64,8 @@ export async function POST({ request }: { request: Request }): Promise<Response>
     const cleanMessage = message.trim();
 
     // 2. Read secrets from the Cloudflare Worker env (Astro v6+ API).
+    // Dynamic import to avoid build-time ERR_UNSUPPORTED_ESM_URL_SCHEME.
+    const { env } = await import('cloudflare:workers');
     const turnstileSecret = env.TURNSTILE_SECRET_KEY as string | undefined;
     const brevoKey = env.BREVO_API_KEY as string | undefined;
 
