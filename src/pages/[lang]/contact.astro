@@ -5,6 +5,7 @@ import GitHubDropdown from '../../components/svelte/GitHubDropdown.svelte';
 import GitHubIcon from '../../components/GitHubIcon.astro';
 import TopBanner from '../../components/astro/TopBanner.astro';
 import ContactForm from '../../components/svelte/ContactForm.svelte';
+import ObfuscatedEmail from '../../components/svelte/ObfuscatedEmail.svelte';
 import '../../styles/global.css';
 
 export const prerender = true;
@@ -20,9 +21,8 @@ const langCode = (lang ?? 'en') as LangCode;
 const t = translations[langCode] ?? translations.en;
 const isEn = langCode === 'en';
 const docsPath = 'https://docs.primebrick.dev';
-const apiCatalogPath = 'https://docs.primebrick.dev/catalog';
-const contactHref = isEn ? '/contact' : `/${langCode}/contact`;
-const homeHref = isEn ? '/' : `/${langCode}/`;
+const contactHref = isEn ? '/en/contact' : `/${langCode}/contact`;
+const homeHref = isEn ? '/en/' : `/${langCode}/`;
 const turnstileSitekey = import.meta.env.PUBLIC_TURNSTILE_SITEKEY ?? '';
 ---
 
@@ -35,9 +35,9 @@ const turnstileSitekey = import.meta.env.PUBLIC_TURNSTILE_SITEKEY ?? '';
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <title>Primebrick — {t.contact.title}</title>
     {LANGUAGES.map((l) => (
-      <link rel="alternate" hreflang={l.hreflang} href={`https://primebrick.dev${l.code === 'en' ? '/contact' : `/${l.code}/contact`}`} />
+      <link rel="alternate" hreflang={l.hreflang} href={`https://primebrick.dev${l.code === 'en' ? '/en/contact' : `/${l.code}/contact`}`} />
     ))}
-    <link rel="alternate" hreflang="x-default" href="https://primebrick.dev/contact" />
+    <link rel="alternate" hreflang="x-default" href="https://primebrick.dev/en/contact" />
   </head>
   <body class="min-h-screen bg-slate-950 text-slate-100 antialiased">
     <!-- Ambient gradient background -->
@@ -58,9 +58,7 @@ const turnstileSitekey = import.meta.env.PUBLIC_TURNSTILE_SITEKEY ?? '';
         </a>
         <div class="flex items-center gap-6 text-sm">
           <a href={docsPath} class="text-slate-300 hover:text-sky-400 transition-colors" target="_blank" rel="noopener">{t.nav.docs}</a>
-          <a href={apiCatalogPath} class="text-slate-300 hover:text-sky-400 transition-colors" target="_blank" rel="noopener">{t.nav.apiCatalog}</a>
           <a href={contactHref} class="text-sky-400 transition-colors">{t.nav.contact}</a>
-          <GitHubDropdown client:load />
           <a
             href="https://opensource.org/license/MIT"
             class="text-slate-300 hover:text-sky-400 transition-colors"
@@ -69,6 +67,7 @@ const turnstileSitekey = import.meta.env.PUBLIC_TURNSTILE_SITEKEY ?? '';
           >
             {t.nav.license}
           </a>
+          <GitHubDropdown client:load />
           <LanguageSwitcher client:load currentLang={langCode} />
         </div>
       </div>
@@ -91,10 +90,10 @@ const turnstileSitekey = import.meta.env.PUBLIC_TURNSTILE_SITEKEY ?? '';
         <div class="mt-12 rounded-3xl border border-slate-800/50 bg-slate-900/30 p-8 backdrop-blur-sm sm:p-10">
           <ContactForm client:load sitekey={turnstileSitekey} labels={t.contact.form} />
 
-          <!-- Direct email fallback (always visible, works without JS) -->
+          <!-- Direct email fallback (obfuscated, anti-scraper) -->
           <div class="mt-8 border-t border-slate-800/50 pt-6 text-center text-sm text-slate-500">
             <span>{t.contact.directEmailLabel}: </span>
-            <a href="mailto:about@primebrick.dev" class="text-sky-400 hover:text-sky-300 transition-colors">about@primebrick.dev</a>
+            <ObfuscatedEmail client:idle encoded="YWJvdXRAcHJpbWVicmljay5kZXY=" />
           </div>
         </div>
       </div>

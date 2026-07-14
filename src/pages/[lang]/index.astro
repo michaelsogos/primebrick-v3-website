@@ -23,8 +23,7 @@ const langCode = (lang ?? 'en') as LangCode;
 const t = translations[langCode] ?? translations.en;
 const isEn = langCode === 'en';
 const docsPath = 'https://docs.primebrick.dev';
-const apiCatalogPath = 'https://docs.primebrick.dev/catalog';
-const contactHref = isEn ? '/contact' : `/${langCode}/contact`;
+const contactHref = isEn ? '/en/contact' : `/${langCode}/contact`;
 ---
 
 <!doctype html>
@@ -59,9 +58,7 @@ const contactHref = isEn ? '/contact' : `/${langCode}/contact`;
         </a>
         <div class="flex items-center gap-6 text-sm">
           <a href={docsPath} class="text-slate-300 hover:text-sky-400 transition-colors" target="_blank" rel="noopener">{t.nav.docs}</a>
-          <a href={apiCatalogPath} class="text-slate-300 hover:text-sky-400 transition-colors" target="_blank" rel="noopener">{t.nav.apiCatalog}</a>
           <a href={contactHref} class="text-sky-400 transition-colors">{t.nav.contact}</a>
-          <GitHubDropdown client:load />
           <a
             href="https://opensource.org/license/MIT"
             class="text-slate-300 hover:text-sky-400 transition-colors"
@@ -70,6 +67,7 @@ const contactHref = isEn ? '/contact' : `/${langCode}/contact`;
           >
             {t.nav.license}
           </a>
+          <GitHubDropdown client:load />
           <LanguageSwitcher client:load currentLang={langCode} />
         </div>
       </div>
