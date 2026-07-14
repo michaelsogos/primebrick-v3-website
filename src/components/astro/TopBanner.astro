@@ -1,0 +1,22 @@
+---
+// Sticky, non-dismissible top banner. Sits above the nav (z-60 > nav z-50).
+// Links to the contact page. Static Astro component — no interactivity.
+interface Props {
+  text: string;
+  href: string;
+}
+const { text, href } = Astro.props;
+---
+
+<a
+  href={href}
+  class="sticky top-0 z-60 flex w-full items-center justify-center gap-2 bg-gradient-to-r from-sky-600 via-indigo-600 to-sky-600 px-4 py-2 text-center text-sm font-medium text-white transition-colors hover:from-sky-500 hover:via-indigo-500 hover:to-sky-500"
+>
+  <svg class="h-4 w-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+    <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
+  </svg>
+  <span>{text}</span>
+  <svg class="h-3.5 w-3.5 shrink-0 opacity-80" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+    <path d="M5 12h14M13 6l6 6-6 6" />
+  </svg>
+</a>

@@ -22,6 +22,10 @@ pnpm-debug.log*
 .env.production
 .env.local
 
+# wrangler local secrets (used by astro dev / wrangler dev)
+.dev.vars
+.dev.vars.*
+
 # macOS-specific files
 .DS_Store
 
