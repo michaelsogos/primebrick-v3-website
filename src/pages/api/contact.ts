@@ -9,7 +9,7 @@ export const prerender = false;
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const RECIPIENT = 'about@primebrick.dev';
 // Sender must be a domain verified in your Brevo account.
-const SENDER = { name: 'Primebrick Website', email: 'no-reply@primebrick.dev' };
+const SENDER = { name: 'Primebrick Website', email: 'noreply@primebrick.dev' };
 
 interface ContactPayload {
   name?: unknown;
