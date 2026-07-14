@@ -1,8 +1,10 @@
 // SSR contact endpoint — opts out of prerendering.
 // Flow: verify Turnstile → validate/sanitize → send via Brevo → JSON response.
 // Secrets (TURNSTILE_SECRET_KEY, BREVO_API_KEY) are read from the Cloudflare
-// Worker runtime env (Wrangler secrets), NOT from import.meta.env.
+// Worker runtime env via `cloudflare:workers` (Astro v6+ / adapter v14+ API).
 // Uses only Web APIs (fetch, Request, Response) — no Node.js APIs.
+
+import { env } from 'cloudflare:workers';
 
 export const prerender = false;
 
@@ -40,7 +42,7 @@ function isNonEmptyString(v: unknown, max: number): v is string {
   return typeof v === 'string' && v.trim().length > 0 && v.trim().length <= max;
 }
 
-export async function POST({ request, locals }: { request: Request; locals: App.Locals }): Promise<Response> {
+export async function POST({ request }: { request: Request }): Promise<Response> {
   let payload: ContactPayload;
   try {
     payload = await request.json() as ContactPayload;
@@ -60,8 +62,7 @@ export async function POST({ request, locals }: { request: Request; locals: App.
   const cleanEmail = email.trim();
   const cleanMessage = message.trim();
 
-  // 2. Read secrets from Worker runtime env (Cloudflare adapter).
-  const env = (locals as any).runtime?.env ?? {};
+  // 2. Read secrets from the Cloudflare Worker env (Astro v6+ API).
   const turnstileSecret = env.TURNSTILE_SECRET_KEY as string | undefined;
   const brevoKey = env.BREVO_API_KEY as string | undefined;
 
@@ -135,5 +136,9 @@ function escapeHtml(s: string): string {
 
 // Reject non-POST methods
 export function ALL(): Response {
+  return json({ error: 'method_not_allowed' }, 405);
+}
+
+export async function GET(): Promise<Response> {
   return json({ error: 'method_not_allowed' }, 405);
 }
