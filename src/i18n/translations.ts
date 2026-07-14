@@ -16,7 +16,7 @@ export type LangCode = (typeof LANGUAGES)[number]['code'];
 
 export const translations = {
   en: {
-    nav: { features: 'Features', docs: 'Docs', apiExplorer: 'API Catalog', github: 'GitHub', license: 'MIT License' },
+    nav: { features: 'Features', docs: 'Docs', apiCatalog: 'API Catalog', github: 'GitHub', license: 'MIT License' },
     hero: {
       badge: 'MIT Licensed • Open Source • Multi-Cloud',
       headlinePrefix: 'The opinionated backoffice framework for',
@@ -122,6 +122,18 @@ export const translations = {
       title: 'Every component, mapped.',
       text: 'From browser to database — clear ports, protocols, and data flow. Dockerized for local dev, Terraform-ready for production.',
     },
+    architecture: {
+      badge: 'Architecture',
+      title: 'Layered by design.',
+      text: 'Frontend, Backend, Microservices, Libraries, Data — each layer has a clear responsibility and communicates through defined protocols.',
+      layers: [
+        { name: 'Frontend', desc: 'SvelteKit Admin UI — communicates only with the Backend API' },
+        { name: 'Backend', desc: 'Express API — Auth, RBAC, Service Registry, Proxy' },
+        { name: 'Microservices', desc: 'Independent Docker services — self-register via NATS' },
+        { name: 'Libraries', desc: '@primebrick/sdk + @primebrick/dal-pg — shared across all services' },
+        { name: 'Data', desc: 'PostgreSQL — single data store, accessed via DAL' },
+      ],
+    },
     forDevs: {
       title: 'Less boilerplate, more value.',
       text: 'Clear structure, objective coding rules, DX designed for speed. Clone, run, and you\'re already in a best-practice environment — CI/CD, linting, types, tests, observability all ready.',
@@ -148,7 +160,7 @@ export const translations = {
   },
 
   it: {
-    nav: { features: 'Funzionalità', docs: 'Docs', apiExplorer: 'API Catalog', github: 'GitHub', license: 'Licenza MIT' },
+    nav: { features: 'Funzionalità', docs: 'Docs', apiCatalog: 'API Catalog', github: 'GitHub', license: 'Licenza MIT' },
     hero: {
       badge: 'Licenza MIT • Open Source • Multi-Cloud',
       headlinePrefix: 'Il framework backoffice opinionato per',
@@ -254,6 +266,18 @@ export const translations = {
       title: 'Ogni componente, mappato.',
       text: 'Dal browser al database — porte, protocolli e flusso dei dati chiari. Dockerizzato per lo sviluppo locale, pronto con Terraform per la produzione.',
     },
+    architecture: {
+      badge: 'Architettura',
+      title: 'Stratificato per design.',
+      text: 'Frontend, Backend, Microservizi, Librerie, Dati — ogni livello ha una responsabilità chiara e comunica tramite protocolli definiti.',
+      layers: [
+        { name: 'Frontend', desc: 'SvelteKit Admin UI — comunica solo con l\'API Backend' },
+        { name: 'Backend', desc: 'Express API — Auth, RBAC, Service Registry, Proxy' },
+        { name: 'Microservizi', desc: 'Servizi Docker indipendenti — auto-registrazione via NATS' },
+        { name: 'Librerie', desc: '@primebrick/sdk + @primebrick/dal-pg — condivise tra tutti i servizi' },
+        { name: 'Dati', desc: 'PostgreSQL — unico data store, accessibile via DAL' },
+      ],
+    },
     forDevs: {
       title: 'Meno boilerplate, più valore.',
       text: 'Struttura chiara, regole di codifica oggettive, DX progettata per la velocità. Clona, esegui, e sei già in un ambiente di best practice — CI/CD, linting, tipi, test, osservabilità pronti.',
@@ -280,7 +304,7 @@ export const translations = {
   },
 
   de: {
-    nav: { features: 'Funktionen', docs: 'Doku', apiExplorer: 'API Catalog', github: 'GitHub', license: 'MIT-Lizenz' },
+    nav: { features: 'Funktionen', docs: 'Doku', apiCatalog: 'API Catalog', github: 'GitHub', license: 'MIT-Lizenz' },
     hero: {
       badge: 'MIT-Lizenziert • Open Source • Multi-Cloud',
       headlinePrefix: 'Das Opinionated Backoffice-Framework für',
@@ -386,6 +410,18 @@ export const translations = {
       title: 'Jede Komponente, kartiert.',
       text: 'Vom Browser zur Datenbank — klare Ports, Protokolle und Datenfluss. Dockerisiert für lokale Entwicklung, Terraform-bereit für Produktion.',
     },
+    architecture: {
+      badge: 'Architektur',
+      title: 'Schichtweise gestaltet.',
+      text: 'Frontend, Backend, Microservices, Bibliotheken, Daten — jede Schicht hat eine klare Verantwortung und kommuniziert über definierte Protokolle.',
+      layers: [
+        { name: 'Frontend', desc: 'SvelteKit Admin UI — kommuniziert nur mit der Backend-API' },
+        { name: 'Backend', desc: 'Express API — Auth, RBAC, Service Registry, Proxy' },
+        { name: 'Microservices', desc: 'Unabhängige Docker-Dienste — Selbstregistrierung via NATS' },
+        { name: 'Bibliotheken', desc: '@primebrick/sdk + @primebrick/dal-pg — gemeinsam genutzt' },
+        { name: 'Daten', desc: 'PostgreSQL — einziger Datenspeicher, Zugriff via DAL' },
+      ],
+    },
     forDevs: {
       title: 'Weniger Boilerplate, mehr Wert.',
       text: 'Klare Struktur, objektive Codierungsregeln, DX für Geschwindigkeit. Klonen, ausführen, und Sie sind bereits in einer Best-Practice-Umgebung — CI/CD, Linting, Typen, Tests, Observability.',
@@ -412,7 +448,7 @@ export const translations = {
   },
 
   es: {
-    nav: { features: 'Características', docs: 'Docs', apiExplorer: 'API Catalog', github: 'GitHub', license: 'Licencia MIT' },
+    nav: { features: 'Características', docs: 'Docs', apiCatalog: 'API Catalog', github: 'GitHub', license: 'Licencia MIT' },
     hero: {
       badge: 'Licencia MIT • Open Source • Multi-Cloud',
       headlinePrefix: 'El framework backoffice opinionated para',
@@ -518,6 +554,18 @@ export const translations = {
       title: 'Cada componente, mapeado.',
       text: 'Del navegador a la base de datos — puertos, protocolos y flujo de datos claros. Dockerizado para desarrollo local, listo con Terraform para producción.',
     },
+    architecture: {
+      badge: 'Arquitectura',
+      title: 'Estratificado por diseño.',
+      text: 'Frontend, Backend, Microservicios, Bibliotecas, Datos — cada capa tiene una responsabilidad clara y comunica mediante protocolos definidos.',
+      layers: [
+        { name: 'Frontend', desc: 'SvelteKit Admin UI — comunica solo con la API del Backend' },
+        { name: 'Backend', desc: 'Express API — Auth, RBAC, Service Registry, Proxy' },
+        { name: 'Microservicios', desc: 'Servicios Docker independientes — auto-registro via NATS' },
+        { name: 'Bibliotecas', desc: '@primebrick/sdk + @primebrick/dal-pg — compartidas' },
+        { name: 'Datos', desc: 'PostgreSQL — único almacén de datos, acceso via DAL' },
+      ],
+    },
     forDevs: {
       title: 'Menos boilerplate, más valor.',
       text: 'Estructura clara, reglas de codificación objetivas, DX diseñada para velocidad. Clona, ejecuta, y ya estás en un entorno de mejores prácticas — CI/CD, linting, tipos, tests, observabilidad.',
@@ -544,7 +592,7 @@ export const translations = {
   },
 
   pt: {
-    nav: { features: 'Funcionalidades', docs: 'Docs', apiExplorer: 'API Catalog', github: 'GitHub', license: 'Licença MIT' },
+    nav: { features: 'Funcionalidades', docs: 'Docs', apiCatalog: 'API Catalog', github: 'GitHub', license: 'Licença MIT' },
     hero: {
       badge: 'Licença MIT • Open Source • Multi-Cloud',
       headlinePrefix: 'O framework backoffice opinionated para',
@@ -650,6 +698,18 @@ export const translations = {
       title: 'Cada componente, mapeado.',
       text: 'Do navegador à base de dados — portas, protocolos e fluxo de dados claros. Dockerizado para desenvolvimento local, pronto com Terraform para produção.',
     },
+    architecture: {
+      badge: 'Arquitetura',
+      title: 'Estratificado por design.',
+      text: 'Frontend, Backend, Microserviços, Bibliotecas, Dados — cada camada tem uma responsabilidade clara e comunica através de protocolos definidos.',
+      layers: [
+        { name: 'Frontend', desc: 'SvelteKit Admin UI — comunica apenas com a API do Backend' },
+        { name: 'Backend', desc: 'Express API — Auth, RBAC, Service Registry, Proxy' },
+        { name: 'Microserviços', desc: 'Serviços Docker independentes — auto-registo via NATS' },
+        { name: 'Bibliotecas', desc: '@primebrick/sdk + @primebrick/dal-pg — partilhadas' },
+        { name: 'Dados', desc: 'PostgreSQL — único armazen de dados, acesso via DAL' },
+      ],
+    },
     forDevs: {
       title: 'Menos boilerplate, mais valor.',
       text: 'Estrutura clara, regras de codificação objetivas, DX desenhada para velocidade. Clona, executa, e já estás num ambiente de melhores práticas — CI/CD, linting, tipos, testes, observabilidade.',
@@ -676,7 +736,7 @@ export const translations = {
   },
 
   fr: {
-    nav: { features: 'Fonctionnalités', docs: 'Docs', apiExplorer: 'API Catalog', github: 'GitHub', license: 'Licence MIT' },
+    nav: { features: 'Fonctionnalités', docs: 'Docs', apiCatalog: 'API Catalog', github: 'GitHub', license: 'Licence MIT' },
     hero: {
       badge: 'Licence MIT • Open Source • Multi-Cloud',
       headlinePrefix: 'Le framework backoffice opinionated pour',
@@ -781,6 +841,18 @@ export const translations = {
       badge: 'Infrastructure',
       title: 'Chaque composant, cartographié.',
       text: 'Du navigateur à la base de données — ports, protocoles et flux de données clairs. Dockerisé pour le développement local, prêt avec Terraform pour la production.',
+    },
+    architecture: {
+      badge: 'Architecture',
+      title: 'Stratifié par conception.',
+      text: 'Frontend, Backend, Microservices, Bibliothèques, Données — chaque couche a une responsabilité claire et communique via des protocoles définis.',
+      layers: [
+        { name: 'Frontend', desc: 'SvelteKit Admin UI — communique uniquement avec l\'API Backend' },
+        { name: 'Backend', desc: 'Express API — Auth, RBAC, Service Registry, Proxy' },
+        { name: 'Microservices', desc: 'Services Docker indépendants — auto-enregistrement via NATS' },
+        { name: 'Bibliothèques', desc: '@primebrick/sdk + @primebrick/dal-pg — partagées' },
+        { name: 'Données', desc: 'PostgreSQL — unique magasin de données, accès via DAL' },
+      ],
     },
     forDevs: {
       title: 'Moins de boilerplate, plus de valeur.',

@@ -12,12 +12,11 @@
 `primebrick-v3-website` is the product website for Primebrick, deployed at `primebrick.dev`.
 It is an Astro static site (hybrid rendering) deployed to Cloudflare Workers free plan.
 
-The site serves three purposes:
+The site serves two purposes:
 1. **Institutional / marketing landing pages** — product overview, features, pricing
-2. **Project documentation** — architecture docs, guides sourced from DeepWiki + in-repo `docs/` folders
-3. **OpenAPI REPL / API explorer** — interactive API docs with live try-it, powered by Scalar
+2. **Links to external docs** — architecture docs and API catalog are hosted on a separate Zudoku site at `docs.primebrick.dev`
 
-**Tech stack**: Astro + @astrojs/svelte + @astrojs/starlight + @scalar/astro + Tailwind CSS 4
+**Tech stack**: Astro + @astrojs/svelte + Tailwind CSS 4
 **Deployment**: Cloudflare Workers (free plan) via `wrangler deploy`
 **Rendering**: Hybrid — all pages prerendered by default (0ms Worker CPU, free unlimited static asset requests)
 

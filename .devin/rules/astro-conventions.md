@@ -25,12 +25,10 @@ trigger: always_on
 
 ## Styling
 1. **Tailwind CSS 4**: Via `@tailwindcss/vite` plugin. No PostCSS config needed.
-2. **Starlight custom CSS**: Override Starlight styles via `customCss` in `astro.config.mjs`, not by editing Starlight's source.
-3. **No CSS-in-JS**: Use Tailwind classes or `.css` files. No styled-components, emotion, or similar.
+2. **No CSS-in-JS**: Use Tailwind classes or `.css` files. No styled-components, emotion, or similar.
 
 ## Enforcement
 - AI agent MUST set `export const prerender = true` on all new pages unless SSR is explicitly needed.
 - AI agent MUST NOT use `fs`, `child_process`, or `node:path` in any server-rendered code.
-- AI agent MUST NOT hand-edit files under `src/content/docs/*/deepwiki/` or `src/content/docs/*/manual/`.
 - AI agent MUST use kebab-case for all filenames.
 - AI agent MUST use Svelte only for interactive components, Astro for static content.

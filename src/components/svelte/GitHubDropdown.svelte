@@ -159,28 +159,4 @@
     background: var(--gh-hover-light, #f3f4f6);
     color: var(--gh-accent-light, #0ea5e9);
   }
-
-  /* Starlight docs context — uses --sl-color-* variables */
-  :global(.starlight-header) .gh-dropdown-btn {
-    color: var(--sl-color-text, inherit);
-  }
-
-  :global(.starlight-header) .gh-dropdown-btn:hover {
-    color: var(--sl-color-text-accent, #38bdf8);
-  }
-
-  :global(.starlight-header) .gh-dropdown-menu {
-    border-color: var(--sl-color-hairline, #334155);
-    background: #0f172a;
-    box-shadow: var(--sl-shadow-lg, 0 10px 25px rgba(0, 0, 0, 0.3));
-  }
-
-  :global(.starlight-header) .gh-dropdown-item {
-    color: var(--sl-color-text, inherit);
-  }
-
-  :global(.starlight-header) .gh-dropdown-item:hover {
-    background: var(--sl-color-bg-inline-code, #1e293b);
-    color: var(--sl-color-text-accent, #38bdf8);
-  }
 </style>
