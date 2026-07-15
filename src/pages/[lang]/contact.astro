@@ -33,7 +33,11 @@ const turnstileSitekey = import.meta.env.PUBLIC_TURNSTILE_SITEKEY ?? '';
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content={t.contact.subtitle.slice(0, 160)} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <title>Primebrick — {t.contact.title}</title>
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+    <link rel="icon" type="image/png" sizes="512x512" href="/favicon-512.png" />
+    <link rel="icon" sizes="any" href="/favicon.ico" />
+    <link rel="apple-touch-icon" href="/favicon-512.png" />
+    <title>PrimeBrick — {t.contact.title}</title>
     {LANGUAGES.map((l) => (
       <link rel="alternate" hreflang={l.hreflang} href={`https://primebrick.dev${l.code === 'en' ? '/en/contact' : `/${l.code}/contact`}`} />
     ))}
@@ -53,8 +57,8 @@ const turnstileSitekey = import.meta.env.PUBLIC_TURNSTILE_SITEKEY ?? '';
     <!-- Navigation (sticky, condensing on scroll) -->
     <nav id="site-nav" class="sticky top-9 z-50 border-b border-slate-800/50 bg-slate-950/40 backdrop-blur-sm transition-all duration-300">
       <div id="nav-inner" class="mx-auto flex max-w-7xl items-center justify-between px-6 py-4 transition-all duration-300">
-        <a href={homeHref} class="flex items-center gap-2 text-xl font-bold transition-all duration-300" id="nav-logo">
-          <span class="bg-gradient-to-r from-sky-400 to-indigo-400 bg-clip-text text-transparent">Primebrick</span>
+        <a href={homeHref} class="flex items-center gap-2 transition-all duration-300" id="nav-logo" aria-label="PrimeBrick home">
+          <img src="/logo-full-dark.svg" alt="PrimeBrick" width="170" height="32" class="h-7 w-auto" />
         </a>
         <div class="flex items-center gap-6 text-sm">
           <a href={docsPath} class="text-slate-300 hover:text-sky-400 transition-colors" target="_blank" rel="noopener">{t.nav.docs}</a>
