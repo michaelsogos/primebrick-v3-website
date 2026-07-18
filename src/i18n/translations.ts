@@ -134,6 +134,39 @@ export const translations = {
         { name: 'Data', desc: 'PostgreSQL — single data store, accessed via DAL' },
       ],
     },
+    accessibility: {
+      badge: 'Accessibility',
+      title: 'WCAG, VPAT & ARIA. Tested, not promised.',
+      text: 'Primebrick is built accessibility-first. Automated WCAG 2.x + ARIA auditing runs on every route via axe-core. A downloadable VPAT 2.5 INT conformance report covers WCAG 2.0/2.1/2.2 (A/AA/AAA), Section 508, and EN 301 549 — so your compliance team has real evidence, not marketing claims.',
+      cards: [
+        { title: 'WCAG 2.2 A/AA/AAA', text: 'Automated axe-core scans on every route, every build. Level A, AA, and AAA success criteria tested continuously.' },
+        { title: 'VPAT 2.5 INT Report', text: 'Downloadable Voluntary Product Accessibility Template covering WCAG, Section 508, and EN 301 549. Generated from real scan data.' },
+        { title: 'ARIA compliance', text: 'Full ARIA roles, states, and properties validated. Screen-reader-compatible components out of the box.' },
+        { title: 'Section 508 & EN 301 549', text: 'US Section 508 (Chapters 3–6) and EU EN 301 549 (Clauses 4–13) covered in the INT edition report.' },
+      ],
+    },
+    security: {
+      badge: 'Enforced Security',
+      title: 'Passkeys, WebAuthn & MFA. Built in, not bolted on.',
+      text: 'Primebrick enforces modern authentication best practices. Passkey support via WebAuthn means users authenticate with Windows Hello™, Face ID™, or Touch ID™ — no passwords to phish, no OTP codes to intercept. Multi-factor authentication is integrated at the identity layer, not added as an afterthought.',
+      cards: [
+        { title: 'Passkeys (WebAuthn)', text: 'FIDO2/WebAuthn passkey authentication. Phishing-resistant by design — no shared secrets, no replay attacks.' },
+        { title: 'Windows Hello™', text: 'Biometric and PIN authentication on Windows 10/11 via Windows Hello™. No password required.' },
+        { title: 'Face ID™ & Touch ID™', text: 'Biometric authentication on macOS and iOS via Face ID™ and Touch ID™. Seamless, secure, native.' },
+        { title: 'MFA everywhere', text: 'Multi-factor authentication enforced at the identity provider (Casdoor/OIDC). TOTP, hardware keys, and passkeys supported.' },
+      ],
+    },
+    securityPosture: {
+      badge: 'Security Posture',
+      title: 'Critical actions require re-authentication. Always.',
+      text: 'Primebrick enforces a strict security posture: every critical action — changing a user password, modifying RBAC permissions, altering security settings — requires an in-app security guard with admin re-login and MFA verification. No session reuse, no silent elevation. This follows NIST SP 800-63B step-up authentication and OWASP ASVS V3.4 session management requirements.',
+      cards: [
+        { title: 'In-app security guard', text: 'Critical actions trigger an in-app modal requiring admin credentials + MFA. No action proceeds without fresh verification.' },
+        { title: 'Step-up authentication', text: 'Following NIST SP 800-63B: sensitive operations require a fresh authentication event, not just an existing session.' },
+        { title: 'No session reuse', text: 'Existing JWT/session tokens are insufficient for critical actions. A new MFA challenge is always required.' },
+        { title: 'OWASP ASVS aligned', text: 'Meets OWASP Application Security Verification Standard V3.4 (session management for high-value transactions).' },
+      ],
+    },
     forDevs: {
       title: 'Less boilerplate, more value.',
       text: 'Clear structure, objective coding rules, DX designed for speed. Clone, run, and you\'re already in a best-practice environment — CI/CD, linting, types, tests, observability all ready.',
@@ -300,6 +333,39 @@ export const translations = {
         { name: 'Microservizi', desc: 'Servizi Docker indipendenti — auto-registrazione via NATS' },
         { name: 'Librerie', desc: '@primebrick/sdk + @primebrick/dal-pg — condivise tra tutti i servizi' },
         { name: 'Dati', desc: 'PostgreSQL — unico data store, accessibile via DAL' },
+      ],
+    },
+    accessibility: {
+      badge: 'Accessibilità',
+      title: 'WCAG, VPAT & ARIA. Testato, non promesso.',
+      text: 'Primebrick è costruito accessibilità-prima. L\'auditing automatizzato WCAG 2.x + ARIA viene eseguito su ogni route tramite axe-core. Un report di conformità VPAT 2.5 INT scaricabile copre WCAG 2.0/2.1/2.2 (A/AA/AAA), Section 508, ed EN 301 549 — così il tuo team di conformità ha prove reali, non claim di marketing.',
+      cards: [
+        { title: 'WCAG 2.2 A/AA/AAA', text: 'Scansioni axe-core automatizzate su ogni route, ogni build. Criteri di successo livello A, AA e AAA testati continuamente.' },
+        { title: 'Report VPAT 2.5 INT', text: 'Voluntary Product Accessibility Template scaricabile che copre WCAG, Section 508, ed EN 301 549. Generato da dati di scansione reali.' },
+        { title: 'Conformità ARIA', text: 'Ruoli, stati e proprietà ARIA completamente validati. Componenti compatibili con screen reader fin da subito.' },
+        { title: 'Section 508 & EN 301 549', text: 'US Section 508 (Capitoli 3–6) ed EU EN 301 549 (Clausole 4–13) coperti nel report edizione INT.' },
+      ],
+    },
+    security: {
+      badge: 'Sicurezza applicata',
+      title: 'Passkeys, WebAuthn & MFA. Integrati, non aggiunti.',
+      text: 'Primebrick applica le migliori pratiche moderne di autenticazione. Il supporto Passkey via WebAuthn significa che gli utenti si autenticano con Windows Hello™, Face ID™, o Touch ID™ — nessuna password da phishare, nessun codice OTP da intercettare. L\'autenticazione multi-fattore è integrata al livello di identità, non aggiunta come ripensamento.',
+      cards: [
+        { title: 'Passkeys (WebAuthn)', text: 'Autenticazione passkey FIDO2/WebAuthn. Resistente al phishing per design — nessun segreto condiviso, nessun attacco di replay.' },
+        { title: 'Windows Hello™', text: 'Autenticazione biometrica e PIN su Windows 10/11 via Windows Hello™. Nessuna password richiesta.' },
+        { title: 'Face ID™ & Touch ID™', text: 'Autenticazione biometrica su macOS e iOS via Face ID™ e Touch ID™. Fluida, sicura, nativa.' },
+        { title: 'MFA ovunque', text: 'Autenticazione multi-fattore applicata al provider di identità (Casdoor/OIDC). TOTP, chiavi hardware e passkey supportati.' },
+      ],
+    },
+    securityPosture: {
+      badge: 'Postura di sicurezza',
+      title: 'Le azioni critiche richiedono ri-autenticazione. Sempre.',
+      text: 'Primebrick applica una postura di sicurezza rigorosa: ogni azione critica — cambiare una password utente, modificare i permessi RBAC, alterare le impostazioni di sicurezza — richiede una guardia di sicurezza in-app con re-login admin e verifica MFA. Nessun riutilizzo di sessione, nessuna elevazione silenziosa. Questo segue l\'autenticazione step-up NIST SP 800-63B e i requisiti di gestione sessione OWASP ASVS V3.4.',
+      cards: [
+        { title: 'Guardia di sicurezza in-app', text: 'Le azioni critiche attivano un modale in-app che richiede credenziali admin + MFA. Nessuna azione procede senza una verifica fresca.' },
+        { title: 'Autenticazione step-up', text: 'Seguendo NIST SP 800-63B: le operazioni sensibili richiedono un nuovo evento di autenticazione, non solo una sessione esistente.' },
+        { title: 'Nessun riutilizzo di sessione', text: 'I token JWT/sessione esistenti sono insufficienti per azioni critiche. Una nuova sfida MFA è sempre richiesta.' },
+        { title: 'Allineato OWASP ASVS', text: 'Soddisfa lo OWASP Application Security Verification Standard V3.4 (gestione sessione per transazioni ad alto valore).' },
       ],
     },
     forDevs: {
@@ -470,6 +536,39 @@ export const translations = {
         { name: 'Daten', desc: 'PostgreSQL — einziger Datenspeicher, Zugriff via DAL' },
       ],
     },
+    accessibility: {
+      badge: 'Barrierefreiheit',
+      title: 'WCAG, VPAT & ARIA. Getestet, nicht versprochen.',
+      text: 'Primebrick wird barrierefreiheits-orientiert gebaut. Automatisches WCAG 2.x + ARIA-Auditing läuft auf jeder Route via axe-core. Ein herunterladbarer VPAT 2.5 INT-Konformitätsbericht deckt WCAG 2.0/2.1/2.2 (A/AA/AAA), Section 508 und EN 301 549 ab — damit Ihr Compliance-Team echte Nachweise hat, keine Marketing-Behauptungen.',
+      cards: [
+        { title: 'WCAG 2.2 A/AA/AAA', text: 'Automatisierte axe-core-Scans auf jeder Route, jedem Build. Erfolgskriterien Level A, AA und AAA werden kontinuierlich getestet.' },
+        { title: 'VPAT 2.5 INT-Bericht', text: 'Herunterladbares Voluntary Product Accessibility Template, das WCAG, Section 508 und EN 301 549 abdeckt. Aus echten Scan-Daten generiert.' },
+        { title: 'ARIA-Konformität', text: 'Vollständige ARIA-Rollen, -Zustände und -Eigenschaften validiert. Screen-Reader-kompatible Komponenten sofort einsatzbereit.' },
+        { title: 'Section 508 & EN 301 549', text: 'US Section 508 (Kapitel 3–6) und EU EN 301 549 (Klauseln 4–13) im INT-Edition-Bericht abgedeckt.' },
+      ],
+    },
+    security: {
+      badge: 'Durchgesetzte Sicherheit',
+      title: 'Passkeys, WebAuthn & MFA. Integriert, nicht aufgesetzt.',
+      text: 'Primebrick setzt moderne Best Practices der Authentifizierung durch. Passkey-Unterstützung via WebAuthn bedeutet, dass Benutzer sich mit Windows Hello™, Face ID™ oder Touch ID™ authentifizieren — keine Passwörter zu phishen, keine OTP-Codes abzufangen. Multi-Faktor-Authentifizierung ist auf der Identitätsebene integriert, nicht nachträglich hinzugefügt.',
+      cards: [
+        { title: 'Passkeys (WebAuthn)', text: 'FIDO2/WebAuthn-Passkey-Authentifizierung. Phishing-resistent per Design — keine gemeinsamen Geheimnisse, keine Replay-Angriffe.' },
+        { title: 'Windows Hello™', text: 'Biometrische und PIN-Authentifizierung auf Windows 10/11 via Windows Hello™. Kein Passwort erforderlich.' },
+        { title: 'Face ID™ & Touch ID™', text: 'Biometrische Authentifizierung auf macOS und iOS via Face ID™ und Touch ID™. Nahtlos, sicher, nativ.' },
+        { title: 'MFA überall', text: 'Multi-Faktor-Authentifizierung beim Identitätsanbieter (Casdoor/OIDC) durchgesetzt. TOTP, Hardware-Schlüssel und Passkeys unterstützt.' },
+      ],
+    },
+    securityPosture: {
+      badge: 'Sicherheitspostur',
+      title: 'Kritische Aktionen erfordern Re-Authentifizierung. Immer.',
+      text: 'Primebrick setzt eine strenge Sicherheitspostur durch: jede kritische Aktion — Ändern eines Benutzerpassworts, Modifizieren von RBAC-Berechtigungen, Ändern von Sicherheitseinstellungen — erfordert eine In-App-Sicherheitswache mit Admin-Re-Login und MFA-Verifizierung. Keine Sitzungswiederverwendung, keine stille Rechteerweiterung. Dies folgt der NIST SP 800-63B Step-up-Authentifizierung und den OWASP ASVS V3.4-Sitzungsverwaltungsanforderungen.',
+      cards: [
+        { title: 'In-App-Sicherheitswache', text: 'Kritische Aktionen lösen ein In-App-Modal aus, das Admin-Anmeldedaten + MFA erfordert. Keine Aktion ohne frische Verifizierung.' },
+        { title: 'Step-up-Authentifizierung', text: 'Gemäß NIST SP 800-63B: sensible Operationen erfordern ein neues Authentifizierungsereignis, nicht nur eine bestehende Sitzung.' },
+        { title: 'Keine Sitzungswiederverwendung', text: 'Bestehende JWT/Sitzungs-Token sind für kritische Aktionen unzureichend. Eine neue MFA-Herausforderung ist immer erforderlich.' },
+        { title: 'OWASP ASVS-konform', text: 'Erfüllt den OWASP Application Security Verification Standard V3.4 (Sitzungsverwaltung für hochwertige Transaktionen).' },
+      ],
+    },
     forDevs: {
       title: 'Weniger Boilerplate, mehr Wert.',
       text: 'Klare Struktur, objektive Codierungsregeln, DX für Geschwindigkeit. Klonen, ausführen, und Sie sind bereits in einer Best-Practice-Umgebung — CI/CD, Linting, Typen, Tests, Observability.',
@@ -636,6 +735,39 @@ export const translations = {
         { name: 'Microservicios', desc: 'Servicios Docker independientes — auto-registro via NATS' },
         { name: 'Bibliotecas', desc: '@primebrick/sdk + @primebrick/dal-pg — compartidas' },
         { name: 'Datos', desc: 'PostgreSQL — único almacén de datos, acceso via DAL' },
+      ],
+    },
+    accessibility: {
+      badge: 'Accesibilidad',
+      title: 'WCAG, VPAT & ARIA. Probado, no prometido.',
+      text: 'Primebrick está construido accesibilidad-primero. La auditoría automatizada WCAG 2.x + ARIA se ejecuta en cada ruta vía axe-core. Un informe de conformidad VPAT 2.5 INT descargable cubre WCAG 2.0/2.1/2.2 (A/AA/AAA), Section 508, y EN 301 549 — para que tu equipo de cumplimiento tenga evidencia real, no afirmaciones de marketing.',
+      cards: [
+        { title: 'WCAG 2.2 A/AA/AAA', text: 'Escaneos axe-core automatizados en cada ruta, cada build. Criterios de éxito nivel A, AA y AAA probados continuamente.' },
+        { title: 'Informe VPAT 2.5 INT', text: 'Voluntary Product Accessibility Template descargable que cubre WCAG, Section 508, y EN 301 549. Generado a partir de datos de escaneo reales.' },
+        { title: 'Conformidad ARIA', text: 'Roles, estados y propiedades ARIA completamente validados. Componentes compatibles con lectores de pantalla listos para usar.' },
+        { title: 'Section 508 & EN 301 549', text: 'US Section 508 (Capítulos 3–6) y EU EN 301 549 (Cláusulas 4–13) cubiertos en el informe edición INT.' },
+      ],
+    },
+    security: {
+      badge: 'Seguridad aplicada',
+      title: 'Passkeys, WebAuthn & MFA. Integrados, no añadidos.',
+      text: 'Primebrick aplica las mejores prácticas modernas de autenticación. El soporte de Passkey vía WebAuthn significa que los usuarios se autentican con Windows Hello™, Face ID™, o Touch ID™ — sin contraseñas que phishar, sin códigos OTP que interceptar. La autenticación multi-factor está integrada en la capa de identidad, no añadida como ocurrencia tardía.',
+      cards: [
+        { title: 'Passkeys (WebAuthn)', text: 'Autenticación passkey FIDO2/WebAuthn. Resistente al phishing por diseño — sin secretos compartidos, sin ataques de replay.' },
+        { title: 'Windows Hello™', text: 'Autenticación biométrica y PIN en Windows 10/11 vía Windows Hello™. Sin contraseña requerida.' },
+        { title: 'Face ID™ & Touch ID™', text: 'Autenticación biométrica en macOS e iOS vía Face ID™ y Touch ID™. Fluida, segura, nativa.' },
+        { title: 'MFA en todas partes', text: 'Autenticación multi-factor aplicada en el proveedor de identidad (Casdoor/OIDC). TOTP, claves de hardware y passkeys soportados.' },
+      ],
+    },
+    securityPosture: {
+      badge: 'Postura de seguridad',
+      title: 'Las acciones críticas requieren re-autenticación. Siempre.',
+      text: 'Primebrick aplica una postura de seguridad estricta: cada acción crítica — cambiar una contraseña de usuario, modificar permisos RBAC, alterar configuraciones de seguridad — requiere un guardia de seguridad in-app con re-login de admin y verificación MFA. Sin reutilización de sesión, sin elevación silenciosa. Esto sigue la autenticación step-up NIST SP 800-63B y los requisitos de gestión de sesión OWASP ASVS V3.4.',
+      cards: [
+        { title: 'Guardia de seguridad in-app', text: 'Las acciones críticas activan un modal in-app que requiere credenciales de admin + MFA. Ninguna acción procede sin verificación reciente.' },
+        { title: 'Autenticación step-up', text: 'Siguiendo NIST SP 800-63B: las operaciones sensibles requieren un evento de autenticación reciente, no solo una sesión existente.' },
+        { title: 'Sin reutilización de sesión', text: 'Los tokens JWT/sesión existentes son insuficientes para acciones críticas. Un nuevo desafío MFA siempre es requerido.' },
+        { title: 'Alineado con OWASP ASVS', text: 'Cumple el OWASP Application Security Verification Standard V3.4 (gestión de sesión para transacciones de alto valor).' },
       ],
     },
     forDevs: {
@@ -806,6 +938,39 @@ export const translations = {
         { name: 'Dados', desc: 'PostgreSQL — único armazen de dados, acesso via DAL' },
       ],
     },
+    accessibility: {
+      badge: 'Acessibilidade',
+      title: 'WCAG, VPAT & ARIA. Testado, não prometido.',
+      text: 'Primebrick é construído acessibilidade-primeiro. A auditoria automatizada WCAG 2.x + ARIA é executada em cada rota via axe-core. Um relatório de conformidade VPAT 2.5 INT descarregável cobre WCAG 2.0/2.1/2.2 (A/AA/AAA), Section 508, e EN 301 549 — para que a tua equipa de conformidade tenha evidência real, não afirmações de marketing.',
+      cards: [
+        { title: 'WCAG 2.2 A/AA/AAA', text: 'Scans axe-core automatizados em cada rota, cada build. Critérios de sucesso nível A, AA e AAA testados continuamente.' },
+        { title: 'Relatório VPAT 2.5 INT', text: 'Voluntary Product Accessibility Template descarregável que cobre WCAG, Section 508, e EN 301 549. Gerado a partir de dados de scan reais.' },
+        { title: 'Conformidade ARIA', text: 'Funções, estados e propriedades ARIA totalmente validados. Componentes compatíveis com leitores de ecrã prontos a usar.' },
+        { title: 'Section 508 & EN 301 549', text: 'US Section 508 (Capítulos 3–6) e EU EN 301 549 (Cláusulas 4–13) cobertos no relatório edição INT.' },
+      ],
+    },
+    security: {
+      badge: 'Segurança aplicada',
+      title: 'Passkeys, WebAuthn & MFA. Integrados, não adicionados.',
+      text: 'Primebrick aplica as melhores práticas modernas de autenticação. O suporte Passkey via WebAuthn significa que os utilizadores autenticam-se com Windows Hello™, Face ID™, ou Touch ID™ — sem palavras-passe para phishar, sem códigos OTP para intercetar. A autenticação multi-fator está integrada na camada de identidade, não adicionada como reflexão tardia.',
+      cards: [
+        { title: 'Passkeys (WebAuthn)', text: 'Autenticação passkey FIDO2/WebAuthn. Resistente a phishing por design — sem segredos partilhados, sem ataques de replay.' },
+        { title: 'Windows Hello™', text: 'Autenticação biométrica e PIN no Windows 10/11 via Windows Hello™. Sem palavra-passe necessária.' },
+        { title: 'Face ID™ & Touch ID™', text: 'Autenticação biométrica no macOS e iOS via Face ID™ e Touch ID™. Fluida, segura, nativa.' },
+        { title: 'MFA em todo o lado', text: 'Autenticação multi-fator aplicada no fornecedor de identidade (Casdoor/OIDC). TOTP, chaves de hardware e passkeys suportados.' },
+      ],
+    },
+    securityPosture: {
+      badge: 'Postura de segurança',
+      title: 'Ações críticas requerem re-autenticação. Sempre.',
+      text: 'Primebrick aplica uma postura de segurança rigorosa: cada ação crítica — alterar uma palavra-passe de utilizador, modificar permissões RBAC, alterar configurações de segurança — requer um guarda de segurança in-app com re-login de admin e verificação MFA. Sem reutilização de sessão, sem elevação silenciosa. Isto segue a autenticação step-up NIST SP 800-63B e os requisitos de gestão de sessão OWASP ASVS V3.4.',
+      cards: [
+        { title: 'Guarda de segurança in-app', text: 'Ações críticas acionam um modal in-app que requer credenciais de admin + MFA. Nenhuma ação prossegue sem verificação recente.' },
+        { title: 'Autenticação step-up', text: 'Seguindo NIST SP 800-63B: operações sensíveis requerem um novo evento de autenticação, não apenas uma sessão existente.' },
+        { title: 'Sem reutilização de sessão', text: 'Tokens JWT/sessão existentes são insuficientes para ações críticas. Um novo desafio MFA é sempre requerido.' },
+        { title: 'Alinhado com OWASP ASVS', text: 'Cumpre o OWASP Application Security Verification Standard V3.4 (gestão de sessão para transações de alto valor).' },
+      ],
+    },
     forDevs: {
       title: 'Menos boilerplate, mais valor.',
       text: 'Estrutura clara, regras de codificação objetivas, DX desenhada para velocidade. Clona, executa, e já estás num ambiente de melhores práticas — CI/CD, linting, tipos, testes, observabilidade.',
@@ -972,6 +1137,39 @@ export const translations = {
         { name: 'Microservices', desc: 'Services Docker indépendants — auto-enregistrement via NATS' },
         { name: 'Bibliothèques', desc: '@primebrick/sdk + @primebrick/dal-pg — partagées' },
         { name: 'Données', desc: 'PostgreSQL — unique magasin de données, accès via DAL' },
+      ],
+    },
+    accessibility: {
+      badge: 'Accessibilité',
+      title: 'WCAG, VPAT & ARIA. Testé, non promis.',
+      text: 'Primebrick est conçu accessibilité-d\'abord. L\'audit automatique WCAG 2.x + ARIA s\'exécute sur chaque route via axe-core. Un rapport de conformité VPAT 2.5 INT téléchargeable couvre WCAG 2.0/2.1/2.2 (A/AA/AAA), Section 508, et EN 301 549 — pour que votre équipe de conformité ait des preuves réelles, pas des affirmations marketing.',
+      cards: [
+        { title: 'WCAG 2.2 A/AA/AAA', text: 'Scans axe-core automatisés sur chaque route, chaque build. Critères de succès niveau A, AA et AAA testés en continu.' },
+        { title: 'Rapport VPAT 2.5 INT', text: 'Voluntary Product Accessibility Template téléchargeable couvrant WCAG, Section 508, et EN 301 549. Généré à partir de données de scan réelles.' },
+        { title: 'Conformité ARIA', text: 'Rôles, états et propriétés ARIA entièrement validés. Composants compatibles avec les lecteurs d\'écran prêts à l\'emploi.' },
+        { title: 'Section 508 & EN 301 549', text: 'US Section 508 (Chapitres 3–6) et EU EN 301 549 (Clauses 4–13) couverts dans le rapport édition INT.' },
+      ],
+    },
+    security: {
+      badge: 'Sécurité appliquée',
+      title: 'Passkeys, WebAuthn & MFA. Intégrés, non ajoutés.',
+      text: 'Primebrick applique les meilleures pratiques modernes d\'authentification. Le support Passkey via WebAuthn signifie que les utilisateurs s\'authentifient avec Windows Hello™, Face ID™, ou Touch ID™ — aucun mot de passe à phisher, aucun code OTP à intercepter. L\'authentification multi-facteurs est intégrée au niveau de l\'identité, pas ajoutée comme réflexion tardive.',
+      cards: [
+        { title: 'Passkeys (WebAuthn)', text: 'Authentification passkey FIDO2/WebAuthn. Résistant au phishing par conception — aucun secret partagé, aucune attaque par rejeu.' },
+        { title: 'Windows Hello™', text: 'Authentification biométrique et par code PIN sur Windows 10/11 via Windows Hello™. Aucun mot de passe requis.' },
+        { title: 'Face ID™ & Touch ID™', text: 'Authentification biométrique sur macOS et iOS via Face ID™ et Touch ID™. Fluide, sécurisé, natif.' },
+        { title: 'MFA partout', text: 'Authentification multi-facteurs appliquée au fournisseur d\'identité (Casdoor/OIDC). TOTP, clés matérielles et passkeys pris en charge.' },
+      ],
+    },
+    securityPosture: {
+      badge: 'Posture de sécurité',
+      title: 'Les actions critiques nécessitent une ré-authentification. Toujours.',
+      text: 'Primebrick applique une posture de sécurité stricte : chaque action critique — changer un mot de passe utilisateur, modifier les permissions RBAC, altérer les paramètres de sécurité — nécessite un garde de sécurité in-app avec reconnexion admin et vérification MFA. Pas de réutilisation de session, pas d\'élévation silencieuse. Cela suit l\'authentification step-up NIST SP 800-63B et les exigences de gestion de session OWASP ASVS V3.4.',
+      cards: [
+        { title: 'Garde de sécurité in-app', text: 'Les actions critiques déclenchent un modal in-app nécessitant des identifiants admin + MFA. Aucune action ne se poursuit sans vérification récente.' },
+        { title: 'Authentification step-up', text: 'Conformément à NIST SP 800-63B : les opérations sensibles nécessitent un nouvel événement d\'authentification, pas seulement une session existante.' },
+        { title: 'Pas de réutilisation de session', text: 'Les tokens JWT/session existants sont insuffisants pour les actions critiques. Un nouveau défi MFA est toujours requis.' },
+        { title: 'Conforme OWASP ASVS', text: 'Répond au OWASP Application Security Verification Standard V3.4 (gestion de session pour les transactions à forte valeur).' },
       ],
     },
     forDevs: {
