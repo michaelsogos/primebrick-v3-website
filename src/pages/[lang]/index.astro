@@ -8,7 +8,10 @@ import RotatingHeadline from '../../components/svelte/RotatingHeadline.svelte';
 import SchemaToProduction from '../../components/svelte/SchemaToProduction.svelte';
 import GitHubCTAButton from '../../components/svelte/GitHubCTAButton.svelte';
 import TopBanner from '../../components/astro/TopBanner.astro';
+import pkg from '../../../package.json';
 import '../../styles/global.css';
+
+const version = pkg.version;
 
 export const prerender = true;
 
