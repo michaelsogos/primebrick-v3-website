@@ -144,6 +144,7 @@ export const translations = {
         { title: 'ARIA compliance', text: 'Full ARIA roles, states, and properties validated. Screen-reader-compatible components out of the box.' },
         { title: 'Section 508 & EN 301 549', text: 'US Section 508 (Chapters 3–6) and EU EN 301 549 (Clauses 4–13) covered in the INT edition report.' },
       ],
+      cta: { label: 'View full VPAT 2.5 INT Report', href: 'https://docs.primebrick.dev/getting-started/vpat-2.5-int' },
     },
     security: {
       badge: 'Enforced Security',
@@ -345,6 +346,7 @@ export const translations = {
         { title: 'Conformità ARIA', text: 'Ruoli, stati e proprietà ARIA completamente validati. Componenti compatibili con screen reader fin da subito.' },
         { title: 'Section 508 & EN 301 549', text: 'US Section 508 (Capitoli 3–6) ed EU EN 301 549 (Clausole 4–13) coperti nel report edizione INT.' },
       ],
+      cta: { label: 'Visualizza il report VPAT 2.5 INT completo', href: 'https://docs.primebrick.dev/getting-started/vpat-2.5-int' },
     },
     security: {
       badge: 'Sicurezza applicata',
@@ -546,6 +548,7 @@ export const translations = {
         { title: 'ARIA-Konformität', text: 'Vollständige ARIA-Rollen, -Zustände und -Eigenschaften validiert. Screen-Reader-kompatible Komponenten sofort einsatzbereit.' },
         { title: 'Section 508 & EN 301 549', text: 'US Section 508 (Kapitel 3–6) und EU EN 301 549 (Klauseln 4–13) im INT-Edition-Bericht abgedeckt.' },
       ],
+      cta: { label: 'Vollständigen VPAT 2.5 INT-Bericht ansehen', href: 'https://docs.primebrick.dev/getting-started/vpat-2.5-int' },
     },
     security: {
       badge: 'Durchgesetzte Sicherheit',
@@ -747,6 +750,7 @@ export const translations = {
         { title: 'Conformidad ARIA', text: 'Roles, estados y propiedades ARIA completamente validados. Componentes compatibles con lectores de pantalla listos para usar.' },
         { title: 'Section 508 & EN 301 549', text: 'US Section 508 (Capítulos 3–6) y EU EN 301 549 (Cláusulas 4–13) cubiertos en el informe edición INT.' },
       ],
+      cta: { label: 'Ver el informe VPAT 2.5 INT completo', href: 'https://docs.primebrick.dev/getting-started/vpat-2.5-int' },
     },
     security: {
       badge: 'Seguridad aplicada',
@@ -948,6 +952,7 @@ export const translations = {
         { title: 'Conformidade ARIA', text: 'Funções, estados e propriedades ARIA totalmente validados. Componentes compatíveis com leitores de ecrã prontos a usar.' },
         { title: 'Section 508 & EN 301 549', text: 'US Section 508 (Capítulos 3–6) e EU EN 301 549 (Cláusulas 4–13) cobertos no relatório edição INT.' },
       ],
+      cta: { label: 'Ver o relatório VPAT 2.5 INT completo', href: 'https://docs.primebrick.dev/getting-started/vpat-2.5-int' },
     },
     security: {
       badge: 'Segurança aplicada',
@@ -1149,6 +1154,7 @@ export const translations = {
         { title: 'Conformité ARIA', text: 'Rôles, états et propriétés ARIA entièrement validés. Composants compatibles avec les lecteurs d\'écran prêts à l\'emploi.' },
         { title: 'Section 508 & EN 301 549', text: 'US Section 508 (Chapitres 3–6) et EU EN 301 549 (Clauses 4–13) couverts dans le rapport édition INT.' },
       ],
+      cta: { label: 'Voir le rapport VPAT 2.5 INT complet', href: 'https://docs.primebrick.dev/getting-started/vpat-2.5-int' },
     },
     security: {
       badge: 'Sécurité appliquée',
