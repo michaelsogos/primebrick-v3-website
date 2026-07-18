@@ -868,15 +868,18 @@ const contactHref = isEn ? '/en/contact' : `/${langCode}/contact`;
     <footer class="relative z-10 border-t border-slate-800/50 px-6 py-8">
       <div class="mx-auto flex max-w-7xl items-center justify-between text-sm text-slate-500">
         <span>&copy; 2026 {t.footer.copyright}</span>
-        <a
-          href="https://github.com/michaelsogos/primebrick-v3-website"
-          class="inline-flex items-center gap-1.5 hover:text-sky-400 transition-colors"
-          target="_blank"
-          rel="noopener"
-        >
-          <GitHubIcon class="h-4 w-4" />
-          GitHub
-        </a>
+        <div class="flex items-center gap-4">
+          <span class="text-xs text-slate-600">v{version}</span>
+          <a
+            href="https://github.com/michaelsogos/primebrick-v3-website"
+            class="inline-flex items-center gap-1.5 hover:text-sky-400 transition-colors"
+            target="_blank"
+            rel="noopener"
+          >
+            <GitHubIcon class="h-4 w-4" />
+            GitHub
+          </a>
+        </div>
       </div>
     </footer>
   </body>
