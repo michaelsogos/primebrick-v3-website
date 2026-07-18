@@ -11,6 +11,7 @@
     "build": "astro build",
     "preview": "astro preview",
     "check": "astro check",
+    "build:full": "pnpm install && astro build",
     "deploy": "astro build && wrangler deploy"
   },
   "devDependencies": {

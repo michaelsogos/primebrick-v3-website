@@ -29,10 +29,25 @@ The site serves two purposes:
 | Install | `pnpm install` |
 | Dev | `pnpm run dev` (port 4321) |
 | Build | `pnpm run build` |
+| Full build (install + build) | `pnpm run build:full` |
 | Preview | `pnpm run preview` |
 | Deploy | `pnpm run build && npx wrangler deploy` |
 | Sync in-repo docs | `node scripts/sync-repo-docs.mjs` |
 | Sync DeepWiki | `DEVIN_API_KEY=xxx node scripts/sync-deepwiki.mjs` |
+
+## Cloudflare Workers build command
+
+The Cloudflare build agent (on push to `main`) build command is the single
+wrapped script:
+
+```
+pnpm run build:full
+```
+
+`build:full` is defined in `package.json` and runs `pnpm install && astro build`.
+**Do NOT** paste the concatenated chain into the Cloudflare dashboard — keep the
+build command as `pnpm run build:full` so the chain is maintained in
+`package.json` (editable by dev/AI) rather than in the dashboard.
 
 ## Dev server
 
