@@ -76,6 +76,17 @@ export const translations = {
       ],
       moreDbs: 'More database support coming soon',
     },
+    enterprise: {
+      badge: 'Enterprise-Ready',
+      title: 'Optimized for enterprise and high traffic.',
+      text: 'Primebrick scales from a single-container laptop setup to enterprise datacenters behind a load balancer. An optional Redis cache layer reduces PostgreSQL load on hot single-row reads — and because it is best-effort, the system is fully valid without it. No Redis? No problem: reads fall through to the database with a warn log, never an error.',
+      cards: [
+        { title: 'Optional Redis cache', text: 'Mark any entity with @Cached(ttl) and hot single-row reads go to Redis first. Omit the TTL for immutable data; pick a TTL that bounds staleness for mutable data. Zero DAL coupling — the cache lives entirely in the SDK.' },
+        { title: 'Best-effort by design', text: 'Redis down? Writes still go to PostgreSQL first, then invalidate in a try/catch. Reads fall through to the DB. The caller never sees a cache error. Cache is a feature, not a requirement.' },
+        { title: 'Multi-instance ready', text: 'Redis is the shared cache. Pod #1 invalidates a key, pod #2 sees the miss and re-hydrates from PostgreSQL. No NATS broadcaster needed. Scale the BE horizontally behind any LB — Docker, K8s, Swarm, Azure Container Apps, Cloud Run.' },
+        { title: 'Zero vendor lock-in on cache too', text: 'Redis is the only cache implementation shipped today, but the CachePort interface is open. Implement your own cache port for Memcached, DragonflyDB, or any KV store — no SDK changes needed.' },
+      ],
+    },
     ai: {
       badge: 'AI-Native',
       title: 'AI that ships features in minutes, not days.',
@@ -277,6 +288,17 @@ export const translations = {
         { prompt: 'LIMIT 5;', color: 'normal' },
       ],
       moreDbs: 'Presto supporto per altri database',
+    },
+    enterprise: {
+      badge: 'Pronto per l\'Enterprise',
+      title: 'Ottimizzato per enterprise e alto traffico.',
+      text: 'Primebrick scala da una configurazione laptop con un singolo container ai datacenter enterprise dietro un load balancer. Un layer di cache Redis opzionale riduce il carico su PostgreSQL sulle letture a riga singola più frequenti — e poiché è best-effort, il sistema è pienamente valido anche senza. Niente Redis? Nessun problema: le letture ricadono sul database con un log di warn, mai un errore.',
+      cards: [
+        { title: 'Cache Redis opzionale', text: 'Marca qualsiasi entità con @Cached(ttl) e le letture a riga singola più frequenti vanno prima a Redis. Ometti il TTL per dati immutabili; scegli un TTL che limiti la stalezza per dati mutabili. Zero accoppiamento con la DAL — la cache vive interamente nell\'SDK.' },
+        { title: 'Best-effort per design', text: 'Redis down? Le scritture vanno comunque prima su PostgreSQL, poi si invalida in un try/catch. Le letture ricadono sul DB. Il chiamante non vede mai un errore di cache. La cache è una feature, non un requisito.' },
+        { title: 'Pronto per multi-istanza', text: 'Redis è la cache condivisa. Il pod #1 invalida una chiave, il pod #2 vede il miss e re-idrata da PostgreSQL. Nessun broadcaster NATS necessario. Scala il BE orizzontalmente dietro qualsiasi LB — Docker, K8s, Swarm, Azure Container Apps, Cloud Run.' },
+        { title: 'Zero vendor lock-in anche sulla cache', text: 'Redis è l\'unica implementazione di cache fornita oggi, ma l\'interfaccia CachePort è aperta. Implementa la tua cache port per Memcached, DragonflyDB o qualsiasi KV store — nessuna modifica all\'SDK necessaria.' },
+      ],
     },
     ai: {
       badge: 'AI-Native',
@@ -480,6 +502,17 @@ export const translations = {
       ],
       moreDbs: 'Weitere Datenbank-Unterstützung folgt bald',
     },
+    enterprise: {
+      badge: 'Enterprise-Tauglich',
+      title: 'Optimiert für Enterprise und hohen Traffic.',
+      text: 'Primebrick skaliert von einem einzelnen Laptop-Container bis zu Enterprise-Rechenzentren hinter einem Load Balancer. Eine optionale Redis-Cache-Schicht reduziert die PostgreSQL-Last bei heißen Single-Row-Reads — und da sie best-effort ist, ist das System ohne sie voll funktionsfähig. Kein Redis? Kein Problem: Reads fallen mit einem Warn-Log auf die Datenbank zurück, niemals auf einen Fehler.',
+      cards: [
+        { title: 'Optionaler Redis-Cache', text: 'Markieren Sie jede Entität mit @Cached(ttl) und heiße Single-Row-Reads gehen zuerst zu Redis. Lassen Sie das TTL für unveränderliche Daten weg; wählen Sie ein TTL, das die Staleness bei veränderlichen Daten begrenzt. Keine DAL-Kopplung — der Cache lebt vollständig im SDK.' },
+        { title: 'Best-effort by Design', text: 'Redis down? Schreibvorgänge gehen trotzdem zuerst zu PostgreSQL, dann invalidieren in einem try/catch. Reads fallen auf die DB zurück. Der Aufrufer sieht nie einen Cache-Fehler. Cache ist ein Feature, keine Anforderung.' },
+        { title: 'Multi-Instanz-fähig', text: 'Redis ist der gemeinsame Cache. Pod #1 invalidiert einen Key, Pod #2 sieht den Miss und rehydriert von PostgreSQL. Kein NATS-Broadcaster nötig. Skalieren Sie das BE horizontal hinter jedem LB — Docker, K8s, Swarm, Azure Container Apps, Cloud Run.' },
+        { title: 'Zero Vendor Lock-in auch beim Cache', text: 'Redis ist heute die einzige mitgelieferte Cache-Implementierung, aber das CachePort-Interface ist offen. Implementieren Sie Ihren eigenen Cache-Port für Memcached, DragonflyDB oder jeden KV-Store — keine SDK-Änderungen nötig.' },
+      ],
+    },
     ai: {
       badge: 'KI-Nativ',
       title: 'KI liefert Features in Minuten, nicht Tagen.',
@@ -681,6 +714,17 @@ export const translations = {
         { prompt: 'LIMIT 5;', color: 'normal' },
       ],
       moreDbs: 'Pronto más soporte de bases de datos',
+    },
+    enterprise: {
+      badge: 'Listo para Enterprise',
+      title: 'Optimizado para enterprise y alto tráfico.',
+      text: 'Primebrick escala desde una configuración de laptop con un solo contenedor hasta datacenters enterprise detrás de un balanceador de carga. Una capa de caché Redis opcional reduce la carga de PostgreSQL en lecturas de fila única frecuentes — y como es best-effort, el sistema es totalmente válido sin ella. ¿No hay Redis? Ningún problema: las lecturas caen a la base de datos con un log de warn, nunca un error.',
+      cards: [
+        { title: 'Caché Redis opcional', text: 'Marca cualquier entidad con @Cached(ttl) y las lecturas de fila única frecuentes van primero a Redis. Omite el TTL para datos inmutables; elige un TTL que limite la obsolescencia para datos mutables. Cero acoplamiento con la DAL — la caché vive enteramente en el SDK.' },
+        { title: 'Best-effort por diseño', text: '¿Redis caído? Las escrituras van primero a PostgreSQL, luego invalidan en un try/catch. Las lecturas caen a la DB. El llamador nunca ve un error de caché. La caché es una feature, no un requisito.' },
+        { title: 'Listo para multi-instancia', text: 'Redis es la caché compartida. El pod #1 invalida una clave, el pod #2 ve el miss y re-hidrata desde PostgreSQL. No se necesita broadcaster NATS. Escala el BE horizontalmente detrás de cualquier LB — Docker, K8s, Swarm, Azure Container Apps, Cloud Run.' },
+        { title: 'Cero vendor lock-in también en caché', text: 'Redis es la única implementación de caché entregada hoy, pero la interfaz CachePort es abierta. Implementa tu propio cache port para Memcached, DragonflyDB o cualquier KV store — sin cambios en el SDK.' },
+      ],
     },
     ai: {
       badge: 'AI-Nativo',
@@ -884,6 +928,17 @@ export const translations = {
       ],
       moreDbs: 'Em breve mais suporte de bases de dados',
     },
+    enterprise: {
+      badge: 'Pronto para Enterprise',
+      title: 'Otimizado para enterprise e alto tráfego.',
+      text: 'Primebrick escala de uma configuração de laptop com um único container até datacenters enterprise atrás de um load balancer. Uma camada de cache Redis opcional reduz a carga do PostgreSQL em leituras de linha única frequentes — e como é best-effort, o sistema é totalmente válido sem ela. Sem Redis? Sem problema: as leituras caem para o banco de dados com um log de warn, nunca um erro.',
+      cards: [
+        { title: 'Cache Redis opcional', text: 'Marque qualquer entidade com @Cached(ttl) e leituras de linha única frequentes vão primeiro para o Redis. Omita o TTL para dados imutáveis; escolha um TTL que limite a obsolescência para dados mutáveis. Zero acoplamento com a DAL — o cache vive inteiramente no SDK.' },
+        { title: 'Best-effort por design', text: 'Redis fora do ar? As escritas ainda vão primeiro para o PostgreSQL, depois invalidam em um try/catch. As leituras caem para o DB. O chamador nunca vê um erro de cache. Cache é uma feature, não um requisito.' },
+        { title: 'Pronto para multi-instância', text: 'Redis é o cache compartilhado. O pod #1 invalida uma chave, o pod #2 vê o miss e re-hidrata do PostgreSQL. Sem broadcaster NATS necessário. Escale o BE horizontalmente atrás de qualquer LB — Docker, K8s, Swarm, Azure Container Apps, Cloud Run.' },
+        { title: 'Zero vendor lock-in também no cache', text: 'Redis é a única implementação de cache entregue hoje, mas a interface CachePort é aberta. Implemente seu próprio cache port para Memcached, DragonflyDB ou qualquer KV store — sem mudanças no SDK.' },
+      ],
+    },
     ai: {
       badge: 'AI-Nativo',
       title: 'IA que entrega funcionalidades em minutos, não dias.',
@@ -1085,6 +1140,17 @@ export const translations = {
         { prompt: 'LIMIT 5;', color: 'normal' },
       ],
       moreDbs: 'Bientôt plus de support de bases de données',
+    },
+    enterprise: {
+      badge: 'Prêt pour l\'Enterprise',
+      title: 'Optimisé pour l\'enterprise et le trafic élevé.',
+      text: 'Primebrick passe d\'une configuration laptop à un seul conteneur aux datacenters enterprise derrière un load balancer. Une couche de cache Redis optionnelle réduit la charge PostgreSQL sur les lectures à ligne unique fréquentes — et comme elle est best-effort, le système est pleinement valide sans elle. Pas de Redis ? Aucun problème : les lectures retombent sur la base de données avec un log de warn, jamais une erreur.',
+      cards: [
+        { title: 'Cache Redis optionnel', text: 'Marquez n\'importe quelle entité avec @Cached(ttl) et les lectures à ligne unique fréquentes vont d\'abord à Redis. Omettez le TTL pour les données immuables ; choisissez un TTL qui borne l\'obsolescence pour les données mutables. Zéro couplage avec la DAL — le cache vit entièrement dans le SDK.' },
+        { title: 'Best-effort par conception', text: 'Redis down ? Les écritures vont d\'abord à PostgreSQL, puis invalident dans un try/catch. Les lectures retombent sur la DB. L\'appelant ne voit jamais d\'erreur de cache. Le cache est une fonctionnalité, pas une exigence.' },
+        { title: 'Prêt pour multi-instance', text: 'Redis est le cache partagé. Le pod #1 invalide une clé, le pod #2 voit le miss et ré-hydrate depuis PostgreSQL. Aucun broadcaster NATS nécessaire. Faites évoluer le BE horizontalement derrière n\'importe quel LB — Docker, K8s, Swarm, Azure Container Apps, Cloud Run.' },
+        { title: 'Zéro vendor lock-in aussi sur le cache', text: 'Redis est la seule implémentation de cache livrée aujourd\'hui, mais l\'interface CachePort est ouverte. Implémentez votre propre cache port pour Memcached, DragonflyDB ou n\'importe quel KV store — aucune modification du SDK nécessaire.' },
+      ],
     },
     ai: {
       badge: 'AI-Natif',
