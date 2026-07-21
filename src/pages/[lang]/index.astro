@@ -529,6 +529,55 @@ const contactHref = isEn ? '/en/contact' : `/${langCode}/contact`;
       </div>
     </section>
 
+    <!-- Modularity Section -->
+    <section class="relative z-10 px-6 py-24">
+      <div class="mx-auto max-w-5xl">
+        <div class="text-center sticky top-9 z-20 bg-slate-950/80 backdrop-blur-sm py-4 -mx-6 px-6">
+          <div class="mb-4 inline-flex items-center gap-2 rounded-full border border-sky-500/30 bg-sky-500/10 px-4 py-1.5 text-xs font-medium text-sky-300">
+            <svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="3" width="7" height="7" rx="1" /><rect x="14" y="3" width="7" height="7" rx="1" /><rect x="3" y="14" width="7" height="7" rx="1" /><rect x="14" y="14" width="7" height="7" rx="1" />
+            </svg>
+            {t.modularity.badge}
+          </div>
+          <h2 class="text-3xl font-bold text-white sm:text-4xl">{t.modularity.title}</h2>
+          <p class="mx-auto mt-4 max-w-3xl text-lg text-slate-400">{t.modularity.text}</p>
+        </div>
+        <div class="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          {t.modularity.pillars.map((pillar, i) => (
+            <div class="group relative rounded-2xl border border-slate-800/50 bg-slate-900/30 p-6 backdrop-blur-sm transition-all hover:border-sky-500/30 hover:bg-slate-900/50">
+              <div class="mb-4 flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-sky-500/20 to-cyan-500/20 text-sky-400">
+                {i === 0 && (
+                  <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                )}
+                {i === 1 && (
+                  <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="5" rx="9" ry="3" /><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3" /><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5" /></svg>
+                )}
+                {i === 2 && (
+                  <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10" /><path d="M12 16v-4M12 8h.01" /></svg>
+                )}
+                {i === 3 && (
+                  <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14" /></svg>
+                )}
+              </div>
+              <h3 class="text-base font-semibold text-white">{pillar.title}</h3>
+              <p class="mt-2 text-sm text-slate-400">{pillar.text}</p>
+            </div>
+          ))}
+        </div>
+        <div class="mt-10 text-center">
+          <a
+            href={`${docsPath}/getting-started/config-modules`}
+            class="inline-flex items-center gap-2 rounded-xl border border-slate-700 bg-slate-900/50 px-6 py-3 text-sm font-semibold text-slate-200 backdrop-blur-sm transition-all hover:border-sky-500 hover:text-sky-400 hover:scale-105"
+            target="_blank"
+            rel="noopener"
+          >
+            {t.modularity.cta}
+            <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7" /></svg>
+          </a>
+        </div>
+      </div>
+    </section>
+
     <!-- Postgres Vector Section -->
     <section class="relative z-10 px-6 py-24">
       <div class="mx-auto max-w-5xl">

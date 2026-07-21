@@ -128,6 +128,18 @@ export const translations = {
         { label: '/ SDK', title: 'Type-safe SDK', text: 'TypeScript clients generated from endpoints, end-to-end type safety.' },
       ],
     },
+    modularity: {
+      badge: 'Modular by design',
+      title: 'One brick at a time. Or all of them.',
+      text: 'Every Primebrick module is a self-contained brick that follows the same shared standards — config tables, entity CRUD, RBAC, OpenAPI, NATS messaging. Start with the built-in auth brick, add the emailsender brick, then ship your own billing or inventory brick using the exact same pattern. The SDK and DAL do the heavy lifting; your module only declares its schema and its typed config.',
+      pillars: [
+        { title: 'Shared standards', text: 'ConfigEntityBase, ConfigLoader<TResult>, entity CRUD path conventions, OpenAPI meta — every brick inherits the same building blocks.' },
+        { title: 'Schema isolation', text: 'Each module owns its own PostgreSQL schema (auth, emailsender, billing…). No cross-module coupling at the data layer.' },
+        { title: 'Self-describing', text: 'Modules expose /meta + /openapi.json. The BE proxy, the FE ConfigTable, and the MCP server all discover capabilities dynamically — no hard-coding.' },
+        { title: 'Add without forking', text: 'A new module is one entity, one config table, one route file, one FE route. The reusable ConfigTable component renders its settings page automatically.' },
+      ],
+      cta: 'Read the Config Modules guide',
+    },
     infrastructure: {
       badge: 'Infrastructure',
       title: 'Every component, mapped.',
@@ -340,6 +352,18 @@ export const translations = {
         { label: '/ MULTI', title: 'Multi-tenant ready', text: 'Isolamento logico e fisico per migliaia di organizzazioni.' },
         { label: '/ SDK', title: 'SDK type-safe', text: 'Client TypeScript generati dagli endpoint, type safety end-to-end.' },
       ],
+    },
+    modularity: {
+      badge: 'Modulare per design',
+      title: 'Un brick alla volta. O tutti insieme.',
+      text: 'Ogni modulo Primebrick è un brick autonomo che segue gli stessi standard condivisi — tabelle di configurazione, CRUD entity, RBAC, OpenAPI, messaggistica NATS. Parti dal brick di autenticazione integrato, aggiungi il brick emailsender, poi spedisci il tuo brick billing o inventario usando esattamente lo stesso pattern. SDK e DAL fanno il lavoro pesante; il tuo modulo dichiara solo lo schema e la sua configurazione tipizzata.',
+      pillars: [
+        { title: 'Standard condivisi', text: 'ConfigEntityBase, ConfigLoader<TResult>, convenzioni dei percetti CRUD entity, meta OpenAPI — ogni brick eredita gli stessi building block.' },
+        { title: 'Isolamento per schema', text: 'Ogni modulo possiede il suo schema PostgreSQL (auth, emailsender, billing…). Nessun accoppiamento cross-modulo al layer dati.' },
+        { title: 'Auto-descrivibile', text: 'I moduli espongono /meta + /openapi.json. Il proxy BE, la ConfigTable FE e il server MCP scoprono le capacità dinamicamente — niente hard-coding.' },
+        { title: 'Aggiungi senza forkare', text: 'Un nuovo modulo è un\'entità, una tabella di config, un file di route, una route FE. Il componente ConfigTable riutilizzabile renderizza la sua pagina di impostazioni automaticamente.' },
+      ],
+      cta: 'Leggi la guida Config Modules',
     },
     infrastructure: {
       badge: 'Infrastruttura',
@@ -554,6 +578,18 @@ export const translations = {
         { label: '/ SDK', title: 'Type-safe SDK', text: 'TypeScript-Clients aus Endpoints generiert, End-to-End-Typsicherheit.' },
       ],
     },
+    modularity: {
+      badge: 'Modular per Design',
+      title: 'Ein Baustein nach dem anderen. Oder alle zusammen.',
+      text: 'Jedes Primebrick-Modul ist ein autarker Baustein, der denselben gemeinsamen Standards folgt — Konfigurationstabellen, Entity-CRUD, RBAC, OpenAPI, NATS-Messaging. Starten Sie mit dem eingebauten Auth-Baustein, fügen Sie den Emailsender-Baustein hinzu und liefern Sie dann Ihren eigenen Billing- oder Inventory-Baustein nach genau demselben Muster. SDK und DAL übernehmen die Schwerstarbeit; Ihr Modul deklariert nur sein Schema und seine typisierte Konfiguration.',
+      pillars: [
+        { title: 'Gemeinsame Standards', text: 'ConfigEntityBase, ConfigLoader<TResult>, Entity-CRUD-Pfadkonventionen, OpenAPI-Meta — jeder Baustein erbt dieselben Building Blocks.' },
+        { title: 'Schema-Isolation', text: 'Jedes Modul besitzt sein eigenes PostgreSQL-Schema (auth, emailsender, billing…). Keine modulübergreifende Kopplung auf der Datenschicht.' },
+        { title: 'Selbstbeschreibend', text: 'Module stellen /meta + /openapi.json bereit. BE-Proxy, FE-ConfigTable und MCP-Server entdecken Fähigkeiten dynamisch — kein Hard-Coding.' },
+        { title: 'Hinzufügen ohne Forking', text: 'Ein neues Modul ist ein Entity, eine Konfigurationstabelle, eine Routendatei, eine FE-Route. Die wiederverwendbare ConfigTable-Komponente rendert seine Einstellungsseite automatisch.' },
+      ],
+      cta: 'Config-Modules-Leitfaden lesen',
+    },
     infrastructure: {
       badge: 'Infrastruktur',
       title: 'Jede Komponente, kartiert.',
@@ -766,6 +802,18 @@ export const translations = {
         { label: '/ MULTI', title: 'Multi-tenant ready', text: 'Aislamiento lógico y físico para miles de organizaciones.' },
         { label: '/ SDK', title: 'SDK type-safe', text: 'Clientes TypeScript generados desde endpoints, type safety end-to-end.' },
       ],
+    },
+    modularity: {
+      badge: 'Modular por diseño',
+      title: 'Un brick a la vez. O todos juntos.',
+      text: 'Cada módulo Primebrick es un brick autónomo que sigue los mismos estándares compartidos — tablas de configuración, CRUD de entidades, RBAC, OpenAPI, mensajería NATS. Empieza con el brick de autenticación integrado, añade el brick emailsender, y luego envía tu propio brick de facturación o inventario usando exactamente el mismo patrón. El SDK y el DAL hacen el trabajo pesado; tu módulo solo declara su schema y su configuración tipada.',
+      pillars: [
+        { title: 'Estándares compartidos', text: 'ConfigEntityBase, ConfigLoader<TResult>, convenciones de rutas CRUD de entidades, meta OpenAPI — cada brick hereda los mismos bloques de construcción.' },
+        { title: 'Aislamiento por schema', text: 'Cada módulo posee su propio schema PostgreSQL (auth, emailsender, billing…). Sin acoplamiento cross-módulo en la capa de datos.' },
+        { title: 'Auto-descriptivo', text: 'Los módulos exponen /meta + /openapi.json. El proxy BE, la ConfigTable FE y el servidor MCP descubren capacidades dinámicamente — sin hard-coding.' },
+        { title: 'Añade sin bifurcar', text: 'Un nuevo módulo es una entidad, una tabla de config, un archivo de rutas, una ruta FE. El componente reutilizable ConfigTable renderiza su página de ajustes automáticamente.' },
+      ],
+      cta: 'Leer la guía de Config Modules',
     },
     infrastructure: {
       badge: 'Infraestructura',
@@ -980,6 +1028,18 @@ export const translations = {
         { label: '/ SDK', title: 'SDK type-safe', text: 'Clientes TypeScript gerados a partir de endpoints, type safety end-to-end.' },
       ],
     },
+    modularity: {
+      badge: 'Modular por design',
+      title: 'Um brick de cada vez. Ou todos juntos.',
+      text: 'Cada módulo Primebrick é um brick autónomo que segue os mesmos padrões partilhados — tabelas de configuração, CRUD de entidades, RBAC, OpenAPI, mensageria NATS. Comece com o brick de autenticação integrado, adicione o brick emailsender e depois envie o seu próprio brick de faturação ou inventário usando exatamente o mesmo padrão. O SDK e o DAL fazem o trabalho pesado; o seu módulo apenas declara o seu schema e a sua configuração tipada.',
+      pillars: [
+        { title: 'Padrões partilhados', text: 'ConfigEntityBase, ConfigLoader<TResult>, convenções de caminhos CRUD de entidades, meta OpenAPI — cada brick herda os mesmos blocos de construção.' },
+        { title: 'Isolamento por schema', text: 'Cada módulo possui o seu próprio schema PostgreSQL (auth, emailsender, billing…). Sem acoplamento cross-módulo na camada de dados.' },
+        { title: 'Auto-descritivo', text: 'Os módulos expõem /meta + /openapi.json. O proxy BE, a ConfigTable FE e o servidor MCP descobrem capacidades dinamicamente — sem hard-coding.' },
+        { title: 'Adicione sem bifurcar', text: 'Um novo módulo é uma entidade, uma tabela de config, um ficheiro de rotas, uma rota FE. O componente reutilizável ConfigTable renderiza a sua página de definições automaticamente.' },
+      ],
+      cta: 'Ler o guia de Config Modules',
+    },
     infrastructure: {
       badge: 'Infraestrutura',
       title: 'Cada componente, mapeado.',
@@ -1192,6 +1252,18 @@ export const translations = {
         { label: '/ MULTI', title: 'Multi-tenant ready', text: 'Isolation logique et physique pour des milliers d\'organisations.' },
         { label: '/ SDK', title: 'SDK type-safe', text: 'Clients TypeScript générés depuis les endpoints, type safety end-to-end.' },
       ],
+    },
+    modularity: {
+      badge: 'Modulaire par conception',
+      title: 'Une brique à la fois. Ou toutes ensemble.',
+      text: 'Chaque module Primebrick est une brique autonome qui suit les mêmes standards partagés — tables de configuration, CRUD d\'entités, RBAC, OpenAPI, messagerie NATS. Commencez par la brique d\'authentification intégrée, ajoutez la brique emailsender, puis livrez votre propre brique de facturation ou d\'inventaire en utilisant exactement le même modèle. Le SDK et le DAL font le gros du travail ; votre module déclare seulement son schéma et sa configuration typée.',
+      pillars: [
+        { title: 'Standards partagés', text: 'ConfigEntityBase, ConfigLoader<TResult>, conventions de chemins CRUD d\'entités, méta OpenAPI — chaque brique hérite des mêmes blocs de construction.' },
+        { title: 'Isolation par schéma', text: 'Chaque module possède son propre schéma PostgreSQL (auth, emailsender, billing…). Aucun couplage inter-modules sur la couche de données.' },
+        { title: 'Auto-descriptif', text: 'Les modules exposent /meta + /openapi.json. Le proxy BE, la ConfigTable FE et le serveur MCP découvrent les capacités dynamiquement — pas de hard-coding.' },
+        { title: 'Ajouter sans forker', text: 'Un nouveau module est une entité, une table de config, un fichier de routes, une route FE. Le composant réutilisable ConfigTable rend sa page de paramètres automatiquement.' },
+      ],
+      cta: 'Lire le guide Config Modules',
     },
     infrastructure: {
       badge: 'Infrastructure',
