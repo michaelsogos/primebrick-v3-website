@@ -76,6 +76,19 @@ export const translations = {
       ],
       moreDbs: 'More database support coming soon',
     },
+    collaboration: {
+      badge: 'Real-Time Collaboration',
+      title: 'See who is editing. Merge changes. Resolve conflicts at field level.',
+      text: 'When two colleagues open the same record, Primebrick shows live presence avatars — you see exactly who is viewing and which field they are editing. When someone saves, changes silently merge into your form at the field level, not the whole entity. If you were both editing the same field, a conflict resolution panel lets you pick which value wins. Powered by SSE (Server-Sent Events) over HTTP/1.1 or HTTP/2, Redis presence, and NATS fanout — no WebSockets required.',
+      cards: [
+        { title: 'Live presence avatars', text: 'See who is reading or editing the same record. Avatars show the field being edited and the value in progress, in real time.' },
+        { title: 'Field-level merge', text: 'When a colleague saves, their changes merge into your form field by field. Untouched fields update silently with a transient green badge. No full-page reload.' },
+        { title: 'Conflict resolution', text: 'Both editing the same field? The conflict panel shows your value, their value, and the original — side by side. Pick which wins, field by field.' },
+        { title: 'Optimistic locking', text: 'Every auditable entity carries a version number. Saves that collide with a concurrent edit get a 409 — never silently overwriting another user\u2019s work.' },
+      ],
+      techNote: 'Powered by SSE + Redis + NATS — no WebSockets required. Works over HTTP/1.1 or HTTP/2.',
+      autoEnabled: 'Automatic for @AuditTrail entities — zero per-entity configuration.',
+    },
     enterprise: {
       badge: 'Enterprise-Ready',
       title: 'Optimized for enterprise and high traffic.',
@@ -300,6 +313,19 @@ export const translations = {
         { prompt: 'LIMIT 5;', color: 'normal' },
       ],
       moreDbs: 'Presto supporto per altri database',
+    },
+    collaboration: {
+      badge: 'Collaborazione Real-Time',
+      title: 'Vedi chi sta modificando. Unisci le modifiche. Risolvi i conflitti a livello di campo.',
+      text: 'Quando due colleghi aprono lo stesso record, Primebrick mostra avatar di presenza live — vedi chi sta visualizzando e quale campo sta modificando. Quando qualcuno salva, le modifiche si uniscono silenziosamente nel tuo form a livello di campo, non dell\u2019intera entità. Se stavate modificando lo stesso campo, un pannello di risoluzione dei conflitti ti permette di scegliere quale valore vince. Basato su SSE (Server-Sent Events) su HTTP/1.1 o HTTP/2, presenza Redis e fanout NATS — nessun WebSocket richiesto.',
+      cards: [
+        { title: 'Avatar di presenza live', text: 'Vedi chi sta leggendo o modificando lo stesso record. Gli avatar mostrano il campo in modifica e il valore in corso, in tempo reale.' },
+        { title: 'Merge a livello di campo', text: 'Quando un collega salva, le sue modifiche si uniscono al tuo form campo per campo. I campi non toccati si aggiornano silenziosamente con un badge verde temporaneo. Nessun reload della pagina.' },
+        { title: 'Risoluzione conflitti', text: 'Entrambi state modificando lo stesso campo? Il pannello di conflitto mostra il tuo valore, il suo e l\u2019originale — affiancati. Scegli quale vince, campo per campo.' },
+        { title: 'Locking ottimistico', text: 'Ogni entità auditable porta un numero di versione. I salvataggi che collidono con una modifica concorrente ricevono un 409 — senza mai sovrascrivere silenziosamente il lavoro di un altro utente.' },
+      ],
+      techNote: 'Basato su SSE + Redis + NATS — nessun WebSocket richiesto. Funziona su HTTP/1.1 o HTTP/2.',
+      autoEnabled: 'Automatico per entità @AuditTrail — zero configurazione per entità.',
     },
     enterprise: {
       badge: 'Pronto per l\'Enterprise',
@@ -526,6 +552,19 @@ export const translations = {
       ],
       moreDbs: 'Weitere Datenbank-Unterstützung folgt bald',
     },
+    collaboration: {
+      badge: 'Echtzeit-Kollaboration',
+      title: 'Sehen Sie, wer bearbeitet. Änderungen zusammenführen. Konflikte auf Feldebene lösen.',
+      text: 'Wenn zwei Kollegen denselben Datensatz öffnen, zeigt Primebrick Live-Presence-Avatare — Sie sehen genau, wer gerade ansieht und welches Feld er bearbeitet. Wenn jemand speichert, werden Änderungen still in Ihr Formular auf Feldebene eingemischt, nicht auf Entitätsebene. Wenn Sie beide dasselbe Feld bearbeitet haben, lässt Sie ein Konfliktlösungs-Panel auswählen, welcher Wert gewinnt. Angetrieben durch SSE (Server-Sent Events) über HTTP/1.1 oder HTTP/2, Redis-Presence und NATS-Fanout — keine WebSockets erforderlich.',
+      cards: [
+        { title: 'Live-Presence-Avatare', text: 'Sehen Sie, wer denselben Datensatz liest oder bearbeitet. Avatare zeigen das bearbeitete Feld und den Wert in Arbeit in Echtzeit.' },
+        { title: 'Zusammenführung auf Feldebene', text: 'Wenn ein Kollege speichert, werden seine Änderungen Feld für Feld in Ihr Formular eingemischt. Unberührte Felder aktualisieren sich still mit einem temporären grünen Badge. Kein Neuladen der Seite.' },
+        { title: 'Konfliktlösung', text: 'Beide bearbeiten dasselbe Feld? Das Konflikt-Panel zeigt Ihren Wert, seinen Wert und das Original — Seite an Seite. Wählen Sie, welcher gewinnt, Feld für Feld.' },
+        { title: 'Optimistisches Locking', text: 'Jede auditable Entität trägt eine Versionsnummer. Speicherungen, die mit einer gleichzeitigen Bearbeitung kollidieren, erhalten eine 409 — niemals wird die Arbeit eines anderen Benutzers still überschrieben.' },
+      ],
+      techNote: 'Angetrieben durch SSE + Redis + NATS — keine WebSockets erforderlich. Funktioniert über HTTP/1.1 oder HTTP/2.',
+      autoEnabled: 'Automatisch für @AuditTrail-Entitäten — keine pro-Entität-Konfiguration.',
+    },
     enterprise: {
       badge: 'Enterprise-Tauglich',
       title: 'Optimiert für Enterprise und hohen Traffic.',
@@ -750,6 +789,19 @@ export const translations = {
         { prompt: 'LIMIT 5;', color: 'normal' },
       ],
       moreDbs: 'Pronto más soporte de bases de datos',
+    },
+    collaboration: {
+      badge: 'Colaboración en Tiempo Real',
+      title: 'Vea quién está editando. Combine cambios. Resuelva conflictos a nivel de campo.',
+      text: 'Cuando dos colegas abren el mismo registro, Primebrick muestra avatares de presencia en vivo — ve exactamente quién está viendo y qué campo está editando. Cuando alguien guarda, los cambios se combinan silenciosamente en su formulario a nivel de campo, no a nivel de entidad. Si ambos estaban editando el mismo campo, un panel de resolución de conflictos le permite elegir qué valor gana. Impulsado por SSE (Server-Sent Events) sobre HTTP/1.1 o HTTP/2, presencia Redis y fanout NATS — sin WebSockets.',
+      cards: [
+        { title: 'Avatares de presencia en vivo', text: 'Vea quién está leyendo o editando el mismo registro. Los avatares muestran el campo en edición y el valor en progreso, en tiempo real.' },
+        { title: 'Combinación a nivel de campo', text: 'Cuando un colega guarda, sus cambios se combinan en su formulario campo por campo. Los campos no tocados se actualizan silenciosamente con un badge verde temporal. Sin recarga de página.' },
+        { title: 'Resolución de conflictos', text: '¿Ambos editando el mismo campo? El panel de conflictos muestra su valor, el suyo y el original — lado a lado. Elija cuál gana, campo por campo.' },
+        { title: 'Bloqueo optimista', text: 'Cada entidad auditable lleva un número de versión. Los guardados que colisionan con una edición concurrente reciben un 409 — nunca sobrescribiendo silenciosamente el trabajo de otro usuario.' },
+      ],
+      techNote: 'Impulsado por SSE + Redis + NATS — sin WebSockets. Funciona sobre HTTP/1.1 o HTTP/2.',
+      autoEnabled: 'Automático para entidades @AuditTrail — cero configuración por entidad.',
     },
     enterprise: {
       badge: 'Listo para Enterprise',
@@ -976,6 +1028,19 @@ export const translations = {
       ],
       moreDbs: 'Em breve mais suporte de bases de dados',
     },
+    collaboration: {
+      badge: 'Colaboração em Tempo Real',
+      title: 'Veja quem está a editar. Combine alterações. Resolva conflitos a nível de campo.',
+      text: 'Quando dois colegas abrem o mesmo registo, o Primebrick mostra avatares de presença em direto — vê exatamente quem está a ver e qual campo está a editar. Quando alguém guarda, as alterações combinam-se silenciosamente no seu formulário a nível de campo, não a nível de entidade. Se ambos estavam a editar o mesmo campo, um painel de resolução de conflitos permite-lhe escolher qual valor ganha. Impulsionado por SSE (Server-Sent Events) sobre HTTP/1.1 ou HTTP/2, presença Redis e fanout NATS — sem WebSockets.',
+      cards: [
+        { title: 'Avatares de presença em direto', text: 'Veja quem está a ler ou editar o mesmo registo. Os avatares mostram o campo em edição e o valor em progresso, em tempo real.' },
+        { title: 'Combinação a nível de campo', text: 'Quando um colega guarda, as suas alterações combinam-se no seu formulário campo por campo. Os campos não tocados atualizam-se silenciosamente com um badge verde temporário. Sem recarga de página.' },
+        { title: 'Resolução de conflitos', text: 'Ambos a editar o mesmo campo? O painel de conflitos mostra o seu valor, o dele e o original — lado a lado. Escolha qual ganha, campo por campo.' },
+        { title: 'Bloqueio otimista', text: 'Cada entidade auditable transporta um número de versão. Os guardados que colidem com uma edição concorrente recebem um 409 — nunca sobrescrevendo silenciosamente o trabalho de outro utilizador.' },
+      ],
+      techNote: 'Impulsionado por SSE + Redis + NATS — sem WebSockets. Funciona sobre HTTP/1.1 ou HTTP/2.',
+      autoEnabled: 'Automático para entidades @AuditTrail — zero configuração por entidade.',
+    },
     enterprise: {
       badge: 'Pronto para Enterprise',
       title: 'Otimizado para enterprise e alto tráfego.',
@@ -1200,6 +1265,19 @@ export const translations = {
         { prompt: 'LIMIT 5;', color: 'normal' },
       ],
       moreDbs: 'Bientôt plus de support de bases de données',
+    },
+    collaboration: {
+      badge: 'Collaboration en Temps Réel',
+      title: 'Voyez qui édite. Fusionnez les changements. Résolvez les conflits au niveau du champ.',
+      text: 'Quand deux collègues ouvrent le même enregistrement, Primebrick affiche des avatars de présence en direct — vous voyez exactement qui regarde et quel champ il édite. Quand quelqu\'un sauvegarde, les changements se fusionnent silencieusement dans votre formulaire au niveau du champ, pas au niveau de l\'entité. Si vous éditiez tous les deux le même champ, un panneau de résolution de conflits vous permet de choisir quelle valeur gagne. Propulsé par SSE (Server-Sent Events) sur HTTP/1.1 ou HTTP/2, présence Redis et fanout NATS — aucun WebSocket requis.',
+      cards: [
+        { title: 'Avatars de présence en direct', text: 'Voyez qui lit ou édite le même enregistrement. Les avatars affichent le champ en cours d\'édition et la valeur en cours, en temps réel.' },
+        { title: 'Fusion au niveau du champ', text: 'Quand un collègue sauvegarde, ses changements se fusionnent dans votre formulaire champ par champ. Les champs non touchés se mettent à jour silencieusement avec un badge vert temporaire. Sans rechargement de page.' },
+        { title: 'Résolution de conflits', text: 'Vous éditez tous les deux le même champ ? Le panneau de conflits affiche votre valeur, la sienne et l\'original — côte à côte. Choisissez laquelle gagne, champ par champ.' },
+        { title: 'Verrouillage optimiste', text: 'Chaque entité auditable porte un numéro de version. Les sauvegardes qui entrent en collision avec une édition concurrente reçoivent un 409 — sans jamais écraser silencieusement le travail d\'un autre utilisateur.' },
+      ],
+      techNote: 'Propulsé par SSE + Redis + NATS — aucun WebSocket requis. Fonctionne sur HTTP/1.1 ou HTTP/2.',
+      autoEnabled: 'Automatique pour les entités @AuditTrail — zéro configuration par entité.',
     },
     enterprise: {
       badge: 'Prêt pour l\'Enterprise',
