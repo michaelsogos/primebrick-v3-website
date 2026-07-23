@@ -914,6 +914,80 @@ const contactHref = isEn ? '/en/contact' : `/${langCode}/contact`;
       </div>
     </section>
 
+    <!-- Security Compliance Section (ISO 27001 / NIS2) -->
+    <section class="relative z-10 px-6 py-24">
+      <div class="mx-auto max-w-5xl">
+        <div class="text-center">
+          <div class="mb-4 inline-flex items-center gap-2 rounded-full border border-sky-500/30 bg-sky-500/10 px-4 py-1.5 text-xs font-medium text-sky-300">
+            <svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M9 12l2 2 4-4" /><path d="M21 12c0 4.97-4.03 9-9 9s-9-4.03-9-9 4.03-9 9-9 9 4.03 9 9z" />
+            </svg>
+            {t.securityCompliance.badge}
+          </div>
+          <h2 class="text-3xl font-bold text-white sm:text-4xl">{t.securityCompliance.title}</h2>
+          <p class="mx-auto mt-4 max-w-2xl text-lg text-slate-400">{t.securityCompliance.text}</p>
+        </div>
+        <div class="mt-12 grid gap-6 sm:grid-cols-2">
+          {t.securityCompliance.cards.map((card) => (
+            <div class="group rounded-2xl border border-slate-800/50 bg-slate-900/30 p-6 backdrop-blur-sm transition-all hover:border-sky-500/30 hover:bg-slate-900/50">
+              <h3 class="text-lg font-semibold text-white">{card.title}</h3>
+              <p class="mt-2 text-sm text-slate-400">{card.text}</p>
+            </div>
+          ))}
+        </div>
+        <div class="mt-10 text-center">
+          <a
+            href={t.securityCompliance.cta.href}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-flex items-center gap-2 rounded-lg border border-sky-500/30 bg-sky-500/10 px-6 py-3 text-sm font-semibold text-sky-300 transition-all hover:border-sky-400/50 hover:bg-sky-500/20"
+          >
+            {t.securityCompliance.cta.label}
+            <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M7 17L17 7M17 7H7M17 7V17" />
+            </svg>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Data Privacy Section (GDPR / CCPA) -->
+    <section class="relative z-10 px-6 py-24">
+      <div class="mx-auto max-w-5xl">
+        <div class="text-center">
+          <div class="mb-4 inline-flex items-center gap-2 rounded-full border border-indigo-500/30 bg-indigo-500/10 px-4 py-1.5 text-xs font-medium text-indigo-300">
+            <svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="11" width="18" height="11" rx="2" /><path d="M7 11V7a5 5 0 0 1 10 0v4" /><circle cx="12" cy="16" r="1" />
+            </svg>
+            {t.dataPrivacy.badge}
+          </div>
+          <h2 class="text-3xl font-bold text-white sm:text-4xl">{t.dataPrivacy.title}</h2>
+          <p class="mx-auto mt-4 max-w-2xl text-lg text-slate-400">{t.dataPrivacy.text}</p>
+        </div>
+        <div class="mt-12 grid gap-6 sm:grid-cols-2">
+          {t.dataPrivacy.cards.map((card) => (
+            <div class="group rounded-2xl border border-slate-800/50 bg-slate-900/30 p-6 backdrop-blur-sm transition-all hover:border-indigo-500/30 hover:bg-slate-900/50">
+              <h3 class="text-lg font-semibold text-white">{card.title}</h3>
+              <p class="mt-2 text-sm text-slate-400">{card.text}</p>
+            </div>
+          ))}
+        </div>
+        <div class="mt-10 text-center">
+          <a
+            href={t.dataPrivacy.cta.href}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-flex items-center gap-2 rounded-lg border border-indigo-500/30 bg-indigo-500/10 px-6 py-3 text-sm font-semibold text-indigo-300 transition-all hover:border-indigo-400/50 hover:bg-indigo-500/20"
+          >
+            {t.dataPrivacy.cta.label}
+            <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M7 17L17 7M17 7H7M17 7V17" />
+            </svg>
+          </a>
+        </div>
+      </div>
+    </section>
+
     <!-- For Devs + For CTOs -->
     <section class="relative z-10 px-6 py-24">
       <div class="mx-auto grid max-w-5xl gap-6 lg:grid-cols-2">
