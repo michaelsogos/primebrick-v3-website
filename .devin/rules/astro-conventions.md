@@ -8,10 +8,10 @@ trigger: always_on
 
 ## Astro Architecture
 1. **Hybrid rendering**: `output: 'hybrid'` with `@astrojs/cloudflare` adapter. Pages are prerendered by default. Only opt into SSR (`export const prerender = false`) when a page genuinely needs server-side data.
-2. **Prerender by default**: All marketing pages, docs pages, and the OpenAPI explorer MUST be prerendered. This keeps Worker CPU at 0ms and requests free/unlimited on Cloudflare's free plan.
-3. **No Node.js APIs in SSR code**: The Workers runtime is a V8 isolate (`workerd`), NOT Node.js. No `fs`, no `child_process`, no `node:path` in any server-rendered code. Use Web APIs instead. The `nodejs_compat` flag enables some Node APIs but not all.
-4. **Svelte for interactivity**: Use `@astrojs/svelte` for interactive components. Svelte components are hydrated client-side via Astro islands (`client:load`, `client:visible`, `client:idle`).
-5. **Astro components for static content**: Use `.astro` files for static content and layout. Do not use Svelte for content that doesn't need interactivity.
+2. **Prerender by default**: All marketing pages, docs pages, and the OpenAPI explorer MUST be prerendered. This keeps Worker CPU at 0ms and requests free/unlimited on Cloudflare®'s free plan.
+3. **No Node.js® APIs in SSR code**: The Workers runtime is a V8 isolate (`workerd`), NOT Node.js®. No `fs`, no `child_process`, no `node:path` in any server-rendered code. Use Web APIs instead. The `nodejs_compat` flag enables some Node APIs but not all.
+4. **Svelte™ for interactivity**: Use `@astrojs/svelte` for interactive components. Svelte™ components are hydrated client-side via Astro islands (`client:load`, `client:visible`, `client:idle`).
+5. **Astro components for static content**: Use `.astro` files for static content and layout. Do not use Svelte™ for content that doesn't need interactivity.
 
 ## Content Collections
 1. **All docs content lives in `src/content/docs/`**: Organized by source repo (`backend/`, `frontend/`, `microservices/`, `dal/`, `sdk/`) and by source type (`deepwiki/`, `manual/`).
@@ -31,4 +31,4 @@ trigger: always_on
 - AI agent MUST set `export const prerender = true` on all new pages unless SSR is explicitly needed.
 - AI agent MUST NOT use `fs`, `child_process`, or `node:path` in any server-rendered code.
 - AI agent MUST use kebab-case for all filenames.
-- AI agent MUST use Svelte only for interactive components, Astro for static content.
+- AI agent MUST use Svelte™ only for interactive components, Astro for static content.
