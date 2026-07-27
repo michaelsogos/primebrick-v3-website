@@ -32,7 +32,6 @@ import {
   siRedis,
   siNatsdotio,
   siVercel,
-  siAnthropic,
   siHuggingface,
   siZod,
   siHandlebarsdotjs,
@@ -40,7 +39,6 @@ import {
   siVitest,
   siTestinglibrary,
   siDotenv,
-  siSharp,
   siGithub,
   siKimi,
 } from 'simple-icons';
@@ -54,7 +52,12 @@ export type SimpleIcon = {
   bgFill?: string;
   /** Optional multi-path override for icons like Shiki that have multiple
    *  colored shapes. When present, `path`/`hex` are ignored. */
-  paths?: { d: string; fill: string }[];
+  paths?: { d: string; fill: string; stroke?: string; strokeWidth?: string; fillNone?: boolean }[];
+  /** Optional raster image path (WebP/PNG) for logos that cannot be
+   *  represented as SVG paths. When present, all other fields are ignored
+   *  and the image is rendered inside the icon container. Path is relative
+   *  to the site root (e.g. "/icons/casdoor.webp"). */
+  imgPath?: string;
 };
 
 export type Credit = {
@@ -111,30 +114,61 @@ const ic = (i: { path: string; hex: string }): SimpleIcon => {
 };
 
 /** Custom brand icon for bits-ui (not in simple-icons).
- *  Icon mark extracted from the official bits-ui logo SVG. */
+ *  Full logo extracted from the official bits-ui logo SVG — a circle
+ *  (the "bits" dot), the word "bits" as letter paths (b, i, t, s), and
+ *  a rounded square containing "ui". The brand color (#91AEBB) is too
+ *  muted for dark backgrounds, so we brighten it to #B8CDD8. */
 const BITS_UI_ICON: SimpleIcon = {
-  path: 'M13.8889 13.8889H25V22.2222H13.8889V13.8889ZM36.1111 36.1111V27.7778H13.8889V36.1111H36.1111ZM38.8889 0H0V50H50V13.8889H38.8889V0ZM8.33333 41.6667V8.33333H30.5556V22.2222H41.6667V41.6667H8.33333Z',
-  hex: '91AEBB',
-  viewBox: '0 0 50 50',
+  path: '',
+  hex: 'B8CDD8',
+  viewBox: '0 0 87.7 21.4',
+  paths: [
+    // "s" letter (from "bits")
+    { d: 'M58,20c-2.3,0-4.1-0.8-5.6-2.4l2.4-2.2c1,1.1,2,1.7,3.2,1.7c1.2,0,1.9-0.6,1.9-1.4c0-0.7-0.3-1.1-2.5-1.6c-3.6-0.9-4.2-2.5-4.2-4.2c0-2.4,1.9-4.1,5-4.1c2.2,0,3.6,0.5,5,2.3l-2.5,1.9c-0.7-1-1.5-1.5-2.4-1.5c-1,0-1.7,0.4-1.7,1.2c0,0.5,0.2,0.9,1.8,1.3c3.9,1,4.8,2.5,4.8,4.5C63.3,18.1,61,20,58,20z', fill: 'B8CDD8' },
+    // "t" letter (from "bits")
+    { d: 'M49.3,19.7c-2.7,0-4.1-1.2-4.1-4.2V9.2h-1.9v-3h1.9V3.4l3.5-0.4v3.1h2.9v3h-2.9v6.2c0,0.9,0.4,1.2,1.1,1.2h1.5v3.1H49.3z', fill: 'B8CDD8' },
+    // "i" letter (from "bits")
+    { d: 'M37.8,19.7V6.2h3.5v13.5H37.8z M37.5,3c0-1.1,0.9-2.1,2.1-2.1c1.2,0,2.1,0.9,2.1,2.1c0,1.2-0.9,2.1-2.1,2.1C38.4,5,37.5,4.1,37.5,3z', fill: 'B8CDD8' },
+    // "b" letter (from "bits")
+    { d: 'M28.8,20c-2.4,0-3.6-1-4.4-2.5v2.2H21v-19h3.5v7.5c0.7-1.4,2-2.4,4.3-2.4c3.7,0,6.7,3.2,6.7,7.1C35.5,16.9,32.5,20,28.8,20z M24.4,13c0,2.1,1.5,3.9,3.8,3.9c2.2,0,3.7-1.8,3.7-3.9c0-2.1-1.5-3.9-3.7-3.9C25.9,9,24.4,10.9,24.4,13z', fill: 'B8CDD8' },
+    // Circle (the "bits" dot)
+    { d: 'M5.9 11.7 m-5 0 a5 5 0 1 0 10 0 a5 5 0 1 0 -10 0', fill: 'B8CDD8' },
+    // Rounded square outline (the "ui" container)
+    { d: 'M81,20.4h-7c-2.9,0-5.2-2.4-5.2-5.2v-7c0-2.9,2.4-5.2,5.2-5.2h7c2.9,0,5.2,2.4,5.2,5.2v7C86.2,18,83.9,20.4,81,20.4z M74,4c-2.3,0-4.2,1.9-4.2,4.2v7c0,2.3,1.9,4.2,4.2,4.2h7c2.3,0,4.2-1.9,4.2-4.2v-7C85.1,5.8,83.3,4,81,4H74z', fill: 'B8CDD8' },
+    // "u" + "i" letters inside the box
+    { d: 'M77.8,8.1h1.1v4.8c0,0.5-0.1,1-0.4,1.4c-0.2,0.4-0.6,0.7-1,0.9c-0.4,0.2-0.9,0.3-1.5,0.3c-0.6,0-1.1-0.1-1.5-0.3c-0.4-0.2-0.8-0.5-1-0.9c-0.2-0.4-0.4-0.8-0.4-1.4V8.1h1.1v4.7c0,0.3,0.1,0.6,0.2,0.9c0.1,0.3,0.4,0.5,0.6,0.6c0.3,0.1,0.6,0.2,1,0.2c0.4,0,0.7-0.1,1-0.2c0.3-0.1,0.5-0.4,0.6-0.6c0.1-0.3,0.2-0.6,0.2-0.9V8.1z M81.7,8.1v7.3h-1.1V8.1H81.7z', fill: 'B8CDD8' },
+  ],
+};
+
+/** Official Zudoku logomark — extracted from cdn.zudoku.dev/logos/favicon.svg.
+ *  Dark rounded square with a white "Z" puzzle-piece mark. 130×130 viewBox. */
+const ZUDOKU_ICON: SimpleIcon = {
+  path: '',
+  hex: 'FFFFFF',
+  viewBox: '0 0 130 130',
+  bgFill: '0C0C0C',
+  paths: [
+    { d: 'M76.221 27.968A4.666 4.666 0 0 1 80.581 25h23.667c6.325 0 10.835 6.134 8.948 12.171l-7.549 24.159a4.688 4.688 0 0 1-4.474 3.289H72.429c-4.103 0-6.19 3.714-7.429 7.429-.992 2.974-8.336 21.83-11.221 29.222a4.666 4.666 0 0 1-4.36 2.968H25.753c-6.325 0-10.835-6.134-8.948-12.171l7.549-24.159a4.688 4.688 0 0 1 4.474-3.289h28.744c4.103 0 6.19-3.714 7.429-7.428.992-2.975 8.335-21.83 11.221-29.223Z', fill: 'FFFFFF' },
+    { d: 'M79.195 70.81a6.19 6.19 0 0 0-5.797 4.016l-9.446 25.19c-.766 2.043.745 4.222 2.926 4.222h26.448a12.5 12.5 0 0 0 11.704-8.11l5.535-14.763c1.916-5.107-1.86-10.555-7.315-10.555H79.195ZM37.913 25a12.5 12.5 0 0 0-11.705 8.111l-5.535 14.762c-1.916 5.107 1.86 10.556 7.315 10.556h24.055c2.58 0 4.89-1.601 5.797-4.017l9.446-25.19C68.052 27.18 66.542 25 64.36 25H37.913Z', fill: 'FFFFFF' },
+  ],
 };
 
 /** Custom brand icon for the Svecosystem (formsnap · paneforge · runed).
- *  Uses the runed icon mark — a rounded square with an "R" — from the
- *  official runed repo logo SVG. */
+ *  Uses the official formsnap icon mark — a rounded square with a
+ *  lightning/arrow shape — in the formsnap brand green (#00D492). */
 const SVECOSYSTEM_ICON: SimpleIcon = {
-  path: 'M22.7164 0C10.1705 0 0 10.1705 0 22.7164V98.79C0 111.335 10.1705 121.506 22.7164 121.506H98.79C111.336 121.506 121.506 111.335 121.506 98.79V22.7164C121.506 10.1705 111.336 0 98.79 0H22.7164ZM48.6384 19.836L77.9001 36.4316C79.4403 37.3047 80.4152 38.9127 80.4836 40.6741C80.5516 42.4418 79.7121 44.1115 78.2399 45.1044L53.5554 61.7486L79.384 94.0559L79.388 94.0609C81.1205 96.252 80.7921 99.452 78.5787 101.22C77.6326 101.977 76.4988 102.335 75.3938 102.335C73.8991 102.335 72.4162 101.684 71.4057 100.417L51.2228 75.1658V97.0981C51.2228 99.9185 48.943 102.198 46.1222 102.198C43.3013 102.198 41.0215 99.9185 41.0215 97.0981V24.2708C41.0215 22.4643 41.9759 20.7814 43.5563 19.867C45.1369 18.9433 47.0699 18.9494 48.6353 19.8343L48.6384 19.836ZM51.2228 51.0277V33.0234L65.7205 41.2511L51.2228 51.0277Z',
-  hex: 'EC4F27',
+  path: 'M101.243 3.2627C74.5494 -0.329442 47.4958 -0.338885 20.7999 3.23462C16.237 3.82902 11.9953 5.90446 8.72581 9.14235C5.45634 12.3802 3.33983 16.6016 2.70117 21.1585C-0.891322 47.8521 -0.900408 74.906 2.67415 101.602C3.26836 106.165 5.34367 110.407 8.58148 113.676C11.8193 116.946 16.0407 119.062 20.5975 119.701C33.9631 121.499 47.4341 122.402 60.9201 122.402C74.3381 122.402 87.7411 121.509 101.04 119.728C105.603 119.134 109.845 117.058 113.115 113.821C116.384 110.583 118.501 106.361 119.139 101.804C120.938 88.4387 121.841 74.9678 121.841 61.4817C121.841 48.0637 120.947 34.6607 119.167 21.3614C118.572 16.7985 116.497 12.5568 113.259 9.28733C110.021 6.01787 105.8 3.90136 101.243 3.2627ZM88.1368 66.8475L62.3218 98.9813C61.764 99.6819 61.0549 100.247 60.2476 100.635C59.4403 101.023 58.5557 101.224 57.6601 101.222C56.9443 101.22 56.234 101.097 55.5597 100.857C54.4257 100.482 53.4385 99.7596 52.7375 98.7926C52.0366 97.8257 51.6575 96.6628 51.6538 95.4685V70.3109H41.0653C39.3141 70.3411 37.5905 69.8713 36.0968 68.9566C34.6031 68.042 33.4011 66.7205 32.6318 65.147C31.9327 63.6959 31.662 62.0755 31.8517 60.476C32.0413 58.8765 32.6833 57.3643 33.7024 56.1169L59.5174 23.9831C60.3066 23.0027 61.3836 22.2919 62.5965 21.9559C63.8095 21.62 65.0973 21.6731 66.2785 22.1078C67.4124 22.4828 68.3997 23.2048 69.1006 24.1718C69.8016 25.1387 70.1807 26.3016 70.1843 27.4959V52.6535H80.7739C82.5249 52.6234 84.2481 53.0932 85.7416 54.0076C87.2351 54.922 88.437 56.2432 89.2064 57.8164C89.9058 59.2673 90.1767 60.8877 89.9872 62.4872C89.7977 64.0867 89.1558 65.6 88.1368 66.8475Z',
+  hex: '00D492',
   viewBox: '0 0 122 122',
 };
 
-/** Custom brand icon for Fontsource — a purple rounded square with a
- *  white "F" letter mark. Extracted from the official fontsource repo
- *  icon.svg. Uses bgFill for the colored background rect. */
+/** Fontsource logo — official icon from fontsource.org, served as a
+ *  WebP raster image (the logo is a purple rounded square with a white
+ *  "F" letter mark). */
 const FONTSOURCE_ICON: SimpleIcon = {
-  path: 'M11.7 7.2H20.1L22.5 7.2V12.6H20.1V9.6L11.7 9.6V13.8L17.1 13.8V16.2H11.7V20.4H13.5V22.8H11.7H9.3L7.5 22.8V20.4H9.3V16.2H7.5V13.8H9.3V9.6H7.5V7.2L9.3 7.2H11.7Z',
-  hex: 'FFFFFF',
-  viewBox: '0 0 30 30',
-  bgFill: '625BF8',
+  path: '',
+  hex: '625BF8',
+  imgPath: '/icons/fontsource.webp',
 };
 
 /** Custom brand icon for tailwind-merge — a stylized wave pattern in
@@ -145,13 +179,12 @@ const TAILWIND_MERGE_ICON: SimpleIcon = {
   viewBox: '0 0 66 45',
 };
 
-/** Custom icon for flag-icons — the project has no brand logo (it's a
- *  collection of country flag SVGs), so we use a simple flag-on-pole
- *  icon in a blue tone to represent the concept. */
+/** flag-icons logo — official favicon from flagicons.lipis.dev, served
+ *  as a WebP raster image. */
 const FLAG_ICONS_ICON: SimpleIcon = {
-  path: 'M5 2V22M5 2H17L14 7L17 12H5',
+  path: '',
   hex: '3B82F6',
-  viewBox: '0 0 24 24',
+  imgPath: '/icons/flag-icons.webp',
 };
 
 /** Custom brand icon for Shiki — a multi-color composition with a pink
@@ -169,75 +202,52 @@ const SHIKI_ICON: SimpleIcon = {
   ],
 };
 
-/** Custom icon for TypeDoc — a document with "TS" lettering in
- *  TypeScript blue. TypeDoc has no brand logo of its own. */
-const TYPEDOC_ICON: SimpleIcon = {
-  path: 'M6 2h8l4 4v16H6V2Zm8 0v4h4',
-  hex: '3178C6',
-  viewBox: '0 0 24 24',
-};
+// TypeDoc has no brand logo — uses ic(siGithub) below (GitHub-hosted project)
+// pdfmake has no brand logo — uses ic(siGithub) below (GitHub-hosted project)
 
-/** Custom icon for pdfmake — a document with folded corner in PDF red.
- *  pdfmake has no brand logo of its own. */
-const PDFMAKE_ICON: SimpleIcon = {
-  path: 'M6 2h8l4 4v16H6V2Zm8 0v4h4M9 13h6M9 16h6M9 19h4',
-  hex: 'E5322D',
-  viewBox: '0 0 24 24',
-};
-
-/** Custom icon for Casdoor — a shield with keyhole representing IAM.
- *  Casdoor has no SVG logo (only PNG favicons). */
+/** Casdoor logo — official icon from casdoor.org, served as a WebP
+ *  raster image (the logo is a purple curved shape with a stem). */
 const CASDOOR_ICON: SimpleIcon = {
-  path: 'M12 2L4 5v6c0 5 3.5 9.5 8 11 4.5-1.5 8-6 8-11V5l-8-3Zm0 5a3 3 0 0 1 1.5 5.6V15h-3v-2.4A3 3 0 0 1 12 7Z',
-  hex: '3B82F6',
-  viewBox: '0 0 24 24',
+  path: '',
+  hex: '522DD5',
+  imgPath: '/icons/casdoor.webp',
 };
 
-/** Custom icon for jose — a seal/badge representing JWT signing.
- *  jose has no brand logo at all. */
-const JOSE_ICON: SimpleIcon = {
-  path: 'M12 2l3 6 6 .5-4.5 4 1.5 6L12 15l-6 3.5 1.5-6L3 8.5 9 8l3-6Z',
-  hex: 'F59E0B',
-  viewBox: '0 0 24 24',
-};
+// jose has no brand logo — uses ic(siGithub) below (GitHub-hosted project)
+// zxcvbn-ts has no brand logo — uses ic(siGithub) below (GitHub-hosted project)
 
-/** Custom icon for zxcvbn-ts — a password strength meter with bars
- *  going from short to tall. zxcvbn-ts has no brand logo. */
-const ZXCVBN_ICON: SimpleIcon = {
-  path: 'M3 17h3v3H3v-3Zm5-4h3v7H8v-7Zm5-4h3v11h-3V9Zm5-5h3v16h-3V4Z',
-  hex: '22C55E',
-  viewBox: '0 0 24 24',
-};
-
-/** Custom icon for node-postgres — a database cylinder with a connection
- *  line, in teal to distinguish it from PostgreSQL's blue. */
+/** node-postgres logo — official icon from node-postgres.com, served as
+ *  a WebP raster image. */
 const NODE_POSTGRES_ICON: SimpleIcon = {
-  path: 'M12 3C7 3 4 4.8 4 7v10c0 2.2 3 4 8 4s8-1.8 8-4V7c0-2.2-3-4-8-4Zm0 2c3.3 0 6 1.1 6 2s-2.7 2-6 2-6-1.1-6-2 2.7-2 6-2Z',
-  hex: '14B8A6',
-  viewBox: '0 0 24 24',
+  path: '',
+  hex: '3D8CB5',
+  imgPath: '/icons/node-postgres.webp',
 };
 
-/** Custom icon for exceljs — a spreadsheet grid. exceljs has no logo. */
-const EXCELJS_ICON: SimpleIcon = {
-  path: 'M4 3h16v18H4V3Zm0 4h16M4 14h16M10 3v18M4 11h16M4 18h16',
-  hex: '217346',
-  viewBox: '0 0 24 24',
-};
+// exceljs has no brand logo — uses ic(siGithub) below (GitHub-hosted project)
+// html2pdf.js has no brand logo — uses ic(siGithub) below (GitHub-hosted project)
 
-/** Custom icon for html2pdf.js — a document converting to PDF.
- *  html2pdf.js has no logo. */
-const HTML2PDF_ICON: SimpleIcon = {
-  path: 'M6 2h8l4 4v16H6V2Zm8 0v4h4M9 14l3 3 3-3M12 10v7',
-  hex: '6366F1',
-  viewBox: '0 0 24 24',
-};
-
-/** Custom icon for axe-core — an accessibility person-in-circle.
- *  axe-core has no logo. */
+/** Official axe-core logomark — extracted from the Deque axe-core SVG
+ *  (docs.deque.com/devtools-for-web). A cream rounded square with two
+ *  interlocking puzzle-piece shapes in blue (#2e5f7a) and pink (#b25295). */
 const AXE_CORE_ICON: SimpleIcon = {
-  path: 'M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20Zm0 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Zm3 12H9v-1.5h2v-4H9V11h4v5.5h2V18Z',
-  hex: '0054A6',
-  viewBox: '0 0 24 24',
+  path: '',
+  hex: '2E5F7A',
+  viewBox: '0 0 339.56 340',
+  paths: [
+    // Background rounded square (cream)
+    { d: 'M60.07 60.84h219.41v219.41H60.07Z', fill: 'F6F3ED' },
+    // Blue puzzle pieces
+    { d: 'M168.22 212.45c5.22 0 10.22 2.07 13.91 5.76 3.69 3.69 5.76 8.69 5.76 13.91s-2.07 10.22-5.76 13.91c-3.69 3.69-8.69 5.76-13.91 5.76h-15.6v-39.34h15.6Z', fill: '2E5F7A' },
+    { d: 'M211.68 172.1c0-5.22 2.07-10.22 5.76-13.91 3.69-3.69 8.69-5.76 13.91-5.76s10.22 2.07 13.91 5.76c3.69 3.69 5.76 8.69 5.76 13.91v15.6h-39.34v-15.6Z', fill: '2E5F7A' },
+    { d: 'M171.34 128.64c-5.22 0-10.22-2.07-13.91-5.76-3.69-3.69-5.76-8.69-5.76-13.91 0-5.22 2.07-10.22 5.76-13.91 3.69-3.69 8.69-5.76 13.91-5.76h15.6v39.34h-15.6Z', fill: '2E5F7A' },
+    { d: 'M127.87 168.98c0 5.22-2.07 10.22-5.76 13.91-3.69 3.69-8.69 5.76-13.91 5.76-5.22 0-10.22-2.07-13.91-5.76-3.69-3.69-5.76-8.69-5.76-13.91v-15.6h39.34v15.6Z', fill: '2E5F7A' },
+    // Pink puzzle pieces
+    { d: 'M198.31 201.28c3.69-3.69 8.69-5.76 13.91-5.76 5.22 0 10.22 2.07 13.91 5.76 3.69 3.69 5.76 8.69 5.76 13.91 0 5.22-2.07 10.22-5.76 13.91l-11.03 11.03-27.82-27.82 11.03-11.03Z', fill: 'B25295' },
+    { d: 'M200.51 142.01c-3.69-3.69-5.76-8.69-5.76-13.91 0-5.22 2.07-10.22 5.76-13.91 3.69-3.69 8.69-5.76 13.91-5.76 5.22 0 10.22 2.07 13.91 5.76l11.03 11.03-27.82 27.82-11.03-11.03Z', fill: 'B25295' },
+    { d: 'M141.25 139.81c-3.69 3.69-8.69 5.76-13.91 5.76-5.22 0-10.22-2.07-13.91-5.76-3.69-3.69-5.76-8.69-5.76-13.91 0-5.22 2.07-10.22 5.76-13.91l11.03-11.03 27.82 27.82-11.03 11.03Z', fill: 'B25295' },
+    { d: 'M139.04 199.07c3.69 3.69 5.76 8.69 5.76 13.91 0 5.22-2.07 10.22-5.76 13.91s-8.69 5.76-13.91 5.76c-5.22 0-10.22-2.07-13.91-5.76l-11.03-11.03 27.82-27.82 11.03 11.03Z', fill: 'B25295' },
+  ],
 };
 
 /** Custom icon for Playwright — simplified comedy/tragedy theater masks.
@@ -258,48 +268,73 @@ const PLAYWRIGHT_ICON: SimpleIcon = {
   ],
 };
 
-/** Custom icon for reflect-metadata — a metadata/annotation tag shape.
- *  reflect-metadata has no logo. */
-const REFLECT_METADATA_ICON: SimpleIcon = {
-  path: 'M12 2L2 7v10l10 5 10-5V7L12 2Zm0 2.5L19.5 8 12 11.5 4.5 8 12 4.5Z',
-  hex: 'DB2777',
-  viewBox: '0 0 24 24',
-};
+// reflect-metadata has no brand logo — uses ic(siGithub) below (GitHub-hosted project)
+// @microsoft/fetch-event-source has no brand logo — uses ic(siGithub) below
 
 /** Official sveltekit-superforms logomark — extracted from
- *  superforms.rocks/favicon.svg. The mark is a faceted diamond outline
- *  in the brand gold (#ECD11C). Single-path with inner cutout,
- *  1080×1080 viewBox. */
+ *  superforms.rocks/favicon.svg. Three layers: dark blue inner diamond,
+ *  olive band lines, and gold outline. 1080×1080 viewBox. */
 const SUPERFORMS_ICON: SimpleIcon = {
-  path: 'M842.637 179.14H258.378L44.915 391.505l484.635 583.598 38.662-43.38 479.723-538.224-205.298-214.358h0Zm-21.344 50l158.572 165.579-448.973 503.732L112.578 394.719l166.433-165.579H821.292Z',
+  path: '',
   hex: 'ECD11C',
   viewBox: '0 0 1080 1080',
+  paths: [
+    // Layer 1: dark blue inner diamond
+    { d: 'M530 922 83 391 275 204.588 834 204.588 1011 396 530 922', fill: '182439' },
+    // Layer 2: olive band lines (#b7a73f)
+    { d: 'M741.251 662.107H334.31v64.28h406.941v-64.28Z', fill: 'b7a73f' },
+    { d: 'M697.019 779.656H381.781v-64.28h315.239v64.28Zm-224.32-116.141h-168.684v-18.093h168.684v18.093Zm270.981 31.964L141.126 347.594l60.584-104.935 602.554 347.885-60.584 104.935Zm194.602-243.383l-386.157-222.949 12.445-21.555 386.157 222.949-12.445 21.555Z', fill: 'b7a73f' },
+    { d: 'M963.286 415.916l-386.157-222.949-12.445 21.555 386.157 222.949 12.445-21.555Z', fill: 'b7a73f' },
+    { d: 'M963.292 426.04l-386.157-222.949 12.445-21.555 386.157 222.949-12.445 21.555Zm-34.816 34.298l-408.373-235.774 9.801-16.976 408.373 235.774-9.801 16.976Z', fill: 'b7a73f' },
+    { d: 'M928.475 456.992L504.426 212.167l-9.801 16.976 424.049 244.825 9.801-16.976Z', fill: 'b7a73f' },
+    { d: 'M908.873 490.95L455.42 229.148l12.445-21.555 453.453 261.801-12.445 21.555Zm-590.686-107.299l-136.251-78.664 40.279-69.765 136.251 78.664-40.279 69.764Z', fill: 'b7a73f' },
+    // Layer 3: gold outline
+    { d: 'M842.637 179.14H258.378L44.915 391.505l484.635 583.598 38.662-43.38 479.723-538.224-205.298-214.358h0Zm-21.344 50l158.572 165.579-448.973 503.732L112.578 394.719l166.433-165.579H821.292Z', fill: 'ECD11C' },
+  ],
 };
 
-/** Custom icon for svelte-sonner — a toast notification bell.
- *  svelte-sonner has no logo (only toast UI icons). */
+/** svelte-sonner logo — official favicon from the svelte-sonner site,
+ *  served as a PNG raster image (white Svelte-style toast icon). */
 const SVELTE_SONNER_ICON: SimpleIcon = {
-  path: 'M12 2a6 6 0 0 0-6 6v4l-2 3h16l-2-3V8a6 6 0 0 0-6-6Zm0 18a3 3 0 0 0 3-3H9a3 3 0 0 0 3 3Z',
-  hex: 'F97316',
-  viewBox: '0 0 24 24',
-};
-
-/** Custom brand icon for svelte-motion — a teal rounded square with a
- *  white bezier curve and dots. Extracted from the official svelte-motion
- *  logo.svg. The stroke-based curve is converted to a filled approximation. */
-const SVELTE_MOTION_ICON: SimpleIcon = {
-  path: 'M4 14C6 8 9 8 11 11s5 4 7-2',
+  path: '',
   hex: 'FFFFFF',
-  viewBox: '0 0 24 24',
-  bgFill: '3DBBA0',
+  imgPath: '/icons/svelte-sonner.png',
 };
 
-/** Custom icon for @microsoft/fetch-event-source — a broadcast/signal
- *  waves icon. fetch-event-source has no logo. */
-const FETCH_EVENT_SOURCE_ICON: SimpleIcon = {
-  path: 'M12 9a3 3 0 1 0 0 6 3 3 0 0 0 0-6Zm0-4a7 7 0 0 1 5 2l-1.5 1.5A5 5 0 0 0 12 7a5 5 0 0 0-3.5 1.5L7 7a7 7 0 0 1 5-2Zm0 14a7 7 0 0 1-5-2l1.5-1.5A5 5 0 0 0 12 17a5 5 0 0 0 3.5-1.5L17 17a7 7 0 0 1-5 2Z',
-  hex: '0078D4',
-  viewBox: '0 0 24 24',
+/** svelte-motion logo — official favicon from svelte-motion.gradientdescent.de,
+ *  served as a PNG raster image. */
+const SVELTE_MOTION_ICON: SimpleIcon = {
+  path: '',
+  hex: '00AC7F',
+  imgPath: '/icons/svelte-motion.png',
+};
+
+/** Official Model Context Protocol logomark — extracted from
+ *  modelcontextprotocol.io/favicon.svg. Black rounded square with three
+ *  white stroke paths forming the MCP connector diagram. */
+const MCP_ICON: SimpleIcon = {
+  path: '',
+  hex: 'FFFFFF',
+  viewBox: '0 0 180 180',
+  bgFill: '000000',
+  paths: [
+    { d: 'M23.5996 85.2532L86.2021 22.6507C94.8457 14.0071 108.86 14.0071 117.503 22.6507C126.147 31.2942 126.147 45.3083 117.503 53.9519L70.2254 101.23', fill: '', stroke: 'FFFFFF', strokeWidth: '11', fillNone: true },
+    { d: 'M70.8789 100.578L117.504 53.952C126.148 45.3083 140.163 45.3083 148.806 53.952L149.132 54.278C157.776 62.9216 157.776 76.9357 149.132 85.5792L92.5139 142.198C89.6327 145.079 89.6327 149.75 92.5139 152.631L104.14 164.257', fill: '', stroke: 'FFFFFF', strokeWidth: '11', fillNone: true },
+    { d: 'M101.853 38.3013L55.553 84.6011C46.9094 93.2447 46.9094 107.258 55.553 115.902C64.1966 124.546 78.2106 124.546 86.8543 115.902L133.154 69.6025', fill: '', stroke: 'FFFFFF', strokeWidth: '11', fillNone: true },
+  ],
+};
+
+/** Official sharp logo — extracted from sharp.pixelplumbing.com/favicon.svg.
+ *  Two-color stroke-based icon: lime green (#9c0) and dark green (#090).
+ *  Uses the paths array with stroke/strokeWidth instead of fill. */
+const SHARP_ICON: SimpleIcon = {
+  path: '',
+  hex: '99CC00',
+  viewBox: '86 86 550 550',
+  paths: [
+    { d: 'M258.411 285.777l200.176-26.8M244.113 466.413L451.44 438.66M451.441 438.66V238.484M451.441 88.363v171.572l178.725-23.917M270.323 255.602V477.22M272.71 634.17V462.591L93.984 486.515', fill: '', stroke: '99CC00', strokeWidth: '80', fillNone: true },
+    { d: 'M451.441 610.246V438.66l178.725-23.91M269.688 112.59v171.58L90.964 308.093', fill: '', stroke: '009900', strokeWidth: '80', fillNone: true },
+  ],
 };
 
 /** Official Devin logo — extracted from devin.ai/favicon.svg.
@@ -348,7 +383,7 @@ export const CREDITS: CreditSection[] = [
       {
         author: 'Microsoft — Anders Hejlsberg & the TS team',
         handle: '@Microsoft',
-        project: 'TypeScript',
+        project: 'TypeScript®',
         version: '7',
         package: 'typescript',
         url: 'https://www.typescriptlang.org',
@@ -358,7 +393,7 @@ export const CREDITS: CreditSection[] = [
       {
         author: 'OpenJS Foundation & Node.js collaborators',
         handle: '@nodejs',
-        project: 'Node.js',
+        project: 'Node.js®',
         version: '24',
         url: 'https://nodejs.org',
         usage: 'Runs the Primebrick backend, SDK, DAL, and all build scripts.',
@@ -367,7 +402,7 @@ export const CREDITS: CreditSection[] = [
       {
         author: 'Jarred Sumner',
         handle: '@oven-sh',
-        project: 'Bun',
+        project: 'Bun™',
         version: '1',
         url: 'https://bun.sh',
         usage: 'Runtime for the Primebrick microservices — fast startup, hot reload, native TypeScript.',
@@ -382,7 +417,7 @@ export const CREDITS: CreditSection[] = [
       {
         author: 'The Astro Team',
         handle: '@withastro',
-        project: 'Astro',
+        project: 'Astro™',
         version: '7',
         package: 'astro',
         url: 'https://astro.build',
@@ -392,7 +427,7 @@ export const CREDITS: CreditSection[] = [
       {
         author: 'Rich Harris & the Svelte team',
         handle: '@sveltejs',
-        project: 'Svelte & SvelteKit',
+        project: 'Svelte™ & SvelteKit™',
         version: '5',
         package: 'svelte',
         url: 'https://svelte.dev',
@@ -402,7 +437,7 @@ export const CREDITS: CreditSection[] = [
       {
         author: 'OpenJS Foundation',
         handle: '@expressjs',
-        project: 'Express',
+        project: 'Express®',
         version: '4',
         package: 'express',
         url: 'https://expressjs.com',
@@ -412,13 +447,14 @@ export const CREDITS: CreditSection[] = [
       {
         author: 'Zuplo',
         handle: '@zuplo',
-        project: 'Zudoku',
+        project: 'Zudoku™',
         version: '0',
         package: 'zudoku',
         url: 'https://zudoku.dev',
         usage: 'Powers docs.primebrick.dev — the API catalog, navigation, and MDX documentation.',
         usageLink: 'https://docs.primebrick.dev',
         usageLinkText: 'docs.primebrick.dev',
+        icon: ZUDOKU_ICON,
       },
     ],
   },
@@ -429,7 +465,7 @@ export const CREDITS: CreditSection[] = [
       {
         author: 'Evan You',
         handle: '@vitejs',
-        project: 'Vite',
+        project: 'Vite™',
         version: '8',
         package: 'vite',
         url: 'https://vitejs.dev',
@@ -439,7 +475,7 @@ export const CREDITS: CreditSection[] = [
       {
         author: 'Zoltan Kochan',
         handle: '@pnpm',
-        project: 'pnpm',
+        project: 'pnpm™',
         version: '9',
         url: 'https://pnpm.io',
         usage: 'Package manager for the entire Primebrick workspace — fast, disk-efficient, workspace-aware.',
@@ -448,7 +484,7 @@ export const CREDITS: CreditSection[] = [
       {
         author: 'Nicholas C. Zakas & the ESLint team',
         handle: '@eslint',
-        project: 'ESLint',
+        project: 'ESLint™',
         version: '10',
         package: 'eslint',
         url: 'https://eslint.org',
@@ -464,21 +500,21 @@ export const CREDITS: CreditSection[] = [
       {
         author: 'Adam Wathan & Tailwind Labs',
         handle: '@tailwindlabs',
-        project: 'Tailwind CSS',
+        project: 'Tailwind CSS™',
         version: '4',
         package: 'tailwindcss',
         url: 'https://tailwindcss.com',
         usage: 'Styling across the Primebrick frontend and this website — every color, every layout.',
-        icon: ic(siTailwindcss),
+        icon: { ...ic(siTailwindcss), hex: '38BDF8' },
       },
       {
         author: 'shadcn',
         handle: '@shadcn',
-        project: 'shadcn/ui',
+        project: 'shadcn/ui™',
         version: '0',
         url: 'https://ui.shadcn.com',
         usage: 'The component system vendored into the Primebrick frontend — buttons, dialogs, command palettes, and more.',
-        icon: ic(siShadcnui),
+        icon: { ...ic(siShadcnui), hex: 'eb4f27' },
       },
       {
         author: 'Hunter Johnston',
@@ -502,7 +538,7 @@ export const CREDITS: CreditSection[] = [
       {
         author: 'Eric Fennis',
         handle: '@lucide-icons',
-        project: 'Lucide',
+        project: 'Lucide™',
         version: '1',
         package: '@lucide/svelte',
         url: 'https://lucide.dev',
@@ -547,6 +583,7 @@ export const CREDITS: CreditSection[] = [
         package: 'clsx',
         url: 'https://github.com/lukeed/clsx',
         usage: 'Powers the clean, consistent styling you see across the Primebrick frontend.',
+        icon: ic(siGithub),
       },
       {
         author: 'Dany Castillo',
@@ -567,7 +604,7 @@ export const CREDITS: CreditSection[] = [
       {
         author: 'The PostgreSQL Global Development Group',
         handle: '@postgresql',
-        project: 'PostgreSQL',
+        project: 'PostgreSQL®',
         version: '17',
         url: 'https://www.postgresql.org',
         usage: 'The world\'s most advanced open-source database — powering every Primebrick query, transaction, and migration.',
@@ -586,7 +623,7 @@ export const CREDITS: CreditSection[] = [
       {
         author: 'The Redis team',
         handle: '@redis',
-        project: 'Redis',
+        project: 'Redis®',
         version: '6',
         package: 'redis',
         url: 'https://redis.io',
@@ -596,7 +633,7 @@ export const CREDITS: CreditSection[] = [
       {
         author: 'Derek Collison & Synadia — CNCF',
         handle: '@nats-io',
-        project: 'NATS',
+        project: 'NATS™',
         version: '2',
         package: 'nats',
         url: 'https://nats.io',
@@ -612,7 +649,7 @@ export const CREDITS: CreditSection[] = [
       {
         author: 'Yang Luo & the Casdoor team',
         handle: '@casdoor',
-        project: 'Casdoor',
+        project: 'Casdoor™',
         version: '1',
         package: 'casdoor-nodejs-sdk',
         url: 'https://casdoor.org',
@@ -627,7 +664,7 @@ export const CREDITS: CreditSection[] = [
         package: 'jose',
         url: 'https://github.com/panva/jose',
         usage: 'Keeps your login secure — multi-factor authentication and single sign-on, verified every time.',
-        icon: JOSE_ICON,
+        icon: ic(siGithub),
       },
       {
         author: 'The zxcvbn-ts team',
@@ -637,7 +674,7 @@ export const CREDITS: CreditSection[] = [
         package: '@zxcvbn-ts/core',
         url: 'https://github.com/zxcvbn-ts/zxcvbn',
         usage: 'Password strength estimation in the Primebrick frontend — the meter you see when choosing a password.',
-        icon: ZXCVBN_ICON,
+        icon: ic(siGithub),
       },
     ],
   },
@@ -648,7 +685,7 @@ export const CREDITS: CreditSection[] = [
       {
         author: 'Vercel — the AI SDK team',
         handle: '@vercel',
-        project: 'Vercel AI SDK',
+        project: 'Vercel AI SDK™',
         version: '7',
         package: 'ai',
         url: 'https://sdk.vercel.ai',
@@ -658,17 +695,17 @@ export const CREDITS: CreditSection[] = [
       {
         author: 'Anthropic',
         handle: '@modelcontextprotocol',
-        project: 'Model Context Protocol',
+        project: 'Model Context Protocol™',
         version: '2',
         package: '@modelcontextprotocol/server',
         url: 'https://modelcontextprotocol.io',
         usage: 'The open standard that lets the AI microservice discover and call backend tools.',
-        icon: ic(siAnthropic),
+        icon: MCP_ICON,
       },
       {
         author: 'Hugging Face — Xenova',
         handle: '@huggingface',
-        project: 'Transformers.js',
+        project: 'Transformers.js™',
         version: '4',
         package: '@huggingface/transformers',
         url: 'https://huggingface.co/docs/transformers.js',
@@ -684,7 +721,7 @@ export const CREDITS: CreditSection[] = [
       {
         author: 'The Mermaid team',
         handle: '@mermaid-js',
-        project: 'Mermaid',
+        project: 'Mermaid™',
         version: '11',
         package: 'mermaid',
         url: 'https://mermaid.js.org',
@@ -694,7 +731,7 @@ export const CREDITS: CreditSection[] = [
       {
         author: 'Pine Wu',
         handle: '@shikijs',
-        project: 'Shiki',
+        project: 'Shiki™',
         version: '4',
         package: 'shiki',
         url: 'https://shiki.style',
@@ -704,12 +741,12 @@ export const CREDITS: CreditSection[] = [
       {
         author: 'The TypeStrong community',
         handle: '@TypeStrong',
-        project: 'TypeDoc',
+        project: 'TypeDoc™',
         version: '0',
         package: 'typedoc',
         url: 'https://typedoc.org',
         usage: 'Generates API reference documentation for the Primebrick SDK and DAL libraries.',
-        icon: TYPEDOC_ICON,
+        icon: ic(siGithub),
       },
       {
         author: 'Bartek Pampuch',
@@ -719,7 +756,7 @@ export const CREDITS: CreditSection[] = [
         package: 'pdfmake',
         url: 'https://pdfmake.org',
         usage: 'Generates VPAT 2.5 accessibility compliance PDFs for the documentation site.',
-        icon: PDFMAKE_ICON,
+        icon: ic(siGithub),
       },
     ],
   },
@@ -730,7 +767,7 @@ export const CREDITS: CreditSection[] = [
       {
         author: 'The Handlebars team',
         handle: '@handlebars-lang',
-        project: 'Handlebars',
+        project: 'Handlebars™',
         version: '4',
         package: 'handlebars',
         url: 'https://handlebarsjs.com',
@@ -740,12 +777,12 @@ export const CREDITS: CreditSection[] = [
       {
         author: 'The ExcelJS team',
         handle: '@exceljs',
-        project: 'ExcelJS',
+        project: 'ExcelJS™',
         version: '4',
         package: 'exceljs',
         url: 'https://github.com/exceljs/exceljs',
         usage: 'Excel and CSV exports in Primebrick — your data, ready to share in a click.',
-        icon: EXCELJS_ICON,
+        icon: ic(siGithub),
       },
       {
         author: 'Erik Koopmans',
@@ -755,7 +792,7 @@ export const CREDITS: CreditSection[] = [
         package: 'html2pdf.js',
         url: 'https://github.com/eKoopmans/html2pdf.js',
         usage: 'Client-side table-to-PDF export in the Primebrick frontend.',
-        icon: HTML2PDF_ICON,
+        icon: ic(siGithub),
       },
     ],
   },
@@ -766,7 +803,7 @@ export const CREDITS: CreditSection[] = [
       {
         author: 'Anthony Fu & the Vitest team',
         handle: '@vitest-dev',
-        project: 'Vitest',
+        project: 'Vitest™',
         version: '4',
         package: 'vitest',
         url: 'https://vitest.dev',
@@ -776,7 +813,7 @@ export const CREDITS: CreditSection[] = [
       {
         author: 'Microsoft — the Playwright team',
         handle: '@microsoft',
-        project: 'Playwright',
+        project: 'Playwright®',
         version: '1',
         package: '@playwright/test',
         url: 'https://playwright.dev',
@@ -796,7 +833,7 @@ export const CREDITS: CreditSection[] = [
       {
         author: 'Kent C. Dodds & the Testing Library team',
         handle: '@testing-library',
-        project: 'Testing Library',
+        project: 'Testing Library™',
         version: '5',
         package: '@testing-library/svelte',
         url: 'https://testing-library.com',
@@ -812,7 +849,7 @@ export const CREDITS: CreditSection[] = [
       {
         author: 'Colin McDonnell',
         handle: '@colinhacks',
-        project: 'Zod',
+        project: 'Zod™',
         version: '4',
         package: 'zod',
         url: 'https://zod.dev',
@@ -827,7 +864,7 @@ export const CREDITS: CreditSection[] = [
         package: 'reflect-metadata',
         url: 'https://www.npmjs.com/package/reflect-metadata',
         usage: 'The foundation that lets Primebrick map data to databases seamlessly — behind every query and migration.',
-        icon: REFLECT_METADATA_ICON,
+        icon: ic(siGithub),
       },
       {
         author: 'Scott Motte',
@@ -847,12 +884,12 @@ export const CREDITS: CreditSection[] = [
         package: 'sharp',
         url: 'https://sharp.pixelplumbing.com',
         usage: 'High-performance image optimization at build time for this website.',
-        icon: ic(siSharp),
+        icon: SHARP_ICON,
       },
       {
         author: 'Andreas Söderlund',
         handle: '@ciscoheat',
-        project: 'sveltekit-superforms',
+        project: 'sveltekit-superforms™',
         version: '2',
         package: 'sveltekit-superforms',
         url: 'https://superforms.rocks',
@@ -862,7 +899,7 @@ export const CREDITS: CreditSection[] = [
       {
         author: 'Robert Soriano',
         handle: '@wobsoriano',
-        project: 'svelte-sonner',
+        project: 'svelte-sonner™',
         version: '1',
         package: 'svelte-sonner',
         url: 'https://github.com/wobsoriano/svelte-sonner',
@@ -872,7 +909,7 @@ export const CREDITS: CreditSection[] = [
       {
         author: 'The humanspeak team',
         handle: '@humanspeak',
-        project: 'svelte-motion',
+        project: 'svelte-motion™',
         version: '0',
         package: 'svelte-motion',
         url: 'https://github.com/humanspeak/svelte-motion',
@@ -887,7 +924,7 @@ export const CREDITS: CreditSection[] = [
         package: '@microsoft/fetch-event-source',
         url: 'https://github.com/microsoft/fetch-event-source',
         usage: 'The real-time connection behind Primebrick\'s live AI chat and service status updates.',
-        icon: FETCH_EVENT_SOURCE_ICON,
+        icon: ic(siGithub),
       },
     ],
   },
@@ -898,7 +935,7 @@ export const CREDITS: CreditSection[] = [
       {
         author: 'Cognition',
         handle: '@cognition',
-        project: 'Devin',
+        project: 'Devin™',
         version: '',
         url: 'https://devin.ai',
         usage: 'The AI software engineer that paired on architecture, code, and releases across the entire Primebrick v3 codebase.',
@@ -907,7 +944,7 @@ export const CREDITS: CreditSection[] = [
       {
         author: 'Cognition & the open SWE community',
         handle: '@cognition',
-        project: 'SWE Models',
+        project: 'SWE Models™',
         version: '1.6+',
         url: 'https://www.swe-bench.org',
         usage: 'Software-engineering-tuned models that reviewed diffs, wrote tests, and caught regressions throughout Primebrick development.',
@@ -916,7 +953,7 @@ export const CREDITS: CreditSection[] = [
       {
         author: 'Zhipu AI',
         handle: '@ZhipuAI',
-        project: 'GLM',
+        project: 'GLM™',
         version: '5.2',
         url: 'https://www.zhipuai.cn',
         usage: 'The model that powered countless coding sessions — refactoring, documentation, and the Primebrick website you are reading right now.',
@@ -925,7 +962,7 @@ export const CREDITS: CreditSection[] = [
       {
         author: 'Moonshot AI',
         handle: '@moonshot',
-        project: 'Kimi',
+        project: 'Kimi™',
         version: '2.6+',
         url: 'https://kimi.com',
         usage: 'Long-context reasoning that helped design Primebrick\'s multi-repo architecture and cross-service contracts.',
@@ -940,10 +977,10 @@ export const CREDITS: CreditSection[] = [
  * bottom of the page. Kept short and iconic.
  */
 export const MARQUEE_NAMES: string[] = [
-  'Microsoft',
+  'Microsoft®',
   'OpenJS Foundation',
   'Jarred Sumner',
-  'The Astro Team',
+  'The Astro™ Team',
   'Rich Harris',
   'Zuplo',
   'Evan You',
@@ -955,13 +992,13 @@ export const MARQUEE_NAMES: string[] = [
   'Luke Edwards',
   'Dany Castillo',
   'Brian Carlson',
-  'The Redis team',
+  'The Redis® team',
   'Derek Collison',
   'Yang Luo',
   'Filip Skokan',
-  'Vercel',
-  'Anthropic',
-  'Hugging Face',
+  'Vercel™',
+  'Anthropic™',
+  'Hugging Face™',
   'Colin McDonnell',
   'Pine Wu',
   'Anthony Fu',
