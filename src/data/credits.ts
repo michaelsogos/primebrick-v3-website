@@ -44,7 +44,7 @@ import {
   siGithub,
 } from 'simple-icons';
 
-export type SimpleIcon = { path: string; hex: string };
+export type SimpleIcon = { path: string; hex: string; viewBox?: string };
 
 export type Credit = {
   /** The person / team / org we thank by name. */
@@ -104,6 +104,16 @@ const ic = (i: { path: string; hex: string }): SimpleIcon => {
 const BITS_UI_ICON: SimpleIcon = {
   path: 'M13.8889 13.8889H25V22.2222H13.8889V13.8889ZM36.1111 36.1111V27.7778H13.8889V36.1111H36.1111ZM38.8889 0H0V50H50V13.8889H38.8889V0ZM8.33333 41.6667V8.33333H30.5556V22.2222H41.6667V41.6667H8.33333Z',
   hex: '91AEBB',
+  viewBox: '0 0 50 50',
+};
+
+/** Custom brand icon for the Svecosystem (formsnap · paneforge · runed).
+ *  Uses the runed icon mark — a rounded square with an "R" — from the
+ *  official runed repo logo SVG. */
+const SVECOSYSTEM_ICON: SimpleIcon = {
+  path: 'M22.7164 0C10.1705 0 0 10.1705 0 22.7164V98.79C0 111.335 10.1705 121.506 22.7164 121.506H98.79C111.336 121.506 121.506 111.335 121.506 98.79V22.7164C121.506 10.1705 111.336 0 98.79 0H22.7164ZM48.6384 19.836L77.9001 36.4316C79.4403 37.3047 80.4152 38.9127 80.4836 40.6741C80.5516 42.4418 79.7121 44.1115 78.2399 45.1044L53.5554 61.7486L79.384 94.0559L79.388 94.0609C81.1205 96.252 80.7921 99.452 78.5787 101.22C77.6326 101.977 76.4988 102.335 75.3938 102.335C73.8991 102.335 72.4162 101.684 71.4057 100.417L51.2228 75.1658V97.0981C51.2228 99.9185 48.943 102.198 46.1222 102.198C43.3013 102.198 41.0215 99.9185 41.0215 97.0981V24.2708C41.0215 22.4643 41.9759 20.7814 43.5563 19.867C45.1369 18.9433 47.0699 18.9494 48.6353 19.8343L48.6384 19.836ZM51.2228 51.0277V33.0234L65.7205 41.2511L51.2228 51.0277Z',
+  hex: 'EC4F27',
+  viewBox: '0 0 122 122',
 };
 
 export const CREDITS: CreditSection[] = [
@@ -263,6 +273,7 @@ export const CREDITS: CreditSection[] = [
         version: '2',
         url: 'https://www.svecosystem.dev',
         usage: 'Accessible form components, resizable panels, and Svelte 5 runes utilities across the Primebrick frontend.',
+        icon: SVECOSYSTEM_ICON,
       },
       {
         author: 'Eric Fennis',
