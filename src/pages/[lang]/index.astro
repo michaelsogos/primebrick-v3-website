@@ -26,6 +26,7 @@ const langCode = (lang ?? 'en') as LangCode;
 const t = translations[langCode] ?? translations.en;
 const isEn = langCode === 'en';
 const docsPath = 'https://docs.primebrick.dev';
+const homeHref = isEn ? '/en/' : `/${langCode}/`;
 const contactHref = isEn ? '/en/contact' : `/${langCode}/contact`;
 const thankyouHref = isEn ? '/en/thank-you' : `/${langCode}/thank-you`;
 ---
@@ -65,8 +66,9 @@ const thankyouHref = isEn ? '/en/thank-you' : `/${langCode}/thank-you`;
           <img src="/logo-full-dark.svg" alt="PrimeBrick" width="170" height="32" class="h-7 w-auto" />
         </a>
         <div class="flex items-center gap-6 text-sm">
+          <a href={homeHref} class="text-sky-400 transition-colors" aria-current="page">{t.nav.home}</a>
           <a href={docsPath} class="text-slate-300 hover:text-sky-400 transition-colors" target="_blank" rel="noopener">{t.nav.docs}</a>
-          <a href={contactHref} class="text-sky-400 transition-colors">{t.nav.contact}</a>
+          <a href={contactHref} class="text-slate-300 hover:text-sky-400 transition-colors">{t.nav.contact}</a>
           <a href={thankyouHref} class="text-slate-300 hover:text-sky-400 transition-colors">{t.nav.thankyou}</a>
           <a
             href="https://opensource.org/license/MIT"
@@ -738,7 +740,14 @@ const thankyouHref = isEn ? '/en/thank-you' : `/${langCode}/thank-you`;
           <p class="mx-auto mt-4 max-w-2xl text-lg text-slate-400">{t.infrastructure.text}</p>
         </div>
         <div class="mt-12 overflow-x-auto rounded-2xl border border-slate-800/50 bg-slate-900/30 p-8 backdrop-blur-sm">
-          <svg viewBox="0 0 900 520" class="mx-auto" style="max-width: 900px; width: 100%; height: auto;" xmlns="http://www.w3.org/2000/svg">
+          <svg viewBox="0 0 900 540" class="mx-auto" style="max-width: 900px; width: 100%; height: auto;" xmlns="http://www.w3.org/2000/svg">
+            <!-- Arrow marker -->
+            <defs>
+              <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+                <path d="M0,0 L0,6 L9,3 z" fill="#475569" />
+              </marker>
+            </defs>
+
             <!-- Connections (drawn first so they're behind boxes) -->
             <!-- Browser → SvelteKit -->
             <line x1="180" y1="80" x2="370" y2="80" stroke="#38bdf8" stroke-width="2" marker-end="url(#arrow)" />
@@ -747,30 +756,29 @@ const thankyouHref = isEn ? '/en/thank-you' : `/${langCode}/thank-you`;
             <line x1="520" y1="80" x2="710" y2="80" stroke="#38bdf8" stroke-width="2" marker-end="url(#arrow)" />
             <text x="615" y="72" fill="#94a3b8" font-size="10" text-anchor="middle">HTTP /api/v1/</text>
             <!-- Backend → Casdoor -->
-            <line x1="780" y1="120" x2="780" y2="210" stroke="#818cf8" stroke-width="2" marker-end="url(#arrow)" />
-            <text x="830" y="170" fill="#94a3b8" font-size="10">OAuth2</text>
+            <line x1="780" y1="120" x2="780" y2="150" stroke="#818cf8" stroke-width="2" marker-end="url(#arrow)" />
+            <text x="830" y="140" fill="#94a3b8" font-size="10">OIDC</text>
+            <!-- Backend → Redis -->
+            <line x1="710" y1="100" x2="520" y2="170" stroke="#dc2626" stroke-width="2" marker-end="url(#arrow)" />
+            <text x="600" y="130" fill="#94a3b8" font-size="9">cache · presence</text>
             <!-- Backend → PostgreSQL -->
             <line x1="780" y1="120" x2="450" y2="430" stroke="#22c55e" stroke-width="2" marker-end="url(#arrow)" />
-            <text x="620" y="280" fill="#94a3b8" font-size="10">SQL via DAL</text>
+            <text x="630" y="290" fill="#94a3b8" font-size="10">SQL via DAL</text>
             <!-- Backend ↔ NATS -->
-            <line x1="710" y1="100" x2="280" y2="280" stroke="#f59e0b" stroke-width="2" stroke-dasharray="4" marker-end="url(#arrow)" />
-            <text x="480" y="185" fill="#94a3b8" font-size="10">NATS</text>
-            <!-- Microservices ↔ NATS -->
-            <line x1="180" y1="280" x2="180" y2="280" stroke="#f59e0b" stroke-width="2" stroke-dasharray="4" />
-            <line x1="180" y1="310" x2="180" y2="310" stroke="#f59e0b" stroke-width="2" stroke-dasharray="4" />
+            <line x1="710" y1="100" x2="250" y2="280" stroke="#f59e0b" stroke-width="2" stroke-dasharray="4" marker-end="url(#arrow)" />
+            <text x="470" y="180" fill="#94a3b8" font-size="10">NATS pub/sub</text>
+            <!-- Backend SSE proxy → Microservices -->
+            <line x1="710" y1="110" x2="100" y2="250" stroke="#38bdf8" stroke-width="1.5" stroke-dasharray="2" marker-end="url(#arrow)" />
+            <text x="380" y="165" fill="#94a3b8" font-size="9">SSE proxy /ws/:code</text>
             <!-- MS → PostgreSQL -->
-            <line x1="180" y1="310" x2="370" y2="450" stroke="#22c55e" stroke-width="2" marker-end="url(#arrow)" />
-            <text x="260" y="390" fill="#94a3b8" font-size="10">SQL via DAL</text>
-            <!-- Backend proxy → Microservices -->
-            <line x1="710" y1="110" x2="250" y2="260" stroke="#38bdf8" stroke-width="1.5" stroke-dasharray="2" marker-end="url(#arrow)" />
-            <text x="500" y="170" fill="#94a3b8" font-size="9">proxy /ws/:code</text>
-
-            <!-- Arrow marker -->
-            <defs>
-              <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
-                <path d="M0,0 L0,6 L9,3 z" fill="#475569" />
-              </marker>
-            </defs>
+            <line x1="70" y1="330" x2="370" y2="450" stroke="#22c55e" stroke-width="2" marker-end="url(#arrow)" />
+            <text x="200" y="400" fill="#94a3b8" font-size="10">SQL via DAL</text>
+            <!-- MS → Redis (rate limit) -->
+            <line x1="100" y1="250" x2="370" y2="180" stroke="#dc2626" stroke-width="1.5" stroke-dasharray="3" marker-end="url(#arrow)" />
+            <text x="180" y="215" fill="#94a3b8" font-size="9">rate limit</text>
+            <!-- MS ↔ NATS (registration) -->
+            <line x1="100" y1="280" x2="110" y2="280" stroke="#f59e0b" stroke-width="2" stroke-dasharray="4" marker-end="url(#arrow)" />
+            <text x="105" y="272" fill="#94a3b8" font-size="8" text-anchor="middle">register</text>
 
             <!-- Browser -->
             <rect x="40" y="50" width="140" height="60" rx="8" fill="#0f172a" stroke="#1e293b" stroke-width="1.5" />
@@ -786,27 +794,34 @@ const thankyouHref = isEn ? '/en/thank-you' : `/${langCode}/thank-you`;
             <rect x="710" y="50" width="140" height="70" rx="8" fill="#0f172a" stroke="#38bdf8" stroke-width="2" />
             <text x="780" y="78" fill="#38bdf8" font-size="12" font-weight="700" text-anchor="middle">Backend</text>
             <text x="780" y="95" fill="#64748b" font-size="10" text-anchor="middle">Express · port 3001</text>
-            <text x="780" y="110" fill="#475569" font-size="9" text-anchor="middle">Auth · RBAC · Proxy · Registry</text>
+            <text x="780" y="110" fill="#475569" font-size="9" text-anchor="middle">Auth · RBAC · Proxy · MCP</text>
+
+            <!-- Redis (NEW) -->
+            <rect x="370" y="150" width="150" height="60" rx="8" fill="#0f172a" stroke="#dc2626" stroke-width="1.5" />
+            <text x="445" y="178" fill="#dc2626" font-size="12" font-weight="600" text-anchor="middle">Redis</text>
+            <text x="445" y="195" fill="#64748b" font-size="10" text-anchor="middle">port 6379 · cache · presence</text>
 
             <!-- Casdoor -->
-            <rect x="710" y="210" width="140" height="60" rx="8" fill="#0f172a" stroke="#818cf8" stroke-width="1.5" />
-            <text x="780" y="238" fill="#818cf8" font-size="12" font-weight="600" text-anchor="middle">Casdoor</text>
-            <text x="780" y="255" fill="#64748b" font-size="10" text-anchor="middle">OAuth2 · port 8000</text>
+            <rect x="710" y="150" width="140" height="60" rx="8" fill="#0f172a" stroke="#818cf8" stroke-width="1.5" />
+            <text x="780" y="178" fill="#818cf8" font-size="12" font-weight="600" text-anchor="middle">Casdoor</text>
+            <text x="780" y="195" fill="#64748b" font-size="10" text-anchor="middle">OIDC · port 8000</text>
 
             <!-- NATS -->
             <rect x="110" y="250" width="140" height="60" rx="8" fill="#0f172a" stroke="#f59e0b" stroke-width="1.5" />
             <text x="180" y="278" fill="#f59e0b" font-size="12" font-weight="600" text-anchor="middle">NATS</text>
             <text x="180" y="295" fill="#64748b" font-size="10" text-anchor="middle">port 4222 · pub/sub</text>
 
-            <!-- Microservices -->
-            <rect x="40" y="250" width="60" height="60" rx="6" fill="#0f172a" stroke="#22c55e" stroke-width="1.5" />
-            <text x="70" y="278" fill="#22c55e" font-size="10" font-weight="600" text-anchor="middle">MS</text>
-            <text x="70" y="295" fill="#475569" font-size="8" text-anchor="middle">dynamic</text>
+            <!-- Microservices (AI + EmailSender) -->
+            <rect x="40" y="250" width="60" height="80" rx="6" fill="#0f172a" stroke="#22c55e" stroke-width="1.5" />
+            <text x="70" y="270" fill="#22c55e" font-size="10" font-weight="600" text-anchor="middle">MS</text>
+            <text x="70" y="285" fill="#475569" font-size="8" text-anchor="middle">AI</text>
+            <text x="70" y="298" fill="#475569" font-size="8" text-anchor="middle">Email</text>
+            <text x="70" y="318" fill="#475569" font-size="7" text-anchor="middle">dynamic</text>
 
             <!-- SDK badge -->
-            <rect x="40" y="330" width="120" height="40" rx="6" fill="#1e293b" stroke="#475569" stroke-width="1" stroke-dasharray="3" />
-            <text x="100" y="348" fill="#94a3b8" font-size="10" font-weight="600" text-anchor="middle">@primebrick/sdk</text>
-            <text x="100" y="362" fill="#475569" font-size="8" text-anchor="middle">registration · NATS · health</text>
+            <rect x="40" y="350" width="150" height="40" rx="6" fill="#1e293b" stroke="#475569" stroke-width="1" stroke-dasharray="3" />
+            <text x="115" y="368" fill="#94a3b8" font-size="10" font-weight="600" text-anchor="middle">@primebrick/sdk</text>
+            <text x="115" y="382" fill="#475569" font-size="8" text-anchor="middle">NATS · cache · presence · health</text>
 
             <!-- PostgreSQL -->
             <rect x="370" y="420" width="160" height="70" rx="8" fill="#0f172a" stroke="#22c55e" stroke-width="2" />
@@ -815,13 +830,13 @@ const thankyouHref = isEn ? '/en/thank-you' : `/${langCode}/thank-you`;
             <text x="450" y="480" fill="#475569" font-size="9" text-anchor="middle">single data store</text>
 
             <!-- DAL badge -->
-            <rect x="560" y="430" width="120" height="40" rx="6" fill="#1e293b" stroke="#475569" stroke-width="1" stroke-dasharray="3" />
-            <text x="620" y="448" fill="#94a3b8" font-size="10" font-weight="600" text-anchor="middle">@primebrick/dal</text>
-            <text x="620" y="462" fill="#475569" font-size="8" text-anchor="middle">pool · repository · types</text>
+            <rect x="560" y="430" width="150" height="40" rx="6" fill="#1e293b" stroke="#475569" stroke-width="1" stroke-dasharray="3" />
+            <text x="635" y="448" fill="#94a3b8" font-size="10" font-weight="600" text-anchor="middle">@primebrick/dal</text>
+            <text x="635" y="462" fill="#475569" font-size="8" text-anchor="middle">pool · repository · audit</text>
 
             <!-- Docker boundary -->
-            <rect x="20" y="230" width="860" height="280" rx="12" fill="none" stroke="#1e293b" stroke-width="1" stroke-dasharray="6" />
-            <text x="40" y="225" fill="#475569" font-size="10" font-weight="500">Docker</text>
+            <rect x="20" y="130" width="860" height="370" rx="12" fill="none" stroke="#1e293b" stroke-width="1" stroke-dasharray="6" />
+            <text x="40" y="125" fill="#475569" font-size="10" font-weight="500">Docker</text>
           </svg>
         </div>
       </div>
