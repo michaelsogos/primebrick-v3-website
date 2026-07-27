@@ -1,0 +1,59 @@
+---
+/**
+ * Static pulsing heart SVG for the "Spirit of Open Source" section.
+ * Pure Astro — no interactivity needed. Animation via Tailwind + a custom
+ * keyframe defined inline (scoped to this component via a unique class).
+ *
+ * Props:
+ *  - class: extra classes for sizing/positioning
+ *  - ariaLabel: accessible label (localized)
+ */
+interface Props {
+  class?: string;
+  ariaLabel?: string;
+}
+const { class: className = 'h-12 w-12', ariaLabel = 'Open source heart' } = Astro.props;
+---
+
+<svg
+  class={`thankyou-heart ${className}`}
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="1.5"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  role="img"
+  aria-label={ariaLabel}
+>
+  <path
+    d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.29 1.51 4.04 3 5.5l7 7Z"
+    fill="url(#thankyou-heart-grad)"
+    stroke="url(#thankyou-heart-grad)"
+  />
+  <defs>
+    <linearGradient id="thankyou-heart-grad" x1="0" y1="0" x2="24" y2="24" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#38bdf8" />
+      <stop offset="0.5" stop-color="#818cf8" />
+      <stop offset="1" stop-color="#22d3ee" />
+    </linearGradient>
+  </defs>
+</svg>
+
+<style>
+  .thankyou-heart {
+    animation: thankyou-heartbeat 2.4s ease-in-out infinite;
+    transform-origin: center;
+    filter: drop-shadow(0 0 12px rgba(56, 189, 248, 0.45));
+  }
+  @keyframes thankyou-heartbeat {
+    0%, 100% { transform: scale(1); }
+    15% { transform: scale(1.12); }
+    30% { transform: scale(1); }
+    45% { transform: scale(1.08); }
+    60% { transform: scale(1); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .thankyou-heart { animation: none; }
+  }
+</style>
