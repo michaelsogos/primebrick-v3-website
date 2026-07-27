@@ -162,6 +162,11 @@ export const translations = {
       title: 'Every component, mapped.',
       text: 'From browser to database — clear ports, protocols, and data flow. Dockerized for local dev, Terraform®-ready for production.',
     },
+    knowledgePipeline: {
+      badge: 'AI Knowledge Pipeline',
+      title: 'From MDX docs to RAG — end to end.',
+      text: 'Docs are written as MDX in each repo, synced by CI, embedded locally with Transformers.js™, and stored in pgvector™. The AI microservice retrieves context and sends prompts to a separate LLM container — no cloud calls by default.',
+    },
     architecture: {
       badge: 'Architecture',
       title: 'Layered by design.',
@@ -459,6 +464,11 @@ export const translations = {
       badge: 'Infrastruttura',
       title: 'Ogni componente, mappato.',
       text: 'Dal browser al database — porte, protocolli e flusso dei dati chiari. Dockerizzato per lo sviluppo locale, pronto con Terraform® per la produzione.',
+    },
+    knowledgePipeline: {
+      badge: 'Pipeline Knowledge AI',
+      title: 'Dai documenti MDX al RAG — end to end.',
+      text: 'I docs sono scritti come MDX in ogni repo, sincronizzati dalla CI, embeddati localmente con Transformers.js™ e salvati in pgvector™. Il microservizio AI recupera il contesto e invia prompt a un container LLM separato — nessuna chiamata cloud di default.',
     },
     architecture: {
       badge: 'Architettura',
@@ -758,6 +768,11 @@ export const translations = {
       title: 'Jede Komponente, kartiert.',
       text: 'Vom Browser zur Datenbank — klare Ports, Protokolle und Datenfluss. Dockerisiert für lokale Entwicklung, Terraform®-bereit für Produktion.',
     },
+    knowledgePipeline: {
+      badge: 'AI Knowledge-Pipeline',
+      title: 'Von MDX-Docs zu RAG — end to end.',
+      text: 'Docs werden als MDX in jedem Repo geschrieben, von CI synchronisiert, lokal mit Transformers.js™ eingebettet und in pgvector™ gespeichert. Der AI-Microservice ruft Kontext ab und sendet Prompts an einen separaten LLM-Container — standardmäßig keine Cloud-Aufrufe.',
+    },
     architecture: {
       badge: 'Architektur',
       title: 'Schichtweise gestaltet.',
@@ -1055,6 +1070,11 @@ export const translations = {
       badge: 'Infraestructura',
       title: 'Cada componente, mapeado.',
       text: 'Del navegador a la base de datos — puertos, protocolos y flujo de datos claros. Dockerizado para desarrollo local, listo con Terraform® para producción.',
+    },
+    knowledgePipeline: {
+      badge: 'Pipeline de Conocimiento AI',
+      title: 'De docs MDX a RAG — end to end.',
+      text: 'Los docs se escriben como MDX en cada repo, sincronizados por CI, embebidos localmente con Transformers.js™ y almacenados en pgvector™. El microservicio AI recupera contexto y envía prompts a un contenedor LLM separado — sin llamadas cloud por defecto.',
     },
     architecture: {
       badge: 'Arquitectura',
@@ -1354,6 +1374,11 @@ export const translations = {
       title: 'Cada componente, mapeado.',
       text: 'Do navegador à base de dados — portas, protocolos e fluxo de dados claros. Dockerizado para desenvolvimento local, pronto com Terraform® para produção.',
     },
+    knowledgePipeline: {
+      badge: 'Pipeline de Conhecimento AI',
+      title: 'De docs MDX ao RAG — end to end.',
+      text: 'Os docs são escritos como MDX em cada repo, sincronizados pelo CI, incorporados localmente com Transformers.js™ e armazenados no pgvector™. O microsserviço AI recupera contexto e envia prompts para um contêiner LLM separado — sem chamadas cloud por padrão.',
+    },
     architecture: {
       badge: 'Arquitetura',
       title: 'Estratificado por design.',
@@ -1651,6 +1676,11 @@ export const translations = {
       badge: 'Infrastructure',
       title: 'Chaque composant, cartographié.',
       text: 'Du navigateur à la base de données — ports, protocoles et flux de données clairs. Dockerisé pour le développement local, prêt avec Terraform® pour la production.',
+    },
+    knowledgePipeline: {
+      badge: 'Pipeline de Connaissance AI',
+      title: 'Des docs MDX au RAG — end to end.',
+      text: 'Les docs sont écrits en MDX dans chaque repo, synchronisés par CI, intégrés localement avec Transformers.js™ et stockés dans pgvector™. Le microservice AI récupère le contexte et envoie des prompts à un conteneur LLM séparé — aucun appel cloud par défaut.',
     },
     architecture: {
       badge: 'Architecture',
