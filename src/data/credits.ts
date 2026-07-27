@@ -70,10 +70,26 @@ export type CreditSection = {
   items: Credit[];
 };
 
-const ic = (i: { path: string; hex: string }): SimpleIcon => ({
-  path: i.path,
-  hex: i.hex,
-});
+/**
+ * Wrap a simple-icon, overriding brand colors that are too dark to see on
+ * the slate-950 background. Brands like Bun, Express, shadcn, Vercel,
+ * Handlebars, GitHub, Anthropic, simple-icons use near-black hex values
+ * that are invisible on dark backgrounds — we replace them with a light
+ * slate tone so the logo shape is always readable.
+ */
+const VISIBLE_FALLBACK = 'cbd5e1'; // slate-300
+
+const ic = (i: { path: string; hex: string }): SimpleIcon => {
+  const { hex } = i;
+  const r = parseInt(hex.slice(0, 2), 16);
+  const g = parseInt(hex.slice(2, 4), 16);
+  const b = parseInt(hex.slice(4, 6), 16);
+  const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+  return {
+    path: i.path,
+    hex: luminance < 0.3 ? VISIBLE_FALLBACK : hex,
+  };
+};
 
 export const CREDITS: CreditSection[] = [
   {
