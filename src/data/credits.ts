@@ -85,7 +85,7 @@ export type CreditSection = {
  * that are invisible on dark backgrounds — we replace them with a light
  * slate tone so the logo shape is always readable.
  */
-const VISIBLE_FALLBACK = 'cbd5e1'; // slate-300
+const VISIBLE_FALLBACK = 'f1f5f9'; // slate-100 — bright enough on slate-950
 
 const ic = (i: { path: string; hex: string }): SimpleIcon => {
   const { hex } = i;
@@ -95,7 +95,7 @@ const ic = (i: { path: string; hex: string }): SimpleIcon => {
   const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
   return {
     path: i.path,
-    hex: luminance < 0.3 ? VISIBLE_FALLBACK : hex,
+    hex: luminance < 0.4 ? VISIBLE_FALLBACK : hex,
   };
 };
 
