@@ -44,7 +44,14 @@ import {
   siGithub,
 } from 'simple-icons';
 
-export type SimpleIcon = { path: string; hex: string; viewBox?: string };
+export type SimpleIcon = {
+  path: string;
+  hex: string;
+  viewBox?: string;
+  /** Optional background rect fill — for icons like Fontsource that have
+   *  a colored rounded-square background behind the foreground path. */
+  bgFill?: string;
+};
 
 export type Credit = {
   /** The person / team / org we thank by name. */
@@ -114,6 +121,16 @@ const SVECOSYSTEM_ICON: SimpleIcon = {
   path: 'M22.7164 0C10.1705 0 0 10.1705 0 22.7164V98.79C0 111.335 10.1705 121.506 22.7164 121.506H98.79C111.336 121.506 121.506 111.335 121.506 98.79V22.7164C121.506 10.1705 111.336 0 98.79 0H22.7164ZM48.6384 19.836L77.9001 36.4316C79.4403 37.3047 80.4152 38.9127 80.4836 40.6741C80.5516 42.4418 79.7121 44.1115 78.2399 45.1044L53.5554 61.7486L79.384 94.0559L79.388 94.0609C81.1205 96.252 80.7921 99.452 78.5787 101.22C77.6326 101.977 76.4988 102.335 75.3938 102.335C73.8991 102.335 72.4162 101.684 71.4057 100.417L51.2228 75.1658V97.0981C51.2228 99.9185 48.943 102.198 46.1222 102.198C43.3013 102.198 41.0215 99.9185 41.0215 97.0981V24.2708C41.0215 22.4643 41.9759 20.7814 43.5563 19.867C45.1369 18.9433 47.0699 18.9494 48.6353 19.8343L48.6384 19.836ZM51.2228 51.0277V33.0234L65.7205 41.2511L51.2228 51.0277Z',
   hex: 'EC4F27',
   viewBox: '0 0 122 122',
+};
+
+/** Custom brand icon for Fontsource — a purple rounded square with a
+ *  white "F" letter mark. Extracted from the official fontsource repo
+ *  icon.svg. Uses bgFill for the colored background rect. */
+const FONTSOURCE_ICON: SimpleIcon = {
+  path: 'M11.7 7.2H20.1L22.5 7.2V12.6H20.1V9.6L11.7 9.6V13.8L17.1 13.8V16.2H11.7V20.4H13.5V22.8H11.7H9.3L7.5 22.8V20.4H9.3V16.2H7.5V13.8H9.3V9.6H7.5V7.2L9.3 7.2H11.7Z',
+  hex: 'FFFFFF',
+  viewBox: '0 0 30 30',
+  bgFill: '625BF8',
 };
 
 export const CREDITS: CreditSection[] = [
@@ -303,6 +320,7 @@ export const CREDITS: CreditSection[] = [
         package: '@fontsource-variable/inter',
         url: 'https://fontsource.org',
         usage: 'The Inter variable font, self-hosted in the Primebrick frontend.',
+        icon: FONTSOURCE_ICON,
       },
       {
         author: 'Panayiotis Lipiridis',

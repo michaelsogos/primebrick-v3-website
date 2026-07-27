@@ -143,16 +143,19 @@
             <div class="mb-4 flex items-start justify-between">
               {#if item.icon}
                 <span
-                  class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border border-slate-700/50 bg-slate-950/60 transition-transform group-hover:scale-110"
+                  class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border border-slate-700/50 transition-transform group-hover:scale-110 {item.icon.bgFill ? '' : 'bg-slate-950/60'}"
                   style={`color:#${item.icon.hex}`}
                   aria-hidden="true"
                 >
                   <svg
-                    class="h-7 w-7"
+                    class={item.icon.bgFill ? 'h-12 w-12' : 'h-7 w-7'}
                     viewBox={item.icon.viewBox ?? '0 0 24 24'}
                     fill="currentColor"
                     role="img"
                   >
+                    {#if item.icon.bgFill}
+                      <rect width="100%" height="100%" rx="4" fill={`#${item.icon.bgFill}`} />
+                    {/if}
                     <path d={item.icon.path} />
                   </svg>
                 </span>
