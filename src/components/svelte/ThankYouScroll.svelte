@@ -136,55 +136,70 @@
             target="_blank"
             rel="noopener"
             data-reveal
-            class="group flex items-center gap-4 rounded-2xl border border-slate-800/50 bg-slate-900/30 p-5 backdrop-blur-sm transition-all duration-700 hover:-translate-y-1 hover:border-sky-500/40 hover:bg-slate-900/60 data-[shown=true]:translate-y-0 data-[shown=true]:opacity-100 data-[shown=false]:translate-y-6 data-[shown=false]:opacity-0"
+            class="group flex flex-col rounded-2xl border border-slate-800/50 bg-slate-900/30 p-6 backdrop-blur-sm transition-all duration-700 hover:-translate-y-1 hover:border-sky-500/40 hover:bg-slate-900/60 data-[shown=true]:translate-y-0 data-[shown=true]:opacity-100 data-[shown=false]:translate-y-6 data-[shown=false]:opacity-0"
             style={`transition-delay:${Math.min(ii, 8) * 60}ms`}
           >
-            {#if item.icon}
-              <span
-                class="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-slate-700/50 bg-slate-950/60 transition-transform group-hover:scale-110"
-                style={`color:#${item.icon.hex}`}
-                aria-hidden="true"
-              >
-                <svg
-                  class="h-6 w-6"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                  role="img"
+            <!-- Logo + external-link icon -->
+            <div class="mb-4 flex items-start justify-between">
+              {#if item.icon}
+                <span
+                  class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border border-slate-700/50 bg-slate-950/60 transition-transform group-hover:scale-110"
+                  style={`color:#${item.icon.hex}`}
+                  aria-hidden="true"
                 >
-                  <path d={item.icon.path} />
-                </svg>
-              </span>
-            {:else}
-              <span
-                class="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-slate-700/50 bg-gradient-to-br from-slate-800 to-slate-900 text-xs font-bold text-slate-300 transition-transform group-hover:scale-110"
+                  <svg
+                    class="h-7 w-7"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                    role="img"
+                  >
+                    <path d={item.icon.path} />
+                  </svg>
+                </span>
+              {:else}
+                <span
+                  class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border border-slate-700/50 bg-gradient-to-br from-sky-900/40 to-indigo-900/40 text-sm font-bold text-sky-300 transition-transform group-hover:scale-110"
+                  aria-hidden="true"
+                >
+                  {item.project.slice(0, 2).toUpperCase()}
+                </span>
+              {/if}
+              <svg
+                class="h-4 w-4 shrink-0 text-slate-600 transition-all group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-sky-400"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
                 aria-hidden="true"
               >
-                {item.name.slice(0, 2).toUpperCase()}
-              </span>
-            {/if}
+                <path d="M7 17 17 7" />
+                <path d="M7 7h10v10" />
+              </svg>
+            </div>
 
-            <span class="min-w-0 flex-1">
-              <span class="block truncate font-semibold text-slate-100 group-hover:text-sky-400 transition-colors">
-                {item.name}
-              </span>
-              {#if item.package}
-                <span class="block truncate text-xs text-slate-500">{item.package}</span>
-              {/if}
-            </span>
+            <!-- "We thank" — the storytelling line -->
+            <p class="mb-1 text-xs font-medium uppercase tracking-wide text-sky-400/80">
+              {labels.weThank ?? 'We thank'}
+            </p>
+            <p class="mb-1 font-semibold leading-snug text-slate-100 group-hover:text-sky-400 transition-colors">
+              {item.author}
+            </p>
+            <p class="mb-3 text-xs text-slate-500">
+              {item.handle}
+            </p>
 
-            <svg
-              class="h-4 w-4 shrink-0 text-slate-600 transition-all group-hover:translate-x-0.5 group-hover:text-sky-400"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              aria-hidden="true"
-            >
-              <path d="M7 17 17 7" />
-              <path d="M7 7h10v10" />
-            </svg>
+            <!-- Project name -->
+            <p class="mb-2 text-sm font-bold text-slate-300">
+              {item.project}
+            </p>
+
+            <!-- Usage — what it's used for in Primebrick -->
+            <p class="mt-auto text-sm leading-relaxed text-slate-400">
+              <span class="text-sky-400" aria-hidden="true">&rarr;</span>
+              {item.usage}
+            </p>
           </a>
         {/each}
       </div>
