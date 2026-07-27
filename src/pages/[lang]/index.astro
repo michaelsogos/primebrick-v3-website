@@ -188,7 +188,7 @@ const contactHref = isEn ? '/en/contact' : `/${langCode}/contact`;
           <h2 class="text-3xl font-bold text-white sm:text-4xl">{t.ai.title}</h2>
           <p class="mx-auto mt-4 max-w-2xl text-lg text-slate-400">{t.ai.text}</p>
         </div>
-        <div class="mt-12 grid gap-6 md:grid-cols-3">
+        <div class="mt-12 grid gap-6 sm:grid-cols-2">
           {t.ai.cards.map((card, i) => (
             <div class="group relative rounded-2xl border border-slate-800/50 bg-slate-900/30 p-6 backdrop-blur-sm transition-all hover:border-indigo-500/30 hover:bg-slate-900/50">
               <div class="mb-4 flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-indigo-500/20 to-sky-500/20 text-indigo-400">
@@ -201,11 +201,33 @@ const contactHref = isEn ? '/en/contact' : `/${langCode}/contact`;
                 {i === 2 && (
                   <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                 )}
+                {i === 3 && (
+                  <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" /></svg>
+                )}
               </div>
               <h3 class="text-lg font-semibold text-white">{card.title}</h3>
               <p class="mt-2 text-sm text-slate-400">{card.text}</p>
             </div>
           ))}
+        </div>
+        <!-- Privacy callout -->
+        <div class="mt-8 flex flex-col items-center gap-4 rounded-2xl border border-emerald-500/30 bg-emerald-500/5 p-6 text-center sm:flex-row sm:text-left">
+          <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-emerald-500/10 text-emerald-400">
+            <svg class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2" /><path d="M7 11V7a5 5 0 0110 0v4" /></svg>
+          </div>
+          <div>
+            <div class="mb-1 inline-flex items-center gap-2 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-3 py-1 text-xs font-medium text-emerald-300">
+              {t.ai.privacyBadge}
+            </div>
+            <p class="text-sm text-slate-300">{t.ai.privacyNote}</p>
+          </div>
+        </div>
+        <!-- Model badge footer -->
+        <div class="mt-6 text-center">
+          <span class="inline-flex items-center gap-2 rounded-full border border-slate-700/50 bg-slate-900/50 px-4 py-2 text-xs text-slate-400">
+            <svg class="h-3.5 w-3.5 text-indigo-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10" /><path d="M12 6v6l4 2" /></svg>
+            {t.ai.modelNote}
+          </span>
         </div>
       </div>
     </section>
