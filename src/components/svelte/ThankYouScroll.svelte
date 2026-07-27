@@ -190,9 +190,10 @@
               {item.handle}
             </p>
 
-            <!-- Project name -->
+            <!-- Project name + version -->
             <p class="mb-2 text-sm font-bold text-slate-300">
               {item.project}
+              <span class="ml-1.5 rounded bg-slate-800/80 px-1.5 py-0.5 text-xs font-mono text-sky-400/90">{item.version}</span>
             </p>
 
             <!-- Usage — what it's used for in Primebrick -->
