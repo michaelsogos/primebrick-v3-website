@@ -4,8 +4,10 @@ import LanguageSwitcher from '../../components/svelte/LanguageSwitcher.svelte';
 import GitHubDropdown from '../../components/svelte/GitHubDropdown.svelte';
 import GitHubIcon from '../../components/GitHubIcon.astro';
 import TopBanner from '../../components/astro/TopBanner.astro';
-import ContactForm from '../../components/svelte/ContactForm.svelte';
-import ObfuscatedEmail from '../../components/svelte/ObfuscatedEmail.svelte';
+import OpenSourceHeart from '../../components/OpenSourceHeart.astro';
+import ThankYouScroll from '../../components/svelte/ThankYouScroll.svelte';
+import GratitudeMarquee from '../../components/svelte/GratitudeMarquee.svelte';
+import { CREDITS, MARQUEE_NAMES } from '../../data/credits';
 import pkg from '../../../package.json';
 import '../../styles/global.css';
 
@@ -27,7 +29,18 @@ const docsPath = 'https://docs.primebrick.dev';
 const contactHref = isEn ? '/en/contact' : `/${langCode}/contact`;
 const homeHref = isEn ? '/en/' : `/${langCode}/`;
 const thankyouHref = isEn ? '/en/thank-you' : `/${langCode}/thank-you`;
-const turnstileSitekey = import.meta.env.PUBLIC_TURNSTILE_SITEKEY ?? '';
+
+// Localized section labels for the credits sections.
+const sectionLabels: Record<string, string> = {
+  sectionCore: t.thankyou.sectionCore,
+  sectionUi: t.thankyou.sectionUi,
+  sectionData: t.thankyou.sectionData,
+  sectionAuth: t.thankyou.sectionAuth,
+  sectionAi: t.thankyou.sectionAi,
+  sectionDocs: t.thankyou.sectionDocs,
+  sectionBuild: t.thankyou.sectionBuild,
+  sectionUtils: t.thankyou.sectionUtils,
+};
 ---
 
 <!doctype html>
@@ -35,26 +48,19 @@ const turnstileSitekey = import.meta.env.PUBLIC_TURNSTILE_SITEKEY ?? '';
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content={t.contact.subtitle.slice(0, 160)} />
+    <meta name="description" content={t.thankyou.subtitle.slice(0, 160)} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
     <link rel="icon" type="image/png" sizes="512x512" href="/favicon-512.png" />
     <link rel="icon" sizes="any" href="/favicon.ico" />
     <link rel="apple-touch-icon" href="/favicon-512.png" />
-    <title>PrimeBrick — {t.contact.title}</title>
+    <title>PrimeBrick — {t.thankyou.title}</title>
     {LANGUAGES.map((l) => (
-      <link rel="alternate" hreflang={l.hreflang} href={`https://primebrick.dev${l.code === 'en' ? '/en/contact' : `/${l.code}/contact`}`} />
+      <link rel="alternate" hreflang={l.hreflang} href={`https://primebrick.dev${l.code === 'en' ? '/en/thank-you' : `/${l.code}/thank-you`}`} />
     ))}
-    <link rel="alternate" hreflang="x-default" href="https://primebrick.dev/en/contact" />
+    <link rel="alternate" hreflang="x-default" href="https://primebrick.dev/en/thank-you" />
   </head>
   <body class="min-h-screen bg-slate-950 text-slate-100 antialiased">
-    <!-- Ambient gradient background -->
-    <div class="pointer-events-none fixed inset-0 overflow-hidden">
-      <div class="absolute -top-40 left-1/2 h-[500px] w-[800px] -translate-x-1/2 rounded-full bg-sky-500/10 blur-[120px]"></div>
-      <div class="absolute top-1/3 -right-40 h-[400px] w-[400px] rounded-full bg-indigo-500/10 blur-[100px]"></div>
-      <div class="absolute bottom-0 -left-40 h-[400px] w-[400px] rounded-full bg-cyan-500/10 blur-[100px]"></div>
-    </div>
-
     <!-- Top banner (sticky, non-dismissible) -->
     <TopBanner text={t.banner.text} href={contactHref} />
 
@@ -66,8 +72,8 @@ const turnstileSitekey = import.meta.env.PUBLIC_TURNSTILE_SITEKEY ?? '';
         </a>
         <div class="flex items-center gap-6 text-sm">
           <a href={docsPath} class="text-slate-300 hover:text-sky-400 transition-colors" target="_blank" rel="noopener">{t.nav.docs}</a>
-          <a href={contactHref} class="text-sky-400 transition-colors">{t.nav.contact}</a>
-          <a href={thankyouHref} class="text-slate-300 hover:text-sky-400 transition-colors">{t.nav.thankyou}</a>
+          <a href={contactHref} class="text-slate-300 hover:text-sky-400 transition-colors">{t.nav.contact}</a>
+          <a href={thankyouHref} class="text-sky-400 transition-colors" aria-current="page">{t.nav.thankyou}</a>
           <a
             href="https://opensource.org/license/MIT"
             class="text-slate-300 hover:text-sky-400 transition-colors"
@@ -106,31 +112,79 @@ const turnstileSitekey = import.meta.env.PUBLIC_TURNSTILE_SITEKEY ?? '';
       })();
     </script>
 
-    <!-- Contact -->
-    <section class="relative z-10 px-6 pt-20 pb-24">
-      <div class="mx-auto max-w-2xl">
-        <div class="text-center">
-          <div class="mb-6 inline-flex items-center gap-2 rounded-full border border-slate-700/50 bg-slate-900/50 px-4 py-1.5 text-xs font-medium text-slate-400 backdrop-blur-sm">
-            <span class="h-1.5 w-1.5 rounded-full bg-sky-400 animate-pulse"></span>
-            {t.contact.badge}
-          </div>
-          <h1 class="text-4xl font-bold tracking-tight text-white sm:text-5xl">
-            <span class="bg-gradient-to-b from-white to-slate-400 bg-clip-text text-transparent">{t.contact.title}</span>
-          </h1>
-          <p class="mx-auto mt-6 max-w-xl text-lg text-slate-400">{t.contact.subtitle}</p>
+    <!-- Hero -->
+    <section class="relative z-10 px-6 pt-24 pb-16 text-center">
+      <div class="mx-auto max-w-3xl">
+        <div class="mb-6 inline-flex items-center gap-2 rounded-full border border-slate-700/50 bg-slate-900/50 px-4 py-1.5 text-xs font-medium text-slate-400 backdrop-blur-sm">
+          <span class="h-1.5 w-1.5 rounded-full bg-sky-400 animate-pulse"></span>
+          {t.thankyou.badge}
         </div>
+        <h1 class="text-5xl font-bold tracking-tight text-white sm:text-6xl lg:text-7xl">
+          <span class="bg-gradient-to-b from-white via-sky-200 to-slate-400 bg-clip-text text-transparent">
+            {t.thankyou.title}
+          </span>
+        </h1>
+        <p class="mx-auto mt-6 max-w-2xl text-lg text-slate-400 sm:text-xl">
+          {t.thankyou.subtitle}
+        </p>
+      </div>
+    </section>
 
-        <div class="mt-12 rounded-3xl border border-slate-800/50 bg-slate-900/30 p-8 backdrop-blur-sm sm:p-10">
-          <ContactForm client:load sitekey={turnstileSitekey} labels={t.contact.form} />
+    <!-- The Spirit of Open Source -->
+    <section class="relative z-10 px-6 py-16">
+      <div class="mx-auto max-w-3xl text-center">
+        <div class="mb-6 flex justify-center">
+          <OpenSourceHeart ariaLabel={t.thankyou.heartAria} class="h-14 w-14" />
+        </div>
+        <h2 class="text-3xl font-bold tracking-tight text-white sm:text-4xl">
+          <span class="bg-gradient-to-b from-white to-slate-400 bg-clip-text text-transparent">
+            {t.thankyou.spiritTitle}
+          </span>
+        </h2>
+        <p class="mx-auto mt-6 max-w-2xl text-lg text-slate-400">
+          {t.thankyou.spiritText}
+        </p>
+      </div>
+    </section>
 
-          <!-- Direct email fallback (obfuscated, anti-scraper) -->
-          <div class="mt-8 border-t border-slate-800/50 pt-6 text-center text-sm text-slate-500">
-            <span>{t.contact.directEmailLabel}: </span>
-            <ObfuscatedEmail client:idle encoded="YWJvdXRAcHJpbWVicmljay5kZXY=" />
-          </div>
+    <!-- Scroll-driven credits experience -->
+    <ThankYouScroll client:load sections={CREDITS} labels={sectionLabels} />
+
+    <!-- The Soul of Open Source (closing) -->
+    <section class="relative z-10 px-6 py-24 text-center">
+      <div class="mx-auto max-w-3xl">
+        <h2 class="text-3xl font-bold tracking-tight text-white sm:text-4xl">
+          <span class="bg-gradient-to-b from-white to-slate-400 bg-clip-text text-transparent">
+            {t.thankyou.soulTitle}
+          </span>
+        </h2>
+        <p class="mx-auto mt-6 max-w-2xl text-lg text-slate-400">
+          {t.thankyou.soulText}
+        </p>
+        <div class="mt-10 flex flex-wrap items-center justify-center gap-4">
+          <a
+            href="https://opensource.org/license/MIT"
+            class="rounded-xl border border-slate-700 bg-slate-900/50 px-7 py-3.5 text-sm font-semibold text-slate-200 backdrop-blur-sm transition-all hover:border-sky-500 hover:text-sky-400 hover:scale-105"
+            target="_blank"
+            rel="noopener"
+          >
+            {t.thankyou.ctaLicense}
+          </a>
+          <a
+            href="https://github.com/michaelsogos/primebrick-v3-website"
+            class="inline-flex items-center gap-2 rounded-xl bg-sky-500 px-7 py-3.5 text-sm font-semibold text-white transition-all hover:bg-sky-400 hover:scale-105"
+            target="_blank"
+            rel="noopener"
+          >
+            <GitHubIcon class="h-4 w-4" />
+            {t.thankyou.ctaContribute}
+          </a>
         </div>
       </div>
     </section>
+
+    <!-- Gratitude marquee -->
+    <GratitudeMarquee client:visible names={MARQUEE_NAMES} label={t.thankyou.marqueeLabel} />
 
     <!-- Footer -->
     <footer class="relative z-10 border-t border-slate-800/50 px-6 py-8">
