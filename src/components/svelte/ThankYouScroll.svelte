@@ -149,7 +149,7 @@
                 >
                   <svg
                     class="h-7 w-7"
-                    viewBox="0 0 24 24"
+                    viewBox={item.icon.viewBox ?? '0 0 24 24'}
                     fill="currentColor"
                     role="img"
                   >
