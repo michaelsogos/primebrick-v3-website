@@ -65,8 +65,9 @@ const turnstileSitekey = import.meta.env.PUBLIC_TURNSTILE_SITEKEY ?? '';
           <img src="/logo-full-dark.svg" alt="PrimeBrick" width="170" height="32" class="h-7 w-auto" />
         </a>
         <div class="flex items-center gap-6 text-sm">
+          <a href={homeHref} class="text-slate-300 hover:text-sky-400 transition-colors">{t.nav.home}</a>
           <a href={docsPath} class="text-slate-300 hover:text-sky-400 transition-colors" target="_blank" rel="noopener">{t.nav.docs}</a>
-          <a href={contactHref} class="text-sky-400 transition-colors">{t.nav.contact}</a>
+          <a href={contactHref} class="text-sky-400 transition-colors" aria-current="page">{t.nav.contact}</a>
           <a href={thankyouHref} class="text-slate-300 hover:text-sky-400 transition-colors">{t.nav.thankyou}</a>
           <a
             href="https://opensource.org/license/MIT"
