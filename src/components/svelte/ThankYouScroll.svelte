@@ -199,7 +199,18 @@
             <!-- Usage — what it's used for in Primebrick -->
             <p class="mt-auto text-sm leading-relaxed text-slate-400">
               <span class="text-sky-400" aria-hidden="true">&rarr;</span>
-              {item.usage}
+              {#if item.usageLink && item.usageLinkText && item.usage.includes(item.usageLinkText)}
+                {@const parts = item.usage.split(item.usageLinkText)}
+                {parts[0]}<a
+                  href={item.usageLink}
+                  target="_blank"
+                  rel="noopener"
+                  class="font-medium text-sky-400 underline decoration-sky-400/40 underline-offset-2 transition-colors hover:text-sky-300 hover:decoration-sky-300"
+                  onclick={(e) => e.stopPropagation()}
+                >{item.usageLinkText}</a>{parts[1]}
+              {:else}
+                {item.usage}
+              {/if}
             </p>
           </a>
         {/each}

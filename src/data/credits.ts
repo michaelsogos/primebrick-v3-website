@@ -61,6 +61,12 @@ export type Credit = {
   url: string;
   /** What it is ACTUALLY used for in Primebrick (empirically verified). */
   usage: string;
+  /** Optional inline link within the usage text — the `usageLinkText`
+   *  substring inside `usage` becomes a clickable link to this URL.
+   *  The card itself still links to `url`. */
+  usageLink?: string;
+  /** The substring of `usage` to turn into a link to `usageLink`. */
+  usageLinkText?: string;
   /** Optional brand icon from simple-icons. */
   icon?: SimpleIcon;
 };
@@ -170,6 +176,8 @@ export const CREDITS: CreditSection[] = [
         package: 'zudoku',
         url: 'https://zudoku.dev',
         usage: 'Powers docs.primebrick.dev — the API catalog, navigation, and MDX documentation.',
+        usageLink: 'https://docs.primebrick.dev',
+        usageLinkText: 'docs.primebrick.dev',
       },
     ],
   },
