@@ -16,7 +16,7 @@ export type LangCode = (typeof LANGUAGES)[number]['code'];
 
 export const translations = {
   en: {
-    nav: { features: 'Features', docs: 'Docs', apiCatalog: 'API Catalog', github: 'GitHub', license: 'MIT License', contact: 'Contact', thankyou: 'Thank You' },
+    nav: { home: 'Home', features: 'Features', docs: 'Docs', apiCatalog: 'API Catalog', github: 'GitHub', license: 'MIT License', contact: 'Contact', thankyou: 'Thank You' },
     hero: {
       badge: 'MIT Licensed • Open Source • Multi-Cloud',
       headlinePrefix: 'The opinionated backoffice framework for',
@@ -92,10 +92,10 @@ export const translations = {
     enterprise: {
       badge: 'Enterprise-Ready',
       title: 'Optimized for enterprise and high traffic.',
-      text: 'Primebrick scales from a single-container laptop setup to enterprise datacenters behind a load balancer. An optional Redis cache layer reduces PostgreSQL load on hot single-row reads — and because it is best-effort, the system is fully valid without it. No Redis? No problem: reads fall through to the database with a warn log, never an error.',
+      text: 'Primebrick scales from a single-container laptop setup to enterprise datacenters behind a load balancer. Thanks to Redis, no matter how the infrastructure scales up or down, every piece stays in sync — cache invalidation, session state, and cross-instance coordination all flow through one reliable backbone.',
       cards: [
-        { title: 'Optional Redis cache', text: 'Mark any entity with @Cached(ttl) and hot single-row reads go to Redis first. Omit the TTL for immutable data; pick a TTL that bounds staleness for mutable data. Zero DAL coupling — the cache lives entirely in the SDK.' },
-        { title: 'Best-effort by design', text: 'Redis down? Writes still go to PostgreSQL first, then invalidate in a try/catch. Reads fall through to the DB. The caller never sees a cache error. Cache is a feature, not a requirement.' },
+        { title: 'Redis-powered cache', text: 'Mark any entity with @Cached(ttl) and hot single-row reads go to Redis first. Omit the TTL for immutable data; pick a TTL that bounds staleness for mutable data. Zero DAL coupling — the cache lives entirely in the SDK.' },
+        { title: 'Always in sync', text: 'Redis keeps every instance on the same page. Writes go to PostgreSQL first, then invalidate the cache. Reads always hit fresh data — no stale entries, no race conditions, no surprises.' },
         { title: 'Multi-instance ready', text: 'Redis is the shared cache. Pod #1 invalidates a key, pod #2 sees the miss and re-hydrates from PostgreSQL. No NATS broadcaster needed. Scale the BE horizontally behind any LB — Docker, K8s, Swarm, Azure Container Apps, Cloud Run.' },
         { title: 'Zero vendor lock-in on cache too', text: 'Redis is the only cache implementation shipped today, but the CachePort interface is open. Implement your own cache port for Memcached, DragonflyDB, or any KV store — no SDK changes needed.' },
       ],
@@ -148,12 +148,12 @@ export const translations = {
     modularity: {
       badge: 'Modular by design',
       title: 'One brick at a time. Or all of them.',
-      text: 'Every Primebrick module is a self-contained brick that follows the same shared standards — config tables, entity CRUD, RBAC, OpenAPI, NATS messaging. Start with the built-in auth brick, add the emailsender brick, then ship your own billing or inventory brick using the exact same pattern. The SDK and DAL do the heavy lifting; your module only declares its schema and its typed config.',
+      text: 'Every Primebrick module is a self-contained brick that follows the same shared standards. Start with the built-in bricks, then ship your own billing or inventory brick using the exact same pattern. The SDK and DAL do the heavy lifting; your module only declares its schema and its typed config.',
       pillars: [
         { title: 'Shared standards', text: 'ConfigEntityBase, ConfigLoader<TResult>, entity CRUD path conventions, OpenAPI meta — every brick inherits the same building blocks.' },
         { title: 'Schema isolation', text: 'Each module owns its own PostgreSQL schema (auth, emailsender, billing…). No cross-module coupling at the data layer.' },
         { title: 'Self-describing', text: 'Modules expose /meta + /openapi.json. The BE proxy, the FE ConfigTable, and the MCP server all discover capabilities dynamically — no hard-coding.' },
-        { title: 'Add without forking', text: 'A new module is one entity, one config table, one route file, one FE route. The reusable ConfigTable component renders its settings page automatically.' },
+        { title: 'Add without forking', text: 'A new module is one or more domain entity, one config table, one route file, one FE route. The reusable ConfigTable component renders its settings page automatically.' },
       ],
       cta: 'Read the Config Modules guide',
     },
@@ -303,6 +303,7 @@ export const translations = {
       sectionExport: 'Templating & Export',
       sectionTesting: 'Testing & Quality',
       sectionUtilities: 'Utilities & Infrastructure',
+      sectionAiAgents: 'AI Agents & Models',
       soulTitle: 'The Soul of Open Source',
       soulText: 'We release Primebrick under the MIT license so that the same generosity we received can flow forward. Use it, fork it, improve it, ship it, sell it — no strings attached. The only thing we ask is that, one day, you too build something open and give it back to the world.',
       ctaLicense: 'Read the MIT License',
@@ -313,7 +314,7 @@ export const translations = {
   },
 
   it: {
-    nav: { features: 'Funzionalità', docs: 'Docs', apiCatalog: 'API Catalog', github: 'GitHub', license: 'Licenza MIT', contact: 'Contatti', thankyou: 'Grazie' },
+    nav: { home: 'Home', features: 'Funzionalità', docs: 'Docs', apiCatalog: 'API Catalog', github: 'GitHub', license: 'Licenza MIT', contact: 'Contatti', thankyou: 'Grazie' },
     hero: {
       badge: 'Licenza MIT • Open Source • Multi-Cloud',
       headlinePrefix: 'Il framework backoffice opinionato per',
@@ -389,10 +390,10 @@ export const translations = {
     enterprise: {
       badge: 'Pronto per l\'Enterprise',
       title: 'Ottimizzato per enterprise e alto traffico.',
-      text: 'Primebrick scala da una configurazione laptop con un singolo container ai datacenter enterprise dietro un load balancer. Un layer di cache Redis opzionale riduce il carico su PostgreSQL sulle letture a riga singola più frequenti — e poiché è best-effort, il sistema è pienamente valido anche senza. Niente Redis? Nessun problema: le letture ricadono sul database con un log di warn, mai un errore.',
+      text: 'Primebrick scala da una configurazione laptop con un singolo container ai datacenter enterprise dietro un load balancer. Grazie a Redis, non importa quanto l\'infrastruttura si espanda o si riduca, ogni componente rimane sincronizzato — invalidazione della cache, stato delle sessioni e coordinazione tra istanze passano tutte attraverso un unico backbone affidabile.',
       cards: [
-        { title: 'Cache Redis opzionale', text: 'Marca qualsiasi entità con @Cached(ttl) e le letture a riga singola più frequenti vanno prima a Redis. Ometti il TTL per dati immutabili; scegli un TTL che limiti la stalezza per dati mutabili. Zero accoppiamento con la DAL — la cache vive interamente nell\'SDK.' },
-        { title: 'Best-effort per design', text: 'Redis down? Le scritture vanno comunque prima su PostgreSQL, poi si invalida in un try/catch. Le letture ricadono sul DB. Il chiamante non vede mai un errore di cache. La cache è una feature, non un requisito.' },
+        { title: 'Cache guidata da Redis', text: 'Marca qualsiasi entità con @Cached(ttl) e le letture a riga singola più frequenti vanno prima a Redis. Ometti il TTL per dati immutabili; scegli un TTL che limiti la stalezza per dati mutabili. Zero accoppiamento con la DAL — la cache vive interamente nell\'SDK.' },
+        { title: 'Sempre sincronizzato', text: 'Redis mantiene ogni istanza sulla stessa pagina. Le scritture vanno prima su PostgreSQL, poi invalidano la cache. Le letture trovano sempre dati freschi — niente entry stale, niente race condition, niente sorprese.' },
         { title: 'Pronto per multi-istanza', text: 'Redis è la cache condivisa. Il pod #1 invalida una chiave, il pod #2 vede il miss e re-idrata da PostgreSQL. Nessun broadcaster NATS necessario. Scala il BE orizzontalmente dietro qualsiasi LB — Docker, K8s, Swarm, Azure Container Apps, Cloud Run.' },
         { title: 'Zero vendor lock-in anche sulla cache', text: 'Redis è l\'unica implementazione di cache fornita oggi, ma l\'interfaccia CachePort è aperta. Implementa la tua cache port per Memcached, DragonflyDB o qualsiasi KV store — nessuna modifica all\'SDK necessaria.' },
       ],
@@ -445,12 +446,12 @@ export const translations = {
     modularity: {
       badge: 'Modulare per design',
       title: 'Un brick alla volta. O tutti insieme.',
-      text: 'Ogni modulo Primebrick è un brick autonomo che segue gli stessi standard condivisi — tabelle di configurazione, CRUD entity, RBAC, OpenAPI, messaggistica NATS. Parti dal brick di autenticazione integrato, aggiungi il brick emailsender, poi spedisci il tuo brick billing o inventario usando esattamente lo stesso pattern. SDK e DAL fanno il lavoro pesante; il tuo modulo dichiara solo lo schema e la sua configurazione tipizzata.',
+      text: 'Ogni modulo Primebrick è un brick autonomo che segue gli stessi standard condivisi. Parti dai brick integrati, poi spedisci il tuo brick billing o inventario usando esattamente lo stesso pattern. SDK e DAL fanno il lavoro pesante; il tuo modulo dichiara solo lo schema e la sua configurazione tipizzata.',
       pillars: [
         { title: 'Standard condivisi', text: 'ConfigEntityBase, ConfigLoader<TResult>, convenzioni dei percetti CRUD entity, meta OpenAPI — ogni brick eredita gli stessi building block.' },
         { title: 'Isolamento per schema', text: 'Ogni modulo possiede il suo schema PostgreSQL (auth, emailsender, billing…). Nessun accoppiamento cross-modulo al layer dati.' },
         { title: 'Auto-descrivibile', text: 'I moduli espongono /meta + /openapi.json. Il proxy BE, la ConfigTable FE e il server MCP scoprono le capacità dinamicamente — niente hard-coding.' },
-        { title: 'Aggiungi senza forkare', text: 'Un nuovo modulo è un\'entità, una tabella di config, un file di route, una route FE. Il componente ConfigTable riutilizzabile renderizza la sua pagina di impostazioni automaticamente.' },
+        { title: 'Aggiungi senza forkare', text: 'Un nuovo modulo è una o più entità di dominio, una tabella di config, un file di route, una route FE. Il componente ConfigTable riutilizzabile renderizza la sua pagina di impostazioni automaticamente.' },
       ],
       cta: 'Leggi la guida Config Modules',
     },
@@ -600,6 +601,7 @@ export const translations = {
       sectionExport: 'Templating & Export',
       sectionTesting: 'Testing & Qualità',
       sectionUtilities: 'Utilità & Infrastruttura',
+      sectionAiAgents: 'Agenti AI & Modelli',
       soulTitle: 'L\'Anima dell\'Open Source',
       soulText: 'Rilasciamo Primebrick con licenza MIT affinché la stessa generosità ricevuta possa fluire in avanti. Usalo, forkalo, miglioralo, vendilo — senza vincoli. Chiediamo solo che, un giorno, anche tu costruisca qualcosa di aperto e lo restituisca al mondo.',
       ctaLicense: 'Leggi la Licenza MIT',
@@ -610,7 +612,7 @@ export const translations = {
   },
 
   de: {
-    nav: { features: 'Funktionen', docs: 'Doku', apiCatalog: 'API Catalog', github: 'GitHub', license: 'MIT-Lizenz', contact: 'Kontakt', thankyou: 'Danke' },
+    nav: { home: 'Startseite', features: 'Funktionen', docs: 'Doku', apiCatalog: 'API Catalog', github: 'GitHub', license: 'MIT-Lizenz', contact: 'Kontakt', thankyou: 'Danke' },
     hero: {
       badge: 'MIT-Lizenziert • Open Source • Multi-Cloud',
       headlinePrefix: 'Das Opinionated Backoffice-Framework für',
@@ -686,10 +688,10 @@ export const translations = {
     enterprise: {
       badge: 'Enterprise-Tauglich',
       title: 'Optimiert für Enterprise und hohen Traffic.',
-      text: 'Primebrick skaliert von einem einzelnen Laptop-Container bis zu Enterprise-Rechenzentren hinter einem Load Balancer. Eine optionale Redis-Cache-Schicht reduziert die PostgreSQL-Last bei heißen Single-Row-Reads — und da sie best-effort ist, ist das System ohne sie voll funktionsfähig. Kein Redis? Kein Problem: Reads fallen mit einem Warn-Log auf die Datenbank zurück, niemals auf einen Fehler.',
+      text: 'Primebrick skaliert von einem einzelnen Laptop-Container bis zu Enterprise-Rechenzentren hinter einem Load Balancer. Dank Redis bleibt egal wie die Infrastruktur hoch- oder herunterskaliert wird, jede Komponente synchronisiert — Cache-Invalidierung, Session-State und instanzübergreifende Koordination laufen alle über ein zuverlässiges Backbone.',
       cards: [
-        { title: 'Optionaler Redis-Cache', text: 'Markieren Sie jede Entität mit @Cached(ttl) und heiße Single-Row-Reads gehen zuerst zu Redis. Lassen Sie das TTL für unveränderliche Daten weg; wählen Sie ein TTL, das die Staleness bei veränderlichen Daten begrenzt. Keine DAL-Kopplung — der Cache lebt vollständig im SDK.' },
-        { title: 'Best-effort by Design', text: 'Redis down? Schreibvorgänge gehen trotzdem zuerst zu PostgreSQL, dann invalidieren in einem try/catch. Reads fallen auf die DB zurück. Der Aufrufer sieht nie einen Cache-Fehler. Cache ist ein Feature, keine Anforderung.' },
+        { title: 'Redis-gestützter Cache', text: 'Markieren Sie jede Entität mit @Cached(ttl) und heiße Single-Row-Reads gehen zuerst zu Redis. Lassen Sie das TTL für unveränderliche Daten weg; wählen Sie ein TTL, das die Staleness bei veränderlichen Daten begrenzt. Keine DAL-Kopplung — der Cache lebt vollständig im SDK.' },
+        { title: 'Immer synchron', text: 'Redis hält jede Instanz auf dem gleichen Stand. Schreibvorgänge gehen zuerst zu PostgreSQL, dann invalidieren den Cache. Reads finden immer frische Daten — keine veralteten Einträge, keine Race-Conditions, keine Überraschungen.' },
         { title: 'Multi-Instanz-fähig', text: 'Redis ist der gemeinsame Cache. Pod #1 invalidiert einen Key, Pod #2 sieht den Miss und rehydriert von PostgreSQL. Kein NATS-Broadcaster nötig. Skalieren Sie das BE horizontal hinter jedem LB — Docker, K8s, Swarm, Azure Container Apps, Cloud Run.' },
         { title: 'Zero Vendor Lock-in auch beim Cache', text: 'Redis ist heute die einzige mitgelieferte Cache-Implementierung, aber das CachePort-Interface ist offen. Implementieren Sie Ihren eigenen Cache-Port für Memcached, DragonflyDB oder jeden KV-Store — keine SDK-Änderungen nötig.' },
       ],
@@ -742,12 +744,12 @@ export const translations = {
     modularity: {
       badge: 'Modular per Design',
       title: 'Ein Baustein nach dem anderen. Oder alle zusammen.',
-      text: 'Jedes Primebrick-Modul ist ein autarker Baustein, der denselben gemeinsamen Standards folgt — Konfigurationstabellen, Entity-CRUD, RBAC, OpenAPI, NATS-Messaging. Starten Sie mit dem eingebauten Auth-Baustein, fügen Sie den Emailsender-Baustein hinzu und liefern Sie dann Ihren eigenen Billing- oder Inventory-Baustein nach genau demselben Muster. SDK und DAL übernehmen die Schwerstarbeit; Ihr Modul deklariert nur sein Schema und seine typisierte Konfiguration.',
+      text: 'Jedes Primebrick-Modul ist ein autarker Baustein, der denselben gemeinsamen Standards folgt. Starten Sie mit den eingebauten Bausteinen und liefern Sie dann Ihren eigenen Billing- oder Inventory-Baustein nach genau demselben Muster. SDK und DAL übernehmen die Schwerstarbeit; Ihr Modul deklariert nur sein Schema und seine typisierte Konfiguration.',
       pillars: [
         { title: 'Gemeinsame Standards', text: 'ConfigEntityBase, ConfigLoader<TResult>, Entity-CRUD-Pfadkonventionen, OpenAPI-Meta — jeder Baustein erbt dieselben Building Blocks.' },
         { title: 'Schema-Isolation', text: 'Jedes Modul besitzt sein eigenes PostgreSQL-Schema (auth, emailsender, billing…). Keine modulübergreifende Kopplung auf der Datenschicht.' },
         { title: 'Selbstbeschreibend', text: 'Module stellen /meta + /openapi.json bereit. BE-Proxy, FE-ConfigTable und MCP-Server entdecken Fähigkeiten dynamisch — kein Hard-Coding.' },
-        { title: 'Hinzufügen ohne Forking', text: 'Ein neues Modul ist ein Entity, eine Konfigurationstabelle, eine Routendatei, eine FE-Route. Die wiederverwendbare ConfigTable-Komponente rendert seine Einstellungsseite automatisch.' },
+        { title: 'Hinzufügen ohne Forking', text: 'Ein neues Modul ist eine oder mehrere Domain-Entitäten, eine Konfigurationstabelle, eine Routendatei, eine FE-Route. Die wiederverwendbare ConfigTable-Komponente rendert seine Einstellungsseite automatisch.' },
       ],
       cta: 'Config-Modules-Leitfaden lesen',
     },
@@ -897,6 +899,7 @@ export const translations = {
       sectionExport: 'Templating & Export',
       sectionTesting: 'Testing & Qualität',
       sectionUtilities: 'Werkzeuge & Infrastruktur',
+      sectionAiAgents: 'KI-Agenten & Modelle',
       soulTitle: 'Die Seele von Open Source',
       soulText: 'Wir veröffentlichen Primebrick unter der MIT-Lizenz, damit dieselbe Großzügigkeit, die wir erhalten haben, weiterfließen kann. Nutze es, forke es, verbessere es, verkaufe es — ohne Bedingungen. Wir bitten nur, dass auch du eines Tages etwas Offenes baust und der Welt zurückgibst.',
       ctaLicense: 'Die MIT-Lizenz lesen',
@@ -907,7 +910,7 @@ export const translations = {
   },
 
   es: {
-    nav: { features: 'Características', docs: 'Docs', apiCatalog: 'API Catalog', github: 'GitHub', license: 'Licencia MIT', contact: 'Contacto', thankyou: 'Gracias' },
+    nav: { home: 'Inicio', features: 'Características', docs: 'Docs', apiCatalog: 'API Catalog', github: 'GitHub', license: 'Licencia MIT', contact: 'Contacto', thankyou: 'Gracias' },
     hero: {
       badge: 'Licencia MIT • Open Source • Multi-Cloud',
       headlinePrefix: 'El framework backoffice opinionated para',
@@ -983,10 +986,10 @@ export const translations = {
     enterprise: {
       badge: 'Listo para Enterprise',
       title: 'Optimizado para enterprise y alto tráfico.',
-      text: 'Primebrick escala desde una configuración de laptop con un solo contenedor hasta datacenters enterprise detrás de un balanceador de carga. Una capa de caché Redis opcional reduce la carga de PostgreSQL en lecturas de fila única frecuentes — y como es best-effort, el sistema es totalmente válido sin ella. ¿No hay Redis? Ningún problema: las lecturas caen a la base de datos con un log de warn, nunca un error.',
+      text: 'Primebrick escala desde una configuración de laptop con un solo contenedor hasta datacenters enterprise detrás de un balanceador de carga. Gracias a Redis, no importa cuánto la infraestructura escale arriba o abajo, cada componente se mantiene sincronizado — invalidación de caché, estado de sesión y coordinación entre instancias fluyen todas a través de una columna vertebral confiable.',
       cards: [
-        { title: 'Caché Redis opcional', text: 'Marca cualquier entidad con @Cached(ttl) y las lecturas de fila única frecuentes van primero a Redis. Omite el TTL para datos inmutables; elige un TTL que limite la obsolescencia para datos mutables. Cero acoplamiento con la DAL — la caché vive enteramente en el SDK.' },
-        { title: 'Best-effort por diseño', text: '¿Redis caído? Las escrituras van primero a PostgreSQL, luego invalidan en un try/catch. Las lecturas caen a la DB. El llamador nunca ve un error de caché. La caché es una feature, no un requisito.' },
+        { title: 'Caché potenciada por Redis', text: 'Marca cualquier entidad con @Cached(ttl) y las lecturas de fila única frecuentes van primero a Redis. Omite el TTL para datos inmutables; elige un TTL que limite la obsolescencia para datos mutables. Cero acoplamiento con la DAL — la caché vive enteramente en el SDK.' },
+        { title: 'Siempre sincronizado', text: 'Redis mantiene cada instancia en la misma página. Las escrituras van primero a PostgreSQL, luego invalidan la caché. Las lecturas siempre encuentran datos frescos — sin entradas obsoletas, sin condiciones de carrera, sin sorpresas.' },
         { title: 'Listo para multi-instancia', text: 'Redis es la caché compartida. El pod #1 invalida una clave, el pod #2 ve el miss y re-hidrata desde PostgreSQL. No se necesita broadcaster NATS. Escala el BE horizontalmente detrás de cualquier LB — Docker, K8s, Swarm, Azure Container Apps, Cloud Run.' },
         { title: 'Cero vendor lock-in también en caché', text: 'Redis es la única implementación de caché entregada hoy, pero la interfaz CachePort es abierta. Implementa tu propio cache port para Memcached, DragonflyDB o cualquier KV store — sin cambios en el SDK.' },
       ],
@@ -1039,12 +1042,12 @@ export const translations = {
     modularity: {
       badge: 'Modular por diseño',
       title: 'Un brick a la vez. O todos juntos.',
-      text: 'Cada módulo Primebrick es un brick autónomo que sigue los mismos estándares compartidos — tablas de configuración, CRUD de entidades, RBAC, OpenAPI, mensajería NATS. Empieza con el brick de autenticación integrado, añade el brick emailsender, y luego envía tu propio brick de facturación o inventario usando exactamente el mismo patrón. El SDK y el DAL hacen el trabajo pesado; tu módulo solo declara su schema y su configuración tipada.',
+      text: 'Cada módulo Primebrick es un brick autónomo que sigue los mismos estándares compartidos. Empieza con los bricks integrados y luego envía tu propio brick de facturación o inventario usando exactamente el mismo patrón. El SDK y el DAL hacen el trabajo pesado; tu módulo solo declara su schema y su configuración tipada.',
       pillars: [
         { title: 'Estándares compartidos', text: 'ConfigEntityBase, ConfigLoader<TResult>, convenciones de rutas CRUD de entidades, meta OpenAPI — cada brick hereda los mismos bloques de construcción.' },
         { title: 'Aislamiento por schema', text: 'Cada módulo posee su propio schema PostgreSQL (auth, emailsender, billing…). Sin acoplamiento cross-módulo en la capa de datos.' },
         { title: 'Auto-descriptivo', text: 'Los módulos exponen /meta + /openapi.json. El proxy BE, la ConfigTable FE y el servidor MCP descubren capacidades dinámicamente — sin hard-coding.' },
-        { title: 'Añade sin bifurcar', text: 'Un nuevo módulo es una entidad, una tabla de config, un archivo de rutas, una ruta FE. El componente reutilizable ConfigTable renderiza su página de ajustes automáticamente.' },
+        { title: 'Añade sin bifurcar', text: 'Un nuevo módulo es una o más entidades de dominio, una tabla de config, un archivo de rutas, una ruta FE. El componente reutilizable ConfigTable renderiza su página de ajustes automáticamente.' },
       ],
       cta: 'Leer la guía de Config Modules',
     },
@@ -1194,6 +1197,7 @@ export const translations = {
       sectionExport: 'Templating & Export',
       sectionTesting: 'Testing & Calidad',
       sectionUtilities: 'Utilidades & Infraestructura',
+      sectionAiAgents: 'Agentes IA & Modelos',
       soulTitle: 'El Alma del Open Source',
       soulText: 'Publicamos Primebrick bajo licencia MIT para que la misma generosidad que recibimos fluya hacia adelante. Úsalo, haz un fork, mejóralo, véndelo — sin ataduras. Solo pedimos que, algún día, tú también construyas algo abierto y lo devuelvas al mundo.',
       ctaLicense: 'Leer la Licencia MIT',
@@ -1204,7 +1208,7 @@ export const translations = {
   },
 
   pt: {
-    nav: { features: 'Funcionalidades', docs: 'Docs', apiCatalog: 'API Catalog', github: 'GitHub', license: 'Licença MIT', contact: 'Contato', thankyou: 'Obrigado' },
+    nav: { home: 'Início', features: 'Funcionalidades', docs: 'Docs', apiCatalog: 'API Catalog', github: 'GitHub', license: 'Licença MIT', contact: 'Contato', thankyou: 'Obrigado' },
     hero: {
       badge: 'Licença MIT • Open Source • Multi-Cloud',
       headlinePrefix: 'O framework backoffice opinionated para',
@@ -1280,10 +1284,10 @@ export const translations = {
     enterprise: {
       badge: 'Pronto para Enterprise',
       title: 'Otimizado para enterprise e alto tráfego.',
-      text: 'Primebrick escala de uma configuração de laptop com um único container até datacenters enterprise atrás de um load balancer. Uma camada de cache Redis opcional reduz a carga do PostgreSQL em leituras de linha única frequentes — e como é best-effort, o sistema é totalmente válido sem ela. Sem Redis? Sem problema: as leituras caem para o banco de dados com um log de warn, nunca um erro.',
+      text: 'Primebrick escala de uma configuração de laptop com um único container até datacenters enterprise atrás de um load balancer. Graças ao Redis, não importa o quanto a infraestrutura escale acima ou abaixo, cada componente mantém-se sincronizado — invalidação de cache, estado de sessão e coordenação entre instâncias fluem todas através de uma espinha dorsal fiável.',
       cards: [
-        { title: 'Cache Redis opcional', text: 'Marque qualquer entidade com @Cached(ttl) e leituras de linha única frequentes vão primeiro para o Redis. Omita o TTL para dados imutáveis; escolha um TTL que limite a obsolescência para dados mutáveis. Zero acoplamento com a DAL — o cache vive inteiramente no SDK.' },
-        { title: 'Best-effort por design', text: 'Redis fora do ar? As escritas ainda vão primeiro para o PostgreSQL, depois invalidam em um try/catch. As leituras caem para o DB. O chamador nunca vê um erro de cache. Cache é uma feature, não um requisito.' },
+        { title: 'Cache alimentado por Redis', text: 'Marque qualquer entidade com @Cached(ttl) e leituras de linha única frequentes vão primeiro para o Redis. Omita o TTL para dados imutáveis; escolha um TTL que limite a obsolescência para dados mutáveis. Zero acoplamento com a DAL — o cache vive inteiramente no SDK.' },
+        { title: 'Sempre sincronizado', text: 'O Redis mantém cada instância na mesma página. As escritas vão primeiro para o PostgreSQL, depois invalidam o cache. As leituras encontram sempre dados frescos — sem entradas obsoletas, sem condições de corrida, sem surpresas.' },
         { title: 'Pronto para multi-instância', text: 'Redis é o cache compartilhado. O pod #1 invalida uma chave, o pod #2 vê o miss e re-hidrata do PostgreSQL. Sem broadcaster NATS necessário. Escale o BE horizontalmente atrás de qualquer LB — Docker, K8s, Swarm, Azure Container Apps, Cloud Run.' },
         { title: 'Zero vendor lock-in também no cache', text: 'Redis é a única implementação de cache entregue hoje, mas a interface CachePort é aberta. Implemente seu próprio cache port para Memcached, DragonflyDB ou qualquer KV store — sem mudanças no SDK.' },
       ],
@@ -1336,12 +1340,12 @@ export const translations = {
     modularity: {
       badge: 'Modular por design',
       title: 'Um brick de cada vez. Ou todos juntos.',
-      text: 'Cada módulo Primebrick é um brick autónomo que segue os mesmos padrões partilhados — tabelas de configuração, CRUD de entidades, RBAC, OpenAPI, mensageria NATS. Comece com o brick de autenticação integrado, adicione o brick emailsender e depois envie o seu próprio brick de faturação ou inventário usando exatamente o mesmo padrão. O SDK e o DAL fazem o trabalho pesado; o seu módulo apenas declara o seu schema e a sua configuração tipada.',
+      text: 'Cada módulo Primebrick é um brick autónomo que segue os mesmos padrões partilhados. Comece com os bricks integrados e depois envie o seu próprio brick de faturação ou inventário usando exatamente o mesmo padrão. O SDK e o DAL fazem o trabalho pesado; o seu módulo apenas declara o seu schema e a sua configuração tipada.',
       pillars: [
         { title: 'Padrões partilhados', text: 'ConfigEntityBase, ConfigLoader<TResult>, convenções de caminhos CRUD de entidades, meta OpenAPI — cada brick herda os mesmos blocos de construção.' },
         { title: 'Isolamento por schema', text: 'Cada módulo possui o seu próprio schema PostgreSQL (auth, emailsender, billing…). Sem acoplamento cross-módulo na camada de dados.' },
         { title: 'Auto-descritivo', text: 'Os módulos expõem /meta + /openapi.json. O proxy BE, a ConfigTable FE e o servidor MCP descobrem capacidades dinamicamente — sem hard-coding.' },
-        { title: 'Adicione sem bifurcar', text: 'Um novo módulo é uma entidade, uma tabela de config, um ficheiro de rotas, uma rota FE. O componente reutilizável ConfigTable renderiza a sua página de definições automaticamente.' },
+        { title: 'Adicione sem bifurcar', text: 'Um novo módulo é uma ou mais entidades de domínio, uma tabela de config, um ficheiro de rotas, uma rota FE. O componente reutilizável ConfigTable renderiza a sua página de definições automaticamente.' },
       ],
       cta: 'Ler o guia de Config Modules',
     },
@@ -1491,6 +1495,7 @@ export const translations = {
       sectionExport: 'Templating & Export',
       sectionTesting: 'Testing & Qualidade',
       sectionUtilities: 'Utilitários & Infraestrutura',
+      sectionAiAgents: 'Agentes IA & Modelos',
       soulTitle: 'A Alma do Open Source',
       soulText: 'Publicamos Primebrick sob licença MIT para que a mesma generosidade que recebemos flua para a frente. Use, faça fork, melhore, venda — sem amarras. Só pedimos que, um dia, você também construa algo aberto e devolva ao mundo.',
       ctaLicense: 'Ler a Licença MIT',
@@ -1501,7 +1506,7 @@ export const translations = {
   },
 
   fr: {
-    nav: { features: 'Fonctionnalités', docs: 'Docs', apiCatalog: 'API Catalog', github: 'GitHub', license: 'Licence MIT', contact: 'Contact', thankyou: 'Merci' },
+    nav: { home: 'Accueil', features: 'Fonctionnalités', docs: 'Docs', apiCatalog: 'API Catalog', github: 'GitHub', license: 'Licence MIT', contact: 'Contact', thankyou: 'Merci' },
     hero: {
       badge: 'Licence MIT • Open Source • Multi-Cloud',
       headlinePrefix: 'Le framework backoffice opinionated pour',
@@ -1577,10 +1582,10 @@ export const translations = {
     enterprise: {
       badge: 'Prêt pour l\'Enterprise',
       title: 'Optimisé pour l\'enterprise et le trafic élevé.',
-      text: 'Primebrick passe d\'une configuration laptop à un seul conteneur aux datacenters enterprise derrière un load balancer. Une couche de cache Redis optionnelle réduit la charge PostgreSQL sur les lectures à ligne unique fréquentes — et comme elle est best-effort, le système est pleinement valide sans elle. Pas de Redis ? Aucun problème : les lectures retombent sur la base de données avec un log de warn, jamais une erreur.',
+      text: 'Primebrick passe d\'une configuration laptop à un seul conteneur aux datacenters enterprise derrière un load balancer. Grâce à Redis, peu importe comment l\'infrastructure monte ou descend en charge, chaque composant reste synchronisé — invalidation du cache, état des sessions et coordination inter-instances passent toutes par une colonne vertébrale fiable.',
       cards: [
-        { title: 'Cache Redis optionnel', text: 'Marquez n\'importe quelle entité avec @Cached(ttl) et les lectures à ligne unique fréquentes vont d\'abord à Redis. Omettez le TTL pour les données immuables ; choisissez un TTL qui borne l\'obsolescence pour les données mutables. Zéro couplage avec la DAL — le cache vit entièrement dans le SDK.' },
-        { title: 'Best-effort par conception', text: 'Redis down ? Les écritures vont d\'abord à PostgreSQL, puis invalident dans un try/catch. Les lectures retombent sur la DB. L\'appelant ne voit jamais d\'erreur de cache. Le cache est une fonctionnalité, pas une exigence.' },
+        { title: 'Cache propulsé par Redis', text: 'Marquez n\'importe quelle entité avec @Cached(ttl) et les lectures à ligne unique fréquentes vont d\'abord à Redis. Omettez le TTL pour les données immuables ; choisissez un TTL qui borne l\'obsolescence pour les données mutables. Zéro couplage avec la DAL — le cache vit entièrement dans le SDK.' },
+        { title: 'Toujours synchronisé', text: 'Redis garde chaque instance sur la même page. Les écritures vont d\'abord à PostgreSQL, puis invalident le cache. Les lectures trouvent toujours des données fraîches — pas d\'entrées obsolètes, pas de conditions de course, pas de surprises.' },
         { title: 'Prêt pour multi-instance', text: 'Redis est le cache partagé. Le pod #1 invalide une clé, le pod #2 voit le miss et ré-hydrate depuis PostgreSQL. Aucun broadcaster NATS nécessaire. Faites évoluer le BE horizontalement derrière n\'importe quel LB — Docker, K8s, Swarm, Azure Container Apps, Cloud Run.' },
         { title: 'Zéro vendor lock-in aussi sur le cache', text: 'Redis est la seule implémentation de cache livrée aujourd\'hui, mais l\'interface CachePort est ouverte. Implémentez votre propre cache port pour Memcached, DragonflyDB ou n\'importe quel KV store — aucune modification du SDK nécessaire.' },
       ],
@@ -1633,12 +1638,12 @@ export const translations = {
     modularity: {
       badge: 'Modulaire par conception',
       title: 'Une brique à la fois. Ou toutes ensemble.',
-      text: 'Chaque module Primebrick est une brique autonome qui suit les mêmes standards partagés — tables de configuration, CRUD d\'entités, RBAC, OpenAPI, messagerie NATS. Commencez par la brique d\'authentification intégrée, ajoutez la brique emailsender, puis livrez votre propre brique de facturation ou d\'inventaire en utilisant exactement le même modèle. Le SDK et le DAL font le gros du travail ; votre module déclare seulement son schéma et sa configuration typée.',
+      text: 'Chaque module Primebrick est une brique autonome qui suit les mêmes standards partagés. Commencez par les briques intégrées, puis livrez votre propre brique de facturation ou d\'inventaire en utilisant exactement le même modèle. Le SDK et le DAL font le gros du travail ; votre module déclare seulement son schéma et sa configuration typée.',
       pillars: [
         { title: 'Standards partagés', text: 'ConfigEntityBase, ConfigLoader<TResult>, conventions de chemins CRUD d\'entités, méta OpenAPI — chaque brique hérite des mêmes blocs de construction.' },
         { title: 'Isolation par schéma', text: 'Chaque module possède son propre schéma PostgreSQL (auth, emailsender, billing…). Aucun couplage inter-modules sur la couche de données.' },
         { title: 'Auto-descriptif', text: 'Les modules exposent /meta + /openapi.json. Le proxy BE, la ConfigTable FE et le serveur MCP découvrent les capacités dynamiquement — pas de hard-coding.' },
-        { title: 'Ajouter sans forker', text: 'Un nouveau module est une entité, une table de config, un fichier de routes, une route FE. Le composant réutilisable ConfigTable rend sa page de paramètres automatiquement.' },
+        { title: 'Ajouter sans forker', text: 'Un nouveau module est une ou plusieurs entités de domaine, une table de config, un fichier de routes, une route FE. Le composant réutilisable ConfigTable rend sa page de paramètres automatiquement.' },
       ],
       cta: 'Lire le guide Config Modules',
     },
@@ -1788,6 +1793,7 @@ export const translations = {
       sectionExport: 'Templating & Export',
       sectionTesting: 'Testing & Qualité',
       sectionUtilities: 'Utilitaires & Infrastructure',
+      sectionAiAgents: 'Agents IA & Modèles',
       soulTitle: 'L\'Âme de l\'Open Source',
       soulText: 'Nous publions Primebrick sous licence MIT pour que la même générosité que nous avons reçue puisse couler en avant. Utilisez-le, forkez-le, améliorez-le, vendez-le — sans contrepartie. Nous demandons seulement qu\'un jour, vous aussi, vous construisiez quelque chose d\'ouvert et le rendiez au monde.',
       ctaLicense: 'Lire la Licence MIT',
