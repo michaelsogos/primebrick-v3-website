@@ -16,7 +16,7 @@ export type LangCode = (typeof LANGUAGES)[number]['code'];
 
 export const translations = {
   en: {
-    nav: { home: 'Home', features: 'Features', docs: 'Docs', apiCatalog: 'API Catalog', github: 'GitHub®', license: 'MIT License', contact: 'Contact', thankyou: 'Thank You' },
+    nav: { home: 'Home', features: 'Features', docs: 'Docs', apiCatalog: 'API Catalog', github: 'GitHub®', license: 'MIT License', contact: 'Contact', thankyou: 'Thank You', virtualTour: 'Virtual Tour' },
     hero: {
       badge: 'MIT Licensed • Open Source • Multi-Cloud',
       headlinePrefix: 'The opinionated backoffice framework for',
@@ -316,10 +316,29 @@ export const translations = {
       marqueeLabel: 'Built with the work of',
       heartAria: 'Open source heart',
     },
+    demo: {
+      hubBadge: 'Interactive Feature Tour',
+      hubTitle: 'Primebrick in Motion',
+      hubSubtitle: 'Scroll through the real Primebrick backoffice — every screen is a faithful replica of the actual UI, animated as you scroll. Pick a tour below.',
+      shellTitle: 'The Shell',
+      comingSoon: 'Coming soon',
+      megaAllLink: 'All Demos',
+      card: {
+        shell:    { title: 'The Shell',               desc: 'App shell anatomy: org & module switchers, dynamic sidebar nav from /meta, command palette, IANA timezone, theme toggle, health badge.', megaDesc: 'The shell that wraps every brick.' },
+        entities: { title: 'Entity List Table',       desc: 'The flagship: search, advanced filters, IANA datetime toggle, column selector, sticky columns, selection, bulk actions, exports, CRUD, preview.', megaDesc: 'Search, filter, edit, export.' },
+        exports:  { title: 'Exports',                 desc: 'XLSX, CSV, HTML, PDF, and email-optimized exports with live preview dock and scope selection.', megaDesc: 'XLSX, CSV, PDF, email.' },
+        aiChat:   { title: 'E2E encrypted AI Chat — Private by Design', desc: 'In-backoffice AI assistant with SSE streaming, RAG citations, and client-side tool calls. LLM runs locally — no data leaves your infra.', megaDesc: 'Private AI, local LLM.' },
+        security: { title: 'Security & Step-Up',      desc: 'Passkey/WebAuthn enrollment & login with biometric ceremonies, plus MFA step-up modal for critical actions.', megaDesc: 'Passkeys, MFA, step-up.' },
+        versions: { title: 'Version History & Errors', desc: 'Audit timeline with action icons and field-level diffs, plus the centralized error panel with impact-colored event cards.', megaDesc: 'Audit trail + error panel.' },
+        modules:  { title: 'Modular Bricks',          desc: 'Module list with health status, dynamic settings from config_entries, and self-registering microservices discovered via /meta.', megaDesc: 'Self-registering modules.' },
+        collab:   { title: 'Real-time Collaboration', desc: 'Presence avatars, field-level merge badges, and conflict resolution. Preview of upcoming UX — backend is ready, UI is next.', megaDesc: 'Presence + field merge.' },
+        agentic:  { title: 'Agentic Development',     desc: 'Describe a feature, approve the plan, watch it build & deploy. Preview of upcoming UX — not yet in the product.', megaDesc: 'Describe, approve, ship.' },
+      },
+    },
   },
 
   it: {
-    nav: { home: 'Home', features: 'Funzionalità', docs: 'Docs', apiCatalog: 'API Catalog', github: 'GitHub®', license: 'Licenza MIT', contact: 'Contatti', thankyou: 'Grazie' },
+    nav: { home: 'Home', features: 'Funzionalità', docs: 'Docs', apiCatalog: 'API Catalog', github: 'GitHub®', license: 'Licenza MIT', contact: 'Contatti', thankyou: 'Grazie', virtualTour: 'Tour Virtuale' },
     hero: {
       badge: 'Licenza MIT • Open Source • Multi-Cloud',
       headlinePrefix: 'Il framework backoffice opinionato per',
@@ -619,10 +638,29 @@ export const translations = {
       marqueeLabel: 'Costruito con il lavoro di',
       heartAria: 'Cuore open source',
     },
+    demo: {
+      hubBadge: 'Tour Interattiva delle Funzionalità',
+      hubTitle: 'Primebrick in Movimento',
+      hubSubtitle: 'Scorri il vero backoffice di Primebrick — ogni schermata è una replica fedele della UI reale, animata mentre scorri. Scegli un tour qui sotto.',
+      shellTitle: 'La Shell',
+      comingSoon: 'Prossimamente',
+      megaAllLink: 'Tutte le Demo',
+      card: {
+        shell:    { title: 'La Shell',                desc: 'Anatomia della shell dell\'app: selettori organizzazione & modulo, sidebar dinamica da /meta, command palette, fuso orario IANA, toggle tema, badge di salute.', megaDesc: 'La shell che avvolge ogni brick.' },
+        entities: { title: 'Tabella Lista Entità',    desc: 'Il fiore all\'occhiello: ricerca, filtri avanzati, toggle datetime IANA, selettore colonne, colonne fisse, selezione, azioni bulk, export, CRUD, anteprima.', megaDesc: 'Cerca, filtra, modifica, esporta.' },
+        exports:  { title: 'Export',                  desc: 'Export XLSX, CSV, HTML, PDF ed email-ottimizzati con dock di anteprima live e selezione scope.', megaDesc: 'XLSX, CSV, PDF, email.' },
+        aiChat:   { title: 'AI Chat crittografata E2E — Privato per Design', desc: 'Assistente AI integrato nel backoffice con streaming SSE, citazioni RAG e chiamate tool lato client. LLM in locale — nessun dato lascia la tua infra.', megaDesc: 'AI privata, LLM locale.' },
+        security: { title: 'Sicurezza & Step-Up',     desc: 'Registrazione & login Passkey/WebAuthn con cerimonie biometriche, più modale MFA step-up per azioni critiche.', megaDesc: 'Passkey, MFA, step-up.' },
+        versions: { title: 'Cronologia Versioni & Errori', desc: 'Timeline di audit con icone azione e diff a livello campo, più il pannello errori centralizzato con schede evento colorate per impatto.', megaDesc: 'Audit trail + pannello errori.' },
+        modules:  { title: 'Bricks Modulari',         desc: 'Lista moduli con stato di salute, impostazioni dinamiche da config_entries e microservizi auto-registranti scoperti via /meta.', megaDesc: 'Moduli auto-registranti.' },
+        collab:   { title: 'Collaborazione in Tempo Reale', desc: 'Avatar di presenza, badge di merge a livello campo e risoluzione conflitti. Anteprima della UX in arrivo — il backend è pronto, la UI è la prossima.', megaDesc: 'Presenza + merge campi.' },
+        agentic:  { title: 'Sviluppo Agentic',        desc: 'Descrivi una funzionalità, approva il piano, guardalo costruire & deployare. Anteprima della UX in arrivo — non ancora nel prodotto.', megaDesc: 'Descrivi, approva, spedisci.' },
+      },
+    },
   },
 
   de: {
-    nav: { home: 'Startseite', features: 'Funktionen', docs: 'Doku', apiCatalog: 'API Catalog', github: 'GitHub®', license: 'MIT-Lizenz', contact: 'Kontakt', thankyou: 'Danke' },
+    nav: { home: 'Startseite', features: 'Funktionen', docs: 'Doku', apiCatalog: 'API Catalog', github: 'GitHub®', license: 'MIT-Lizenz', contact: 'Kontakt', thankyou: 'Danke', virtualTour: 'Virtuelle Tour' },
     hero: {
       badge: 'MIT-Lizenziert • Open Source • Multi-Cloud',
       headlinePrefix: 'Das Opinionated Backoffice-Framework für',
@@ -922,10 +960,29 @@ export const translations = {
       marqueeLabel: 'Gebaut mit der Arbeit von',
       heartAria: 'Open-Source-Herz',
     },
+    demo: {
+      hubBadge: 'Interaktive Feature-Tour',
+      hubTitle: 'Primebrick in Bewegung',
+      hubSubtitle: 'Scrollen Sie durch das echte Primebrick-Backoffice — jeder Bildschirm ist eine originalgetreue Nachbildung der echten UI, animiert beim Scrollen. Wählen Sie unten eine Tour.',
+      shellTitle: 'Die Shell',
+      comingSoon: 'Demnächst',
+      megaAllLink: 'Alle Demos',
+      card: {
+        shell:    { title: 'Die Shell',               desc: 'Anatomie der App-Shell: Org- & Modul-Umschalter, dynamische Sidebar-Nav aus /meta, Command-Palette, IANA-Zeitzone, Theme-Umschalter, Health-Badge.', megaDesc: 'Die Shell, die jeden Brick umhüllt.' },
+        entities: { title: 'Entitätslisten-Tabelle',  desc: 'Das Aushängeschild: Suche, erweiterte Filter, IANA-Datetime-Umschalter, Spaltenwähler, fixierte Spalten, Auswahl, Massenaktionen, Exporte, CRUD, Vorschau.', megaDesc: 'Suchen, filtern, bearbeiten, exportieren.' },
+        exports:  { title: 'Exporte',                 desc: 'XLSX-, CSV-, HTML-, PDF- und E-Mail-optimierte Exporte mit Live-Vorschau-Dock und Scope-Auswahl.', megaDesc: 'XLSX, CSV, PDF, E-Mail.' },
+        aiChat:   { title: 'E2E-verschlüsselte AI Chat — Private by Design', desc: 'Im Backoffice integrierter AI-Assistent mit SSE-Streaming, RAG-Zitaten und clientseitigen Tool-Aufrufen. LLM läuft lokal — keine Daten verlassen Ihre Infra.', megaDesc: 'Private AI, lokales LLM.' },
+        security: { title: 'Sicherheit & Step-Up',    desc: 'Passkey/WebAuthn-Registrierung & Login mit biometrischen Zeremonien, plus MFA-Step-Up-Modal für kritische Aktionen.', megaDesc: 'Passkeys, MFA, Step-Up.' },
+        versions: { title: 'Versionsverlauf & Fehler', desc: 'Audit-Zeitleiste mit Aktions-Icons und Feld-level-Diffs, plus zentralisiertes Fehler-Panel mit nach Auswirkung farbigen Event-Karten.', megaDesc: 'Audit-Trail + Fehler-Panel.' },
+        modules:  { title: 'Modulare Bricks',         desc: 'Modulliste mit Health-Status, dynamischen Einstellungen aus config_entries und selbst-registrierenden Microservices, entdeckt via /meta.', megaDesc: 'Selbst-registrierende Module.' },
+        collab:   { title: 'Echtzeit-Zusammenarbeit', desc: 'Präsenz-Avatare, Merge-Badges auf Feldebene und Konfliktlösung. Vorschau der kommenden UX — Backend ist bereit, UI folgt als Nächstes.', megaDesc: 'Präsenz + Feld-Merge.' },
+        agentic:  { title: 'Agentic Entwicklung',     desc: 'Beschreiben Sie ein Feature, genehmigen Sie den Plan, sehen Sie zu, wie es gebaut & deployt wird. Vorschau der kommenden UX — noch nicht im Produkt.', megaDesc: 'Beschreiben, genehmigen, ausliefern.' },
+      },
+    },
   },
 
   es: {
-    nav: { home: 'Inicio', features: 'Características', docs: 'Docs', apiCatalog: 'API Catalog', github: 'GitHub®', license: 'Licencia MIT', contact: 'Contacto', thankyou: 'Gracias' },
+    nav: { home: 'Inicio', features: 'Características', docs: 'Docs', apiCatalog: 'API Catalog', github: 'GitHub®', license: 'Licencia MIT', contact: 'Contacto', thankyou: 'Gracias', virtualTour: 'Tour Virtual' },
     hero: {
       badge: 'Licencia MIT • Open Source • Multi-Cloud',
       headlinePrefix: 'El framework backoffice opinionated para',
@@ -1225,10 +1282,29 @@ export const translations = {
       marqueeLabel: 'Construido con el trabajo de',
       heartAria: 'Corazón open source',
     },
+    demo: {
+      hubBadge: 'Tour Interactivo de Funciones',
+      hubTitle: 'Primebrick en Movimiento',
+      hubSubtitle: 'Desplázate por el verdadero backoffice de Primebrick — cada pantalla es una réplica fiel de la UI real, animada mientras te desplazas. Elige un tour a continuación.',
+      shellTitle: 'La Shell',
+      comingSoon: 'Próximamente',
+      megaAllLink: 'Todas las Demos',
+      card: {
+        shell:    { title: 'La Shell',                desc: 'Anatomía de la shell de la app: selectores de organización y módulo, sidebar dinámica desde /meta, command palette, zona horaria IANA, toggle de tema, badge de salud.', megaDesc: 'La shell que envuelve cada brick.' },
+        entities: { title: 'Tabla de Lista de Entidades', desc: 'El buque insignia: búsqueda, filtros avanzados, toggle de datetime IANA, selector de columnas, columnas fijas, selección, acciones masivas, exportaciones, CRUD, vista previa.', megaDesc: 'Buscar, filtrar, editar, exportar.' },
+        exports:  { title: 'Exportaciones',           desc: 'Exportaciones XLSX, CSV, HTML, PDF y optimizadas para email con dock de vista previa en vivo y selección de ámbito.', megaDesc: 'XLSX, CSV, PDF, email.' },
+        aiChat:   { title: 'AI Chat cifrado E2E — Privado por Diseño', desc: 'Asistente AI integrado en el backoffice con streaming SSE, citas RAG y llamadas a herramientas del lado cliente. El LLM se ejecuta localmente — ningún dato sale de tu infra.', megaDesc: 'AI privada, LLM local.' },
+        security: { title: 'Seguridad & Step-Up',     desc: 'Registro e inicio de sesión con Passkey/WebAuthn con ceremonias biométricas, más modal MFA step-up para acciones críticas.', megaDesc: 'Passkeys, MFA, step-up.' },
+        versions: { title: 'Historial de Versiones & Errores', desc: 'Línea de tiempo de auditoría con iconos de acción y diffs a nivel de campo, más el panel de errores centralizado con tarjetas de evento coloreadas por impacto.', megaDesc: 'Audit trail + panel de errores.' },
+        modules:  { title: 'Bricks Modulares',        desc: 'Lista de módulos con estado de salud, ajustes dinámicos desde config_entries y microservicios auto-registrados descubiertos vía /meta.', megaDesc: 'Módulos auto-registrados.' },
+        collab:   { title: 'Colaboración en Tiempo Real', desc: 'Avatares de presencia, badges de merge a nivel de campo y resolución de conflictos. Vista previa de la UX próxima — el backend está listo, la UI es la siguiente.', megaDesc: 'Presencia + merge de campos.' },
+        agentic:  { title: 'Desarrollo Agentic',      desc: 'Describe una función, aprueba el plan, míralo construir y desplegar. Vista previa de la UX próxima — aún no en el producto.', megaDesc: 'Describir, aprobar, enviar.' },
+      },
+    },
   },
 
   pt: {
-    nav: { home: 'Início', features: 'Funcionalidades', docs: 'Docs', apiCatalog: 'API Catalog', github: 'GitHub®', license: 'Licença MIT', contact: 'Contato', thankyou: 'Obrigado' },
+    nav: { home: 'Início', features: 'Funcionalidades', docs: 'Docs', apiCatalog: 'API Catalog', github: 'GitHub®', license: 'Licença MIT', contact: 'Contato', thankyou: 'Obrigado', virtualTour: 'Tour Virtual' },
     hero: {
       badge: 'Licença MIT • Open Source • Multi-Cloud',
       headlinePrefix: 'O framework backoffice opinionated para',
@@ -1528,10 +1604,29 @@ export const translations = {
       marqueeLabel: 'Construído com o trabalho de',
       heartAria: 'Coração open source',
     },
+    demo: {
+      hubBadge: 'Tour Interativo de Funcionalidades',
+      hubTitle: 'Primebrick em Movimento',
+      hubSubtitle: 'Percorra o verdadeiro backoffice do Primebrick — cada ecrã é uma réplica fiel da UI real, animada enquanto percorre. Escolha um tour abaixo.',
+      shellTitle: 'A Shell',
+      comingSoon: 'Em breve',
+      megaAllLink: 'Todas as Demos',
+      card: {
+        shell:    { title: 'A Shell',                 desc: 'Anatomia da shell da app: seletores de organização & módulo, sidebar dinâmica a partir de /meta, command palette, fuso horário IANA, toggle de tema, badge de saúde.', megaDesc: 'A shell que envolve cada brick.' },
+        entities: { title: 'Tabela de Lista de Entidades', desc: 'O carro-chefe: pesquisa, filtros avançados, toggle de datetime IANA, seletor de colunas, colunas fixas, seleção, ações em massa, exportações, CRUD, pré-visualização.', megaDesc: 'Pesquisar, filtrar, editar, exportar.' },
+        exports:  { title: 'Exportações',             desc: 'Exportações XLSX, CSV, HTML, PDF e otimizadas para email com dock de pré-visualização ao vivo e seleção de escopo.', megaDesc: 'XLSX, CSV, PDF, email.' },
+        aiChat:   { title: 'AI Chat criptografado E2E — Privado por Design', desc: 'Assistente AI integrado no backoffice com streaming SSE, citações RAG e chamadas de ferramentas do lado do cliente. LLM executa localmente — nenhum dado sai da sua infra.', megaDesc: 'AI privada, LLM local.' },
+        security: { title: 'Segurança & Step-Up',     desc: 'Registo & login com Passkey/WebAuthn com cerimónias biométricas, mais modal MFA step-up para ações críticas.', megaDesc: 'Passkeys, MFA, step-up.' },
+        versions: { title: 'Histórico de Versões & Erros', desc: 'Linha do tempo de auditoria com ícones de ação e diffs ao nível de campo, mais o painel de erros centralizado com cartões de evento coloridos por impacto.', megaDesc: 'Audit trail + painel de erros.' },
+        modules:  { title: 'Bricks Modulares',        desc: 'Lista de módulos com estado de saúde, definições dinâmicas a partir de config_entries e microsserviços auto-registados descobertos via /meta.', megaDesc: 'Módulos auto-registados.' },
+        collab:   { title: 'Colaboração em Tempo Real', desc: 'Avatares de presença, badges de merge ao nível de campo e resolução de conflitos. Pré-visualização da UX futura — o backend está pronto, a UI é a próxima.', megaDesc: 'Presença + merge de campos.' },
+        agentic:  { title: 'Desenvolvimento Agentic', desc: 'Descreva uma funcionalidade, aprove o plano, veja-o ser construído & deployado. Pré-visualização da UX futura — ainda não no produto.', megaDesc: 'Descrever, aprovar, enviar.' },
+      },
+    },
   },
 
   fr: {
-    nav: { home: 'Accueil', features: 'Fonctionnalités', docs: 'Docs', apiCatalog: 'API Catalog', github: 'GitHub®', license: 'Licence MIT', contact: 'Contact', thankyou: 'Merci' },
+    nav: { home: 'Accueil', features: 'Fonctionnalités', docs: 'Docs', apiCatalog: 'API Catalog', github: 'GitHub®', license: 'Licence MIT', contact: 'Contact', thankyou: 'Merci', virtualTour: 'Tour Virtuel' },
     hero: {
       badge: 'Licence MIT • Open Source • Multi-Cloud',
       headlinePrefix: 'Le framework backoffice opinionated pour',
@@ -1830,6 +1925,25 @@ export const translations = {
       ctaContribute: 'Contribuer sur GitHub®',
       marqueeLabel: 'Construit avec le travail de',
       heartAria: 'Cœur open source',
+    },
+    demo: {
+      hubBadge: 'Tour Interactif des Fonctionnalités',
+      hubTitle: 'Primebrick en Mouvement',
+      hubSubtitle: 'Défilez dans le véritable backoffice de Primebrick — chaque écran est une réplique fidèle de la véritable UI, animée au fil du défilement. Choisissez une tour ci-dessous.',
+      shellTitle: 'La Shell',
+      comingSoon: 'Bientôt disponible',
+      megaAllLink: 'Toutes les Démos',
+      card: {
+        shell:    { title: 'La Shell',                desc: 'Anatomie de la shell de l\'app : sélecteurs d\'org & de module, sidebar dynamique depuis /meta, command palette, fuseau horaire IANA, toggle de thème, badge de santé.', megaDesc: 'La shell qui enveloppe chaque brick.' },
+        entities: { title: 'Tableau de Liste d\'Entités', desc: 'Le produit phare : recherche, filtres avancés, toggle datetime IANA, sélecteur de colonnes, colonnes figées, sélection, actions en masse, exportations, CRUD, aperçu.', megaDesc: 'Rechercher, filtrer, éditer, exporter.' },
+        exports:  { title: 'Exportations',            desc: 'Exportations XLSX, CSV, HTML, PDF et optimisées email avec dock d\'aperçu en direct et sélection de portée.', megaDesc: 'XLSX, CSV, PDF, email.' },
+        aiChat:   { title: 'AI Chat chiffré E2E — Privé par Design', desc: 'Assistant AI intégré au backoffice avec streaming SSE, citations RAG et appels d\'outils côté client. Le LLM s\'exécute localement — aucune donnée ne quitte votre infra.', megaDesc: 'AI privée, LLM local.' },
+        security: { title: 'Sécurité & Step-Up',      desc: 'Enregistrement & connexion Passkey/WebAuthn avec cérémonies biométriques, plus modale MFA step-up pour les actions critiques.', megaDesc: 'Passkeys, MFA, step-up.' },
+        versions: { title: 'Historique des Versions & Erreurs', desc: 'Timeline d\'audit avec icônes d\'action et diffs au niveau champ, plus le panneau d\'erreurs centralisé avec cartes d\'événement colorées par impact.', megaDesc: 'Audit trail + panneau d\'erreurs.' },
+        modules:  { title: 'Bricks Modulaires',       desc: 'Liste de modules avec état de santé, paramètres dynamiques depuis config_entries et microservices auto-enregistrés découverts via /meta.', megaDesc: 'Modules auto-enregistrés.' },
+        collab:   { title: 'Collaboration en Temps Réel', desc: 'Avatars de présence, badges de merge au niveau champ et résolution de conflits. Aperçu de l\'UX à venir — le backend est prêt, l\'UI est la prochaine.', megaDesc: 'Présence + merge de champs.' },
+        agentic:  { title: 'Développement Agentic',   desc: 'Décrivez une fonctionnalité, approuvez le plan, regardez-la se construire & se déployer. Aperçu de l\'UX à venir — pas encore dans le produit.', megaDesc: 'Décrire, approuver, livrer.' },
+      },
     },
   },
 } as const;
