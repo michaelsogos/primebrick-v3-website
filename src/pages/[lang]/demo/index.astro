@@ -1,0 +1,222 @@
+---
+import { translations, LANGUAGES, type LangCode } from '../../../i18n/translations';
+import LanguageSwitcher from '../../../components/svelte/LanguageSwitcher.svelte';
+import GitHubDropdown from '../../../components/svelte/GitHubDropdown.svelte';
+import VirtualTourMegaMenu from '../../../components/svelte/VirtualTourMegaMenu.svelte';
+import GitHubIcon from '../../../components/GitHubIcon.astro';
+import TopBanner from '../../../components/astro/TopBanner.astro';
+import pkg from '../../../../package.json';
+import '../../../styles/global.css';
+import '../../../styles/demo/demo.css';
+import { renderAllIcons } from '../../../scripts/demo/icons';
+
+const version = pkg.version;
+
+export const prerender = true;
+
+export function getStaticPaths() {
+  return LANGUAGES.map((lang) => ({
+    params: { lang: lang.code === 'en' ? 'en' : lang.code },
+  }));
+}
+
+const { lang } = Astro.params;
+const langCode = (lang ?? 'en') as LangCode;
+const t = translations[langCode] ?? translations.en;
+const isEn = langCode === 'en';
+const docsPath = 'https://docs.primebrick.dev';
+const homeHref = isEn ? '/en/' : `/${langCode}/`;
+const contactHref = isEn ? '/en/contact' : `/${langCode}/contact`;
+const thankyouHref = isEn ? '/en/thank-you' : `/${langCode}/thank-you`;
+const demoHref = isEn ? '/en/demo/' : `/${langCode}/demo/`;
+const shellHref = `${demoHref}shell`;
+---
+
+<!doctype html>
+<html lang={langCode}>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={t.demo.hubSubtitle.slice(0, 160)} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+    <link rel="icon" type="image/png" sizes="512x512" href="/favicon-512.png" />
+    <link rel="icon" sizes="any" href="/favicon.ico" />
+    <link rel="apple-touch-icon" href="/favicon-512.png" />
+    <title>Primebrick — {t.demo.hubTitle}</title>
+    {LANGUAGES.map((l) => (
+      <link rel="alternate" hreflang={l.hreflang} href={`https://primebrick.dev${l.code === 'en' ? '/en/demo/' : `/${l.code}/demo/`}`} />
+    ))}
+    <link rel="alternate" hreflang="x-default" href="https://primebrick.dev/en/demo/" />
+  </head>
+  <body class="min-h-screen bg-slate-950 text-slate-100 antialiased">
+    <!-- Ambient gradient background -->
+    <div class="pointer-events-none fixed inset-0 overflow-hidden">
+      <div class="absolute -top-40 left-1/2 h-[500px] w-[800px] -translate-x-1/2 rounded-full bg-sky-500/10 blur-[120px]"></div>
+      <div class="absolute top-1/3 -right-40 h-[400px] w-[400px] rounded-full bg-indigo-500/10 blur-[100px]"></div>
+      <div class="absolute bottom-0 -left-40 h-[400px] w-[400px] rounded-full bg-cyan-500/10 blur-[100px]"></div>
+    </div>
+
+    <!-- Top banner (sticky, non-dismissible) -->
+    <TopBanner text={t.banner.text} href={contactHref} />
+
+    <!-- Navigation (sticky, condensing on scroll) -->
+    <nav id="site-nav" class="sticky top-9 z-50 border-b border-slate-800/50 bg-slate-950/40 backdrop-blur-sm transition-all duration-300">
+      <div id="nav-inner" class="mx-auto flex max-w-7xl items-center justify-between px-6 py-4 transition-all duration-300">
+        <a href={homeHref} class="flex items-center gap-2 transition-all duration-300" id="nav-logo" aria-label="PrimeBrick home">
+          <img src="/logo-full-dark.svg" alt="PrimeBrick" width="170" height="32" class="h-7 w-auto" />
+        </a>
+        <div class="flex items-center gap-6 text-sm">
+          <a href={homeHref} class="text-slate-300 hover:text-sky-400 transition-colors">{t.nav.home}</a>
+          <VirtualTourMegaMenu client:load currentLang={langCode} activeDemo="hub" />
+          <a href={docsPath} class="text-slate-300 hover:text-sky-400 transition-colors" target="_blank" rel="noopener">{t.nav.docs}</a>
+          <a href={contactHref} class="text-slate-300 hover:text-sky-400 transition-colors">{t.nav.contact}</a>
+          <a href={thankyouHref} class="text-slate-300 hover:text-sky-400 transition-colors">{t.nav.thankyou}</a>
+          <a
+            href="https://opensource.org/license/MIT"
+            class="text-slate-300 hover:text-sky-400 transition-colors"
+            target="_blank"
+            rel="noopener"
+          >
+            {t.nav.license}
+          </a>
+          <GitHubDropdown client:load />
+          <LanguageSwitcher client:load currentLang={langCode} />
+        </div>
+      </div>
+    </nav>
+    <script>
+      (() => {
+        const nav = document.getElementById('site-nav');
+        const inner = document.getElementById('nav-inner');
+        const logo = document.getElementById('nav-logo');
+        if (!nav || !inner) return;
+        const onScroll = () => {
+          const scrolled = window.scrollY > 20;
+          if (scrolled) {
+            inner.classList.replace('py-4', 'py-2');
+            nav.classList.add('bg-slate-950/80', 'backdrop-blur-md', 'shadow-lg', 'border-slate-800/80');
+            nav.classList.remove('bg-slate-950/40', 'border-slate-800/50');
+            logo?.classList.replace('text-xl', 'text-lg');
+          } else {
+            inner.classList.replace('py-2', 'py-4');
+            nav.classList.remove('bg-slate-950/80', 'backdrop-blur-md', 'shadow-lg', 'border-slate-800/80');
+            nav.classList.add('bg-slate-950/40', 'border-slate-800/50');
+            logo?.classList.replace('text-lg', 'text-xl');
+          }
+        };
+        window.addEventListener('scroll', onScroll, { passive: true });
+        onScroll();
+      })();
+    </script>
+
+    <!-- Demo content: ambient blobs + hero + cards (from index.html, minus prototype nav/footer) -->
+    <div class="ambient-blob blob-1"></div>
+    <div class="ambient-blob blob-2"></div>
+
+    <section class="hub-hero">
+      <div class="hub-badge">
+        <i data-icon="monitorPlay"></i>
+        {t.demo.hubBadge}
+      </div>
+      <h1 class="hub-title">{t.demo.hubTitle}</h1>
+      <p class="hub-subtitle">{t.demo.hubSubtitle}</p>
+    </section>
+
+    <section style="padding: 0 2rem 4rem; position: relative; z-index: 1; display: flex; justify-content: center;">
+      <div class="hub-cards">
+        <a href={shellHref} class="hub-card">
+          <div class="card-icon"><i data-icon="panelsTopLeft"></i></div>
+          <div class="card-title">{t.demo.card.shell.title}</div>
+          <div class="card-desc">{t.demo.card.shell.desc}</div>
+          <div class="card-arrow"><i data-icon="arrowUpRight"></i></div>
+        </a>
+
+        <a href="#" class="hub-card coming-soon" aria-disabled="true">
+          <div class="card-icon"><i data-icon="table2"></i></div>
+          <div class="card-title">{t.demo.card.entities.title}</div>
+          <div class="card-desc">{t.demo.card.entities.desc}</div>
+          <div class="card-arrow"><i data-icon="arrowUpRight"></i></div>
+        </a>
+
+        <a href="#" class="hub-card coming-soon" aria-disabled="true">
+          <div class="card-icon"><i data-icon="download"></i></div>
+          <div class="card-title">{t.demo.card.exports.title}</div>
+          <div class="card-desc">{t.demo.card.exports.desc}</div>
+          <div class="card-arrow"><i data-icon="arrowUpRight"></i></div>
+        </a>
+
+        <a href="#" class="hub-card coming-soon" aria-disabled="true">
+          <div class="card-icon"><i data-icon="botMessageSquare"></i></div>
+          <div class="card-title">{t.demo.card.aiChat.title}</div>
+          <div class="card-desc">{t.demo.card.aiChat.desc}</div>
+          <div class="card-arrow"><i data-icon="arrowUpRight"></i></div>
+        </a>
+
+        <a href="#" class="hub-card coming-soon" aria-disabled="true">
+          <div class="card-icon"><i data-icon="shieldCheck"></i></div>
+          <div class="card-title">{t.demo.card.security.title}</div>
+          <div class="card-desc">{t.demo.card.security.desc}</div>
+          <div class="card-arrow"><i data-icon="arrowUpRight"></i></div>
+        </a>
+
+        <a href="#" class="hub-card coming-soon" aria-disabled="true">
+          <div class="card-icon"><i data-icon="history"></i></div>
+          <div class="card-title">{t.demo.card.versions.title}</div>
+          <div class="card-desc">{t.demo.card.versions.desc}</div>
+          <div class="card-arrow"><i data-icon="arrowUpRight"></i></div>
+        </a>
+
+        <a href="#" class="hub-card coming-soon" aria-disabled="true">
+          <div class="card-icon"><i data-icon="package"></i></div>
+          <div class="card-title">{t.demo.card.modules.title}</div>
+          <div class="card-desc">{t.demo.card.modules.desc}</div>
+          <div class="card-arrow"><i data-icon="arrowUpRight"></i></div>
+        </a>
+
+        <a href="#" class="hub-card preview coming-soon" aria-disabled="true">
+          <div class="card-icon"><i data-icon="users"></i></div>
+          <div class="card-title">{t.demo.card.collab.title}</div>
+          <div class="card-desc">{t.demo.card.collab.desc}</div>
+          <div class="card-arrow"><i data-icon="arrowUpRight"></i></div>
+        </a>
+
+        <a href="#" class="hub-card preview coming-soon" aria-disabled="true">
+          <div class="card-icon"><i data-icon="brainCircuit"></i></div>
+          <div class="card-title">{t.demo.card.agentic.title}</div>
+          <div class="card-desc">{t.demo.card.agentic.desc}</div>
+          <div class="card-arrow"><i data-icon="arrowUpRight"></i></div>
+        </a>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="relative z-10 border-t border-slate-800/50 px-6 py-8">
+      <div class="mx-auto flex max-w-7xl items-center justify-between text-sm text-slate-500">
+        <span>&copy; 2026 {t.footer.copyright}</span>
+        <div class="flex items-center gap-4">
+          <span class="text-xs text-slate-600">v{version}</span>
+          <a
+            href="https://github.com/michaelsogos/primebrick-v3-website"
+            class="inline-flex items-center gap-1.5 hover:text-sky-400 transition-colors"
+            target="_blank"
+            rel="noopener"
+          >
+            <GitHubIcon class="h-4 w-4" />
+            GitHub®
+          </a>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      import { renderAllIcons } from '../../../scripts/demo/icons';
+      renderAllIcons();
+
+      // Prevent coming-soon cards from navigating
+      document.querySelectorAll('.hub-card.coming-soon').forEach((a) => {
+        a.addEventListener('click', (e) => e.preventDefault());
+      });
+    </script>
+  </body>
+</html>
