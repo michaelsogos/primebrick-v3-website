@@ -48,7 +48,7 @@ const shellHref = `${demoHref}shell`;
     ))}
     <link rel="alternate" hreflang="x-default" href="https://primebrick.dev/en/demo/shell" />
   </head>
-  <body class="demo-body">
+  <body class="min-h-screen bg-slate-950 text-slate-100 antialiased">
     <!-- Ambient gradient background (website) -->
     <div class="pointer-events-none fixed inset-0 overflow-hidden">
       <div class="absolute -top-40 left-1/2 h-[500px] w-[800px] -translate-x-1/2 rounded-full bg-sky-500/10 blur-[120px]"></div>
@@ -109,12 +109,11 @@ const shellHref = `${demoHref}shell`;
       })();
     </script>
 
-    <!-- ===== Demo body (from shell-v2.html, verbatim) ===== -->
+    <!-- ===== Demo body (from shell-v2.html, scoped) ===== -->
 
-<div class="ambient-blob blob-1"></div>
-<div class="ambient-blob blob-2"></div>
+<div class="demo-scope">
 
-<!-- Fixed title bar -->
+<!-- Sticky title bar (sits below website nav stack) -->
 <div class="demo-title-bar">
   <h1 class="demo-title">The App Shell</h1>
   <div class="demo-subtitle">The shell that wraps every Primebrick module — one layout, infinite bricks</div>
@@ -498,8 +497,7 @@ const shellHref = `${demoHref}shell`;
   </div>
 </div>
 
-    <!-- Demo footer (repoint to demo hub) -->
-    <footer class="demo-footer">&copy; 2026 Primebrick &middot; <a href={demoHref} style="color:#38bdf8;text-decoration:none">{t.demo.hubTitle}</a></footer>
+</div><!-- /.demo-scope -->
 
     <!-- Website footer -->
     <footer class="relative z-10 border-t border-slate-800/50 px-6 py-8">
