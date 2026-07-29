@@ -33,18 +33,18 @@ export function initShellScroll(): void {
   //   5: screen moves down + re-centers
   //   6: top nav elements extract upward, annotations appear above pointing down
   const PHASES = [
-    { name: 'The App Shell', start: 0.00, end: 0.05 },
-    { name: 'Zooming in', start: 0.05, end: 0.12 },
-    { name: 'Extracting the sidebar', start: 0.12, end: 0.25 },
-    { name: 'Sidebar anatomy', start: 0.25, end: 0.42 },
-    { name: 'Reassembling sidebar', start: 0.42, end: 0.52 },
-    { name: 'Recentering', start: 0.52, end: 0.60 },
-    { name: 'Top navigation anatomy', start: 0.60, end: 0.75 },
-    { name: 'Reassembling topbar', start: 0.75, end: 0.82 },
-    { name: 'Recentering for content', start: 0.82, end: 0.88 },
-    { name: 'Content area anatomy', start: 0.88, end: 0.94 },
-    { name: 'Reassembling content', start: 0.94, end: 0.97 },
-    { name: 'Returning to origin', start: 0.97, end: 0.99 },
+    { name: 'The App Shell', start: 0.00, end: 0.03 },
+    { name: 'Zooming in', start: 0.03, end: 0.08 },
+    { name: 'Extracting the sidebar', start: 0.08, end: 0.18 },
+    { name: 'Sidebar anatomy', start: 0.18, end: 0.32 },
+    { name: 'Reassembling sidebar', start: 0.32, end: 0.40 },
+    { name: 'Recentering', start: 0.40, end: 0.44 },
+    { name: 'Top navigation anatomy', start: 0.44, end: 0.66 },
+    { name: 'Reassembling topbar', start: 0.66, end: 0.72 },
+    { name: 'Recentering for content', start: 0.72, end: 0.76 },
+    { name: 'Content area anatomy', start: 0.76, end: 0.92 },
+    { name: 'Reassembling content', start: 0.92, end: 0.96 },
+    { name: 'Returning to origin', start: 0.96, end: 0.99 },
     { name: 'The Shell', start: 0.99, end: 1.00 },
   ];
 
@@ -81,9 +81,9 @@ export function initShellScroll(): void {
   if (dotsContainer) {
     const dotPhases = [
       { label: 'Start', target: 0.0 },        // Very beginning
-      { label: 'Sidebar', target: 0.40 },     // Sidebar anatomy: annotations + claim fully visible
-      { label: 'Topbar', target: 0.75 },      // Topbar anatomy: annotations + claim fully visible
-      { label: 'Content', target: 0.94 },    // Content anatomy: annotations + claim fully visible
+      { label: 'Sidebar', target: 0.30 },     // Sidebar anatomy: annotations + claim fully visible
+      { label: 'Topbar', target: 0.60 },      // Topbar anatomy: annotations + claim fully visible
+      { label: 'Content', target: 0.88 },     // Content anatomy: annotations + claim fully visible
       { label: 'Conclusion', target: 1.0 },   // Final conclusion claim visible
     ];
     dotPhases.forEach((dp, i) => {
@@ -456,7 +456,7 @@ export function initShellScroll(): void {
     // Content section claim: appears during content extraction (phase 9), fades out during reassembly (phase 10)
     const claimContentEl = document.getElementById('section-claim-content');
     if (claimContentEl) {
-      const claimContentIn = smoothstep(PHASES[9].start + 0.04, PHASES[9].start + 0.06, progress);
+      const claimContentIn = smoothstep(PHASES[9].start + 0.06, PHASES[9].start + 0.10, progress);
       const claimContentOut = smoothstep(PHASES[10].start, PHASES[10].end, progress);
       claimContentEl.style.opacity = claimContentIn * (1 - claimContentOut);
     }
@@ -515,7 +515,7 @@ export function initShellScroll(): void {
     // ===== Topbar extraction + reassembly =====
     // Topbar slides UP out of the mock's top edge, starting from the RIGHT edge of the mock
     // During phase 7, topbar reassembles back into the mock
-    const pTbExtract = smoothstep(PHASES[6].start + 0.03, PHASES[6].start + 0.12, progress);
+    const pTbExtract = smoothstep(PHASES[6].start + 0.03, PHASES[6].start + 0.10, progress);
     const pTbReassemble = smoothstep(PHASES[7].start, PHASES[7].end, progress);
     const tbAmount = pTbExtract * (1 - pTbReassemble);
 
@@ -619,8 +619,8 @@ export function initShellScroll(): void {
     }
 
     // ===== Topbar annotations — fade in AFTER topbar extraction completes, fade out during reassembly =====
-    const tbExtractEnd = PHASES[6].start + 0.12;  // extraction ends at start+0.12
-    const pTbAnnotate = smoothstep(tbExtractEnd, tbExtractEnd + 0.03, progress);
+    const tbExtractEnd = PHASES[6].start + 0.10;  // extraction ends at start+0.10
+    const pTbAnnotate = smoothstep(tbExtractEnd, tbExtractEnd + 0.05, progress);
     const pTbAnnFadeOut = smoothstep(PHASES[7].start, PHASES[7].end, progress);
     const tbAnnOpacity = pTbAnnotate * (1 - pTbAnnFadeOut);
 
@@ -644,8 +644,9 @@ export function initShellScroll(): void {
     // Step 1: slide content area left to center it (same size)
     // Step 2: zoom out from centered position to final size
     // Phase 10: reverse — zoom back in, then slide back to original position
-    const pContentSlide = smoothstep(PHASES[9].start + 0.01, PHASES[9].start + 0.025, progress);
-    const pContentZoom = smoothstep(PHASES[9].start + 0.025, PHASES[9].start + 0.05, progress);
+    // Spread extraction across ~8% of scroll (matching sidebar's pacing)
+    const pContentSlide = smoothstep(PHASES[9].start, PHASES[9].start + 0.04, progress);
+    const pContentZoom = smoothstep(PHASES[9].start + 0.04, PHASES[9].start + 0.08, progress);
     const pContentReassemble = smoothstep(PHASES[10].start, PHASES[10].end, progress);
     // Effective amounts: extraction * (1 - reassembly)
     const effSlide = pContentSlide * (1 - pContentReassemble);
@@ -693,8 +694,8 @@ export function initShellScroll(): void {
     }
 
     // ===== Content annotations — fade in AFTER content zoom completes =====
-    const contentExtractEnd = PHASES[9].start + 0.05;
-    const pContentAnnotate = smoothstep(contentExtractEnd, contentExtractEnd + 0.008, progress);
+    const contentExtractEnd = PHASES[9].start + 0.08;
+    const pContentAnnotate = smoothstep(contentExtractEnd, contentExtractEnd + 0.03, progress);
     const pContentAnnotateOut = smoothstep(PHASES[10].start, PHASES[10].start + 0.03, progress);
     const pContentAnnotateVis = pContentAnnotate * (1 - pContentAnnotateOut);
 

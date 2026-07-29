@@ -113,11 +113,23 @@ const shellHref = `${demoHref}shell`;
 
 <div class="demo-scope">
 
-<!-- Sticky title bar (sits below website nav stack) -->
-<div class="demo-title-bar">
-  <h1 class="demo-title">The App Shell</h1>
-  <div class="demo-subtitle">The shell that wraps every Primebrick module — one layout, infinite bricks</div>
-</div>
+<!-- Hero (matches the website pattern: badge + gradient h1 + subtitle) -->
+<section class="relative z-10 px-6 pt-24 pb-16 text-center">
+  <div class="mx-auto max-w-3xl">
+    <div class="mb-6 inline-flex items-center gap-2 rounded-full border border-slate-700/50 bg-slate-900/50 px-4 py-1.5 text-xs font-medium text-slate-400 backdrop-blur-sm">
+      <span class="h-1.5 w-1.5 rounded-full bg-sky-400 animate-pulse"></span>
+      {t.demo.shellBadge}
+    </div>
+    <h1 class="text-5xl font-bold tracking-tight text-white sm:text-6xl lg:text-7xl">
+      <span class="bg-gradient-to-b from-white via-sky-200 to-slate-400 bg-clip-text text-transparent">
+        {t.demo.shellTitle}
+      </span>
+    </h1>
+    <p class="mx-auto mt-6 max-w-2xl text-lg text-slate-400 sm:text-xl">
+      {t.demo.shellSubtitle}
+    </p>
+  </div>
+</section>
 
 <!-- Scroll hint — scrolls away with the page (not fixed) -->
 <div class="demo-scroll-hint" id="scroll-hint">↓ Scroll to control the animation</div>
