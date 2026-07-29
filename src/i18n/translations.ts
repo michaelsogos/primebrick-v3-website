@@ -321,6 +321,8 @@ export const translations = {
       hubTitle: 'Primebrick in Motion',
       hubSubtitle: 'Scroll through the real Primebrick backoffice — every screen is a faithful replica of the actual UI, animated as you scroll. Pick a tour below.',
       shellTitle: 'The Shell',
+      shellBadge: 'Scroll-Jacking Demo',
+      shellSubtitle: 'The shell that wraps every Primebrick module — one layout, infinite bricks. Scroll to control the animation and explore the anatomy of the Primebrick backoffice.',
       comingSoon: 'Coming soon',
       megaAllLink: 'All Demos',
       card: {
@@ -643,6 +645,8 @@ export const translations = {
       hubTitle: 'Primebrick in Movimento',
       hubSubtitle: 'Scorri il vero backoffice di Primebrick — ogni schermata è una replica fedele della UI reale, animata mentre scorri. Scegli un tour qui sotto.',
       shellTitle: 'La Shell',
+      shellBadge: 'Demo Scroll-Jacking',
+      shellSubtitle: 'La shell che avvolge ogni modulo Primebrick — un layout, brick infiniti. Scorri per controllare l\'animazione ed esplorare l\'anatomia del backoffice Primebrick.',
       comingSoon: 'Prossimamente',
       megaAllLink: 'Tutte le Demo',
       card: {
@@ -965,6 +969,8 @@ export const translations = {
       hubTitle: 'Primebrick in Bewegung',
       hubSubtitle: 'Scrollen Sie durch das echte Primebrick-Backoffice — jeder Bildschirm ist eine originalgetreue Nachbildung der echten UI, animiert beim Scrollen. Wählen Sie unten eine Tour.',
       shellTitle: 'Die Shell',
+      shellBadge: 'Scroll-Jacking-Demo',
+      shellSubtitle: 'Die Shell, die jedes Primebrick-Modul umhüllt — ein Layout, unendliche Bricks. Scrollen Sie, um die Animation zu steuern und die Anatomie des Primebrick-Backoffice zu erkunden.',
       comingSoon: 'Demnächst',
       megaAllLink: 'Alle Demos',
       card: {
@@ -1287,6 +1293,8 @@ export const translations = {
       hubTitle: 'Primebrick en Movimiento',
       hubSubtitle: 'Desplázate por el verdadero backoffice de Primebrick — cada pantalla es una réplica fiel de la UI real, animada mientras te desplazas. Elige un tour a continuación.',
       shellTitle: 'La Shell',
+      shellBadge: 'Demo de Scroll-Jacking',
+      shellSubtitle: 'La shell que envuelve cada módulo Primebrick — un layout, bricks infinitos. Desplázate para controlar la animación y explorar la anatomía del backoffice Primebrick.',
       comingSoon: 'Próximamente',
       megaAllLink: 'Todas las Demos',
       card: {
@@ -1609,6 +1617,8 @@ export const translations = {
       hubTitle: 'Primebrick em Movimento',
       hubSubtitle: 'Percorra o verdadeiro backoffice do Primebrick — cada ecrã é uma réplica fiel da UI real, animada enquanto percorre. Escolha um tour abaixo.',
       shellTitle: 'A Shell',
+      shellBadge: 'Demo de Scroll-Jacking',
+      shellSubtitle: 'A shell que envolve cada módulo Primebrick — um layout, bricks infinitos. Percorra para controlar a animação e explorar a anatomia do backoffice Primebrick.',
       comingSoon: 'Em breve',
       megaAllLink: 'Todas as Demos',
       card: {
@@ -1931,6 +1941,8 @@ export const translations = {
       hubTitle: 'Primebrick en Mouvement',
       hubSubtitle: 'Défilez dans le véritable backoffice de Primebrick — chaque écran est une réplique fidèle de la véritable UI, animée au fil du défilement. Choisissez une tour ci-dessous.',
       shellTitle: 'La Shell',
+      shellBadge: 'Démo Scroll-Jacking',
+      shellSubtitle: 'La shell qui enveloppe chaque module Primebrick — un layout, des bricks infinis. Défilez pour contrôler l\'animation et explorer l\'anatomie du backoffice Primebrick.',
       comingSoon: 'Bientôt disponible',
       megaAllLink: 'Toutes les Démos',
       card: {

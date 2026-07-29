@@ -20,26 +20,9 @@
   --pb-font: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
 }
 
-/* ===== Sticky title bar (sits below website nav stack) ===== */
-.demo-title-bar {
-  position: sticky; top: 104px; z-index: 30;
-  padding: 1.5rem 2rem 1rem;
-  background: rgba(2, 6, 23, 0.85);
-  backdrop-filter: blur(12px);
-  border-bottom: 1px solid rgba(56, 189, 248, 0.1);
-  text-align: center;
-}
-.demo-title-bar .demo-title {
-  font-size: 1.75rem; font-weight: 800;
-  background: linear-gradient(135deg, #e2e8f0 0%, #38bdf8 50%, #818cf8 100%);
-  -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
-  margin: 0;
-}
-.demo-title-bar .demo-subtitle {
-  font-size: 0.875rem; color: #94a3b8; margin-top: 0.25rem;
-}
+/* ===== Scroll hint (fixed, fades on scroll) ===== */
 .demo-scroll-hint {
-  position: fixed; top: 180px; left: 50%; transform: translateX(-50%);
+  position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%);
   font-size: 0.75rem; color: #38bdf8;
   font-weight: 500; letter-spacing: 0.02em;
   z-index: 50; pointer-events: none;

@@ -144,7 +144,8 @@
 
   .vt-panel {
     position: absolute;
-    right: 0;
+    left: 50%;
+    transform: translateX(-50%);
     top: 100%;
     margin-top: 0.5rem;
     width: 680px;
@@ -198,13 +199,24 @@
   }
 
   .vt-disabled {
-    opacity: 0.5;
     cursor: not-allowed;
+  }
+
+  .vt-disabled .vt-card-icon,
+  .vt-disabled .vt-card-title,
+  .vt-disabled .vt-card-desc {
+    opacity: 0.5;
   }
 
   .vt-disabled:hover {
     border-color: rgba(30, 41, 59, 0.5);
     background: rgba(30, 41, 59, 0.3);
+  }
+
+  .vt-disabled:hover .vt-card-icon,
+  .vt-disabled:hover .vt-card-title,
+  .vt-disabled:hover .vt-card-desc {
+    opacity: 0.65;
   }
 
   .vt-card-icon {
@@ -243,22 +255,24 @@
 
   .vt-coming {
     position: absolute;
-    top: 0.5rem;
-    right: 0.5rem;
+    bottom: -0.625rem;
+    right: 0.75rem;
     font-size: 0.5625rem;
     font-weight: 700;
     letter-spacing: 0.05em;
     color: #fbbf24;
-    background: rgba(251, 191, 36, 0.1);
+    background: rgba(15, 23, 42, 0.96);
     border: 1px solid rgba(251, 191, 36, 0.3);
     padding: 2px 6px;
     border-radius: 4px;
+    line-height: 1.2;
   }
 
   @media (max-width: 768px) {
     .vt-panel {
       width: calc(100vw - 3rem);
-      right: -1rem;
+      left: 0;
+      transform: none;
     }
     .vt-grid {
       grid-template-columns: repeat(2, 1fr);
