@@ -2,7 +2,10 @@
    Primebrick Demo — The Shell scroll-jacking engine
    Extracted verbatim from shell-v2.html inline IIFE (lines 1215-1941).
    Wrapped in an exported function so Astro can import it.
+   Shared helpers imported from demo-utils.ts.
    ============================================================ */
+
+import { lerp, clamp01, smoothstep, drawConnector, buildSceneDots } from './demo-utils';
 
 export function initShellScroll(): void {
 (function() {
@@ -79,30 +82,13 @@ export function initShellScroll(): void {
   // Build scene dots — 5 phase bullets (Start + Sidebar + Topbar + Content + Conclusion)
   // Each target is a custom progress point where the animation is "done" (extraction complete, annotations + claim visible)
   if (dotsContainer) {
-    const dotPhases = [
+    buildSceneDots(dotsContainer as HTMLElement, track as HTMLElement, [
       { label: 'Start', target: 0.0 },        // Very beginning
       { label: 'Sidebar', target: 0.30 },     // Sidebar anatomy: annotations + claim fully visible
       { label: 'Topbar', target: 0.60 },      // Topbar anatomy: annotations + claim fully visible
       { label: 'Content', target: 0.88 },     // Content anatomy: annotations + claim fully visible
       { label: 'Conclusion', target: 1.0 },   // Final conclusion claim visible
-    ];
-    dotPhases.forEach((dp, i) => {
-      const dot = document.createElement('button');
-      dot.className = 'scene-dot' + (i === 0 ? ' active' : '');
-      dot.setAttribute('aria-label', dp.label);
-      const mark = document.createElement('span');
-      mark.className = 'dot-mark';
-      const label = document.createElement('span');
-      label.className = 'dot-label';
-      label.textContent = dp.label;
-      dot.appendChild(mark);
-      dot.appendChild(label);
-      dot.addEventListener('click', () => {
-        const target = track.offsetTop + dp.target * (track.offsetHeight - window.innerHeight);
-        window.scrollTo({ top: target + 1, behavior: reducedMotion ? 'auto' : 'smooth' });
-      });
-      dotsContainer.appendChild(dot);
-    });
+    ], reducedMotion);
   }
 
   if (reducedMotion) {
@@ -110,23 +96,8 @@ export function initShellScroll(): void {
     return;
   }
 
-  function lerp(a, b, t) { return a + (b - a) * t; }
-  function clamp01(x) { return Math.max(0, Math.min(1, x)); }
-  function smoothstep(e0, e1, x) { const t = clamp01((x - e0) / (e1 - e0)); return t * t * (3 - 2 * t); }
-
   let currentPhaseIdx = -1;
   let ticking = false;
-
-  // ===== Connector drawing =====
-  function drawConnector(lineEl, dotEl, fromX, fromY, toX, toY) {
-    if (!lineEl || !dotEl) return;
-    lineEl.setAttribute('x1', fromX);
-    lineEl.setAttribute('y1', fromY);
-    lineEl.setAttribute('x2', toX);
-    lineEl.setAttribute('y2', toY);
-    dotEl.setAttribute('cx', fromX);
-    dotEl.setAttribute('cy', fromY);
-  }
 
   function updateSidebarConnectors() {
     const canvasRect = canvas.getBoundingClientRect();

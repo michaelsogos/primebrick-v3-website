@@ -1,0 +1,1156 @@
+---
+import { translations, LANGUAGES, type LangCode } from '../../../i18n/translations';
+import { entitiesTranslations } from '../../../i18n/entities-translations';
+import LanguageSwitcher from '../../../components/svelte/LanguageSwitcher.svelte';
+import GitHubDropdown from '../../../components/svelte/GitHubDropdown.svelte';
+import VirtualTourMegaMenu from '../../../components/svelte/VirtualTourMegaMenu.svelte';
+import GitHubIcon from '../../../components/GitHubIcon.astro';
+import TopBanner from '../../../components/astro/TopBanner.astro';
+import pkg from '../../../../package.json';
+import '../../../styles/global.css';
+import '../../../styles/demo/demo.css';
+import '../../../styles/demo/entities.css';
+
+const version = pkg.version;
+
+export const prerender = true;
+
+export function getStaticPaths() {
+  return LANGUAGES.map((lang) => ({
+    params: { lang: lang.code === 'en' ? 'en' : lang.code },
+  }));
+}
+
+const { lang } = Astro.params;
+const langCode = (lang ?? 'en') as LangCode;
+const t = translations[langCode] ?? translations.en;
+const et = entitiesTranslations[langCode] ?? entitiesTranslations.en;
+const isEn = langCode === 'en';
+const docsPath = 'https://docs.primebrick.dev';
+const homeHref = isEn ? '/en/' : `/${langCode}/`;
+const contactHref = isEn ? '/en/contact' : `/${langCode}/contact`;
+const thankyouHref = isEn ? '/en/thank-you' : `/${langCode}/thank-you`;
+const demoHref = isEn ? '/en/demo/' : `/${langCode}/demo/`;
+const entitiesHref = `${demoHref}entities`;
+
+const jsonSnippetHtml = `<div class="j-line"><span class="j-lineno">1</span><span class="j-content"><span class="j-punct">{</span></span></div>
+    <div class="j-line"><span class="j-lineno">2</span><span class="j-content">  <span class="j-key">"entity"</span><span class="j-punct">:</span> <span class="j-string">"customers"</span><span class="j-punct">,</span></span></div>
+    <div class="j-line"><span class="j-lineno">3</span><span class="j-content">  <span class="j-key">"columns"</span><span class="j-punct">:</span> <span class="j-punct">[</span></span></div>
+    <div class="j-line"><span class="j-lineno">4</span><span class="j-content">    <span class="j-punct">{</span></span></div>
+    <div class="j-line"><span class="j-lineno">5</span><span class="j-content">      <span class="j-key">"key"</span><span class="j-punct">:</span> <span class="j-string">"name"</span><span class="j-punct">,</span></span></div>
+    <div class="j-line"><span class="j-lineno">6</span><span class="j-content">      <span class="j-key">"label"</span><span class="j-punct">:</span> <span class="j-string">"Name"</span><span class="j-punct">,</span></span></div>
+    <div class="j-line"><span class="j-lineno">7</span><span class="j-content">      <span class="j-key">"type"</span><span class="j-punct">:</span> <span class="j-string">"text"</span><span class="j-punct">,</span></span></div>
+    <div class="j-line"><span class="j-lineno">8</span><span class="j-content">      <span class="j-key">"sticky"</span><span class="j-punct">:</span> <span class="j-bool">true</span></span></div>
+    <div class="j-line"><span class="j-lineno">9</span><span class="j-content">    <span class="j-punct">},</span></span></div>
+    <div class="j-line"><span class="j-lineno">10</span><span class="j-content">    <span class="j-punct">{</span></span></div>
+    <div class="j-line"><span class="j-lineno">11</span><span class="j-content">      <span class="j-key">"key"</span><span class="j-punct">:</span> <span class="j-string">"status"</span><span class="j-punct">,</span></span></div>
+    <div class="j-line"><span class="j-lineno">12</span><span class="j-content">      <span class="j-key">"label"</span><span class="j-punct">:</span> <span class="j-string">"Status"</span><span class="j-punct">,</span></span></div>
+    <div class="j-line"><span class="j-lineno">13</span><span class="j-content">      <span class="j-key">"type"</span><span class="j-punct">:</span> <span class="j-string">"badge"</span><span class="j-punct">,</span></span></div>
+    <div class="j-line"><span class="j-lineno">14</span><span class="j-content">      <span class="j-key">"options"</span><span class="j-punct">:</span> <span class="j-punct">[</span><span class="j-string">"Active"</span><span class="j-punct">,</span> <span class="j-string">"Lead"</span><span class="j-punct">,</span> <span class="j-ellipsis">…</span><span class="j-punct">]</span></span></div>
+    <div class="j-line"><span class="j-lineno">15</span><span class="j-content">    <span class="j-punct">},</span></span></div>
+    <div class="j-line"><span class="j-lineno">16</span><span class="j-content">    <span class="j-ellipsis">… 3 more columns</span></span></div>
+    <div class="j-line"><span class="j-lineno">17</span><span class="j-content">  <span class="j-punct">]</span></span></div>
+    <div class="j-line"><span class="j-lineno">18</span><span class="j-content"><span class="j-punct">}</span></span></div>`;
+---
+
+<!doctype html>
+<html lang={langCode}>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={et.pageSubtitle.slice(0, 160)} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+    <link rel="icon" type="image/png" sizes="512x512" href="/favicon-512.png" />
+    <link rel="icon" sizes="any" href="/favicon.ico" />
+    <link rel="apple-touch-icon" href="/favicon-512.png" />
+    <title>Primebrick — {et.pageTitle}</title>
+    {LANGUAGES.map((l) => (
+      <link rel="alternate" hreflang={l.hreflang} href={`https://primebrick.dev${l.code === 'en' ? '/en/demo/entities' : `/${l.code}/demo/entities`}`} />
+    ))}
+    <link rel="alternate" hreflang="x-default" href="https://primebrick.dev/en/demo/entities" />
+  </head>
+  <body class="min-h-screen bg-slate-950 text-slate-100 antialiased">
+    <!-- Ambient gradient background (website) -->
+    <div class="pointer-events-none fixed inset-0 overflow-hidden">
+      <div class="absolute -top-40 left-1/2 h-[500px] w-[800px] -translate-x-1/2 rounded-full bg-sky-500/10 blur-[120px]"></div>
+      <div class="absolute top-1/3 -right-40 h-[400px] w-[400px] rounded-full bg-indigo-500/10 blur-[100px]"></div>
+      <div class="absolute bottom-0 -left-40 h-[400px] w-[400px] rounded-full bg-cyan-500/10 blur-[100px]"></div>
+    </div>
+
+    <!-- Top banner (sticky, non-dismissible) -->
+    <TopBanner text={t.banner.text} href={contactHref} />
+
+    <!-- Navigation (sticky, condensing on scroll) -->
+    <nav id="site-nav" class="sticky top-9 z-50 border-b border-slate-800/50 bg-slate-950/40 backdrop-blur-sm transition-all duration-300">
+      <div id="nav-inner" class="mx-auto flex max-w-7xl items-center justify-between px-6 py-4 transition-all duration-300">
+        <a href={homeHref} class="flex items-center gap-2 transition-all duration-300" id="nav-logo" aria-label="PrimeBrick home">
+          <img src="/logo-full-dark.svg" alt="PrimeBrick" width="170" height="32" class="h-7 w-auto" />
+        </a>
+        <div class="flex items-center gap-6 text-sm">
+          <a href={homeHref} class="text-slate-300 hover:text-sky-400 transition-colors">{t.nav.home}</a>
+          <VirtualTourMegaMenu client:load currentLang={langCode} activeDemo="entities" />
+          <a href={docsPath} class="text-slate-300 hover:text-sky-400 transition-colors" target="_blank" rel="noopener">{t.nav.docs}</a>
+          <a href={contactHref} class="text-slate-300 hover:text-sky-400 transition-colors">{t.nav.contact}</a>
+          <a href={thankyouHref} class="text-slate-300 hover:text-sky-400 transition-colors">{t.nav.thankyou}</a>
+          <a
+            href="https://opensource.org/license/MIT"
+            class="text-slate-300 hover:text-sky-400 transition-colors"
+            target="_blank"
+            rel="noopener"
+          >
+            {t.nav.license}
+          </a>
+          <GitHubDropdown client:load />
+          <LanguageSwitcher client:load currentLang={langCode} />
+        </div>
+      </div>
+    </nav>
+    <script>
+      (() => {
+        const nav = document.getElementById('site-nav');
+        const inner = document.getElementById('nav-inner');
+        const logo = document.getElementById('nav-logo');
+        if (!nav || !inner) return;
+        const onScroll = () => {
+          const scrolled = window.scrollY > 20;
+          if (scrolled) {
+            inner.classList.replace('py-4', 'py-2');
+            nav.classList.add('bg-slate-950/80', 'backdrop-blur-md', 'shadow-lg', 'border-slate-800/80');
+            nav.classList.remove('bg-slate-950/40', 'border-slate-800/50');
+            logo?.classList.replace('text-xl', 'text-lg');
+          } else {
+            inner.classList.replace('py-2', 'py-4');
+            nav.classList.remove('bg-slate-950/80', 'backdrop-blur-md', 'shadow-lg', 'border-slate-800/80');
+            nav.classList.add('bg-slate-950/40', 'border-slate-800/50');
+            logo?.classList.replace('text-lg', 'text-xl');
+          }
+        };
+        window.addEventListener('scroll', onScroll, { passive: true });
+        onScroll();
+      })();
+    </script>
+
+    <!-- ===== Demo body (from entities-v2.html, scoped) ===== -->
+
+<div class="demo-scope">
+
+<div class="ambient-blob blob-1"></div>
+<div class="ambient-blob blob-2"></div>
+
+<!-- Fixed title bar -->
+<div class="demo-title-bar">
+  <h1 class="demo-title">{et.pageTitle}</h1>
+  <div class="demo-subtitle">{et.pageSubtitle}</div>
+</div>
+
+<!-- Scroll hint -->
+<div class="demo-scroll-hint" id="scroll-hint">{et.scrollHint}</div>
+
+<!-- ===== Section claims (alternating right/left) ===== -->
+<!-- Section 0: Intro (right) -->
+<div class="section-claim" id="claim-0">
+  <div class="claim-eyebrow">{et.claim0Eyebrow}</div>
+  <div class="claim-title" set:html={et.claim0Title} />
+  <div class="claim-subtitle">{et.claim0Subtitle}</div>
+</div>
+<!-- Section 1: The Table (left, near top) -->
+<div class="section-claim left" id="claim-1">
+  <div class="claim-eyebrow">{et.claim1Eyebrow}</div>
+  <div class="claim-title" set:html={et.claim1Title} />
+  <div class="claim-subtitle">{et.claim1Subtitle}</div>
+</div>
+<!-- Section 2: Server-side pagination (left) -->
+<div class="section-claim left" id="claim-2-pag">
+  <div class="claim-eyebrow">{et.claim2Eyebrow}</div>
+  <div class="claim-title" set:html={et.claim2Title} />
+  <div class="claim-subtitle">{et.claim2Subtitle}</div>
+</div>
+<!-- JSON metadata snippet (right side, below claim-1, matches grid columns) -->
+<div class="json-snippet" id="json-snippet">
+  <div class="snippet-header">
+    <span class="snippet-title">{et.jsonTitle}</span>
+    <span class="snippet-lang"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H7a2 2 0 0 0-2 2v5a2 2 0 0 1-2 2 2 2 0 0 1 2 2v5a2 2 0 0 0 2 2h1M16 3h1a2 2 0 0 1 2 2v5a2 2 0 0 0 2 2 2 2 0 0 0-2 2v5a2 2 0 0 1-2 2h-1"/></svg>JSON</span>
+  </div>
+  <div class="snippet-body" set:html={jsonSnippetHtml} />
+</div>
+<!-- Section 2: Search & Filter (left) -->
+<div class="section-claim left" id="claim-2">
+  <div class="claim-eyebrow">{et.claim3Eyebrow}</div>
+  <div class="claim-title" set:html={et.claim3Title} />
+  <div class="claim-subtitle">{et.claim3Subtitle}</div>
+</div>
+<!-- Section 3: Column Management (left — right panel occupies right side) -->
+<div class="section-claim left" id="claim-3" style="left:4%">
+  <div class="claim-eyebrow">{et.claim4Eyebrow}</div>
+  <div class="claim-title" set:html={et.claim4Title} />
+  <div class="claim-subtitle">{et.claim4Subtitle}</div>
+</div>
+<!-- Section 4: Selection & Cross-page (right) -->
+<div class="section-claim" id="claim-4">
+  <div class="claim-eyebrow">{et.claim5Eyebrow}</div>
+  <div class="claim-title" set:html={et.claim5Title} />
+  <div class="claim-subtitle">{et.claim5Subtitle}</div>
+</div>
+<!-- Section 5: Sorting & Row Actions (right) -->
+<div class="section-claim" id="claim-5">
+  <div class="claim-eyebrow">{et.claim6Eyebrow}</div>
+  <div class="claim-title" set:html={et.claim6Title} />
+  <div class="claim-subtitle">{et.claim6Subtitle}</div>
+</div>
+<!-- Section 6: View Modes & Deletion (left) -->
+<div class="section-claim left" id="claim-6">
+  <div class="claim-eyebrow">{et.claim7Eyebrow}</div>
+  <div class="claim-title" set:html={et.claim7Title} />
+  <div class="claim-subtitle">{et.claim7Subtitle}</div>
+</div>
+<!-- Section 7: Bulk Ops & Preview (left, slightly lower) -->
+<div class="section-claim left" id="claim-7" style="top: 64%;">
+  <div class="claim-eyebrow">{et.claim8Eyebrow}</div>
+  <div class="claim-title" set:html={et.claim8Title} />
+  <div class="claim-subtitle">{et.claim8Subtitle}</div>
+</div>
+
+<!-- Final conclusion claim -->
+<div class="section-claim-final" id="claim-final">
+  <div class="claim-title-final" set:html={et.claimFinalTitle} />
+</div>
+
+<!-- Progress rail + dots -->
+<div class="progress-rail"><div class="progress-rail-fill" id="rail-fill" style="height:0%"></div></div>
+<div class="scene-dots" id="dots"></div>
+<div class="phase-label" id="phase-label">Intro</div>
+
+<!-- Scroll track -->
+<div class="scroll-track" style="height: 3200vh" id="track">
+  <div class="scroll-stage" id="stage">
+    <div class="scroll-canvas" id="canvas">
+
+      <!-- ===== Screen mock (collapsed sidebar + topbar + content with table) ===== -->
+      <div class="screen-mock" id="screen-mock">
+        <div class="browser-bar">
+          <div class="browser-dots"><span class="browser-dot red"></span><span class="browser-dot yellow"></span><span class="browser-dot green"></span></div>
+          <div class="browser-url"><span class="url-lock">🔒</span>https://backoffice.acme.org/customers</div>
+        </div>
+        <div class="app-body">
+          <!-- Collapsed sidebar (rail) -->
+          <div class="pb-sidebar">
+            <div class="sb-rail-avatar">AC</div>
+            <div class="sb-rail-icon"><i data-icon="settings"></i></div>
+            <div class="sb-rail-icon active"><i data-icon="users"></i></div>
+            <div class="sb-rail-spacer"></div>
+            <div class="sb-rail-profile">JD</div>
+            <div class="sb-rail-health"></div>
+          </div>
+          <!-- Main -->
+          <div class="pb-main">
+            <!-- Topbar -->
+            <div class="pb-header" id="topbar">
+              <div class="pb-header-left">
+                <button class="pb-header-toggle"><i data-icon="panelLeft"></i></button>
+                <div class="pb-header-search"><i data-icon="search"></i>{et.searchPlaceholder}<span class="kbd">{et.searchShortcut}</span></div>
+                <button class="pb-header-btn pb-ai-cta" title="AI Assistant"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z"/><path d="M20 2v4"/><path d="M22 4h-4"/><path d="M6 20a2 2 0 1 1-4 0 2 2 0 0 1 4 0"/></svg></button>
+              </div>
+              <div class="pb-header-right">
+                <div class="pb-header-tz" id="mock-browser-tz"><i data-icon="globe"></i>Europe/Rome</div>
+                <button class="pb-header-lang">IT<i data-icon="chevronDown"></i></button>
+                <button class="pb-header-btn" title="Errors"><i data-icon="triangleAlert"></i></button>
+                <button class="pb-header-btn" title="Notifications"><i data-icon="bell"></i><span class="btn-badge">3</span></button>
+                <button class="pb-header-btn" title="Theme"><i data-icon="moon"></i></button>
+              </div>
+            </div>
+            <!-- Content area (the source for all extractions) -->
+            <div class="pb-content" id="content-area">
+              <div class="pb-breadcrumb">{et.breadcrumbSystem} / {et.breadcrumbSettings} / <span class="crumb-current">{et.breadcrumbCustomers}</span></div>
+              <!-- First toolbar: search (left) + view mode, deletion filter, refresh, columns, filters, divider, New (right) -->
+              <div class="pb-toolbar" style="border-bottom:1px solid var(--pb-border);padding:0.5rem 0.75rem">
+                <div class="pb-search-input" id="src-search" style="max-width:240px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg><input placeholder={et.toolbarSearchPlaceholder}><button class="pb-search-scope">{et.searchScopeAllFields}</button></div>
+                <div style="margin-left:auto;display:flex;align-items:center;gap:0.375rem">
+                  <div class="pb-soft-gradient-group" id="src-view-toggle">
+                    <div class="sg-btn active" id="src-vt-table" title="Table"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3H5a2 2 0 0 0-2 2v4m6-6h10a2 2 0 0 1 2 2v4M9 3v18m0 0h10a2 2 0 0 0 2-2V9M9 21H5a2 2 0 0 1-2-2V9m0 0h18"/></svg></div>
+                    <div class="sg-btn" id="src-vt-cards" title="Cards"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="7" x="3" y="3" rx="1"/><rect width="7" height="7" x="14" y="3" rx="1"/><rect width="7" height="7" x="14" y="14" rx="1"/><rect width="7" height="7" x="3" y="14" rx="1"/></svg></div>
+                    <div class="sg-btn" id="src-vt-list" title="Cards list"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="7" x="3" y="3" rx="1"/><rect width="7" height="7" x="3" y="14" rx="1"/><path d="M14 4h7"/><path d="M14 9h7"/><path d="M14 15h7"/><path d="M14 20h7"/></svg></div>
+                  </div>
+                  <div class="pb-del-filter" id="src-del-filter">
+                    <div class="df-btn active" id="src-df-active" title="Active records"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 5H3"/><path d="M16 12H3"/><path d="M11 19H3"/><path d="m15 18 2 2 4-4"/></svg></div>
+                    <div class="df-btn" id="src-df-deleted" title="Deleted records"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 5H3"/><path d="M11 12H3"/><path d="M16 19H3"/><path d="m15.5 9.5 5 5"/><path d="m20.5 9.5-5 5"/></svg></div>
+                    <div class="df-btn" id="src-df-all" title="All records"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 5h18"/><path d="M3 12h18"/><path d="M3 19h18"/></svg></div>
+                  </div>
+                  <button class="pb-btn-soft-icon" title="Refresh"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/></svg></button>
+                  <button class="pb-btn-soft" id="src-columns-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M9 3v18"/><path d="M15 3v18"/></svg>{et.toolbarColumns}</button>
+                  <button class="pb-btn-soft" id="src-filter-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 5H3"/><path d="M12 19H3"/><path d="M14 3v4"/><path d="M16 17v4"/><path d="M21 12h-9"/><path d="M21 19h-5"/><path d="M21 5h-7"/><path d="M8 10v4"/><path d="M8 12H3"/></svg>{et.toolbarFilters}</button>
+                  <div class="pb-gradient-divider"></div>
+                  <button class="pb-btn-primary-gradient">{et.toolbarNew}</button>
+                </div>
+              </div>
+              <!-- Second toolbar: toggle (filters/bulk) + Clear all + filter chips -->
+              <div class="pb-toolbar-second" id="src-toolbar-second">
+                <!-- Filters mode content (visible by default) -->
+                <div id="src-toolbar-filters" style="display:flex;align-items:center;gap:0.5rem;flex-wrap:wrap">
+                  <button class="pb-btn-outline" id="src-toggle-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 5H3"/><path d="M16 12H3"/><path d="M11 19H3"/><path d="m15 18 2 2 4-4"/></svg><span id="src-toggle-label">{et.toolbarBulkActions}</span></button>
+                  <div class="pb-gradient-divider"></div>
+                  <button class="pb-btn-soft-xs"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>{et.toolbarClearAll}</button>
+                  <div class="pb-gradient-divider"></div>
+                  <div class="pb-filter-badge">
+                    <span class="fb-label">{et.filterFieldEmail}</span>
+                    <span class="fb-op">{et.filterOpEndsWith}</span>
+                    <span class="fb-val">.com</span>
+                    <button class="fb-x"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button>
+                  </div>
+                </div>
+                <!-- Bulk mode content (hidden by default, toggled in during bulk phase) -->
+                <div id="src-toolbar-bulk" style="display:none;align-items:center;gap:0.5rem;flex-wrap:wrap">
+                  <button class="pb-btn-outline" id="src-toggle-btn-bulk"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 5H3"/><path d="M12 19H3"/><path d="M14 3v4"/><path d="M16 17v4"/><path d="M21 12h-9"/><path d="M21 19h-5"/><path d="M21 5h-7"/><path d="M8 10v4"/><path d="M8 12H3"/></svg>{et.toolbarFilters}</button>
+                  <div class="pb-gradient-divider"></div>
+                  <button class="pb-btn-soft-xs"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M7 10l5 5 5-5"/><path d="M12 15V3"/></svg>{et.bulkExport}</button>
+                  <button class="pb-btn-soft-xs"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M7 10l5 5 5-5"/><path d="M12 15V3"/></svg>{et.bulkExportHtml}</button>
+                  <button class="pb-btn-soft-xs"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>{et.bulkDuplicate}</button>
+                  <button class="pb-btn-soft-xs" style="color:var(--pb-destructive);border-color:rgba(239,68,68,0.3)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/></svg>{et.bulkDelete}</button>
+                  <button class="pb-btn-soft-xs" style="color:#f59e0b;border-color:rgba(245,158,11,0.3)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>{et.bulkRestore}</button>
+                </div>
+              </div>
+              <!-- Shared card view toolbar — stays in place during grid/list cross-fade -->
+              <div id="src-card-toolbar" style="display:none;display:flex;flex-wrap:nowrap;align-items:center;gap:0.5rem;border-bottom:1px solid var(--pb-border);padding:0.5rem 0.75rem;background:var(--pb-bg);white-space:nowrap;flex-shrink:0;margin-top:-0.625rem">
+                <div class="pb-checkbox" style="width:14px;height:14px"></div>
+                <span style="font-size:0.6875rem;font-weight:500;color:var(--pb-muted-fg)">{et.cardSelectAll}</span>
+                <div style="height:1rem;width:1px;background:var(--pb-border);margin:0 0.25rem"></div>
+                <span style="font-size:0.6875rem;font-weight:500;color:var(--pb-muted-fg)">{et.cardSortBy}</span>
+                <button class="pb-btn-soft" style="font-size:0.6875rem;padding:0.125rem 0.5rem">{et.tableHeaderName}</button>
+                <span style="font-size:0.6875rem;font-weight:500;color:var(--pb-muted-fg)">{et.cardInOrder}</span>
+                <button class="pb-btn-soft-icon" style="padding:0.125rem"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 8 4-4 4 4"/><path d="M7 4v16"/><path d="m21 16-4 4-4-4"/><path d="M17 20V4"/></svg></button>
+                <div style="height:1rem;width:1px;background:var(--pb-border);margin:0 0.25rem"></div>
+                <span style="font-size:0.6875rem;font-weight:500;color:var(--pb-muted-fg)">{et.tableHeaderOnboardedAt}</span>
+                <div style="display:inline-flex;align-items:center;gap:0.25rem;padding:0.125rem 0.375rem;border-radius:9999px;background:var(--pb-border);cursor:pointer">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--pb-muted-fg)"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>
+                </div>
+              </div>
+              <!-- Table views container — 3 variants (active, deleted, all) overlap for cross-fade -->
+              <div id="src-table-views" style="flex:1;position:relative;min-height:0;overflow:hidden">
+              <div class="pb-table-wrap" id="src-table-scroll" style="position:relative;z-index:1">
+                <table class="pb-table" id="src-table">
+                  <thead><tr>
+                    <th class="sticky-col first-col" style="width:40px"><div class="pb-checkbox" id="src-check-all"></div></th>
+                    <th class="sticky-col" id="src-name-th">{et.tableHeaderName} <svg class="sort-icon" id="src-sort-name" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21 16-4 4-4-4"/><path d="M17 20V4"/><path d="m3 8 4-4 4 4"/><path d="M7 4v16"/></svg></th>
+                    <th>{et.tableHeaderEmail} <svg class="sort-icon" id="src-sort-email" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21 16-4 4-4-4"/><path d="M17 20V4"/><path d="m3 8 4-4 4 4"/><path d="M7 4v16"/></svg></th>
+                    <th>{et.tableHeaderStatus} <svg class="sort-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21 16-4 4-4-4"/><path d="M17 20V4"/><path d="m3 8 4-4 4 4"/><path d="M7 4v16"/></svg></th>
+                    <th id="src-onboarded-th"><div style="display:flex;align-items:center;justify-content:space-between;gap:0.25rem"><span style="display:flex;align-items:center;gap:0.25rem">{et.tableHeaderOnboardedAt} <svg class="sort-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21 16-4 4-4-4"/><path d="M17 20V4"/><path d="m3 8 4-4 4 4"/><path d="M7 4v16"/></svg></span><svg id="src-onboarded-globe" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--pb-muted-fg)"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg></div></th>
+                    <th>{et.tableHeaderCreated} <svg class="sort-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21 16-4 4-4-4"/><path d="M17 20V4"/><path d="m3 8 4-4 4 4"/><path d="M7 4v16"/></svg></th>
+                    <th class="act-col" id="src-action-th"><div style="display:grid;place-items:center"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--pb-muted-fg)"><use href="#i-panel-right-open"/></svg></div></th>
+                  </tr></thead>
+                  <tbody id="src-tbody">
+                    <tr id="src-row-1"><td class="sticky-col"><div class="pb-checkbox" id="src-check-1"></div></td><td class="sticky-col">Acme Corp</td><td>info@acme.com</td><td><span class="pb-badge green">{et.statusActive}</span></td><td class="onboarded-cell">16 May 2026, 19:00</td><td>15 Mar 2024</td><td class="act-col"><button class="pb-act-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-more-vertical"/></svg></button></td></tr>
+                    <tr id="src-row-2"><td class="sticky-col"><div class="pb-checkbox" id="src-check-2"></div></td><td class="sticky-col">Globex Inc</td><td>hello@globex.com</td><td><span class="pb-badge green">{et.statusActive}</span></td><td class="onboarded-cell">16 May 2026, 19:00</td><td>02 Apr 2024</td><td class="act-col"><button class="pb-act-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-more-vertical"/></svg></button></td></tr>
+                    <tr id="src-row-3"><td class="sticky-col"><div class="pb-checkbox" id="src-check-3"></div></td><td class="sticky-col">Initech</td><td>contact@initech.com</td><td><span class="pb-badge amber">{et.statusLead}</span></td><td class="onboarded-cell">16 May 2026, 19:00</td><td>10 May 2024</td><td class="act-col"><button class="pb-act-btn" id="src-act-btn-3"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-more-vertical"/></svg></button></td></tr>
+                    <tr id="src-row-4"><td class="sticky-col"><div class="pb-checkbox" id="src-check-4"></div></td><td class="sticky-col">Umbrella Co</td><td>admin@umbrella.com</td><td><span class="pb-badge gray">{et.statusInactive}</span></td><td class="onboarded-cell"></td><td>20 Jun 2024</td><td class="act-col"><button class="pb-act-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-more-vertical"/></svg></button></td></tr>
+                    <tr id="src-row-5"><td class="sticky-col"><div class="pb-checkbox" id="src-check-5"></div></td><td class="sticky-col">Stark Industries</td><td>tony@stark.com</td><td><span class="pb-badge green">{et.statusActive}</span></td><td class="onboarded-cell"></td><td>01 Jul 2024</td><td class="act-col"><button class="pb-act-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-more-vertical"/></svg></button></td></tr>
+                  </tbody>
+                </table>
+              </div>
+              <!-- Deleted records table (overlay, absolute) -->
+              <div class="pb-table-wrap" id="src-table-deleted" style="display:none;opacity:0;position:absolute;top:0;left:0;right:0;bottom:0;z-index:2">
+                <table class="pb-table">
+                  <thead><tr><th class="sticky-col first-col" style="width:40px"></th><th class="sticky-col">{et.tableHeaderName}</th><th>{et.tableHeaderEmail}</th><th>{et.tableHeaderStatus}</th><th>{et.tableHeaderOnboardedAt}</th><th>{et.tableHeaderDeletedAt}</th><th class="act-col"></th></tr></thead>
+                  <tbody>
+                    <tr class="deleted"><td class="sticky-col"></td><td class="sticky-col">Acme Old</td><td>old@acme.com</td><td><span class="pb-badge gray">{et.statusDeleted}</span></td><td>10 Jan 2024</td><td>01 Jun 2024</td><td class="act-col"><button class="pb-act-btn" style="opacity:0.5;cursor:not-allowed"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-more-vertical"/></svg></button></td></tr>
+                    <tr class="deleted"><td class="sticky-col"></td><td class="sticky-col">Beta Corp</td><td>info@beta.com</td><td><span class="pb-badge gray">{et.statusDeleted}</span></td><td>05 Feb 2024</td><td>15 Jul 2024</td><td class="act-col"><button class="pb-act-btn" style="opacity:0.5;cursor:not-allowed"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-more-vertical"/></svg></button></td></tr>
+                    <tr class="deleted"><td class="sticky-col"></td><td class="sticky-col">Gamma LLC</td><td>contact@gamma.com</td><td><span class="pb-badge gray">{et.statusDeleted}</span></td><td>20 Mar 2024</td><td>10 Aug 2024</td><td class="act-col"><button class="pb-act-btn" style="opacity:0.5;cursor:not-allowed"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-more-vertical"/></svg></button></td></tr>
+                    <tr class="deleted"><td class="sticky-col"></td><td class="sticky-col">Delta Inc</td><td>admin@delta.com</td><td><span class="pb-badge gray">{et.statusDeleted}</span></td><td>15 Apr 2024</td><td>22 Sep 2024</td><td class="act-col"><button class="pb-act-btn" style="opacity:0.5;cursor:not-allowed"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-more-vertical"/></svg></button></td></tr>
+                    <tr class="deleted"><td class="sticky-col"></td><td class="sticky-col">Epsilon Co</td><td>hello@epsilon.com</td><td><span class="pb-badge gray">{et.statusDeleted}</span></td><td>01 May 2024</td><td>05 Oct 2024</td><td class="act-col"><button class="pb-act-btn" style="opacity:0.5;cursor:not-allowed"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-more-vertical"/></svg></button></td></tr>
+                  </tbody>
+                </table>
+              </div>
+              <!-- All records table (overlay, absolute) — mix of active and deleted -->
+              <div class="pb-table-wrap" id="src-table-all" style="display:none;opacity:0;position:absolute;top:0;left:0;right:0;bottom:0;z-index:3">
+                <table class="pb-table">
+                  <thead><tr><th class="sticky-col first-col" style="width:40px"></th><th class="sticky-col">{et.tableHeaderName}</th><th>{et.tableHeaderEmail}</th><th>{et.tableHeaderStatus}</th><th>{et.tableHeaderOnboardedAt}</th><th>{et.tableHeaderCreated}</th><th class="act-col"></th></tr></thead>
+                  <tbody>
+                    <tr><td class="sticky-col"></td><td class="sticky-col">Acme Corp</td><td>info@acme.com</td><td><span class="pb-badge green">{et.statusActive}</span></td><td>16 May 2026, 19:00</td><td>15 Mar 2024</td><td class="act-col"><button class="pb-act-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-more-vertical"/></svg></button></td></tr>
+                    <tr class="deleted"><td class="sticky-col"></td><td class="sticky-col">Acme Old</td><td>old@acme.com</td><td><span class="pb-badge gray">{et.statusDeleted}</span></td><td>10 Jan 2024</td><td>01 Jun 2024</td><td class="act-col"><button class="pb-act-btn" style="opacity:0.5;cursor:not-allowed"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-more-vertical"/></svg></button></td></tr>
+                    <tr><td class="sticky-col"></td><td class="sticky-col">Globex Inc</td><td>hello@globex.com</td><td><span class="pb-badge green">{et.statusActive}</span></td><td>16 May 2026, 19:00</td><td>02 Apr 2024</td><td class="act-col"><button class="pb-act-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-more-vertical"/></svg></button></td></tr>
+                    <tr class="deleted"><td class="sticky-col"></td><td class="sticky-col">Beta Corp</td><td>info@beta.com</td><td><span class="pb-badge gray">{et.statusDeleted}</span></td><td>05 Feb 2024</td><td>15 Jul 2024</td><td class="act-col"><button class="pb-act-btn" style="opacity:0.5;cursor:not-allowed"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-more-vertical"/></svg></button></td></tr>
+                    <tr><td class="sticky-col"></td><td class="sticky-col">Stark Industries</td><td>tony@stark.com</td><td><span class="pb-badge green">{et.statusActive}</span></td><td></td><td>01 Jul 2024</td><td class="act-col"><button class="pb-act-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-more-vertical"/></svg></button></td></tr>
+                  </tbody>
+                </table>
+              </div>
+              </div>
+              <!-- Card grid overlay (for view modes phase) — content only, no toolbar -->
+              <!-- Card views container — grid and list overlap for cross-fade -->
+              <div id="src-card-views" style="display:none;flex:1;position:relative;min-height:0;overflow:hidden">
+              <div id="src-card-grid" style="display:none;opacity:0;flex:1;flex-direction:column;position:relative;z-index:1">
+                <!-- Card grid content -->
+                <div style="padding:0.75rem;flex:1">
+                  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:0.75rem">
+                    <!-- Card 1: Acme Corp -->
+                    <div style="border:1px solid var(--pb-border);border-radius:6px;padding:0.75rem;box-shadow:0 1px 3px rgba(0,0,0,0.06);background:var(--pb-bg);display:flex;flex-direction:column;gap:0.375rem">
+                      <div style="display:flex;flex-direction:column;gap:0.0625rem"><span style="font-size:0.625rem;font-weight:500;color:var(--pb-muted-fg)">{et.tableHeaderName}</span><span style="font-size:0.8125rem;font-weight:600;color:var(--pb-fg)">Acme Corp</span></div>
+                      <div style="display:flex;flex-direction:column;gap:0.0625rem"><span style="font-size:0.625rem;font-weight:500;color:var(--pb-muted-fg)">{et.tableHeaderEmail}</span><span style="font-size:0.75rem;color:var(--pb-fg)">info@acme.com</span></div>
+                      <div style="display:flex;flex-direction:column;gap:0.0625rem"><span style="font-size:0.625rem;font-weight:500;color:var(--pb-muted-fg)">{et.tableHeaderStatus}</span><span class="pb-badge green">{et.statusActive}</span></div>
+                      <div style="display:flex;flex-direction:column;gap:0.0625rem"><span style="font-size:0.625rem;font-weight:500;color:var(--pb-muted-fg)">{et.tableHeaderCreated}</span><span style="font-size:0.75rem;color:var(--pb-fg)">15 Mar 2024</span></div>
+                    </div>
+                    <!-- Card 2: Globex Inc -->
+                    <div style="border:1px solid var(--pb-border);border-radius:6px;padding:0.75rem;box-shadow:0 1px 3px rgba(0,0,0,0.06);background:var(--pb-bg);display:flex;flex-direction:column;gap:0.375rem">
+                      <div style="display:flex;flex-direction:column;gap:0.0625rem"><span style="font-size:0.625rem;font-weight:500;color:var(--pb-muted-fg)">{et.tableHeaderName}</span><span style="font-size:0.8125rem;font-weight:600;color:var(--pb-fg)">Globex Inc</span></div>
+                      <div style="display:flex;flex-direction:column;gap:0.0625rem"><span style="font-size:0.625rem;font-weight:500;color:var(--pb-muted-fg)">{et.tableHeaderEmail}</span><span style="font-size:0.75rem;color:var(--pb-fg)">hello@globex.com</span></div>
+                      <div style="display:flex;flex-direction:column;gap:0.0625rem"><span style="font-size:0.625rem;font-weight:500;color:var(--pb-muted-fg)">{et.tableHeaderStatus}</span><span class="pb-badge green">{et.statusActive}</span></div>
+                      <div style="display:flex;flex-direction:column;gap:0.0625rem"><span style="font-size:0.625rem;font-weight:500;color:var(--pb-muted-fg)">{et.tableHeaderCreated}</span><span style="font-size:0.75rem;color:var(--pb-fg)">02 Apr 2024</span></div>
+                    </div>
+                    <!-- Card 3: Initech -->
+                    <div style="border:1px solid var(--pb-border);border-radius:6px;padding:0.75rem;box-shadow:0 1px 3px rgba(0,0,0,0.06);background:var(--pb-bg);display:flex;flex-direction:column;gap:0.375rem">
+                      <div style="display:flex;flex-direction:column;gap:0.0625rem"><span style="font-size:0.625rem;font-weight:500;color:var(--pb-muted-fg)">{et.tableHeaderName}</span><span style="font-size:0.8125rem;font-weight:600;color:var(--pb-fg)">Initech</span></div>
+                      <div style="display:flex;flex-direction:column;gap:0.0625rem"><span style="font-size:0.625rem;font-weight:500;color:var(--pb-muted-fg)">{et.tableHeaderEmail}</span><span style="font-size:0.75rem;color:var(--pb-fg)">contact@initech.com</span></div>
+                      <div style="display:flex;flex-direction:column;gap:0.0625rem"><span style="font-size:0.625rem;font-weight:500;color:var(--pb-muted-fg)">{et.tableHeaderStatus}</span><span class="pb-badge amber">{et.statusLead}</span></div>
+                      <div style="display:flex;flex-direction:column;gap:0.0625rem"><span style="font-size:0.625rem;font-weight:500;color:var(--pb-muted-fg)">{et.tableHeaderCreated}</span><span style="font-size:0.75rem;color:var(--pb-fg)">10 May 2024</span></div>
+                    </div>
+                    <!-- Card 4: Umbrella Co -->
+                    <div style="border:1px solid var(--pb-border);border-radius:6px;padding:0.75rem;box-shadow:0 1px 3px rgba(0,0,0,0.06);background:var(--pb-bg);display:flex;flex-direction:column;gap:0.375rem">
+                      <div style="display:flex;flex-direction:column;gap:0.0625rem"><span style="font-size:0.625rem;font-weight:500;color:var(--pb-muted-fg)">{et.tableHeaderName}</span><span style="font-size:0.8125rem;font-weight:600;color:var(--pb-fg)">Umbrella Co</span></div>
+                      <div style="display:flex;flex-direction:column;gap:0.0625rem"><span style="font-size:0.625rem;font-weight:500;color:var(--pb-muted-fg)">{et.tableHeaderEmail}</span><span style="font-size:0.75rem;color:var(--pb-fg)">admin@umbrella.com</span></div>
+                      <div style="display:flex;flex-direction:column;gap:0.0625rem"><span style="font-size:0.625rem;font-weight:500;color:var(--pb-muted-fg)">{et.tableHeaderStatus}</span><span class="pb-badge gray">{et.statusInactive}</span></div>
+                      <div style="display:flex;flex-direction:column;gap:0.0625rem"><span style="font-size:0.625rem;font-weight:500;color:var(--pb-muted-fg)">{et.tableHeaderCreated}</span><span style="font-size:0.75rem;color:var(--pb-fg)">20 Jun 2024</span></div>
+                    </div>
+                    <!-- Card 5: Stark Industries -->
+                    <div style="border:1px solid var(--pb-border);border-radius:6px;padding:0.75rem;box-shadow:0 1px 3px rgba(0,0,0,0.06);background:var(--pb-bg);display:flex;flex-direction:column;gap:0.375rem">
+                      <div style="display:flex;flex-direction:column;gap:0.0625rem"><span style="font-size:0.625rem;font-weight:500;color:var(--pb-muted-fg)">{et.tableHeaderName}</span><span style="font-size:0.8125rem;font-weight:600;color:var(--pb-fg)">Stark Industries</span></div>
+                      <div style="display:flex;flex-direction:column;gap:0.0625rem"><span style="font-size:0.625rem;font-weight:500;color:var(--pb-muted-fg)">{et.tableHeaderEmail}</span><span style="font-size:0.75rem;color:var(--pb-fg)">tony@stark.com</span></div>
+                      <div style="display:flex;flex-direction:column;gap:0.0625rem"><span style="font-size:0.625rem;font-weight:500;color:var(--pb-muted-fg)">{et.tableHeaderStatus}</span><span class="pb-badge green">{et.statusActive}</span></div>
+                      <div style="display:flex;flex-direction:column;gap:0.0625rem"><span style="font-size:0.625rem;font-weight:500;color:var(--pb-muted-fg)">{et.tableHeaderCreated}</span><span style="font-size:0.75rem;color:var(--pb-fg)">01 Jul 2024</span></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Card list overlay (for view modes phase) -->
+              <!-- Card list overlay (for view modes phase) — content only, no toolbar -->
+              <div id="src-card-list" style="display:none;opacity:0;position:absolute;top:0;left:0;right:0;bottom:0;flex-direction:column;z-index:2">
+                <!-- Card list content -->
+                <div style="padding:0.75rem;flex:1">
+                  <div style="display:flex;flex-direction:column;gap:0.75rem">
+                    <!-- Card 1: Acme Corp -->
+                    <div style="border:1px solid var(--pb-border);border-radius:6px;padding:0.75rem;box-shadow:0 1px 3px rgba(0,0,0,0.06);background:var(--pb-bg);display:flex;gap:1rem;align-items:flex-start">
+                      <div style="display:flex;flex-direction:column;gap:0.125rem;min-width:120px;max-width:200px;flex-shrink:0"><span style="font-size:0.625rem;font-weight:500;color:var(--pb-muted-fg)">{et.tableHeaderName}</span><span style="font-size:0.8125rem;font-weight:600;color:var(--pb-fg)">Acme Corp</span></div>
+                      <div style="display:flex;flex-direction:column;gap:0.125rem;min-width:120px;max-width:200px;flex-shrink:0"><span style="font-size:0.625rem;font-weight:500;color:var(--pb-muted-fg)">{et.tableHeaderEmail}</span><span style="font-size:0.75rem;color:var(--pb-fg)">info@acme.com</span></div>
+                      <div style="display:flex;flex-direction:column;gap:0.125rem;min-width:80px;flex-shrink:0"><span style="font-size:0.625rem;font-weight:500;color:var(--pb-muted-fg)">{et.tableHeaderStatus}</span><span class="pb-badge green">{et.statusActive}</span></div>
+                      <div style="display:flex;flex-direction:column;gap:0.125rem;min-width:120px;flex-shrink:0"><span style="font-size:0.625rem;font-weight:500;color:var(--pb-muted-fg)">{et.tableHeaderOnboardedAt}</span><span style="font-size:0.75rem;color:var(--pb-fg)">16 May 2026, 19:00</span></div>
+                      <div style="display:flex;flex-direction:column;gap:0.125rem;min-width:100px;flex-shrink:0"><span style="font-size:0.625rem;font-weight:500;color:var(--pb-muted-fg)">{et.tableHeaderCreated}</span><span style="font-size:0.75rem;color:var(--pb-fg)">15 Mar 2024</span></div>
+                    </div>
+                    <!-- Card 2: Globex Inc -->
+                    <div style="border:1px solid var(--pb-border);border-radius:6px;padding:0.75rem;box-shadow:0 1px 3px rgba(0,0,0,0.06);background:var(--pb-bg);display:flex;gap:1rem;align-items:flex-start">
+                      <div style="display:flex;flex-direction:column;gap:0.125rem;min-width:120px;max-width:200px;flex-shrink:0"><span style="font-size:0.625rem;font-weight:500;color:var(--pb-muted-fg)">{et.tableHeaderName}</span><span style="font-size:0.8125rem;font-weight:600;color:var(--pb-fg)">Globex Inc</span></div>
+                      <div style="display:flex;flex-direction:column;gap:0.125rem;min-width:120px;max-width:200px;flex-shrink:0"><span style="font-size:0.625rem;font-weight:500;color:var(--pb-muted-fg)">{et.tableHeaderEmail}</span><span style="font-size:0.75rem;color:var(--pb-fg)">hello@globex.com</span></div>
+                      <div style="display:flex;flex-direction:column;gap:0.125rem;min-width:80px;flex-shrink:0"><span style="font-size:0.625rem;font-weight:500;color:var(--pb-muted-fg)">{et.tableHeaderStatus}</span><span class="pb-badge green">{et.statusActive}</span></div>
+                      <div style="display:flex;flex-direction:column;gap:0.125rem;min-width:120px;flex-shrink:0"><span style="font-size:0.625rem;font-weight:500;color:var(--pb-muted-fg)">{et.tableHeaderOnboardedAt}</span><span style="font-size:0.75rem;color:var(--pb-fg)">16 May 2026, 19:00</span></div>
+                      <div style="display:flex;flex-direction:column;gap:0.125rem;min-width:100px;flex-shrink:0"><span style="font-size:0.625rem;font-weight:500;color:var(--pb-muted-fg)">{et.tableHeaderCreated}</span><span style="font-size:0.75rem;color:var(--pb-fg)">02 Apr 2024</span></div>
+                    </div>
+                    <!-- Card 3: Initech -->
+                    <div style="border:1px solid var(--pb-border);border-radius:6px;padding:0.75rem;box-shadow:0 1px 3px rgba(0,0,0,0.06);background:var(--pb-bg);display:flex;gap:1rem;align-items:flex-start">
+                      <div style="display:flex;flex-direction:column;gap:0.125rem;min-width:120px;max-width:200px;flex-shrink:0"><span style="font-size:0.625rem;font-weight:500;color:var(--pb-muted-fg)">{et.tableHeaderName}</span><span style="font-size:0.8125rem;font-weight:600;color:var(--pb-fg)">Initech</span></div>
+                      <div style="display:flex;flex-direction:column;gap:0.125rem;min-width:120px;max-width:200px;flex-shrink:0"><span style="font-size:0.625rem;font-weight:500;color:var(--pb-muted-fg)">{et.tableHeaderEmail}</span><span style="font-size:0.75rem;color:var(--pb-fg)">contact@initech.com</span></div>
+                      <div style="display:flex;flex-direction:column;gap:0.125rem;min-width:80px;flex-shrink:0"><span style="font-size:0.625rem;font-weight:500;color:var(--pb-muted-fg)">{et.tableHeaderStatus}</span><span class="pb-badge amber">{et.statusLead}</span></div>
+                      <div style="display:flex;flex-direction:column;gap:0.125rem;min-width:120px;flex-shrink:0"><span style="font-size:0.625rem;font-weight:500;color:var(--pb-muted-fg)">{et.tableHeaderOnboardedAt}</span><span style="font-size:0.75rem;color:var(--pb-fg)">16 May 2026, 19:00</span></div>
+                      <div style="display:flex;flex-direction:column;gap:0.125rem;min-width:100px;flex-shrink:0"><span style="font-size:0.625rem;font-weight:500;color:var(--pb-muted-fg)">{et.tableHeaderCreated}</span><span style="font-size:0.75rem;color:var(--pb-fg)">10 May 2024</span></div>
+                    </div>
+                    <!-- Card 4: Umbrella Co -->
+                    <div style="border:1px solid var(--pb-border);border-radius:6px;padding:0.75rem;box-shadow:0 1px 3px rgba(0,0,0,0.06);background:var(--pb-bg);display:flex;gap:1rem;align-items:flex-start">
+                      <div style="display:flex;flex-direction:column;gap:0.125rem;min-width:120px;max-width:200px;flex-shrink:0"><span style="font-size:0.625rem;font-weight:500;color:var(--pb-muted-fg)">{et.tableHeaderName}</span><span style="font-size:0.8125rem;font-weight:600;color:var(--pb-fg)">Umbrella Co</span></div>
+                      <div style="display:flex;flex-direction:column;gap:0.125rem;min-width:120px;max-width:200px;flex-shrink:0"><span style="font-size:0.625rem;font-weight:500;color:var(--pb-muted-fg)">{et.tableHeaderEmail}</span><span style="font-size:0.75rem;color:var(--pb-fg)">admin@umbrella.com</span></div>
+                      <div style="display:flex;flex-direction:column;gap:0.125rem;min-width:80px;flex-shrink:0"><span style="font-size:0.625rem;font-weight:500;color:var(--pb-muted-fg)">{et.tableHeaderStatus}</span><span class="pb-badge gray">{et.statusInactive}</span></div>
+                      <div style="display:flex;flex-direction:column;gap:0.125rem;min-width:120px;flex-shrink:0"><span style="font-size:0.625rem;font-weight:500;color:var(--pb-muted-fg)">{et.tableHeaderOnboardedAt}</span><span style="font-size:0.75rem;color:var(--pb-muted-fg)">—</span></div>
+                      <div style="display:flex;flex-direction:column;gap:0.125rem;min-width:100px;flex-shrink:0"><span style="font-size:0.625rem;font-weight:500;color:var(--pb-muted-fg)">{et.tableHeaderCreated}</span><span style="font-size:0.75rem;color:var(--pb-fg)">20 Jun 2024</span></div>
+                    </div>
+                    <!-- Card 5: Stark Industries -->
+                    <div style="border:1px solid var(--pb-border);border-radius:6px;padding:0.75rem;box-shadow:0 1px 3px rgba(0,0,0,0.06);background:var(--pb-bg);display:flex;gap:1rem;align-items:flex-start">
+                      <div style="display:flex;flex-direction:column;gap:0.125rem;min-width:120px;max-width:200px;flex-shrink:0"><span style="font-size:0.625rem;font-weight:500;color:var(--pb-muted-fg)">{et.tableHeaderName}</span><span style="font-size:0.8125rem;font-weight:600;color:var(--pb-fg)">Stark Industries</span></div>
+                      <div style="display:flex;flex-direction:column;gap:0.125rem;min-width:120px;max-width:200px;flex-shrink:0"><span style="font-size:0.625rem;font-weight:500;color:var(--pb-muted-fg)">{et.tableHeaderEmail}</span><span style="font-size:0.75rem;color:var(--pb-fg)">tony@stark.com</span></div>
+                      <div style="display:flex;flex-direction:column;gap:0.125rem;min-width:80px;flex-shrink:0"><span style="font-size:0.625rem;font-weight:500;color:var(--pb-muted-fg)">{et.tableHeaderStatus}</span><span class="pb-badge green">{et.statusActive}</span></div>
+                      <div style="display:flex;flex-direction:column;gap:0.125rem;min-width:120px;flex-shrink:0"><span style="font-size:0.625rem;font-weight:500;color:var(--pb-muted-fg)">{et.tableHeaderOnboardedAt}</span><span style="font-size:0.75rem;color:var(--pb-muted-fg)">—</span></div>
+                      <div style="display:flex;flex-direction:column;gap:0.125rem;min-width:100px;flex-shrink:0"><span style="font-size:0.625rem;font-weight:500;color:var(--pb-muted-fg)">{et.tableHeaderCreated}</span><span style="font-size:0.75rem;color:var(--pb-fg)">01 Jul 2024</span></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              </div>
+              <div class="pb-pagination" id="src-pagination">
+                <div style="display:flex;align-items:center;gap:0.75rem;flex-wrap:wrap">
+                  <div class="pag-range">1-8 / 247</div>
+                  <div class="pag-divider" id="src-selection-divider" style="display:none"></div>
+                  <div class="pb-selection-counter" id="src-selection-counter" style="display:none;align-items:center;gap:0.375rem;color:var(--pb-primary)">
+                    <span><span id="src-selection-count">0</span> selected</span>
+                    <button class="eye-toggle" id="src-eye-toggle" style="display:none"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-eye"/></svg></button>
+                  </div>
+                </div>
+                <div class="pag-controls">
+                  <div class="pag-size"><span>{et.paginationPageSize}</span><button class="pag-size-btn">25</button></div>
+                  <div class="pag-divider"></div>
+                  <button class="pag-btn" disabled><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m11 17-5-5 5-5"/><path d="m18 17-5-5 5-5"/></svg></button>
+                  <button class="pag-btn" disabled><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg></button>
+                  <span class="pag-status">1 / 31</span>
+                  <button class="pag-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg></button>
+                  <button class="pag-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m13 17 5-5-5-5"/><path d="m6 17 5-5-5-5"/></svg></button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== 15 Extracted overlays (duplicates of UI pieces) ===== -->
+      <!-- #1 Table (the content area itself, zooms out) -->
+      <div class="extracted no-pad" id="ex-table">
+        <div class="pb-content" style="padding:1rem 1.25rem;width:100%;height:100%;display:flex;flex-direction:column;gap:0.625rem">
+          <div class="pb-breadcrumb">System / Settings / <span class="crumb-current">Customers</span></div>
+          <div class="pb-table-wrap" style="flex:1">
+            <table class="pb-table">
+              <thead><tr><th class="sticky-col first-col" style="width:40px"></th><th class="sticky-col">{et.tableHeaderName}</th><th>{et.tableHeaderEmail}</th><th>{et.tableHeaderStatus}</th><th>{et.tableHeaderCreated}</th><th class="act-col"></th></tr></thead>
+              <tbody>
+                <tr><td class="sticky-col"><div class="pb-checkbox"></div></td><td class="sticky-col">Acme Corp</td><td>info@acme.com</td><td><span class="pb-badge green">{et.statusActive}</span></td><td>15 Mar 2024</td><td class="act-col"><button class="pb-act-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-more-vertical"/></svg></button></td></tr>
+                <tr><td class="sticky-col"><div class="pb-checkbox"></div></td><td class="sticky-col">Globex Inc</td><td>hello@globex.com</td><td><span class="pb-badge green">{et.statusActive}</span></td><td>02 Apr 2024</td><td class="act-col"><button class="pb-act-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-more-vertical"/></svg></button></td></tr>
+                <tr><td class="sticky-col"><div class="pb-checkbox"></div></td><td class="sticky-col">Initech</td><td>contact@initech.com</td><td><span class="pb-badge amber">{et.statusLead}</span></td><td>10 May 2024</td><td class="act-col"><button class="pb-act-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-more-vertical"/></svg></button></td></tr>
+                <tr><td class="sticky-col"><div class="pb-checkbox"></div></td><td class="sticky-col">Umbrella Co</td><td>admin@umbrella.com</td><td><span class="pb-badge gray">{et.statusInactive}</span></td><td>20 Jun 2024</td><td class="act-col"><button class="pb-act-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-more-vertical"/></svg></button></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- #15 Pagination footer -->
+      <div class="extracted panel-pad" id="ex-pagination" style="width:480px">
+        <div class="pb-pagination" style="border:none;padding:0">
+          <div class="pag-range">1-25 / 247</div>
+          <div class="pag-controls">
+            <div class="pag-size"><span>{et.paginationPageSize}</span><button class="pag-size-btn">25</button></div>
+            <div class="pag-divider"></div>
+            <button class="pag-btn" disabled><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m11 17-5-5 5-5"/><path d="m18 17-5-5 5-5"/></svg></button>
+            <button class="pag-btn" disabled><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg></button>
+            <span class="pag-status">1 / 10</span>
+            <button class="pag-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg></button>
+            <button class="pag-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m13 17 5-5-5-5"/><path d="m6 17 5-5-5-5"/></svg></button>
+          </div>
+        </div>
+      </div>
+
+      <!-- #2 Search input (with typed query) -->
+      <div class="extracted panel-pad search-extracted" id="ex-search" style="width:280px">
+        <div class="pb-search-input" style="max-width:none">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+          <input value="Acme" readonly style="font-weight:600">
+          <button class="pb-search-scope" id="ex-search-scope">All fields</button>
+        </div>
+      </div>
+
+      <!-- #2b Search In — right-side sheet panel (mirrors shell sidebar, slides from right edge of mock) -->
+      <div class="sheet-right" id="ex-searchin">
+        <div class="sheet-header">
+          <span class="sheet-header-title">{et.searchInTitle}</span>
+          <div class="sheet-header-actions">
+            <button class="sheet-header-btn" title="Reset"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg></button>
+            <button class="sheet-header-btn close" title="Close"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button>
+          </div>
+        </div>
+        <div class="sheet-body">
+          <div class="sheet-item">
+            <div class="pb-checkbox checked"></div>
+            <span>All fields</span>
+          </div>
+          <div class="sheet-divider"></div>
+          <div class="sheet-item">
+            <div class="pb-checkbox"></div>
+            <span>{et.fieldCode}</span>
+          </div>
+          <div class="sheet-item">
+            <div class="pb-checkbox"></div>
+            <span>{et.fieldFirstName}</span>
+          </div>
+          <div class="sheet-item">
+            <div class="pb-checkbox"></div>
+            <span>{et.fieldLastName}</span>
+          </div>
+          <div class="sheet-item">
+            <div class="pb-checkbox"></div>
+            <span>{et.fieldCompany}</span>
+          </div>
+          <div class="sheet-item">
+            <div class="pb-checkbox"></div>
+            <span>{et.fieldEmail}</span>
+          </div>
+          <div class="sheet-item">
+            <div class="pb-checkbox"></div>
+            <span>{et.fieldPhone}</span>
+          </div>
+          <div class="sheet-item">
+            <div class="pb-checkbox"></div>
+            <span>{et.fieldUuid}</span>
+          </div>
+          <div class="sheet-item">
+            <div class="pb-checkbox"></div>
+            <span>{et.fieldStatusReason}</span>
+          </div>
+          <div class="sheet-item">
+            <div class="pb-checkbox"></div>
+            <span>{et.fieldAddress}</span>
+          </div>
+          <div class="sheet-item">
+            <div class="pb-checkbox"></div>
+            <span>{et.fieldCity}</span>
+          </div>
+          <div class="sheet-item">
+            <div class="pb-checkbox"></div>
+            <span>{et.fieldStateRegion}</span>
+          </div>
+          <div class="sheet-item">
+            <div class="pb-checkbox"></div>
+            <span>{et.fieldCountry}</span>
+          </div>
+          <div class="sheet-item">
+            <div class="pb-checkbox"></div>
+            <span>{et.fieldZip}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- #3 Filters & Bulk Actions toolbar (entire second toolbar) -->
+      <div class="extracted no-pad" id="ex-filterchips" style="width:938px">
+        <div class="pb-toolbar-second" style="border-radius:10px">
+          <button class="pb-btn-outline"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 5H3"/><path d="M16 12H3"/><path d="M11 19H3"/><path d="m15 18 2 2 4-4"/></svg>{et.toolbarBulkActions}</button>
+          <div class="pb-gradient-divider"></div>
+          <button class="pb-btn-soft-xs" id="ex-clearall"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>{et.toolbarClearAll}</button>
+          <div class="pb-gradient-divider"></div>
+          <div class="pb-filter-badge" id="ex-filterbadge">
+            <span class="fb-label">{et.fieldEmail}</span>
+            <span class="fb-op">{et.filterOpEndsWith}</span>
+            <span class="fb-val">.com</span>
+            <button class="fb-x"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button>
+          </div>
+        </div>
+      </div>
+
+      <!-- #4 Advanced filter builder — right-side sheet panel (same shape as Search In) -->
+      <div class="sheet-right" id="ex-advfilter" style="height:534px">
+        <div class="sheet-header">
+          <span class="sheet-header-title" id="adv-panel-title">{et.advFiltersTitle}</span>
+          <div class="sheet-header-actions">
+            <button class="sheet-header-btn" id="adv-apply-btn" title={et.advFiltersApply} style="background:rgba(56,189,248,0.1);color:var(--pb-primary);gap:0.25rem;font-size:0.6875rem;padding:0 0.5rem"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 3 14 9-14 9V3z"/></svg><span>{et.advFiltersApply}</span></button>
+            <button class="sheet-header-btn" id="adv-reset-btn" title="Reset"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg></button>
+            <button class="sheet-header-btn close" title="Close"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button>
+          </div>
+        </div>
+        <!-- Standard / Advanced tabs with sliding pill (soft gradient style) -->
+        <div id="adv-tabs" style="display:flex;gap:0;padding:0.25rem 0;margin:0 1rem;background:var(--pb-sidebar-accent);border-bottom:1px solid var(--pb-sidebar-border);flex-shrink:0;position:relative">
+          <div id="adv-tab-standard" style="position:relative;flex:1;display:flex;align-items:center;justify-content:center;height:32px;border-radius:9999px;font-size:0.75rem;font-weight:500;color:var(--pb-sidebar-muted);cursor:pointer;z-index:2">
+            <span style="position:relative;z-index:2">{et.advFiltersTabStandard}</span>
+          </div>
+          <div id="adv-tab-advanced" style="position:relative;flex:1;display:flex;align-items:center;justify-content:center;height:32px;border-radius:9999px;font-size:0.75rem;font-weight:500;color:var(--pb-sidebar-fg);cursor:pointer;z-index:2">
+            <span style="position:relative;z-index:2">{et.advFiltersTabAdvanced}</span>
+          </div>
+          <!-- Active pill (slides between tabs) — soft gradient bg + border -->
+          <div id="adv-tab-pill" style="position:absolute;top:0.25rem;height:32px;width:50%;border-radius:9999px;border:1px solid transparent;background:linear-gradient(to bottom right, #bae6fd, #c7d2fe) padding-box, linear-gradient(to bottom right, #38bdf8, #818cf8) border-box;box-shadow:0 1px 2px rgba(0,0,0,0.05);left:50%;z-index:1"></div>
+        </div>
+        <!-- Advanced body (visible during phase 5) -->
+        <div class="sheet-body" id="adv-body-advanced" style="padding:0.75rem;overflow-y:auto">
+          <!-- AND/OR toggle with switch -->
+          <div id="adv-connector-toggle" style="display:flex;justify-content:center;align-items:center;gap:0.75rem;margin-bottom:1rem">
+            <span style="font-size:0.6875rem;font-weight:500;color:var(--pb-sidebar-fg)">{et.advFiltersAllCriteria}</span>
+            <div style="width:36px;height:20px;border-radius:10px;background:rgba(56,189,248,0.3);position:relative;cursor:pointer">
+              <div style="width:16px;height:16px;border-radius:50%;background:rgba(56,189,248,0.8);position:absolute;top:2px;left:2px;transition:all 0.2s"></div>
+            </div>
+            <span style="font-size:0.6875rem;font-weight:500;color:var(--pb-sidebar-muted)">{et.advFiltersAnyCriteria}</span>
+          </div>
+
+          <!-- Filter composition box (existing filter) -->
+          <div id="adv-preview-box" style="display:flex;align-items:center;gap:0.5rem;padding:0.625rem;background:var(--pb-sidebar-accent);border-radius:6px;border:1px solid var(--pb-sidebar-border);margin-bottom:0.75rem">
+            <div style="flex:1;min-width:0">
+              <div style="font-size:0.6875rem;display:flex;flex-wrap:wrap;align-items:center;gap:0.25rem">
+                <span style="font-weight:700;color:var(--pb-sidebar-fg)">{et.fieldEmail}</span>
+                <span style="color:var(--pb-primary)">{et.filterOpEndsWith}</span>
+                <span style="font-style:italic;color:var(--pb-sidebar-muted)">.com</span>
+              </div>
+            </div>
+            <div style="display:flex;align-items:center;gap:0.25rem">
+              <button style="display:flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:4px;border:none;background:transparent;color:var(--pb-sidebar-muted);cursor:pointer">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"/><path d="m15 5 4 4"/></svg>
+              </button>
+              <button style="display:flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:4px;border:none;background:transparent;color:var(--pb-sidebar-muted);cursor:pointer">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.531 3H3a1 1 0 0 0-.742 1.67l7.225 7.989A2 2 0 0 1 10 14v6a1 1 0 0 0 .553.895l2 1A1 1 0 0 0 14 21v-7a2 2 0 0 1 .517-1.341l.427-.473"/><path d="m16.5 3.5 5 5"/><path d="m21.5 3.5-5 5"/></svg>
+              </button>
+            </div>
+          </div>
+
+          <!-- Divider -->
+          <div id="adv-form-section" style="border-top:1px solid var(--pb-sidebar-border);padding-top:0.75rem">
+            <div style="display:flex;flex-direction:column;gap:0.625rem">
+              <!-- Field selector -->
+              <div>
+                <label style="font-size:0.6875rem;font-weight:400;color:var(--pb-sidebar-fg);display:block;margin-bottom:0.25rem">{et.advFiltersFieldLabel}</label>
+                <button class="sheet-select">
+                  <span>{et.fieldEmail}</span>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+                </button>
+              </div>
+
+              <!-- Operator selector -->
+              <div>
+                <label style="font-size:0.6875rem;font-weight:400;color:var(--pb-sidebar-fg);display:block;margin-bottom:0.25rem">{et.advFiltersOperatorLabel}</label>
+                <button class="sheet-select">
+                  <span>{et.filterOpEndsWith}</span>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+                </button>
+              </div>
+
+              <!-- Value input -->
+              <div>
+                <label style="font-size:0.6875rem;font-weight:400;color:var(--pb-sidebar-fg);display:block;margin-bottom:0.25rem">{et.advFiltersValueLabel}</label>
+                <input id="adv-value-input" class="sheet-input" placeholder="Type a value..." value=".com">
+              </div>
+
+              <!-- Add Filter button (primary gradient) -->
+              <button class="pb-btn-primary-gradient" style="width:100%;height:36px;font-size:0.75rem;margin-top:0.25rem;justify-content:center">
+                Add Filter
+              </button>
+            </div>
+          </div>
+        </div>
+        <!-- Standard body (hidden initially, shown during phase 6) -->
+        <div class="sheet-body" id="adv-body-standard" style="padding:0.75rem;overflow-y:auto;display:none">
+          <div id="std-field-list" style="display:flex;flex-direction:column;gap:1rem">
+            <div>
+              <label style="font-size:0.6875rem;font-weight:400;color:var(--pb-sidebar-fg);display:block;margin-bottom:0.375rem">{et.fieldCode}</label>
+              <input class="sheet-input" placeholder="Contains...">
+            </div>
+            <div>
+              <label style="font-size:0.6875rem;font-weight:400;color:var(--pb-sidebar-fg);display:block;margin-bottom:0.375rem">{et.fieldFirstName}</label>
+              <input class="sheet-input" placeholder="Contains...">
+            </div>
+            <div>
+              <label style="font-size:0.6875rem;font-weight:400;color:var(--pb-sidebar-fg);display:block;margin-bottom:0.375rem">{et.fieldLastName}</label>
+              <input class="sheet-input" placeholder="Contains...">
+            </div>
+            <div>
+              <label style="font-size:0.6875rem;font-weight:400;color:var(--pb-sidebar-fg);display:block;margin-bottom:0.375rem">{et.fieldEmail}</label>
+              <input id="std-email-input" class="sheet-input" placeholder="Contains..." value=".com">
+            </div>
+            <div>
+              <label style="font-size:0.6875rem;font-weight:400;color:var(--pb-sidebar-fg);display:block;margin-bottom:0.375rem">{et.fieldStatus}</label>
+              <button class="sheet-select" style="color:var(--pb-sidebar-muted);font-size:0.6875rem">
+                <span>{et.stdFilterSelectValues}</span>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- #5 IANA datetime — extracted table column (browser mode + IANA record mode) -->
+      <div class="extracted no-pad" id="ex-datetime" style="width:220px">
+        <div id="ex-datetime-header" style="display:flex;align-items:center;justify-content:space-between;gap:0.25rem;padding:0.5rem 0.75rem;border-bottom:1px solid var(--pb-border);background:var(--pb-muted);font-size:0.75rem;font-weight:600;color:var(--pb-fg);white-space:nowrap;position:relative">
+          <span style="display:flex;align-items:center;gap:0.25rem">Onboarded At <svg class="sort-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21 16-4 4-4-4"/><path d="M17 20V4"/><path d="m3 8 4-4 4 4"/><path d="M7 4v16"/></svg></span>
+          <svg id="ex-datetime-globe" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--pb-muted-fg);position:absolute;right:0.75rem;top:50%;transform:translateY(-50%)"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>
+          <svg id="ex-datetime-pin" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;color:#d97706;position:absolute;right:0.75rem;top:50%;transform:translateY(-50%)"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/></svg>
+        </div>
+        <div id="ex-datetime-rows" style="display:flex;flex-direction:column">
+          <div class="ex-datetime-row" id="ex-datetime-row1" style="display:flex;flex-direction:column;gap:0.125rem;padding:0.5rem 0.75rem;border-bottom:1px solid var(--pb-border);font-size:0.75rem;color:var(--pb-fg);white-space:nowrap;transition:background 0.3s ease">
+            <span class="ex-datetime-value">16 May 2026, 19:00</span>
+            <span class="pb-badge amber iana ex-datetime-tz" style="display:none">America/New_York</span>
+          </div>
+          <div class="ex-datetime-row" id="ex-datetime-row2" style="display:flex;flex-direction:column;gap:0.125rem;padding:0.5rem 0.75rem;border-bottom:1px solid var(--pb-border);font-size:0.75rem;color:var(--pb-fg);white-space:nowrap;transition:background 0.3s ease">
+            <span class="ex-datetime-value">16 May 2026, 19:00</span>
+            <span class="pb-badge amber iana ex-datetime-tz" style="display:none">Europe/Rome</span>
+          </div>
+          <div class="ex-datetime-row" id="ex-datetime-row3" style="display:flex;flex-direction:column;gap:0.125rem;padding:0.5rem 0.75rem;font-size:0.75rem;color:var(--pb-fg);white-space:nowrap;transition:background 0.3s ease">
+            <span class="ex-datetime-value">16 May 2026, 19:00</span>
+            <span class="pb-badge amber iana ex-datetime-tz" style="display:none">Asia/Tokyo</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- #6 Column selector panel -->
+      <div class="sheet-right" id="ex-colsel" style="height:534px">
+        <div class="sheet-header">
+          <span class="sheet-header-title">{et.colselTitle}</span>
+          <div class="sheet-header-actions">
+            <button class="sheet-header-btn" title="Reset"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg></button>
+            <button class="sheet-header-btn close" title="Close"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button>
+          </div>
+        </div>
+        <div class="sheet-body" style="padding:0.5rem;overflow-y:auto">
+          <!-- Sticky fields group -->
+          <div id="colsel-group-sticky" style="display:flex;align-items:center;gap:0.5rem;margin:0.5rem 0">
+            <div style="height:1px;flex:1;background:var(--pb-sidebar-border)"></div>
+            <div style="font-size:0.6875rem;font-weight:500;color:var(--pb-sidebar-muted)">{et.colselGroupSticky}</div>
+            <div style="height:1px;flex:1;background:var(--pb-sidebar-border)"></div>
+          </div>
+          <div id="colsel-field-name" style="display:flex;align-items:center;gap:0.5rem;padding:0.375rem 0.5rem;border-radius:6px;font-size:0.8125rem;color:var(--pb-sidebar-fg);cursor:pointer">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--pb-sidebar-muted);cursor:grab"><circle cx="9" cy="6" r="1"/><circle cx="9" cy="12" r="1"/><circle cx="9" cy="18" r="1"/><circle cx="15" cy="6" r="1"/><circle cx="15" cy="12" r="1"/><circle cx="15" cy="18" r="1"/></svg>
+            <div class="pb-checkbox checked" style="pointer-events:none"></div>
+            <span>{et.fieldName}</span>
+          </div>
+          <!-- Data fields group -->
+          <div id="colsel-group-data" style="display:flex;align-items:center;gap:0.5rem;margin:0.75rem 0">
+            <div style="height:1px;flex:1;background:var(--pb-sidebar-border)"></div>
+            <div style="font-size:0.6875rem;font-weight:500;color:var(--pb-sidebar-muted)">{et.colselGroupData}</div>
+            <div style="height:1px;flex:1;background:var(--pb-sidebar-border)"></div>
+          </div>
+          <div style="display:flex;align-items:center;gap:0.5rem;padding:0.375rem 0.5rem;border-radius:6px;font-size:0.8125rem;color:var(--pb-sidebar-fg);cursor:pointer">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--pb-sidebar-muted);cursor:grab"><circle cx="9" cy="6" r="1"/><circle cx="9" cy="12" r="1"/><circle cx="9" cy="18" r="1"/><circle cx="15" cy="6" r="1"/><circle cx="15" cy="12" r="1"/><circle cx="15" cy="18" r="1"/></svg>
+            <div class="pb-checkbox checked" style="pointer-events:none"></div>
+            <span>{et.fieldCode}</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:0.5rem;padding:0.375rem 0.5rem;border-radius:6px;font-size:0.8125rem;color:var(--pb-sidebar-fg);cursor:pointer">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--pb-sidebar-muted);cursor:grab"><circle cx="9" cy="6" r="1"/><circle cx="9" cy="12" r="1"/><circle cx="9" cy="18" r="1"/><circle cx="15" cy="6" r="1"/><circle cx="15" cy="12" r="1"/><circle cx="15" cy="18" r="1"/></svg>
+            <div class="pb-checkbox checked" style="pointer-events:none"></div>
+            <span>{et.fieldEmail}</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:0.5rem;padding:0.375rem 0.5rem;border-radius:6px;font-size:0.8125rem;color:var(--pb-sidebar-fg);cursor:pointer">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--pb-sidebar-muted);cursor:grab"><circle cx="9" cy="6" r="1"/><circle cx="9" cy="12" r="1"/><circle cx="9" cy="18" r="1"/><circle cx="15" cy="6" r="1"/><circle cx="15" cy="12" r="1"/><circle cx="15" cy="18" r="1"/></svg>
+            <div class="pb-checkbox checked" style="pointer-events:none"></div>
+            <span>{et.fieldStatus}</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:0.5rem;padding:0.375rem 0.5rem;border-radius:6px;font-size:0.8125rem;color:var(--pb-sidebar-fg);cursor:pointer;opacity:0.5">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--pb-sidebar-muted);cursor:grab"><circle cx="9" cy="6" r="1"/><circle cx="9" cy="12" r="1"/><circle cx="9" cy="18" r="1"/><circle cx="15" cy="6" r="1"/><circle cx="15" cy="12" r="1"/><circle cx="15" cy="18" r="1"/></svg>
+            <div class="pb-checkbox" style="pointer-events:none"></div>
+            <span>{et.fieldPhone}</span>
+          </div>
+          <!-- Auditing fields group -->
+          <div id="colsel-group-audit" style="display:flex;align-items:center;gap:0.5rem;margin:0.75rem 0">
+            <div style="height:1px;flex:1;background:var(--pb-sidebar-border)"></div>
+            <div style="font-size:0.6875rem;font-weight:500;color:var(--pb-sidebar-muted)">{et.colselGroupAudit}</div>
+            <div style="height:1px;flex:1;background:var(--pb-sidebar-border)"></div>
+          </div>
+          <div id="colsel-field-createdat" style="display:flex;align-items:center;gap:0.5rem;padding:0.375rem 0.5rem;border-radius:6px;font-size:0.8125rem;color:var(--pb-sidebar-fg);cursor:pointer">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--pb-sidebar-muted);cursor:grab"><circle cx="9" cy="6" r="1"/><circle cx="9" cy="12" r="1"/><circle cx="9" cy="18" r="1"/><circle cx="15" cy="6" r="1"/><circle cx="15" cy="12" r="1"/><circle cx="15" cy="18" r="1"/></svg>
+            <div class="pb-checkbox checked" style="pointer-events:none"></div>
+            <span>{et.fieldCreatedAt}</span>
+          </div>
+          <div id="colsel-field-createdby" style="display:flex;align-items:center;gap:0.5rem;padding:0.375rem 0.5rem;border-radius:6px;font-size:0.8125rem;color:var(--pb-sidebar-fg);cursor:pointer">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--pb-sidebar-muted);cursor:grab"><circle cx="9" cy="6" r="1"/><circle cx="9" cy="12" r="1"/><circle cx="9" cy="18" r="1"/><circle cx="15" cy="6" r="1"/><circle cx="15" cy="12" r="1"/><circle cx="15" cy="18" r="1"/></svg>
+            <div class="pb-checkbox checked" style="pointer-events:none"></div>
+            <span>{et.fieldCreatedBy}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- #7a Sticky columns — extracted Name column (left sticky) -->
+      <div class="extracted no-pad" id="ex-sticky-name" style="width:154px">
+        <div style="padding:0.5rem 0.75rem;border-bottom:1px solid var(--pb-border);background:var(--pb-muted);font-size:0.75rem;font-weight:600;color:var(--pb-fg);white-space:nowrap;display:flex;align-items:center;gap:0.25rem">
+          <span>{et.fieldName}</span>
+          <svg class="sort-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21 16-4 4-4-4"/><path d="M17 20V4"/><path d="m3 8 4-4 4 4"/><path d="M7 4v16"/></svg>
+        </div>
+        <div style="display:flex;flex-direction:column">
+          <div style="padding:0.5rem 0.75rem;border-bottom:1px solid var(--pb-border);font-size:0.75rem;color:var(--pb-fg);white-space:nowrap">Acme Corp</div>
+          <div style="padding:0.5rem 0.75rem;border-bottom:1px solid var(--pb-border);font-size:0.75rem;color:var(--pb-fg);white-space:nowrap">Globex Inc</div>
+          <div style="padding:0.5rem 0.75rem;border-bottom:1px solid var(--pb-border);font-size:0.75rem;color:var(--pb-fg);white-space:nowrap">Initech</div>
+          <div style="padding:0.5rem 0.75rem;border-bottom:1px solid var(--pb-border);font-size:0.75rem;color:var(--pb-fg);white-space:nowrap">Umbrella Co</div>
+          <div style="padding:0.5rem 0.75rem;font-size:0.75rem;color:var(--pb-fg);white-space:nowrap">Stark Industries</div>
+        </div>
+      </div>
+
+      <!-- #7b Sticky columns — extracted Action column (right sticky) -->
+      <div class="extracted no-pad" id="ex-sticky-action" style="width:33px">
+        <div style="padding:0.5rem 0.25rem;border-bottom:1px solid var(--pb-border);background:var(--pb-muted);display:grid;place-items:center">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--pb-muted-fg)"><use href="#i-panel-right-open"/></svg>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:center">
+          <div style="padding:0.5rem 0.25rem;border-bottom:1px solid var(--pb-border);display:grid;place-items:center"><button class="pb-act-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-more-vertical"/></svg></button></div>
+          <div style="padding:0.5rem 0.25rem;border-bottom:1px solid var(--pb-border);display:grid;place-items:center"><button class="pb-act-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-more-vertical"/></svg></button></div>
+          <div style="padding:0.5rem 0.25rem;border-bottom:1px solid var(--pb-border);display:grid;place-items:center"><button class="pb-act-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-more-vertical"/></svg></button></div>
+          <div style="padding:0.5rem 0.25rem;border-bottom:1px solid var(--pb-border);display:grid;place-items:center"><button class="pb-act-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-more-vertical"/></svg></button></div>
+          <div style="padding:0.5rem 0.25rem;display:grid;place-items:center"><button class="pb-act-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-more-vertical"/></svg></button></div>
+        </div>
+      </div>
+
+      <!-- #8 Selection (hidden — selection is simulated on mock screen) -->
+      <div class="extracted" id="ex-selection" style="width:1px;height:1px;opacity:0;pointer-events:none"></div>
+
+      <!-- #9 Sorting (hidden — sorting is simulated on mock screen) -->
+      <div class="extracted" id="ex-sorting" style="width:1px;height:1px;opacity:0;pointer-events:none"></div>
+
+      <!-- #12 CRUD row actions (three-dot dropdown menu) -->
+      <!-- #9b CRUD row actions (hidden — dropdown is simulated on mock screen) -->
+      <div class="extracted" id="ex-rowactions" style="width:1px;height:1px;opacity:0;pointer-events:none"></div>
+
+      <!-- Row actions dropdown (appears next to row 3 action button) -->
+      <div id="row-actions-dropdown" style="position:absolute;opacity:0;pointer-events:none;z-index:200;transition:opacity 0.2s ease">
+        <div id="row-actions-dropdown-inner" style="position:relative;width:224px;border-radius:8px;background:var(--pb-bg)">
+        <div style="border:1px solid var(--pb-border);border-radius:8px;overflow:hidden;box-shadow:0 8px 24px -6px rgba(0,0,0,0.18)">
+          <div style="padding:0.4375rem 0.625rem;font-size:0.8125rem;display:flex;align-items:center;gap:0.5rem;cursor:pointer;color:var(--pb-fg)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="opacity:0.7"><use href="#i-pencil"/></svg> <span>Edit</span></div>
+          <div style="padding:0.4375rem 0.625rem;font-size:0.8125rem;display:flex;align-items:center;gap:0.5rem;cursor:pointer;color:var(--pb-fg)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="opacity:0.7"><use href="#i-copy"/></svg> <span>{et.bulkDuplicate}</span></div>
+          <div style="padding:0.4375rem 0.625rem;font-size:0.8125rem;display:flex;align-items:center;gap:0.5rem;cursor:pointer;color:var(--pb-fg)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="opacity:0.7"><use href="#i-file-clock"/></svg> <span>Version history</span></div>
+          <div style="padding:0.4375rem 0.625rem;font-size:0.8125rem;display:flex;align-items:center;gap:0.5rem;cursor:pointer;color:var(--pb-fg)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="opacity:0.7"><use href="#i-eye"/></svg> <span>{et.previewTitle}</span></div>
+          <div style="height:1px;background:var(--pb-border);margin:0.25rem 0"></div>
+          <div style="padding:0.4375rem 0.625rem;font-size:0.8125rem;display:flex;align-items:center;gap:0.5rem;cursor:pointer;color:var(--pb-destructive)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="opacity:0.7"><use href="#i-trash2"/></svg> <span>{et.bulkDelete}</span></div>
+        </div>
+        </div>
+      </div>
+
+      <!-- #10 View modes (hidden — simulated on mock screen) -->
+      <div class="extracted" id="ex-viewmode" style="width:1px;height:1px;opacity:0;pointer-events:none"></div>
+
+      <!-- #11 Deletion filter (toggle + deleted row) -->
+      <div class="extracted panel-pad" id="ex-deletion" style="width:320px">
+        <div class="pb-del-filter" style="margin-bottom:0.5rem">
+          <div class="df-btn" title="Active records"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 5H3"/><path d="M16 12H3"/><path d="M11 19H3"/><path d="m15 18 2 2 4-4"/></svg></div>
+          <div class="df-btn active" title="Deleted records"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 5H3"/><path d="M11 12H3"/><path d="M16 19H3"/><path d="m15.5 9.5 5 5"/><path d="m20.5 9.5-5 5"/></svg></div>
+          <div class="df-btn" title="All records"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 5h18"/><path d="M3 12h18"/><path d="M3 19h18"/></svg></div>
+        </div>
+        <table class="pb-table">
+          <thead><tr><th class="sticky-col">{et.tableHeaderName}</th><th>{et.tableHeaderStatus}</th><th>{et.tableHeaderDeletedAt}</th></tr></thead>
+          <tbody>
+            <tr class="deleted"><td class="sticky-col">Acme Old</td><td><span class="pb-badge gray">{et.statusDeleted}</span></td><td>01 Jun 2024</td></tr>
+            <tr class="deleted"><td class="sticky-col">Beta Corp</td><td><span class="pb-badge gray">{et.statusDeleted}</span></td><td>2024-07-15</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- #13 Bulk actions toolbar (same second toolbar, toggled to bulk mode) -->
+      <div class="extracted no-pad" id="ex-bulk" style="width:938px">
+        <div class="pb-toolbar-second" style="border-radius:10px">
+          <button class="pb-btn-outline" id="ex-bulk-toggle"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 5H3"/><path d="M12 19H3"/><path d="M14 3v4"/><path d="M16 17v4"/><path d="M21 12h-9"/><path d="M21 19h-5"/><path d="M21 5h-7"/><path d="M8 10v4"/><path d="M8 12H3"/></svg>{et.toolbarFilters}</button>
+          <div class="pb-gradient-divider"></div>
+          <button class="pb-btn-soft-xs"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M7 10l5 5 5-5"/><path d="M12 15V3"/></svg>{et.bulkExport}</button>
+          <button class="pb-btn-soft-xs"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M7 10l5 5 5-5"/><path d="M12 15V3"/></svg>{et.bulkExportHtml}</button>
+          <button class="pb-btn-soft-xs"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>{et.bulkDuplicate}</button>
+          <button class="pb-btn-soft-xs" style="color:var(--pb-destructive);border-color:rgba(239,68,68,0.3)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/></svg>{et.bulkDelete}</button>
+          <button class="pb-btn-soft-xs" style="color:var(--pb-warning, #f59e0b);border-color:rgba(245,158,11,0.3)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>{et.bulkRestore}</button>
+        </div>
+      </div>
+
+      <!-- #14 Preview panel (inside table, right side — matches real PreviewPanel.svelte) -->
+      <div class="extracted no-pad" id="ex-preview" style="width:380px">
+        <!-- Resize handle on left edge -->
+        <div style="position:absolute;left:0;top:0;bottom:0;width:8px;cursor:ew-resize;display:flex;align-items:center;justify-content:center;border-left:2px solid transparent">
+          <div style="width:4px;height:32px;background:var(--pb-border);border-radius:9999px"></div>
+        </div>
+        <div style="display:flex;flex-direction:column;height:100%;background:var(--pb-bg);border-left:1px solid var(--pb-border);border-radius:inherit;overflow:hidden">
+          <!-- Header (SheetHeader pattern) -->
+          <div style="position:relative;display:flex;align-items:center;justify-content:space-between;gap:0.5rem;padding:0.5rem 0.625rem;border-bottom:1px solid var(--pb-border);background:var(--pb-muted)">
+            <!-- Title -->
+            <div style="font-size:0.8125rem;font-weight:500">{et.previewTitle}</div>
+            <!-- Micro pagination (centered) -->
+            <div style="position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);display:flex;align-items:center;gap:0.25rem">
+              <button class="pb-act-btn" style="width:24px;height:24px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg></button>
+              <span style="font-size:0.6875rem;font-weight:500;width:64px;text-align:center">1 / 124</span>
+              <button class="pb-act-btn" style="width:24px;height:24px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg></button>
+            </div>
+            <!-- Actions on right: edit toggle + kebab + close -->
+            <div style="display:flex;align-items:center;gap:0.375rem">
+              <div style="display:flex;align-items:center;gap:0.25rem">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--pb-muted-fg)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13.5 6.5a2.5 2.5 0 0 1 3 3"/><path d="M21 21a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1l5.5-5.5"/><path d="M16 8a2.5 2.5 0 0 0-3-3l-5 5v3h3l5-5z"/></svg>
+                <div style="width:28px;height:16px;border-radius:9999px;background:var(--pb-muted);position:relative;border:1px solid var(--pb-border)"><div style="position:absolute;left:2px;top:1px;width:12px;height:12px;border-radius:50%;background:var(--pb-muted-fg)"></div></div>
+              </div>
+              <button class="pb-act-btn" style="width:24px;height:24px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="1"/><circle cx="12" cy="5" r="1"/><circle cx="12" cy="19" r="1"/></svg></button>
+              <button class="pb-act-btn" style="width:24px;height:24px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button>
+            </div>
+          </div>
+          <!-- Scrollable content -->
+          <div style="flex:1;overflow-y:auto;padding:0.5rem 0.5rem">
+            <!-- Sticky fields section -->
+            <div style="margin:0.5rem 0;position:sticky;top:0;z-index:1;background:var(--pb-bg);display:flex;align-items:center;gap:0.5rem">
+              <div style="height:1px;flex:1;background:var(--pb-border)"></div>
+              <div style="font-size:0.6875rem;font-weight:500;color:var(--pb-muted-fg)">{et.previewGroupSticky}</div>
+              <div style="height:1px;flex:1;background:var(--pb-border)"></div>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.5rem;padding:0 0.25rem">
+              <div style="display:flex;flex-direction:column;gap:0.25rem;padding:0.5rem;border-radius:6px;background:var(--pb-muted)">
+                <span style="font-size:0.6875rem;font-weight:600;color:var(--pb-primary)">{et.fieldCompany}</span>
+                <span style="font-size:0.8125rem;font-weight:500">Acme Corp</span>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:0.25rem;padding:0.5rem;border-radius:6px;background:var(--pb-muted)">
+                <span style="font-size:0.6875rem;font-weight:600;color:var(--pb-primary)">{et.fieldCode}</span>
+                <span style="font-size:0.8125rem;font-weight:500">ACM-001</span>
+              </div>
+            </div>
+            <!-- Data fields section -->
+            <div style="margin:0.75rem 0 0.5rem;position:sticky;top:0;z-index:1;background:var(--pb-bg);display:flex;align-items:center;gap:0.5rem">
+              <div style="height:1px;flex:1;background:var(--pb-border)"></div>
+              <div style="font-size:0.6875rem;font-weight:500;color:var(--pb-muted-fg)">{et.previewGroupData}</div>
+              <div style="height:1px;flex:1;background:var(--pb-border)"></div>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.5rem;padding:0 0.25rem">
+              <div style="display:flex;flex-direction:column;gap:0.25rem;padding:0.5rem;border-radius:6px;background:var(--pb-muted)">
+                <span style="font-size:0.6875rem;font-weight:600;color:var(--pb-primary)">{et.fieldFirstName}</span>
+                <span style="font-size:0.8125rem;font-weight:500">John</span>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:0.25rem;padding:0.5rem;border-radius:6px;background:var(--pb-muted)">
+                <span style="font-size:0.6875rem;font-weight:600;color:var(--pb-primary)">{et.fieldLastName}</span>
+                <span style="font-size:0.8125rem;font-weight:500">Doe</span>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:0.25rem;padding:0.5rem;border-radius:6px;background:var(--pb-muted)">
+                <span style="font-size:0.6875rem;font-weight:600;color:var(--pb-primary)">{et.fieldEmail}</span>
+                <span style="font-size:0.8125rem;font-weight:500">info@acme.com</span>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:0.25rem;padding:0.5rem;border-radius:6px;background:var(--pb-muted)">
+                <span style="font-size:0.6875rem;font-weight:600;color:var(--pb-primary)">{et.fieldPhone}</span>
+                <span style="font-size:0.8125rem;font-weight:500">+1 555-0100</span>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:0.25rem;padding:0.5rem;border-radius:6px;background:var(--pb-muted)">
+                <span style="font-size:0.6875rem;font-weight:600;color:var(--pb-primary)">{et.fieldStatus}</span>
+                <span class="pb-badge green" style="width:fit-content">{et.statusActive}</span>
+              </div>
+            </div>
+            <!-- Auditing fields section -->
+            <div style="margin:0.75rem 0 0.5rem;position:sticky;top:0;z-index:1;background:var(--pb-bg);display:flex;align-items:center;gap:0.5rem">
+              <div style="height:1px;flex:1;background:var(--pb-border)"></div>
+              <div style="font-size:0.6875rem;font-weight:500;color:var(--pb-muted-fg)">{et.previewGroupAudit}</div>
+              <div style="height:1px;flex:1;background:var(--pb-border)"></div>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.5rem;padding:0 0.25rem">
+              <div style="display:flex;flex-direction:column;gap:0.25rem;padding:0.5rem;border-radius:6px;background:var(--pb-muted)">
+                <span style="font-size:0.6875rem;font-weight:600;color:var(--pb-primary)">{et.fieldUpdatedAt}</span>
+                <span style="font-size:0.8125rem;font-weight:500">16 May 2026, 19:00</span>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:0.25rem;padding:0.5rem;border-radius:6px;background:var(--pb-muted)">
+                <span style="font-size:0.6875rem;font-weight:600;color:var(--pb-primary)">{et.fieldVersion}</span>
+                <span style="font-size:0.8125rem;font-weight:500">42</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- ===== 15 Annotation cards ===== -->
+      <div class="ann-label" id="ann-table"><div class="ann-card"><div class="ann-title">{et.annTableTitle}</div><div class="ann-desc">{et.annTableDesc}</div></div></div>
+      <div class="ann-label" id="ann-pagination"><div class="ann-card"><div class="ann-title">{et.annPaginationTitle}</div><div class="ann-desc">{et.annPaginationDesc}</div></div></div>
+      <div class="ann-label" id="ann-pagination-range"><div class="ann-card"><div class="ann-title">{et.annPaginationRangeTitle}</div><div class="ann-desc">{et.annPaginationRangeDesc}</div></div></div>
+      <div class="ann-label" id="ann-pagination-size"><div class="ann-card"><div class="ann-title">{et.annPaginationSizeTitle}</div><div class="ann-desc">{et.annPaginationSizeDesc}</div></div></div>
+      <div class="ann-label" id="ann-search"><div class="ann-card"><div class="ann-title">{et.annSearchTitle}</div><div class="ann-desc">{et.annSearchDesc}</div></div></div>
+      <div class="ann-label" id="ann-searchin"><div class="ann-card"><div class="ann-title">{et.annSearchinTitle}</div><div class="ann-desc">{et.annSearchinDesc}</div></div></div>
+      <div class="ann-label" id="ann-filterchips"><div class="ann-card"><div class="ann-title">{et.annFilterchipsTitle}</div><div class="ann-desc">{et.annFilterchipsDesc}</div></div></div>
+      <div class="ann-label" id="ann-filterchips-clear"><div class="ann-card"><div class="ann-title">{et.annFilterchipsClearTitle}</div><div class="ann-desc">{et.annFilterchipsClearDesc}</div></div></div>
+      <div class="ann-label" id="ann-filterchips-2"><div class="ann-card"><div class="ann-title">{et.annFilterchips2Title}</div><div class="ann-desc">{et.annFilterchips2Desc}</div></div></div>
+      <div class="ann-label" id="ann-advfilter"><div class="ann-card"><div class="ann-title">{et.annAdvfilterTitle}</div><div class="ann-desc">{et.annAdvfilterDesc}</div></div></div>
+      <div class="ann-label" id="ann-advfilter-reset"><div class="ann-card"><div class="ann-title">{et.annAdvfilterResetTitle}</div><div class="ann-desc">{et.annAdvfilterResetDesc}</div></div></div>
+      <div class="ann-label" id="ann-advfilter-connector"><div class="ann-card"><div class="ann-title">{et.annAdvfilterConnectorTitle}</div><div class="ann-desc">{et.annAdvfilterConnectorDesc}</div></div></div>
+      <div class="ann-label" id="ann-advfilter-preview"><div class="ann-card"><div class="ann-title">{et.annAdvfilterPreviewTitle}</div><div class="ann-desc">{et.annAdvfilterPreviewDesc}</div></div></div>
+      <div class="ann-label" id="ann-advfilter-form"><div class="ann-card"><div class="ann-title">{et.annAdvfilterFormTitle}</div><div class="ann-desc">{et.annAdvfilterFormDesc}</div></div></div>
+      <div class="ann-label" id="ann-stdfilter"><div class="ann-card"><div class="ann-title">{et.annStdfilterTitle}</div><div class="ann-desc">{et.annStdfilterDesc}</div></div></div>
+      <div class="ann-label" id="ann-stdfilter-field"><div class="ann-card"><div class="ann-title">{et.annStdfilterFieldTitle}</div><div class="ann-desc">{et.annStdfilterFieldDesc}</div></div></div>
+      <div class="ann-label" id="ann-datetime"><div class="ann-card"><div class="ann-title">{et.annDatetimeTitle}</div><div class="ann-desc">{et.annDatetimeDesc}</div></div></div>
+      <div class="ann-label" id="ann-datetime-iana"><div class="ann-card"><div class="ann-title">{et.annDatetimeIanaTitle}</div><div class="ann-desc">{et.annDatetimeIanaDesc}</div></div></div>
+      <div class="ann-label" id="ann-colsel"><div class="ann-card"><div class="ann-title">{et.annColselTitle}</div><div class="ann-desc">{et.annColselDesc}</div></div></div>
+      <div class="ann-label" id="ann-colsel-sticky"><div class="ann-card"><div class="ann-title">{et.annColselStickyTitle}</div><div class="ann-desc">{et.annColselStickyDesc}</div></div></div>
+      <div class="ann-label" id="ann-colsel-audit"><div class="ann-card"><div class="ann-title">{et.annColselAuditTitle}</div><div class="ann-desc">{et.annColselAuditDesc}</div></div></div>
+      <div class="ann-label" id="ann-sticky"><div class="ann-card"><div class="ann-title">{et.annStickyTitle}</div><div class="ann-desc">{et.annStickyDesc}</div></div></div>
+      <div class="ann-label" id="ann-sticky-name"><div class="ann-card"><div class="ann-title">{et.annStickyNameTitle}</div><div class="ann-desc">{et.annStickyNameDesc}</div></div></div>
+      <div class="ann-label" id="ann-sticky-action"><div class="ann-card"><div class="ann-title">{et.annStickyActionTitle}</div><div class="ann-desc">{et.annStickyActionDesc}</div></div></div>
+      <div class="ann-label" id="ann-selection"><div class="ann-card"><div class="ann-title">{et.annSelectionTitle}</div><div class="ann-desc">{et.annSelectionDesc}</div></div></div>
+      <div class="ann-label" id="ann-select-all"><div class="ann-card"><div class="ann-title">{et.annSelectAllTitle}</div><div class="ann-desc">{et.annSelectAllDesc}</div></div></div>
+      <div class="ann-label" id="ann-selection-counter"><div class="ann-card"><div class="ann-title">{et.annSelectionCounterTitle}</div><div class="ann-desc">{et.annSelectionCounterDesc}</div></div></div>
+      <div class="ann-label" id="ann-sorting"><div class="ann-card"><div class="ann-title">{et.annSortingTitle}</div><div class="ann-desc">{et.annSortingDesc}</div></div></div>
+      <div class="ann-label" id="ann-sort-none"><div class="ann-card"><div class="ann-title">{et.annSortNoneTitle}</div><div class="ann-desc">{et.annSortNoneDesc}</div></div></div>
+      <div class="ann-label" id="ann-sort-asc"><div class="ann-card"><div class="ann-title">{et.annSortAscTitle}</div><div class="ann-desc">{et.annSortAscDesc}</div></div></div>
+      <div class="ann-label" id="ann-sort-desc"><div class="ann-card"><div class="ann-title">{et.annSortDescTitle}</div><div class="ann-desc">{et.annSortDescDesc}</div></div></div>
+      <div class="ann-label" id="ann-rowactions"><div class="ann-card"><div class="ann-title">{et.annRowactionsTitle}</div><div class="ann-desc">{et.annRowactionsDesc}</div></div></div>
+      <div class="ann-label" id="ann-viewmode"><div class="ann-card"><div class="ann-title">{et.annViewmodeTitle}</div><div class="ann-desc">{et.annViewmodeDesc}</div></div></div>
+      <div class="ann-label" id="ann-viewmode-grid"><div class="ann-card"><div class="ann-title">{et.annViewmodeGridTitle}</div><div class="ann-desc">{et.annViewmodeGridDesc}</div></div></div>
+      <div class="ann-label" id="ann-viewmode-toolbar"><div class="ann-card"><div class="ann-title">{et.annViewmodeToolbarTitle}</div><div class="ann-desc">{et.annViewmodeToolbarDesc}</div></div></div>
+      <div class="ann-label" id="ann-viewmode-list"><div class="ann-card"><div class="ann-title">{et.annViewmodeListTitle}</div><div class="ann-desc">{et.annViewmodeListDesc}</div></div></div>
+      <div class="ann-label" id="ann-deletion"><div class="ann-card"><div class="ann-title">{et.annDeletionTitle}</div><div class="ann-desc">{et.annDeletionDesc}</div></div></div>
+      <div class="ann-label" id="ann-deletion-deleted"><div class="ann-card"><div class="ann-title">{et.annDeletionDeletedTitle}</div><div class="ann-desc">{et.annDeletionDeletedDesc}</div></div></div>
+      <div class="ann-label" id="ann-deletion-all"><div class="ann-card"><div class="ann-title">{et.annDeletionAllTitle}</div><div class="ann-desc">{et.annDeletionAllDesc}</div></div></div>
+      <div class="ann-label" id="ann-bulk"><div class="ann-card"><div class="ann-title">{et.annBulkTitle}</div><div class="ann-desc">{et.annBulkDesc}</div></div></div>
+      <div class="ann-label" id="ann-bulk-toggle"><div class="ann-card"><div class="ann-title">{et.annBulkToggleTitle}</div><div class="ann-desc">{et.annBulkToggleDesc}</div></div></div>
+      <div class="ann-label" id="ann-bulk-export"><div class="ann-card"><div class="ann-title">{et.annBulkExportTitle}</div><div class="ann-desc">{et.annBulkExportDesc}</div></div></div>
+      <div class="ann-label" id="ann-bulk-duplicate"><div class="ann-card"><div class="ann-title">{et.annBulkDuplicateTitle}</div><div class="ann-desc">{et.annBulkDuplicateDesc}</div><div style="margin-top:0.5rem;display:inline-flex;align-items:center;gap:0.25rem;padding:0.125rem 0.5rem;border-radius:9999px;background:rgba(245,158,11,0.12);border:1px solid rgba(245,158,11,0.25);font-size:0.625rem;font-weight:600;color:#d97706;letter-spacing:0.05em;text-transform:uppercase">Coming soon</div><div style="margin-top:0.375rem;font-size:0.75rem;color:#94a3b8">Field-level control: choose which fields to copy, which to exclude, and which to manually set before duplicating.</div></div></div>
+      <div class="ann-label" id="ann-preview"><div class="ann-card"><div class="ann-title">{et.annPreviewTitle}</div><div class="ann-desc">{et.annPreviewDesc}</div></div></div>
+      <!-- ===== SVG connectors (17 pairs: 15 features, #2 and #8 have 2 overlays) ===== -->
+      <svg class="connector-svg" id="connectors">
+        <line class="conn-line" id="line-table" /><circle class="conn-dot" id="dot-table" r="4" />
+        <line class="conn-line" id="line-pagination" /><circle class="conn-dot" id="dot-pagination" r="4" />
+        <line class="conn-line" id="line-pagination-range" /><circle class="conn-dot" id="dot-pagination-range" r="4" />
+        <line class="conn-line" id="line-pagination-size" /><circle class="conn-dot" id="dot-pagination-size" r="4" />
+        <line class="conn-line" id="line-search" /><circle class="conn-dot" id="dot-search" r="4" />
+        <line class="conn-line" id="line-searchin" /><circle class="conn-dot" id="dot-searchin" r="4" />
+        <line class="conn-line" id="line-searchin-cta" /><circle class="conn-dot" id="dot-searchin-cta" r="4" />
+        <line class="conn-line" id="line-filterchips" /><circle class="conn-dot" id="dot-filterchips" r="4" />
+        <line class="conn-line" id="line-filterchips-clear" /><circle class="conn-dot" id="dot-filterchips-clear" r="4" />
+        <line class="conn-line" id="line-filterchips-2" /><circle class="conn-dot" id="dot-filterchips-2" r="4" />
+        <line class="conn-line" id="line-advfilter" /><circle class="conn-dot" id="dot-advfilter" r="4" />
+        <line class="conn-line" id="line-advfilter-reset" /><circle class="conn-dot" id="dot-advfilter-reset" r="4" />
+        <line class="conn-line" id="line-advfilter-connector" /><circle class="conn-dot" id="dot-advfilter-connector" r="4" />
+        <line class="conn-line" id="line-advfilter-preview" /><circle class="conn-dot" id="dot-advfilter-preview" r="4" />
+        <line class="conn-line" id="line-advfilter-form" /><circle class="conn-dot" id="dot-advfilter-form" r="4" />
+        <line class="conn-line" id="line-stdfilter" /><circle class="conn-dot" id="dot-stdfilter" r="4" />
+        <line class="conn-line" id="line-stdfilter-field" /><circle class="conn-dot" id="dot-stdfilter-field" r="4" />
+        <line class="conn-line" id="line-datetime" /><circle class="conn-dot" id="dot-datetime" r="4" />
+        <line class="conn-line" id="line-datetime-iana" /><circle class="conn-dot" id="dot-datetime-iana" r="4" />
+        <line class="conn-line" id="line-colsel" /><circle class="conn-dot" id="dot-colsel" r="4" />
+        <line class="conn-line" id="line-colsel-sticky" /><circle class="conn-dot" id="dot-colsel-sticky" r="4" />
+        <line class="conn-line" id="line-colsel-audit" /><circle class="conn-dot" id="dot-colsel-audit" r="4" />
+        <line class="conn-line" id="line-sticky" /><circle class="conn-dot" id="dot-sticky" r="4" />
+        <line class="conn-line" id="line-sticky-name" /><circle class="conn-dot" id="dot-sticky-name" r="4" />
+        <line class="conn-line" id="line-sticky-action" /><circle class="conn-dot" id="dot-sticky-action" r="4" />
+        <line class="conn-line" id="line-selection" /><circle class="conn-dot" id="dot-selection" r="4" />
+        <line class="conn-line" id="line-select-all" /><circle class="conn-dot" id="dot-select-all" r="4" />
+        <line class="conn-line" id="line-selection-counter" /><circle class="conn-dot" id="dot-selection-counter" r="4" />
+        <line class="conn-line" id="line-sorting" /><circle class="conn-dot" id="dot-sorting" r="4" />
+        <line class="conn-line" id="line-sort-none" /><circle class="conn-dot" id="dot-sort-none" r="4" />
+        <line class="conn-line" id="line-sort-asc" /><circle class="conn-dot" id="dot-sort-asc" r="4" />
+        <line class="conn-line" id="line-sort-desc" /><circle class="conn-dot" id="dot-sort-desc" r="4" />
+        <line class="conn-line" id="line-rowactions" /><circle class="conn-dot" id="dot-rowactions" r="4" />
+        <line class="conn-line" id="line-viewmode" /><circle class="conn-dot" id="dot-viewmode" r="4" />
+        <line class="conn-line" id="line-viewmode-grid" /><circle class="conn-dot" id="dot-viewmode-grid" r="4" />
+        <line class="conn-line" id="line-viewmode-toolbar" /><circle class="conn-dot" id="dot-viewmode-toolbar" r="4" />
+        <line class="conn-line" id="line-viewmode-list" /><circle class="conn-dot" id="dot-viewmode-list" r="4" />
+        <line class="conn-line" id="line-deletion" /><circle class="conn-dot" id="dot-deletion" r="4" />
+        <line class="conn-line" id="line-deletion-deleted" /><circle class="conn-dot" id="dot-deletion-deleted" r="4" />
+        <line class="conn-line" id="line-deletion-all" /><circle class="conn-dot" id="dot-deletion-all" r="4" />
+        <line class="conn-line" id="line-bulk" /><circle class="conn-dot" id="dot-bulk" r="4" />
+        <line class="conn-line" id="line-bulk-toggle" /><circle class="conn-dot" id="dot-bulk-toggle" r="4" />
+        <line class="conn-line" id="line-bulk-export" /><circle class="conn-dot" id="dot-bulk-export" r="4" />
+        <line class="conn-line" id="line-bulk-duplicate" /><circle class="conn-dot" id="dot-bulk-duplicate" r="4" />
+        <line class="conn-line" id="line-preview" /><circle class="conn-dot" id="dot-preview" r="4" />
+      </svg>
+
+    </div>
+  </div>
+</div>
+
+<footer class="demo-footer">© 2026 Primebrick · <a href="index.html" style="color:#38bdf8;text-decoration:none">Back to Demo Hub</a></footer>
+
+<!-- ===== Inline SVG icons not in icons.js ===== -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="i-eye" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0"/><circle cx="12" cy="12" r="3"/></symbol>
+    <symbol id="i-eye-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.733 5.076a10.744 10.744 0 0 1 11.205 6.575 1 1 0 0 1 0 .7 10.823 10.823 0 0 1-1.355 2.282m-3.858 1.859A10.77 10.77 0 0 1 12 17.546a10.77 10.77 0 0 1-7.5-3.046m-2.7-2.54A10.823 10.823 0 0 1 1.062 12.65a1 1 0 0 1 0-.7 10.744 10.744 0 0 1 4.335-5.187M2 2l20 20M9.88 9.88a3 3 0 1 0 4.24 4.24"/></symbol>
+    <symbol id="i-grip-vertical" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="6" r="1"/><circle cx="9" cy="12" r="1"/><circle cx="9" cy="18" r="1"/><circle cx="15" cy="6" r="1"/><circle cx="15" cy="12" r="1"/><circle cx="15" cy="18" r="1"/></symbol>
+    <symbol id="i-chevrons-left" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m11 17-5-5 5-5M18 17l-5-5 5-5"/></symbol>
+    <symbol id="i-chevrons-right" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m13 17 5-5-5-5M6 17l5-5-5-5"/></symbol>
+    <symbol id="i-upload" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"/></symbol>
+    <symbol id="i-rotate-cw" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/></symbol>
+    <symbol id="i-sliders-horizontal" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="21" x2="14" y1="4" y2="4"/><line x1="10" x2="3" y1="4" y2="4"/><line x1="21" x2="12" y1="12" y2="12"/><line x1="8" x2="3" y1="12" y2="12"/><line x1="21" x2="16" y1="20" y2="20"/><line x1="12" x2="3" y1="20" y2="20"/><line x1="14" x2="14" y1="2" y2="6"/><line x1="8" x2="8" y1="10" y2="14"/><line x1="16" x2="16" y1="18" y2="22"/></symbol>
+    <symbol id="i-list-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 18H3"/><path d="M11 12H3"/><path d="M11 6H3"/><path d="m15 6 2 2 4-4"/><path d="m15 12 2 2 4-4"/><path d="m15 18 2 2 4-4"/></symbol>
+    <symbol id="i-more-vertical" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="5" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="12" cy="19" r="1"/></symbol>
+    <symbol id="i-panel-right-open" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M15 3v18"/></symbol>
+    <symbol id="i-file-clock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><circle cx="12" cy="15" r="2"/><path d="M12 13v2l1.5 1"/></symbol>
+    <linearGradient id="ai-cta-gradient" x1="0" y1="0" x2="24" y2="24" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#0ea5e9" />
+      <stop offset="100%" stop-color="#6366f1" />
+    </linearGradient>
+  </defs>
+</svg>
+</div><!-- /.demo-scope -->
+
+    <!-- Website footer -->
+    <footer class="relative z-10 border-t border-slate-800/50 px-6 py-8">
+      <div class="mx-auto flex max-w-7xl items-center justify-between text-sm text-slate-500">
+        <span>&copy; 2026 {t.footer.copyright}</span>
+        <div class="flex items-center gap-4">
+          <span class="text-xs text-slate-600">v{version}</span>
+          <a
+            href="https://github.com/michaelsogos/primebrick-v3-website"
+            class="inline-flex items-center gap-1.5 hover:text-sky-400 transition-colors"
+            target="_blank"
+            rel="noopener"
+          >
+            <GitHubIcon class="h-4 w-4" />
+            GitHub®
+          </a>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      import { renderAllIcons } from '../../../scripts/demo/icons';
+      import { initEntitiesScroll } from '../../../scripts/demo/entities-scroll';
+      renderAllIcons();
+      initEntitiesScroll();
+    </script>
+  </body>
+</html>
