@@ -30,7 +30,7 @@ const contactHref = isEn ? '/en/contact' : `/${langCode}/contact`;
 const thankyouHref = isEn ? '/en/thank-you' : `/${langCode}/thank-you`;
 const demoHref = isEn ? '/en/demo/' : `/${langCode}/demo/`;
 const shellHref = `${demoHref}shell`;
-const entitiesHref = `${demoHref}entities`;
+const entityListTableHref = `${demoHref}entity-list-table`;
 ---
 
 <!doctype html>
@@ -131,7 +131,7 @@ const entitiesHref = `${demoHref}entities`;
           <div class="card-arrow"><i data-icon="arrowUpRight"></i></div>
         </a>
 
-        <a href={entitiesHref} class="hub-card">
+        <a href={entityListTableHref} class="hub-card">
           <div class="card-icon"><i data-icon="table2"></i></div>
           <div class="card-title">{t.demo.card.entities.title}</div>
           <div class="card-desc">{t.demo.card.entities.desc}</div>

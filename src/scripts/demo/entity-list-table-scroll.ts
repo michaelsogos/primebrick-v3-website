@@ -16,7 +16,7 @@ import {
   type AnnotationSide,
 } from './demo-utils';
 
-export function initEntitiesScroll(): void {
+export function initEntityListTableScroll(): void {
 (function() {
   const track = document.getElementById('track');
   const screenMock = document.getElementById('screen-mock');

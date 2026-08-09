@@ -1,15 +1,13 @@
 /* ============================================================
-   Primebrick Demo — Entity List Table (entities-specific CSS)
-   Only styles unique to the entities demo.
+   Primebrick Demo — Entity List Table (entity-list-table-specific CSS)
+   Only styles unique to the entity-list-table demo.
    Shared demo infrastructure is in demo.css.
    ============================================================ */
 
 /* ===== Page-specific CSS variable overrides ===== */
 .demo-scope {
   --sidebar-width: 56px;          /* collapsed rail (shell uses 255px expanded) */
-  --app-body-height: 540px;       /* entities mock is slightly taller */
-  --scroll-hint-top: 140px;       /* entities positions hint at top (shell uses bottom) */
-  --scroll-hint-bottom: auto;
+  --app-body-height: 540px;       /* entity-list-table mock is slightly taller */
 }
 
 /* ===== Left-aligned section claim variant ===== */

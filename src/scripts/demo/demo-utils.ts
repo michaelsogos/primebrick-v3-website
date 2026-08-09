@@ -1,7 +1,7 @@
 /* ============================================================
    Primebrick Demo — Shared Utilities
    Extracted from common helpers used by both shell-scroll.ts
-   and entities-scroll.ts (and future demo scroll engines).
+   and entity-list-table-scroll.ts (and future demo scroll engines).
    ============================================================ */
 
 // ===== Math helpers =====

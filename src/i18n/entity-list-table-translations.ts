@@ -4,8 +4,9 @@
  * Technical terms (IANA, CRUD, CSV, XLSX, RBAC, MFA, SSE, API, UUID, HTML, PDF, UTC, OR, AND) remain untranslated.
  */
 
-export const entitiesTranslations = {
+export const entityListTableTranslations = {
   en: {
+    pageBadge: 'Scroll-Jacking Demo',
     pageTitle: 'The Entity List Table',
     pageSubtitle: 'One table component — every feature a backoffice needs, zero per-page config',
     scrollHint: '↓ Scroll to control the animation',
@@ -213,6 +214,7 @@ export const entitiesTranslations = {
     annPreviewDesc: 'A resizable panel inside the table area. Inspect any row\'s full details without leaving the list. Navigate between records with prev/next — even across pages. Toggle edit mode, access row actions, or close — all from the header.',
   },
   it: {
+    pageBadge: 'Demo Scroll-Jacking',
     pageTitle: 'La Tabella Entità',
     pageSubtitle: 'Un componente tabella — ogni funzionalità di un backoffice, zero configurazione per pagina',
     scrollHint: '↓ Scorri per controllare l\'animazione',
@@ -420,6 +422,7 @@ export const entitiesTranslations = {
     annPreviewDesc: 'Un pannello ridimensionabile dentro l\'area tabella. Ispeziona i dettagli completi di qualsiasi riga senza lasciare la lista. Naviga tra i record con prev/next — anche tra pagine. Attiva modalità modifica, accedi alle azioni riga o chiudi — tutto dall\'header.',
   },
   de: {
+    pageBadge: 'Scroll-Jacking-Demo',
     pageTitle: 'Die Entitäten-Listentabelle',
     pageSubtitle: 'Eine Tabellenkomponente — jede Funktion, die ein Backoffice braucht, null Konfiguration pro Seite',
     scrollHint: '↓ Scrollen, um die Animation zu steuern',
@@ -627,6 +630,7 @@ export const entitiesTranslations = {
     annPreviewDesc: 'Ein in der Größe veränderbares Panel im Tabellenbereich. Inspeziere die vollen Details jeder Zeile, ohne die Liste zu verlassen. Navigiere zwischen Datensätzen mit Vor/Zurück — sogar seitenübergreifend. Bearbeitungsmodus umschalten, Zeilen-Aktionen aufrufen oder schließen — alles vom Header.',
   },
   es: {
+    pageBadge: 'Demo de Scroll-Jacking',
     pageTitle: 'La Tabla de Entidades',
     pageSubtitle: 'Un componente de tabla — cada función que un backoffice necesita, cero configuración por página',
     scrollHint: '↓ Desplázate para controlar la animación',
@@ -834,6 +838,7 @@ export const entitiesTranslations = {
     annPreviewDesc: 'Un panel redimensionable dentro del área de tabla. Inspecciona los detalles completos de cualquier fila sin salir de la lista. Navega entre registros con prev/next — incluso entre páginas. Alterna modo edición, accede a acciones de fila o cierra — todo desde el header.',
   },
   pt: {
+    pageBadge: 'Demo de Scroll-Jacking',
     pageTitle: 'A Tabela de Entidades',
     pageSubtitle: 'Um componente de tabela — cada função que um backoffice precisa, zero configuração por página',
     scrollHint: '↓ Percorra para controlar a animação',
@@ -1041,6 +1046,7 @@ export const entitiesTranslations = {
     annPreviewDesc: 'Um painel redimensionável dentro da área da tabela. Inspeciona os detalhes completos de qualquer linha sem sair da lista. Navega entre registos com prev/next — mesmo entre páginas. Alterna modo de edição, acede a ações de linha ou fecha — tudo a partir do header.',
   },
   fr: {
+    pageBadge: 'Démo Scroll-Jacking',
     pageTitle: 'La Table d\'Entités',
     pageSubtitle: 'Un composant de table — chaque fonction dont un backoffice a besoin, zéro configuration par page',
     scrollHint: '↓ Faites défiler pour contrôler l\'animation',
@@ -1249,5 +1255,5 @@ export const entitiesTranslations = {
   },
 } as const;
 
-export type EntitiesLang = keyof typeof entitiesTranslations;
-export type EntitiesTranslationKey = keyof typeof entitiesTranslations['en'];
+export type EntityListTableLang = keyof typeof entityListTableTranslations;
+export type EntityListTableTranslationKey = keyof typeof entityListTableTranslations['en'];

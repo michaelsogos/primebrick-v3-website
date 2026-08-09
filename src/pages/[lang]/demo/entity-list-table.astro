@@ -1,15 +1,16 @@
 ---
 import { translations, LANGUAGES, type LangCode } from '../../../i18n/translations';
-import { entitiesTranslations } from '../../../i18n/entities-translations';
+import { entityListTableTranslations } from '../../../i18n/entity-list-table-translations';
 import LanguageSwitcher from '../../../components/svelte/LanguageSwitcher.svelte';
 import GitHubDropdown from '../../../components/svelte/GitHubDropdown.svelte';
 import VirtualTourMegaMenu from '../../../components/svelte/VirtualTourMegaMenu.svelte';
 import GitHubIcon from '../../../components/GitHubIcon.astro';
 import TopBanner from '../../../components/astro/TopBanner.astro';
+import DemoHero from '../../../components/astro/DemoHero.astro';
 import pkg from '../../../../package.json';
 import '../../../styles/global.css';
 import '../../../styles/demo/demo.css';
-import '../../../styles/demo/entities.css';
+import '../../../styles/demo/entity-list-table.css';
 
 const version = pkg.version;
 
@@ -24,14 +25,14 @@ export function getStaticPaths() {
 const { lang } = Astro.params;
 const langCode = (lang ?? 'en') as LangCode;
 const t = translations[langCode] ?? translations.en;
-const et = entitiesTranslations[langCode] ?? entitiesTranslations.en;
+const et = entityListTableTranslations[langCode] ?? entityListTableTranslations.en;
 const isEn = langCode === 'en';
 const docsPath = 'https://docs.primebrick.dev';
 const homeHref = isEn ? '/en/' : `/${langCode}/`;
 const contactHref = isEn ? '/en/contact' : `/${langCode}/contact`;
 const thankyouHref = isEn ? '/en/thank-you' : `/${langCode}/thank-you`;
 const demoHref = isEn ? '/en/demo/' : `/${langCode}/demo/`;
-const entitiesHref = `${demoHref}entities`;
+const entityListTableHref = `${demoHref}entity-list-table`;
 
 const jsonSnippetHtml = `<div class="j-line"><span class="j-lineno">1</span><span class="j-content"><span class="j-punct">{</span></span></div>
     <div class="j-line"><span class="j-lineno">2</span><span class="j-content">  <span class="j-key">"entity"</span><span class="j-punct">:</span> <span class="j-string">"customers"</span><span class="j-punct">,</span></span></div>
@@ -66,9 +67,9 @@ const jsonSnippetHtml = `<div class="j-line"><span class="j-lineno">1</span><spa
     <link rel="apple-touch-icon" href="/favicon-512.png" />
     <title>Primebrick — {et.pageTitle}</title>
     {LANGUAGES.map((l) => (
-      <link rel="alternate" hreflang={l.hreflang} href={`https://primebrick.dev${l.code === 'en' ? '/en/demo/entities' : `/${l.code}/demo/entities`}`} />
+      <link rel="alternate" hreflang={l.hreflang} href={`https://primebrick.dev${l.code === 'en' ? '/en/demo/entity-list-table' : `/${l.code}/demo/entity-list-table`}`} />
     ))}
-    <link rel="alternate" hreflang="x-default" href="https://primebrick.dev/en/demo/entities" />
+    <link rel="alternate" hreflang="x-default" href="https://primebrick.dev/en/demo/entity-list-table" />
   </head>
   <body class="min-h-screen bg-slate-950 text-slate-100 antialiased">
     <!-- Ambient gradient background (website) -->
@@ -89,7 +90,7 @@ const jsonSnippetHtml = `<div class="j-line"><span class="j-lineno">1</span><spa
         </a>
         <div class="flex items-center gap-6 text-sm">
           <a href={homeHref} class="text-slate-300 hover:text-sky-400 transition-colors">{t.nav.home}</a>
-          <VirtualTourMegaMenu client:load currentLang={langCode} activeDemo="entities" />
+          <VirtualTourMegaMenu client:load currentLang={langCode} activeDemo="entity-list-table" />
           <a href={docsPath} class="text-slate-300 hover:text-sky-400 transition-colors" target="_blank" rel="noopener">{t.nav.docs}</a>
           <a href={contactHref} class="text-slate-300 hover:text-sky-400 transition-colors">{t.nav.contact}</a>
           <a href={thankyouHref} class="text-slate-300 hover:text-sky-400 transition-colors">{t.nav.thankyou}</a>
@@ -135,14 +136,8 @@ const jsonSnippetHtml = `<div class="j-line"><span class="j-lineno">1</span><spa
 
 <div class="demo-scope">
 
-<div class="ambient-blob blob-1"></div>
-<div class="ambient-blob blob-2"></div>
-
-<!-- Fixed title bar -->
-<div class="demo-title-bar">
-  <h1 class="demo-title">{et.pageTitle}</h1>
-  <div class="demo-subtitle">{et.pageSubtitle}</div>
-</div>
+<!-- Hero (matches the website pattern: badge + gradient h1 + subtitle) -->
+<DemoHero badge={et.pageBadge} title={et.pageTitle} subtitle={et.pageSubtitle} badgeColor="bg-indigo-400" gradientVia="via-indigo-200" />
 
 <!-- Scroll hint -->
 <div class="demo-scroll-hint" id="scroll-hint">{et.scrollHint}</div>
@@ -1102,8 +1097,6 @@ const jsonSnippetHtml = `<div class="j-line"><span class="j-lineno">1</span><spa
   </div>
 </div>
 
-<footer class="demo-footer">© 2026 Primebrick · <a href="index.html" style="color:#38bdf8;text-decoration:none">Back to Demo Hub</a></footer>
-
 <!-- ===== Inline SVG icons not in icons.js ===== -->
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <defs>
@@ -1148,9 +1141,9 @@ const jsonSnippetHtml = `<div class="j-line"><span class="j-lineno">1</span><spa
 
     <script>
       import { renderAllIcons } from '../../../scripts/demo/icons';
-      import { initEntitiesScroll } from '../../../scripts/demo/entities-scroll';
+      import { initEntityListTableScroll } from '../../../scripts/demo/entity-list-table-scroll';
       renderAllIcons();
-      initEntitiesScroll();
+      initEntityListTableScroll();
     </script>
   </body>
 </html>
