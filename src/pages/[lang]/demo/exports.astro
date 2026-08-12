@@ -1,0 +1,747 @@
+---
+import { translations, LANGUAGES, type LangCode } from '../../../i18n/translations';
+import { exportsTranslations } from '../../../i18n/exports-translations';
+import LanguageSwitcher from '../../../components/svelte/LanguageSwitcher.svelte';
+import GitHubDropdown from '../../../components/svelte/GitHubDropdown.svelte';
+import VirtualTourMegaMenu from '../../../components/svelte/VirtualTourMegaMenu.svelte';
+import GitHubIcon from '../../../components/GitHubIcon.astro';
+import TopBanner from '../../../components/astro/TopBanner.astro';
+import DemoHero from '../../../components/astro/DemoHero.astro';
+import pkg from '../../../../package.json';
+import '../../../styles/global.css';
+import '../../../styles/demo/demo.css';
+import '../../../styles/demo/exports.css';
+
+const version = pkg.version;
+
+export const prerender = true;
+
+export function getStaticPaths() {
+  return LANGUAGES.map((lang) => ({
+    params: { lang: lang.code === 'en' ? 'en' : lang.code },
+  }));
+}
+
+const { lang } = Astro.params;
+const langCode = (lang ?? 'en') as LangCode;
+const t = translations[langCode] ?? translations.en;
+const et = exportsTranslations[langCode] ?? exportsTranslations.en;
+const isEn = langCode === 'en';
+const docsPath = 'https://docs.primebrick.dev';
+const homeHref = isEn ? '/en/' : `/${langCode}/`;
+const contactHref = isEn ? '/en/contact' : `/${langCode}/contact`;
+const thankyouHref = isEn ? '/en/thank-you' : `/${langCode}/thank-you`;
+const demoHref = isEn ? '/en/demo/' : `/${langCode}/demo/`;
+---
+
+<!doctype html>
+<html lang={langCode}>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={et.pageSubtitle.slice(0, 160)} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+    <link rel="icon" type="image/png" sizes="512x512" href="/favicon-512.png" />
+    <link rel="icon" sizes="any" href="/favicon.ico" />
+    <link rel="apple-touch-icon" href="/favicon-512.png" />
+    <title>Primebrick — {t.demo.card.exports.title}</title>
+    {LANGUAGES.map((l) => (
+      <link rel="alternate" hreflang={l.hreflang} href={`https://primebrick.dev${l.code === 'en' ? '/en/demo/exports' : `/${l.code}/demo/exports`}`} />
+    ))}
+    <link rel="alternate" hreflang="x-default" href="https://primebrick.dev/en/demo/exports" />
+  </head>
+  <body class="min-h-screen bg-slate-950 text-slate-100 antialiased">
+    <!-- Ambient gradient background (website) -->
+    <div class="pointer-events-none fixed inset-0 overflow-hidden">
+      <div class="absolute -top-40 left-1/2 h-[500px] w-[800px] -translate-x-1/2 rounded-full bg-sky-500/10 blur-[120px]"></div>
+      <div class="absolute top-1/3 -right-40 h-[400px] w-[400px] rounded-full bg-indigo-500/10 blur-[100px]"></div>
+      <div class="absolute bottom-0 -left-40 h-[400px] w-[400px] rounded-full bg-cyan-500/10 blur-[100px]"></div>
+    </div>
+
+    <!-- Top banner (sticky, non-dismissible) -->
+    <TopBanner text={t.banner.text} href={contactHref} />
+
+    <!-- Navigation (sticky, condensing on scroll) -->
+    <nav id="site-nav" class="sticky top-9 z-50 border-b border-slate-800/50 bg-slate-950/40 backdrop-blur-sm transition-all duration-300">
+      <div id="nav-inner" class="mx-auto flex max-w-7xl items-center justify-between px-6 py-4 transition-all duration-300">
+        <a href={homeHref} class="flex items-center gap-2 transition-all duration-300" id="nav-logo" aria-label="PrimeBrick home">
+          <img src="/logo-full-dark.svg" alt="PrimeBrick" width="170" height="32" class="h-7 w-auto" />
+        </a>
+        <div class="flex items-center gap-6 text-sm">
+          <a href={homeHref} class="text-slate-300 hover:text-sky-400 transition-colors">{t.nav.home}</a>
+          <VirtualTourMegaMenu client:load currentLang={langCode} activeDemo="exports" />
+          <a href={docsPath} class="text-slate-300 hover:text-sky-400 transition-colors" target="_blank" rel="noopener">{t.nav.docs}</a>
+          <a href={contactHref} class="text-slate-300 hover:text-sky-400 transition-colors">{t.nav.contact}</a>
+          <a href={thankyouHref} class="text-slate-300 hover:text-sky-400 transition-colors">{t.nav.thankyou}</a>
+          <a
+            href="https://opensource.org/license/MIT"
+            class="text-slate-300 hover:text-sky-400 transition-colors"
+            target="_blank"
+            rel="noopener"
+          >
+            {t.nav.license}
+          </a>
+          <GitHubDropdown client:load />
+          <LanguageSwitcher client:load currentLang={langCode} />
+        </div>
+      </div>
+    </nav>
+    <script>
+      (() => {
+        const nav = document.getElementById('site-nav');
+        const inner = document.getElementById('nav-inner');
+        const logo = document.getElementById('nav-logo');
+        if (!nav || !inner) return;
+        const onScroll = () => {
+          const scrolled = window.scrollY > 20;
+          if (scrolled) {
+            inner.classList.replace('py-4', 'py-2');
+            nav.classList.add('bg-slate-950/80', 'backdrop-blur-md', 'shadow-lg', 'border-slate-800/80');
+            nav.classList.remove('bg-slate-950/40', 'border-slate-800/50');
+            logo?.classList.replace('text-xl', 'text-lg');
+          } else {
+            inner.classList.replace('py-2', 'py-4');
+            nav.classList.remove('bg-slate-950/80', 'backdrop-blur-md', 'shadow-lg', 'border-slate-800/80');
+            nav.classList.add('bg-slate-950/40', 'border-slate-800/50');
+            logo?.classList.replace('text-lg', 'text-xl');
+          }
+        };
+        window.addEventListener('scroll', onScroll, { passive: true });
+        onScroll();
+      })();
+    </script>
+
+    <!-- ===== Demo body (scoped) ===== -->
+
+<div class="demo-scope">
+
+<!-- Hero (badge + gradient h1 + subtitle) -->
+<DemoHero badge={et.pageBadge} title={et.pageTitle} subtitle={et.pageSubtitle} badgeColor="bg-violet-400" gradientVia="via-violet-200" />
+
+<!-- Scroll hint -->
+<div class="demo-scroll-hint" id="scroll-hint">{et.scrollHint}</div>
+
+<!-- ===== Section claims (6, alternating right/left) ===== -->
+<!-- Claim 0: Export Buttons (right) -->
+<div class="section-claim" id="claim-0">
+  <div class="claim-eyebrow">{et.claim0Eyebrow}</div>
+  <div class="claim-title" set:html={et.claim0Title} />
+  <div class="claim-subtitle">{et.claim0Subtitle}</div>
+</div>
+<!-- Claim 1: Scope Selection (left) -->
+<div class="section-claim left" id="claim-1">
+  <div class="claim-eyebrow">{et.claim1Eyebrow}</div>
+  <div class="claim-title" set:html={et.claim1Title} />
+  <div class="claim-subtitle">{et.claim1Subtitle}</div>
+</div>
+
+<!-- Modal preview: export dialog shown centered over the mock during phase 1 -->
+<!-- Matches FE ExportDialog.svelte: DialogBordered severity="warning" + Choicebox + warning buttons -->
+<div class="modal-preview" id="modal-preview">
+  <div class="mp-overlay"></div>
+  <div class="mp-content">
+    <!-- Top accent strip (warning gradient — matches DialogBordered severity="warning") -->
+    <div class="mp-top-strip"></div>
+    <!-- Inner padded wrapper (p-4) -->
+    <div class="mp-inner">
+      <!-- Header (pb-4) -->
+      <div class="mp-header">
+        <div class="mp-title">{et.mockExportDataTitle}</div>
+        <div class="mp-description">{et.mockExportQuestion}</div>
+      </div>
+      <!-- Body (py-4) — Choicebox -->
+      <div class="mp-body">
+        <div class="mp-choicebox">
+          <div class="mp-choicebox-item selected">
+            <div class="mp-choicebox-content">
+              <div class="mp-choicebox-title">{et.mockSelectedOnly}</div>
+              <div class="mp-choicebox-desc">{et.mockSelectedOnlyDesc}</div>
+            </div>
+            <div class="mp-choicebox-indicator"><div class="mp-radio"><div class="mp-radio-dot"></div></div></div>
+          </div>
+          <div class="mp-choicebox-item">
+            <div class="mp-choicebox-content">
+              <div class="mp-choicebox-title">{et.mockAllItems}</div>
+              <div class="mp-choicebox-desc">{et.mockAllItemsDesc}</div>
+            </div>
+            <div class="mp-choicebox-indicator"><div class="mp-radio"><div class="mp-radio-dot"></div></div></div>
+          </div>
+        </div>
+      </div>
+      <!-- Footer (gap-2, flex-col sm:flex-row) -->
+      <div class="mp-footer">
+        <button class="mp-btn-secondary-outline">{et.mockCancel}</button>
+        <div class="mp-btn-group">
+          <button class="mp-btn-warning"><svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path fill-rule="evenodd" d="M14 4.5V11h-1V4.5h-2A1.5 1.5 0 0 1 9.5 3V1H4a1 1 0 0 0-1 1v9H2V2a2 2 0 0 1 2-2h5.5zM7.86 14.841a1.13 1.13 0 0 0 .401.823q.195.162.479.252.284.091.665.091.507 0 .858-.158.355-.158.54-.44a1.17 1.17 0 0 0 .187-.656q0-.336-.135-.56a1 1 0 0 0-.375-.357 2 2 0 0 0-.565-.21l-.621-.144a1 1 0 0 1-.405-.176.37.37 0 0 1-.143-.299q0-.234.184-.384.188-.152.513-.152.214 0 .37.068a.6.6 0 0 1 .245.181.56.56 0 0 1 .12.258h.75a1.1 1.1 0 0 0-.199-.566 1.2 1.2 0 0 0-.5-.41 1.8 1.8 0 0 0-.78-.152q-.44 0-.777.15-.336.149-.527.421-.19.273-.19.639 0 .302.123.524t.351.367q.229.143.54.213l.618.144q.31.073.462.193a.39.39 0 0 1 .153.326.5.5 0 0 1-.085.29.56.56 0 0 1-.255.193q-.168.07-.413.07-.176 0-.32-.04a.8.8 0 0 1-.249-.115.58.58 0 0 1-.255-.384zm-3.726-2.909h.893l-1.274 2.007 1.254 1.992h-.908l-.85-1.415h-.035l-.853 1.415H1.5l1.24-2.016-1.228-1.983h.931l.832 1.438h.036zm1.923 3.325h1.697v.674H5.266v-3.999h.791zm7.636-3.325h.893l-1.274 2.007 1.254 1.992h-.908l-.85-1.415h-.035l-.853 1.415h-.861l1.24-2.016-1.228-1.983h.931l.832 1.438h.036z"/></svg>{et.mockExportExcel}</button>
+          <button class="mp-btn-warning"><svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path fill-rule="evenodd" d="M14 4.5V14a2 2 0 0 1-2 2h-1v-1h1a1 1 0 0 0 1-1V4.5h-2A1.5 1.5 0 0 1 9.5 3V1H4a1 1 0 0 0-1 1v9H2V2a2 2 0 0 1 2-2h5.5zM3.517 14.841a1.13 1.13 0 0 0 .401.823q.195.162.478.252.284.091.665.091.507 0 .859-.158.354-.158.539-.44.187-.284.187-.656 0-.336-.134-.56a1 1 0 0 0-.375-.357 2 2 0 0 0-.566-.21l-.621-.144a1 1 0 0 1-.404-.176.37.37 0 0 1-.144-.299q0-.234.185-.384.188-.152.512-.152.214 0 .37.068a.6.6 0 0 1 .246.181.56.56 0 0 1 .12.258h.75a1.1 1.1 0 0 0-.2-.566 1.2 1.2 0 0 0-.5-.41 1.8 1.8 0 0 0-.78-.152q-.439 0-.776.15-.337.149-.527.421-.19.273-.19.639 0 .302.122.524.124.223.352.367.228.143.539.213l.618.144q.31.073.463.193a.39.39 0 0 1 .152.326.5.5 0 0 1-.085.29.56.56 0 0 1-.255.193q-.167.07-.413.07-.175 0-.32-.04a.8.8 0 0 1-.248-.115.58.58 0 0 1-.255-.384zM.806 13.693q0-.373.102-.633a.87.87 0 0 1 .302-.399.8.8 0 0 1 .475-.137q.225 0 .398.097a.7.7 0 0 1 .272.26.85.85 0 0 1 .12.381h.765v-.072a1.33 1.33 0 0 0-.466-.964 1.4 1.4 0 0 0-.489-.272 1.8 1.8 0 0 0-.606-.097q-.534 0-.911.223-.375.222-.572.632-.195.41-.196.979v.498q0 .568.193.976.197.407.572.626.375.217.914.217.439 0 .785-.164t.55-.454a1.27 1.27 0 0 0 .226-.674v-.076h-.764a.8.8 0 0 1-.118.363.7.7 0 0 1-.272.25.9.9 0 0 1-.401.087.85.85 0 0 1-.478-.132.83.83 0 0 1-.299-.392 1.7 1.7 0 0 1-.102-.627zm8.239 2.238h-.953l-1.338-3.999h.917l.896 3.138h.038l.888-3.138h.879z"/></svg>{et.mockExportCsv}</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Claim 2: Server-Generated (right) -->
+<div class="section-claim" id="claim-2">
+  <div class="claim-eyebrow">{et.claim2Eyebrow}</div>
+  <div class="claim-title" set:html={et.claim2Title} />
+  <div class="claim-subtitle">{et.claim2Subtitle}</div>
+</div>
+<!-- Claim 3: HTML Export (left) -->
+<div class="section-claim left" id="claim-3">
+  <div class="claim-eyebrow">{et.claim3Eyebrow}</div>
+  <div class="claim-title" set:html={et.claim3Title} />
+  <div class="claim-subtitle">{et.claim3Subtitle}</div>
+</div>
+<!-- Claim 4: Live Preview (right) -->
+<div class="section-claim" id="claim-4">
+  <div class="claim-eyebrow">{et.claim4Eyebrow}</div>
+  <div class="claim-title" set:html={et.claim4Title} />
+  <div class="claim-subtitle">{et.claim4Subtitle}</div>
+</div>
+
+<!-- Final conclusion claim -->
+<div class="section-claim-final" id="claim-final">
+  <div class="claim-title-final" set:html={et.claimFinalTitle} />
+</div>
+
+<!-- Progress rail + dots + phase label -->
+<div class="progress-rail"><div class="progress-rail-fill" id="rail-fill" style="height:0%"></div></div>
+<div class="scene-dots" id="dots"></div>
+<div class="phase-label" id="phase-label">Intro</div>
+
+<!-- Scroll track -->
+<div class="scroll-track" style="height: 2000vh" id="track">
+  <div class="scroll-stage" id="stage">
+    <div class="scroll-canvas" id="canvas">
+
+      <!-- ===== Screen mock (collapsed sidebar + topbar + content with table) ===== -->
+      <div class="screen-mock" id="screen-mock">
+        <div class="browser-bar">
+          <div class="browser-dots"><span class="browser-dot red"></span><span class="browser-dot yellow"></span><span class="browser-dot green"></span></div>
+          <div class="browser-url"><span class="url-lock">🔒</span>https://backoffice.acme.org/customers</div>
+        </div>
+        <div class="app-body">
+          <!-- Collapsed sidebar (rail) -->
+          <div class="pb-sidebar">
+            <div class="sb-rail-avatar">AC</div>
+            <div class="sb-rail-icon"><i data-icon="settings"></i></div>
+            <div class="sb-rail-icon active"><i data-icon="users"></i></div>
+            <div class="sb-rail-spacer"></div>
+            <div class="sb-rail-profile">JD</div>
+            <div class="sb-rail-health"></div>
+          </div>
+          <!-- Main -->
+          <div class="pb-main">
+            <!-- Topbar -->
+            <div class="pb-header" id="topbar">
+              <div class="pb-header-left">
+                <button class="pb-header-toggle"><i data-icon="panelLeft"></i></button>
+                <div class="pb-header-search"><i data-icon="search"></i>{et.searchPlaceholder}<span class="kbd">{et.searchShortcut}</span></div>
+                <button class="pb-header-btn pb-ai-cta" title="AI Assistant"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z"/><path d="M20 2v4"/><path d="M22 4h-4"/><path d="M6 20a2 2 0 1 1-4 0 2 2 0 0 1 4 0"/></svg></button>
+              </div>
+              <div class="pb-header-right">
+                <div class="pb-header-tz" id="mock-browser-tz"><i data-icon="globe"></i>Europe/Rome</div>
+                <button class="pb-header-lang">IT<i data-icon="chevronDown"></i></button>
+                <button class="pb-header-btn" title="Errors"><i data-icon="triangleAlert"></i></button>
+                <button class="pb-header-btn" title="Notifications"><i data-icon="bell"></i><span class="btn-badge">3</span></button>
+                <button class="pb-header-btn" title="Theme"><i data-icon="moon"></i></button>
+              </div>
+            </div>
+            <!-- Content area (the source for all extractions) -->
+            <div class="pb-content" id="content-area">
+              <div class="pb-breadcrumb">{et.breadcrumbSystem} / {et.breadcrumbSettings} / <span class="crumb-current">{et.breadcrumbCustomers}</span></div>
+              <!-- First toolbar: search (left) + view mode, deletion filter, refresh, columns, filters, divider, New (right) -->
+              <div class="pb-toolbar" style="border-bottom:1px solid var(--pb-border);padding:0.5rem 0.75rem">
+                <div class="pb-search-input" id="src-search" style="max-width:240px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg><input placeholder={et.toolbarSearchPlaceholder}><button class="pb-search-scope">{et.searchScopeAllFields}</button></div>
+                <div style="margin-left:auto;display:flex;align-items:center;gap:0.375rem">
+                  <div class="pb-soft-gradient-group" id="src-view-toggle">
+                    <div class="sg-btn active" id="src-vt-table" title="Table"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3H5a2 2 0 0 0-2 2v4m6-6h10a2 2 0 0 1 2 2v4M9 3v18m0 0h10a2 2 0 0 0 2-2V9M9 21H5a2 2 0 0 1-2-2V9m0 0h18"/></svg></div>
+                    <div class="sg-btn" id="src-vt-cards" title="Cards"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="7" x="3" y="3" rx="1"/><rect width="7" height="7" x="14" y="3" rx="1"/><rect width="7" height="7" x="14" y="14" rx="1"/><rect width="7" height="7" x="3" y="14" rx="1"/></svg></div>
+                    <div class="sg-btn" id="src-vt-list" title="Cards list"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="7" x="3" y="3" rx="1"/><rect width="7" height="7" x="3" y="14" rx="1"/><path d="M14 4h7"/><path d="M14 9h7"/><path d="M14 15h7"/><path d="M14 20h7"/></svg></div>
+                  </div>
+                  <div class="pb-del-filter" id="src-del-filter">
+                    <div class="df-btn active" id="src-df-active" title="Active records"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 5H3"/><path d="M16 12H3"/><path d="M11 19H3"/><path d="m15 18 2 2 4-4"/></svg></div>
+                    <div class="df-btn" id="src-df-deleted" title="Deleted records"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 5H3"/><path d="M11 12H3"/><path d="M16 19H3"/><path d="m15.5 9.5 5 5"/><path d="m20.5 9.5-5 5"/></svg></div>
+                    <div class="df-btn" id="src-df-all" title="All records"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 5h18"/><path d="M3 12h18"/><path d="M3 19h18"/></svg></div>
+                  </div>
+                  <button class="pb-btn-soft-icon" title="Refresh"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/></svg></button>
+                  <button class="pb-btn-soft" id="src-columns-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M9 3v18"/><path d="M15 3v18"/></svg>{et.toolbarColumns}</button>
+                  <button class="pb-btn-soft" id="src-filter-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 5H3"/><path d="M12 19H3"/><path d="M14 3v4"/><path d="M16 17v4"/><path d="M21 12h-9"/><path d="M21 19h-5"/><path d="M21 5h-7"/><path d="M8 10v4"/><path d="M8 12H3"/></svg>{et.toolbarFilters}</button>
+                  <div class="pb-gradient-divider"></div>
+                  <button class="pb-btn-primary-gradient">{et.toolbarNew}</button>
+                </div>
+              </div>
+              <!-- Second toolbar: toggle (filters/bulk) + Clear all + filter chips -->
+              <div class="pb-toolbar-second" id="src-toolbar-second">
+                <!-- Filters mode content (visible by default) -->
+                <div id="src-toolbar-filters" style="display:flex;align-items:center;gap:0.5rem;flex-wrap:wrap">
+                  <button class="pb-btn-outline" id="src-toggle-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 5H3"/><path d="M16 12H3"/><path d="M11 19H3"/><path d="m15 18 2 2 4-4"/></svg><span id="src-toggle-label">{et.toolbarBulkActions}</span></button>
+                  <div class="pb-gradient-divider"></div>
+                  <button class="pb-btn-soft-xs"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>{et.toolbarClearAll}</button>
+                  <div class="pb-gradient-divider"></div>
+                  <div class="pb-filter-badge">
+                    <span class="fb-label">{et.filterFieldEmail}</span>
+                    <span class="fb-op">{et.filterOpEndsWith}</span>
+                    <span class="fb-val">.com</span>
+                    <button class="fb-x"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button>
+                  </div>
+                </div>
+                <!-- Bulk mode content (hidden by default, toggled in during export buttons phase) -->
+                <div id="src-toolbar-bulk" style="display:none;align-items:center;gap:0.5rem;flex-wrap:wrap">
+                  <button class="pb-btn-outline" id="src-toggle-btn-bulk"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 5H3"/><path d="M12 19H3"/><path d="M14 3v4"/><path d="M16 17v4"/><path d="M21 12h-9"/><path d="M21 19h-5"/><path d="M21 5h-7"/><path d="M8 10v4"/><path d="M8 12H3"/></svg>{et.toolbarFilters}</button>
+                  <div class="pb-gradient-divider"></div>
+                  <button class="pb-btn-soft-xs" id="src-btn-export"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M7 10l5 5 5-5"/><path d="M12 15V3"/></svg>{et.bulkExport}</button>
+                  <button class="pb-btn-soft-xs" id="src-btn-export-html"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M7 10l5 5 5-5"/><path d="M12 15V3"/></svg>{et.bulkExportHtml}</button>
+                  <button class="pb-btn-soft-xs"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>{et.bulkDuplicate}</button>
+                  <button class="pb-btn-soft-xs" style="color:var(--pb-destructive);border-color:rgba(239,68,68,0.3)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/></svg>{et.bulkDelete}</button>
+                  <button class="pb-btn-soft-xs" style="color:#f59e0b;border-color:rgba(245,158,11,0.3)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>{et.bulkRestore}</button>
+                </div>
+              </div>
+              <!-- Shared card view toolbar — stays in place during grid/list cross-fade -->
+              <div id="src-card-toolbar" style="display:none;display:flex;flex-wrap:nowrap;align-items:center;gap:0.5rem;border-bottom:1px solid var(--pb-border);padding:0.5rem 0.75rem;background:var(--pb-bg);white-space:nowrap;flex-shrink:0;margin-top:-0.625rem">
+                <div class="pb-checkbox" style="width:14px;height:14px"></div>
+                <span style="font-size:0.6875rem;font-weight:500;color:var(--pb-muted-fg)">{et.cardSelectAll}</span>
+                <div style="height:1rem;width:1px;background:var(--pb-border);margin:0 0.25rem"></div>
+                <span style="font-size:0.6875rem;font-weight:500;color:var(--pb-muted-fg)">{et.cardSortBy}</span>
+                <button class="pb-btn-soft" style="font-size:0.6875rem;padding:0.125rem 0.5rem">{et.tableHeaderName}</button>
+                <span style="font-size:0.6875rem;font-weight:500;color:var(--pb-muted-fg)">{et.cardInOrder}</span>
+                <button class="pb-btn-soft-icon" style="padding:0.125rem"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 8 4-4 4 4"/><path d="M7 4v16"/><path d="m21 16-4 4-4-4"/><path d="M17 20V4"/></svg></button>
+                <div style="height:1rem;width:1px;background:var(--pb-border);margin:0 0.25rem"></div>
+                <span style="font-size:0.6875rem;font-weight:500;color:var(--pb-muted-fg)">{et.tableHeaderOnboardedAt}</span>
+                <div style="display:inline-flex;align-items:center;gap:0.25rem;padding:0.125rem 0.375rem;border-radius:9999px;background:var(--pb-border);cursor:pointer">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--pb-muted-fg)"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>
+                </div>
+              </div>
+              <!-- Table views container — 3 variants (active, deleted, all) overlap for cross-fade -->
+              <div id="src-table-views" style="flex:1;position:relative;min-height:0;overflow:hidden">
+              <div class="pb-table-wrap" id="src-table-scroll" style="position:relative;z-index:1">
+                <table class="pb-table" id="src-table">
+                  <thead><tr>
+                    <th class="sticky-col first-col" style="width:40px"><div class="pb-checkbox" id="src-check-all"></div></th>
+                    <th class="sticky-col" id="src-name-th">{et.tableHeaderName} <svg class="sort-icon" id="src-sort-name" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21 16-4 4-4-4"/><path d="M17 20V4"/><path d="m3 8 4-4 4 4"/><path d="M7 4v16"/></svg></th>
+                    <th>{et.tableHeaderEmail} <svg class="sort-icon" id="src-sort-email" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21 16-4 4-4-4"/><path d="M17 20V4"/><path d="m3 8 4-4 4 4"/><path d="M7 4v16"/></svg></th>
+                    <th>{et.tableHeaderStatus} <svg class="sort-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21 16-4 4-4-4"/><path d="M17 20V4"/><path d="m3 8 4-4 4 4"/><path d="M7 4v16"/></svg></th>
+                    <th id="src-onboarded-th"><div style="display:flex;align-items:center;justify-content:space-between;gap:0.25rem"><span style="display:flex;align-items:center;gap:0.25rem">{et.tableHeaderOnboardedAt} <svg class="sort-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21 16-4 4-4-4"/><path d="M17 20V4"/><path d="m3 8 4-4 4 4"/><path d="M7 4v16"/></svg></span><svg id="src-onboarded-globe" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--pb-muted-fg)"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg></div></th>
+                    <th>{et.tableHeaderCreated} <svg class="sort-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21 16-4 4-4-4"/><path d="M17 20V4"/><path d="m3 8 4-4 4 4"/><path d="M7 4v16"/></svg></th>
+                    <th class="act-col" id="src-action-th"><div style="display:grid;place-items:center"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--pb-muted-fg)"><use href="#i-panel-right-open"/></svg></div></th>
+                  </tr></thead>
+                  <tbody id="src-tbody">
+                    <tr id="src-row-1"><td class="sticky-col"><div class="pb-checkbox" id="src-check-1"></div></td><td class="sticky-col">Acme Corp</td><td>info@acme.com</td><td><span class="pb-badge green">{et.statusActive}</span></td><td class="onboarded-cell">16 May 2026, 19:00</td><td>15 Mar 2024</td><td class="act-col"><button class="pb-act-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-more-vertical"/></svg></button></td></tr>
+                    <tr id="src-row-2"><td class="sticky-col"><div class="pb-checkbox" id="src-check-2"></div></td><td class="sticky-col">Globex Inc</td><td>hello@globex.com</td><td><span class="pb-badge green">{et.statusActive}</span></td><td class="onboarded-cell">16 May 2026, 19:00</td><td>02 Apr 2024</td><td class="act-col"><button class="pb-act-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-more-vertical"/></svg></button></td></tr>
+                    <tr id="src-row-3"><td class="sticky-col"><div class="pb-checkbox" id="src-check-3"></div></td><td class="sticky-col">Initech</td><td>contact@initech.com</td><td><span class="pb-badge amber">{et.statusLead}</span></td><td class="onboarded-cell">16 May 2026, 19:00</td><td>10 May 2024</td><td class="act-col"><button class="pb-act-btn" id="src-act-btn-3"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-more-vertical"/></svg></button></td></tr>
+                    <tr id="src-row-4"><td class="sticky-col"><div class="pb-checkbox" id="src-check-4"></div></td><td class="sticky-col">Umbrella Co</td><td>admin@umbrella.com</td><td><span class="pb-badge gray">{et.statusInactive}</span></td><td class="onboarded-cell"></td><td>20 Jun 2024</td><td class="act-col"><button class="pb-act-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-more-vertical"/></svg></button></td></tr>
+                    <tr id="src-row-5"><td class="sticky-col"><div class="pb-checkbox" id="src-check-5"></div></td><td class="sticky-col">Stark Industries</td><td>tony@stark.com</td><td><span class="pb-badge green">{et.statusActive}</span></td><td class="onboarded-cell"></td><td>01 Jul 2024</td><td class="act-col"><button class="pb-act-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-more-vertical"/></svg></button></td></tr>
+                  </tbody>
+                </table>
+              </div>
+              <!-- Deleted records table (overlay, absolute) -->
+              <div class="pb-table-wrap" id="src-table-deleted" style="display:none;opacity:0;position:absolute;top:0;left:0;right:0;bottom:0;z-index:2">
+                <table class="pb-table">
+                  <thead><tr><th class="sticky-col first-col" style="width:40px"></th><th class="sticky-col">{et.tableHeaderName}</th><th>{et.tableHeaderEmail}</th><th>{et.tableHeaderStatus}</th><th>{et.tableHeaderOnboardedAt}</th><th>{et.tableHeaderDeletedAt}</th><th class="act-col"></th></tr></thead>
+                  <tbody>
+                    <tr class="deleted"><td class="sticky-col"></td><td class="sticky-col">Acme Old</td><td>old@acme.com</td><td><span class="pb-badge gray">{et.statusDeleted}</span></td><td>10 Jan 2024</td><td>01 Jun 2024</td><td class="act-col"><button class="pb-act-btn" style="opacity:0.5;cursor:not-allowed"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-more-vertical"/></svg></button></td></tr>
+                    <tr class="deleted"><td class="sticky-col"></td><td class="sticky-col">Beta Corp</td><td>info@beta.com</td><td><span class="pb-badge gray">{et.statusDeleted}</span></td><td>05 Feb 2024</td><td>15 Jul 2024</td><td class="act-col"><button class="pb-act-btn" style="opacity:0.5;cursor:not-allowed"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-more-vertical"/></svg></button></td></tr>
+                    <tr class="deleted"><td class="sticky-col"></td><td class="sticky-col">Gamma LLC</td><td>contact@gamma.com</td><td><span class="pb-badge gray">{et.statusDeleted}</span></td><td>20 Mar 2024</td><td>10 Aug 2024</td><td class="act-col"><button class="pb-act-btn" style="opacity:0.5;cursor:not-allowed"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-more-vertical"/></svg></button></td></tr>
+                    <tr class="deleted"><td class="sticky-col"></td><td class="sticky-col">Delta Inc</td><td>admin@delta.com</td><td><span class="pb-badge gray">{et.statusDeleted}</span></td><td>15 Apr 2024</td><td>22 Sep 2024</td><td class="act-col"><button class="pb-act-btn" style="opacity:0.5;cursor:not-allowed"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-more-vertical"/></svg></button></td></tr>
+                    <tr class="deleted"><td class="sticky-col"></td><td class="sticky-col">Epsilon Co</td><td>hello@epsilon.com</td><td><span class="pb-badge gray">{et.statusDeleted}</span></td><td>01 May 2024</td><td>05 Oct 2024</td><td class="act-col"><button class="pb-act-btn" style="opacity:0.5;cursor:not-allowed"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-more-vertical"/></svg></button></td></tr>
+                  </tbody>
+                </table>
+              </div>
+              <!-- All records table (overlay, absolute) — mix of active and deleted -->
+              <div class="pb-table-wrap" id="src-table-all" style="display:none;opacity:0;position:absolute;top:0;left:0;right:0;bottom:0;z-index:3">
+                <table class="pb-table">
+                  <thead><tr><th class="sticky-col first-col" style="width:40px"></th><th class="sticky-col">{et.tableHeaderName}</th><th>{et.tableHeaderEmail}</th><th>{et.tableHeaderStatus}</th><th>{et.tableHeaderOnboardedAt}</th><th>{et.tableHeaderCreated}</th><th class="act-col"></th></tr></thead>
+                  <tbody>
+                    <tr><td class="sticky-col"></td><td class="sticky-col">Acme Corp</td><td>info@acme.com</td><td><span class="pb-badge green">{et.statusActive}</span></td><td>16 May 2026, 19:00</td><td>15 Mar 2024</td><td class="act-col"><button class="pb-act-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-more-vertical"/></svg></button></td></tr>
+                    <tr class="deleted"><td class="sticky-col"></td><td class="sticky-col">Acme Old</td><td>old@acme.com</td><td><span class="pb-badge gray">{et.statusDeleted}</span></td><td>10 Jan 2024</td><td>01 Jun 2024</td><td class="act-col"><button class="pb-act-btn" style="opacity:0.5;cursor:not-allowed"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-more-vertical"/></svg></button></td></tr>
+                    <tr><td class="sticky-col"></td><td class="sticky-col">Globex Inc</td><td>hello@globex.com</td><td><span class="pb-badge green">{et.statusActive}</span></td><td>16 May 2026, 19:00</td><td>02 Apr 2024</td><td class="act-col"><button class="pb-act-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-more-vertical"/></svg></button></td></tr>
+                    <tr class="deleted"><td class="sticky-col"></td><td class="sticky-col">Beta Corp</td><td>info@beta.com</td><td><span class="pb-badge gray">{et.statusDeleted}</span></td><td>05 Feb 2024</td><td>15 Jul 2024</td><td class="act-col"><button class="pb-act-btn" style="opacity:0.5;cursor:not-allowed"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-more-vertical"/></svg></button></td></tr>
+                    <tr><td class="sticky-col"></td><td class="sticky-col">Stark Industries</td><td>tony@stark.com</td><td><span class="pb-badge green">{et.statusActive}</span></td><td></td><td>01 Jul 2024</td><td class="act-col"><button class="pb-act-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-more-vertical"/></svg></button></td></tr>
+                  </tbody>
+                </table>
+              </div>
+              </div>
+              <!-- Card grid overlay (for view modes phase) — content only, no toolbar -->
+              <!-- Card views container — grid and list overlap for cross-fade -->
+              <div id="src-card-views" style="display:none;flex:1;position:relative;min-height:0;overflow:hidden">
+              <div id="src-card-grid" style="display:none;opacity:0;flex:1;flex-direction:column;position:relative;z-index:1">
+                <!-- Card grid content -->
+                <div style="padding:0.75rem;flex:1">
+                  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:0.75rem">
+                    <!-- Card 1: Acme Corp -->
+                    <div style="border:1px solid var(--pb-border);border-radius:6px;padding:0.75rem;box-shadow:0 1px 3px rgba(0,0,0,0.06);background:var(--pb-bg);display:flex;flex-direction:column;gap:0.375rem">
+                      <div style="display:flex;flex-direction:column;gap:0.0625rem"><span style="font-size:0.625rem;font-weight:500;color:var(--pb-muted-fg)">{et.tableHeaderName}</span><span style="font-size:0.8125rem;font-weight:600;color:var(--pb-fg)">Acme Corp</span></div>
+                      <div style="display:flex;flex-direction:column;gap:0.0625rem"><span style="font-size:0.625rem;font-weight:500;color:var(--pb-muted-fg)">{et.tableHeaderEmail}</span><span style="font-size:0.75rem;color:var(--pb-fg)">info@acme.com</span></div>
+                      <div style="display:flex;flex-direction:column;gap:0.0625rem"><span style="font-size:0.625rem;font-weight:500;color:var(--pb-muted-fg)">{et.tableHeaderStatus}</span><span class="pb-badge green">{et.statusActive}</span></div>
+                      <div style="display:flex;flex-direction:column;gap:0.0625rem"><span style="font-size:0.625rem;font-weight:500;color:var(--pb-muted-fg)">{et.tableHeaderCreated}</span><span style="font-size:0.75rem;color:var(--pb-fg)">15 Mar 2024</span></div>
+                    </div>
+                    <!-- Card 2: Globex Inc -->
+                    <div style="border:1px solid var(--pb-border);border-radius:6px;padding:0.75rem;box-shadow:0 1px 3px rgba(0,0,0,0.06);background:var(--pb-bg);display:flex;flex-direction:column;gap:0.375rem">
+                      <div style="display:flex;flex-direction:column;gap:0.0625rem"><span style="font-size:0.625rem;font-weight:500;color:var(--pb-muted-fg)">{et.tableHeaderName}</span><span style="font-size:0.8125rem;font-weight:600;color:var(--pb-fg)">Globex Inc</span></div>
+                      <div style="display:flex;flex-direction:column;gap:0.0625rem"><span style="font-size:0.625rem;font-weight:500;color:var(--pb-muted-fg)">{et.tableHeaderEmail}</span><span style="font-size:0.75rem;color:var(--pb-fg)">hello@globex.com</span></div>
+                      <div style="display:flex;flex-direction:column;gap:0.0625rem"><span style="font-size:0.625rem;font-weight:500;color:var(--pb-muted-fg)">{et.tableHeaderStatus}</span><span class="pb-badge green">{et.statusActive}</span></div>
+                      <div style="display:flex;flex-direction:column;gap:0.0625rem"><span style="font-size:0.625rem;font-weight:500;color:var(--pb-muted-fg)">{et.tableHeaderCreated}</span><span style="font-size:0.75rem;color:var(--pb-fg)">02 Apr 2024</span></div>
+                    </div>
+                    <!-- Card 3: Initech -->
+                    <div style="border:1px solid var(--pb-border);border-radius:6px;padding:0.75rem;box-shadow:0 1px 3px rgba(0,0,0,0.06);background:var(--pb-bg);display:flex;flex-direction:column;gap:0.375rem">
+                      <div style="display:flex;flex-direction:column;gap:0.0625rem"><span style="font-size:0.625rem;font-weight:500;color:var(--pb-muted-fg)">{et.tableHeaderName}</span><span style="font-size:0.8125rem;font-weight:600;color:var(--pb-fg)">Initech</span></div>
+                      <div style="display:flex;flex-direction:column;gap:0.0625rem"><span style="font-size:0.625rem;font-weight:500;color:var(--pb-muted-fg)">{et.tableHeaderEmail}</span><span style="font-size:0.75rem;color:var(--pb-fg)">contact@initech.com</span></div>
+                      <div style="display:flex;flex-direction:column;gap:0.0625rem"><span style="font-size:0.625rem;font-weight:500;color:var(--pb-muted-fg)">{et.tableHeaderStatus}</span><span class="pb-badge amber">{et.statusLead}</span></div>
+                      <div style="display:flex;flex-direction:column;gap:0.0625rem"><span style="font-size:0.625rem;font-weight:500;color:var(--pb-muted-fg)">{et.tableHeaderCreated}</span><span style="font-size:0.75rem;color:var(--pb-fg)">10 May 2024</span></div>
+                    </div>
+                    <!-- Card 4: Umbrella Co -->
+                    <div style="border:1px solid var(--pb-border);border-radius:6px;padding:0.75rem;box-shadow:0 1px 3px rgba(0,0,0,0.06);background:var(--pb-bg);display:flex;flex-direction:column;gap:0.375rem">
+                      <div style="display:flex;flex-direction:column;gap:0.0625rem"><span style="font-size:0.625rem;font-weight:500;color:var(--pb-muted-fg)">{et.tableHeaderName}</span><span style="font-size:0.8125rem;font-weight:600;color:var(--pb-fg)">Umbrella Co</span></div>
+                      <div style="display:flex;flex-direction:column;gap:0.0625rem"><span style="font-size:0.625rem;font-weight:500;color:var(--pb-muted-fg)">{et.tableHeaderEmail}</span><span style="font-size:0.75rem;color:var(--pb-fg)">admin@umbrella.com</span></div>
+                      <div style="display:flex;flex-direction:column;gap:0.0625rem"><span style="font-size:0.625rem;font-weight:500;color:var(--pb-muted-fg)">{et.tableHeaderStatus}</span><span class="pb-badge gray">{et.statusInactive}</span></div>
+                      <div style="display:flex;flex-direction:column;gap:0.0625rem"><span style="font-size:0.625rem;font-weight:500;color:var(--pb-muted-fg)">{et.tableHeaderCreated}</span><span style="font-size:0.75rem;color:var(--pb-fg)">20 Jun 2024</span></div>
+                    </div>
+                    <!-- Card 5: Stark Industries -->
+                    <div style="border:1px solid var(--pb-border);border-radius:6px;padding:0.75rem;box-shadow:0 1px 3px rgba(0,0,0,0.06);background:var(--pb-bg);display:flex;flex-direction:column;gap:0.375rem">
+                      <div style="display:flex;flex-direction:column;gap:0.0625rem"><span style="font-size:0.625rem;font-weight:500;color:var(--pb-muted-fg)">{et.tableHeaderName}</span><span style="font-size:0.8125rem;font-weight:600;color:var(--pb-fg)">Stark Industries</span></div>
+                      <div style="display:flex;flex-direction:column;gap:0.0625rem"><span style="font-size:0.625rem;font-weight:500;color:var(--pb-muted-fg)">{et.tableHeaderEmail}</span><span style="font-size:0.75rem;color:var(--pb-fg)">tony@stark.com</span></div>
+                      <div style="display:flex;flex-direction:column;gap:0.0625rem"><span style="font-size:0.625rem;font-weight:500;color:var(--pb-muted-fg)">{et.tableHeaderStatus}</span><span class="pb-badge green">{et.statusActive}</span></div>
+                      <div style="display:flex;flex-direction:column;gap:0.0625rem"><span style="font-size:0.625rem;font-weight:500;color:var(--pb-muted-fg)">{et.tableHeaderCreated}</span><span style="font-size:0.75rem;color:var(--pb-fg)">01 Jul 2024</span></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Card list overlay (for view modes phase) -->
+              <!-- Card list overlay (for view modes phase) — content only, no toolbar -->
+              <div id="src-card-list" style="display:none;opacity:0;position:absolute;top:0;left:0;right:0;bottom:0;flex-direction:column;z-index:2">
+                <!-- Card list content -->
+                <div style="padding:0.75rem;flex:1">
+                  <div style="display:flex;flex-direction:column;gap:0.75rem">
+                    <!-- Card 1: Acme Corp -->
+                    <div style="border:1px solid var(--pb-border);border-radius:6px;padding:0.75rem;box-shadow:0 1px 3px rgba(0,0,0,0.06);background:var(--pb-bg);display:flex;gap:1rem;align-items:flex-start">
+                      <div style="display:flex;flex-direction:column;gap:0.125rem;min-width:120px;max-width:200px;flex-shrink:0"><span style="font-size:0.625rem;font-weight:500;color:var(--pb-muted-fg)">{et.tableHeaderName}</span><span style="font-size:0.8125rem;font-weight:600;color:var(--pb-fg)">Acme Corp</span></div>
+                      <div style="display:flex;flex-direction:column;gap:0.125rem;min-width:120px;max-width:200px;flex-shrink:0"><span style="font-size:0.625rem;font-weight:500;color:var(--pb-muted-fg)">{et.tableHeaderEmail}</span><span style="font-size:0.75rem;color:var(--pb-fg)">info@acme.com</span></div>
+                      <div style="display:flex;flex-direction:column;gap:0.125rem;min-width:80px;flex-shrink:0"><span style="font-size:0.625rem;font-weight:500;color:var(--pb-muted-fg)">{et.tableHeaderStatus}</span><span class="pb-badge green">{et.statusActive}</span></div>
+                      <div style="display:flex;flex-direction:column;gap:0.125rem;min-width:120px;flex-shrink:0"><span style="font-size:0.625rem;font-weight:500;color:var(--pb-muted-fg)">{et.tableHeaderOnboardedAt}</span><span style="font-size:0.75rem;color:var(--pb-fg)">16 May 2026, 19:00</span></div>
+                      <div style="display:flex;flex-direction:column;gap:0.125rem;min-width:100px;flex-shrink:0"><span style="font-size:0.625rem;font-weight:500;color:var(--pb-muted-fg)">{et.tableHeaderCreated}</span><span style="font-size:0.75rem;color:var(--pb-fg)">15 Mar 2024</span></div>
+                    </div>
+                    <!-- Card 2: Globex Inc -->
+                    <div style="border:1px solid var(--pb-border);border-radius:6px;padding:0.75rem;box-shadow:0 1px 3px rgba(0,0,0,0.06);background:var(--pb-bg);display:flex;gap:1rem;align-items:flex-start">
+                      <div style="display:flex;flex-direction:column;gap:0.125rem;min-width:120px;max-width:200px;flex-shrink:0"><span style="font-size:0.625rem;font-weight:500;color:var(--pb-muted-fg)">{et.tableHeaderName}</span><span style="font-size:0.8125rem;font-weight:600;color:var(--pb-fg)">Globex Inc</span></div>
+                      <div style="display:flex;flex-direction:column;gap:0.125rem;min-width:120px;max-width:200px;flex-shrink:0"><span style="font-size:0.625rem;font-weight:500;color:var(--pb-muted-fg)">{et.tableHeaderEmail}</span><span style="font-size:0.75rem;color:var(--pb-fg)">hello@globex.com</span></div>
+                      <div style="display:flex;flex-direction:column;gap:0.125rem;min-width:80px;flex-shrink:0"><span style="font-size:0.625rem;font-weight:500;color:var(--pb-muted-fg)">{et.tableHeaderStatus}</span><span class="pb-badge green">{et.statusActive}</span></div>
+                      <div style="display:flex;flex-direction:column;gap:0.125rem;min-width:120px;flex-shrink:0"><span style="font-size:0.625rem;font-weight:500;color:var(--pb-muted-fg)">{et.tableHeaderOnboardedAt}</span><span style="font-size:0.75rem;color:var(--pb-fg)">16 May 2026, 19:00</span></div>
+                      <div style="display:flex;flex-direction:column;gap:0.125rem;min-width:100px;flex-shrink:0"><span style="font-size:0.625rem;font-weight:500;color:var(--pb-muted-fg)">{et.tableHeaderCreated}</span><span style="font-size:0.75rem;color:var(--pb-fg)">02 Apr 2024</span></div>
+                    </div>
+                    <!-- Card 3: Initech -->
+                    <div style="border:1px solid var(--pb-border);border-radius:6px;padding:0.75rem;box-shadow:0 1px 3px rgba(0,0,0,0.06);background:var(--pb-bg);display:flex;gap:1rem;align-items:flex-start">
+                      <div style="display:flex;flex-direction:column;gap:0.125rem;min-width:120px;max-width:200px;flex-shrink:0"><span style="font-size:0.625rem;font-weight:500;color:var(--pb-muted-fg)">{et.tableHeaderName}</span><span style="font-size:0.8125rem;font-weight:600;color:var(--pb-fg)">Initech</span></div>
+                      <div style="display:flex;flex-direction:column;gap:0.125rem;min-width:120px;max-width:200px;flex-shrink:0"><span style="font-size:0.625rem;font-weight:500;color:var(--pb-muted-fg)">{et.tableHeaderEmail}</span><span style="font-size:0.75rem;color:var(--pb-fg)">contact@initech.com</span></div>
+                      <div style="display:flex;flex-direction:column;gap:0.125rem;min-width:80px;flex-shrink:0"><span style="font-size:0.625rem;font-weight:500;color:var(--pb-muted-fg)">{et.tableHeaderStatus}</span><span class="pb-badge amber">{et.statusLead}</span></div>
+                      <div style="display:flex;flex-direction:column;gap:0.125rem;min-width:120px;flex-shrink:0"><span style="font-size:0.625rem;font-weight:500;color:var(--pb-muted-fg)">{et.tableHeaderOnboardedAt}</span><span style="font-size:0.75rem;color:var(--pb-fg)">16 May 2026, 19:00</span></div>
+                      <div style="display:flex;flex-direction:column;gap:0.125rem;min-width:100px;flex-shrink:0"><span style="font-size:0.625rem;font-weight:500;color:var(--pb-muted-fg)">{et.tableHeaderCreated}</span><span style="font-size:0.75rem;color:var(--pb-fg)">10 May 2024</span></div>
+                    </div>
+                    <!-- Card 4: Umbrella Co -->
+                    <div style="border:1px solid var(--pb-border);border-radius:6px;padding:0.75rem;box-shadow:0 1px 3px rgba(0,0,0,0.06);background:var(--pb-bg);display:flex;gap:1rem;align-items:flex-start">
+                      <div style="display:flex;flex-direction:column;gap:0.125rem;min-width:120px;max-width:200px;flex-shrink:0"><span style="font-size:0.625rem;font-weight:500;color:var(--pb-muted-fg)">{et.tableHeaderName}</span><span style="font-size:0.8125rem;font-weight:600;color:var(--pb-fg)">Umbrella Co</span></div>
+                      <div style="display:flex;flex-direction:column;gap:0.125rem;min-width:120px;max-width:200px;flex-shrink:0"><span style="font-size:0.625rem;font-weight:500;color:var(--pb-muted-fg)">{et.tableHeaderEmail}</span><span style="font-size:0.75rem;color:var(--pb-fg)">admin@umbrella.com</span></div>
+                      <div style="display:flex;flex-direction:column;gap:0.125rem;min-width:80px;flex-shrink:0"><span style="font-size:0.625rem;font-weight:500;color:var(--pb-muted-fg)">{et.tableHeaderStatus}</span><span class="pb-badge gray">{et.statusInactive}</span></div>
+                      <div style="display:flex;flex-direction:column;gap:0.125rem;min-width:120px;flex-shrink:0"><span style="font-size:0.625rem;font-weight:500;color:var(--pb-muted-fg)">{et.tableHeaderOnboardedAt}</span><span style="font-size:0.75rem;color:var(--pb-muted-fg)">—</span></div>
+                      <div style="display:flex;flex-direction:column;gap:0.125rem;min-width:100px;flex-shrink:0"><span style="font-size:0.625rem;font-weight:500;color:var(--pb-muted-fg)">{et.tableHeaderCreated}</span><span style="font-size:0.75rem;color:var(--pb-fg)">20 Jun 2024</span></div>
+                    </div>
+                    <!-- Card 5: Stark Industries -->
+                    <div style="border:1px solid var(--pb-border);border-radius:6px;padding:0.75rem;box-shadow:0 1px 3px rgba(0,0,0,0.06);background:var(--pb-bg);display:flex;gap:1rem;align-items:flex-start">
+                      <div style="display:flex;flex-direction:column;gap:0.125rem;min-width:120px;max-width:200px;flex-shrink:0"><span style="font-size:0.625rem;font-weight:500;color:var(--pb-muted-fg)">{et.tableHeaderName}</span><span style="font-size:0.8125rem;font-weight:600;color:var(--pb-fg)">Stark Industries</span></div>
+                      <div style="display:flex;flex-direction:column;gap:0.125rem;min-width:120px;max-width:200px;flex-shrink:0"><span style="font-size:0.625rem;font-weight:500;color:var(--pb-muted-fg)">{et.tableHeaderEmail}</span><span style="font-size:0.75rem;color:var(--pb-fg)">tony@stark.com</span></div>
+                      <div style="display:flex;flex-direction:column;gap:0.125rem;min-width:80px;flex-shrink:0"><span style="font-size:0.625rem;font-weight:500;color:var(--pb-muted-fg)">{et.tableHeaderStatus}</span><span class="pb-badge green">{et.statusActive}</span></div>
+                      <div style="display:flex;flex-direction:column;gap:0.125rem;min-width:120px;flex-shrink:0"><span style="font-size:0.625rem;font-weight:500;color:var(--pb-muted-fg)">{et.tableHeaderOnboardedAt}</span><span style="font-size:0.75rem;color:var(--pb-muted-fg)">—</span></div>
+                      <div style="display:flex;flex-direction:column;gap:0.125rem;min-width:100px;flex-shrink:0"><span style="font-size:0.625rem;font-weight:500;color:var(--pb-muted-fg)">{et.tableHeaderCreated}</span><span style="font-size:0.75rem;color:var(--pb-fg)">01 Jul 2024</span></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              </div>
+              <div class="pb-pagination" id="src-pagination">
+                <div style="display:flex;align-items:center;gap:0.75rem;flex-wrap:wrap">
+                  <div class="pag-range">1-8 / 247</div>
+                  <div class="pag-divider" id="src-selection-divider" style="display:none"></div>
+                  <div class="pb-selection-counter" id="src-selection-counter" style="display:none;align-items:center;gap:0.375rem;color:var(--pb-primary)">
+                    <span><span id="src-selection-count">0</span> selected</span>
+                    <button class="eye-toggle" id="src-eye-toggle" style="display:none"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-eye"/></svg></button>
+                  </div>
+                </div>
+                <div class="pag-controls">
+                  <div class="pag-size"><span>{et.paginationPageSize}</span><button class="pag-size-btn">25</button></div>
+                  <div class="pag-divider"></div>
+                  <button class="pag-btn" disabled><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m11 17-5-5 5-5"/><path d="m18 17-5-5 5-5"/></svg></button>
+                  <button class="pag-btn" disabled><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg></button>
+                  <span class="pag-status">1 / 31</span>
+                  <button class="pag-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg></button>
+                  <button class="pag-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m13 17 5-5-5-5"/><path d="m6 17 5-5-5-5"/></svg></button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== Extracted overlays ===== -->
+
+      <!-- #1 Export buttons (bulk toolbar with Export + Export HTML) — same as entity-list-table ex-bulk -->
+      <div class="extracted no-pad" id="ex-export-buttons" style="width:938px">
+        <div class="pb-toolbar-second" style="border-radius:10px">
+          <button class="pb-btn-outline" id="ex-bulk-toggle"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 5H3"/><path d="M12 19H3"/><path d="M14 3v4"/><path d="M16 17v4"/><path d="M21 12h-9"/><path d="M21 19h-5"/><path d="M21 5h-7"/><path d="M8 10v4"/><path d="M8 12H3"/></svg>{et.toolbarFilters}</button>
+          <div class="pb-gradient-divider"></div>
+          <button class="pb-btn-soft-xs"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M7 10l5 5 5-5"/><path d="M12 15V3"/></svg>{et.bulkExport}</button>
+          <button class="pb-btn-soft-xs"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M7 10l5 5 5-5"/><path d="M12 15V3"/></svg>{et.bulkExportHtml}</button>
+          <button class="pb-btn-soft-xs"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>{et.bulkDuplicate}</button>
+          <button class="pb-btn-soft-xs" style="color:var(--pb-destructive);border-color:rgba(239,68,68,0.3)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/></svg>{et.bulkDelete}</button>
+          <button class="pb-btn-soft-xs" style="color:var(--pb-warning, #f59e0b);border-color:rgba(245,158,11,0.3)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>{et.bulkRestore}</button>
+        </div>
+      </div>
+
+      <!-- #2 Export dialog (warning-bordered with choicebox) -->
+      <div class="extracted no-pad" id="ex-export-dialog" style="width:448px">
+        <div class="export-dialog" style="transform:none;border-radius:10px">
+          <div class="export-dialog-header">
+            <div class="export-dialog-title">{et.mockExportDataTitle}</div>
+            <div class="export-dialog-desc">{et.mockExportQuestion}</div>
+          </div>
+          <div class="export-dialog-body">
+            <div class="export-choicebox">
+              <div class="export-choicebox-item selected" id="ex-choice-selected">
+                <div class="export-choicebox-indicator"></div>
+                <div class="export-choicebox-text">
+                  <div class="export-choicebox-title">{et.mockSelectedOnly}</div>
+                  <div class="export-choicebox-desc">{et.mockSelectedOnlyDesc}</div>
+                </div>
+              </div>
+              <div class="export-choicebox-item" id="ex-choice-all">
+                <div class="export-choicebox-indicator"></div>
+                <div class="export-choicebox-text">
+                  <div class="export-choicebox-title">{et.mockAllItems}</div>
+                  <div class="export-choicebox-desc">{et.mockAllItemsDesc}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="export-dialog-footer">
+            <button class="pb-btn-soft">{et.mockCancel}</button>
+            <button class="pb-btn-primary-gradient">{et.mockExportExcel}</button>
+            <button class="pb-btn-soft">{et.mockExportCsv}</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- #3 HTML export confirm dialog (matches FE HtmlExportDialog.svelte: DialogBordered severity="warning") -->
+      <div class="extracted no-pad" id="ex-html-dialog" style="width:448px">
+        <div class="mp-content" style="position:relative">
+          <div class="mp-top-strip"></div>
+          <div class="mp-inner">
+            <div class="mp-header">
+              <div class="mp-title">{et.mockHtmlExportTitle}</div>
+              <div class="mp-description">{et.mockHtmlExportQuestion}</div>
+            </div>
+            <div class="mp-footer">
+              <button class="mp-btn-secondary-outline">{et.mockCancel}</button>
+              <button class="mp-btn-warning">{et.mockConfirm}</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- #5 Preview dialog (near-fullscreen, matches FE ExportPreviewDialog.svelte: DialogBordered severity="primary", 95vw x 95vh) -->
+      <div class="extracted no-pad" id="ex-preview-dialog" style="width:1200px;height:620px">
+        <div class="mp-content" style="position:relative;width:100%;height:100%;display:flex;flex-direction:column">
+          <div class="mp-top-strip mp-top-strip-primary"></div>
+          <div class="mp-inner" style="flex:1;display:flex;flex-direction:column;min-height:0;padding:1rem">
+            <!-- Header -->
+            <div class="mp-header" style="padding-bottom:0.5rem;flex-shrink:0">
+              <div class="mp-title">{et.mockHtmlPreviewTitle}</div>
+            </div>
+            <!-- Dock navigation (floating above content, centered) -->
+            <div class="export-dock-container">
+              <div class="export-dock">
+                <div class="export-dock-icon selected" title="HTML">
+                  <svg width="20" height="20" viewBox="0 0 16 16" fill="currentColor"><path fill-rule="evenodd" d="M14 1.5V14H2V1.5h12zM5.5 7.25a.25.25 0 0 1 .25-.25h4a.25.25 0 0 1 .25.25v1a.25.25 0 0 1-.25.25h-4a.25.25 0 0 1-.25-.25v-1zm.25 2a.25.25 0 0 0-.25.25v1c0 .138.112.25.25.25h4a.25.25 0 0 0 .25-.25v-1a.25.25 0 0 0-.25-.25h-4z"/></svg>
+                </div>
+                <div class="export-dock-icon" title="PDF">
+                  <svg width="20" height="20" viewBox="0 0 16 16" fill="currentColor"><path fill-rule="evenodd" d="M14 14V4.5L9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2zM9.5 3A1.5 1.5 0 0 0 11 4.5h2V9H3V3h6.5zM3 10v3h10v-3H3z"/></svg>
+                </div>
+                <div class="export-dock-icon" title="Email">
+                  <svg width="20" height="20" viewBox="0 0 16 16" fill="currentColor"><path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V4zm2-1a1 1 0 0 0-1 1v.217l7 4.2 7-4.2V4a1 1 0 0 0-1-1H2zm13 2.383-4.708 2.825L15 11.105V5.383zm-.034 6.876-5.348-3.221L8 9.717l-1.618-.979L1.034 12.26A1 1 0 0 0 2 13h12a1 1 0 0 0 .966-.741zM1 11.105l4.708-2.897L1 5.383v5.722z"/></svg>
+                </div>
+              </div>
+            </div>
+            <!-- Preview content area (3 modes, cross-faded by scroll script) -->
+            <div class="export-preview-content">
+              <!-- HTML mode -->
+              <div id="preview-html-content" class="preview-mode-content" style="opacity:1">
+                <div style="padding:1rem;background:white;height:100%;overflow:auto">
+                  <table class="export-preview-table">
+                    <thead><tr><th>{et.tableHeaderName}</th><th>{et.tableHeaderEmail}</th><th>{et.tableHeaderStatus}</th><th>{et.tableHeaderCreated}</th></tr></thead>
+                    <tbody>
+                      <tr><td>Acme Corp</td><td>info@acme.com</td><td>{et.statusActive}</td><td>15 Mar 2024</td></tr>
+                      <tr><td>Globex Inc</td><td>hello@globex.com</td><td>{et.statusActive}</td><td>02 Apr 2024</td></tr>
+                      <tr><td>Initech</td><td>contact@initech.com</td><td>{et.statusLead}</td><td>10 May 2024</td></tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+              <!-- PDF mode — looks like a real PDF viewer (dark gray bg, centered A4 page) -->
+              <div id="preview-pdf-content" class="preview-mode-content" style="opacity:0">
+                <div class="pdf-viewer-bg">
+                  <div class="pdf-a4-page">
+                    <div class="pdf-a4-header">
+                      <div class="pdf-a4-logo">Primebrick</div>
+                      <div class="pdf-a4-meta">Customer Export — 3 records</div>
+                    </div>
+                    <div class="pdf-a4-date">Generated {new Date().toISOString().split('T')[0]}</div>
+                    <table class="pdf-a4-table">
+                      <thead>
+                        <tr><th>Name</th><th>Email</th><th>Status</th><th>Created</th></tr>
+                      </thead>
+                      <tbody>
+                        <tr><td>Acme Corp</td><td>info@acme.com</td><td>Active</td><td>15 Mar 2024</td></tr>
+                        <tr><td>Globex Inc</td><td>hello@globex.com</td><td>Active</td><td>02 Apr 2024</td></tr>
+                        <tr><td>Initech</td><td>contact@initech.com</td><td>Lead</td><td>10 May 2024</td></tr>
+                      </tbody>
+                    </table>
+                    <div class="pdf-a4-footer">
+                      <span>Page 1 of 1</span>
+                      <span>Primebrick — primebrick.dev</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- Email mode (split pane: mailbox + email preview) -->
+              <div id="preview-email-content" class="preview-mode-content" style="opacity:0">
+                <div class="export-email-split">
+                  <div class="export-email-mailbox">
+                    <div class="export-email-mailbox-title">{et.mockMailbox}</div>
+                    <div class="export-email-mailbox-list">
+                      <div class="export-email-mailbox-item active">
+                        <div class="export-email-skeleton medium"></div>
+                        <div class="export-email-skeleton short"></div>
+                      </div>
+                      <div class="export-email-mailbox-item faded">
+                        <div class="export-email-skeleton medium"></div>
+                        <div class="export-email-skeleton short"></div>
+                      </div>
+                      <div class="export-email-mailbox-item faded">
+                        <div class="export-email-skeleton medium"></div>
+                        <div class="export-email-skeleton short"></div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="export-email-content">
+                    <div class="export-email-header">
+                      <div class="export-email-header-row">
+                        <span class="export-email-header-label">{et.mockTo}</span>
+                        <span class="export-email-header-recipient">{et.mockRecipient}</span>
+                      </div>
+                      <div class="export-email-header-row">
+                        <span class="export-email-header-label">{et.mockSubject}</span>
+                        <span>Customer Export — 3 records</span>
+                      </div>
+                    </div>
+                    <div class="export-email-iframe-wrap">
+                      <div style="padding:1rem;background:white;height:100%;overflow:auto">
+                        <table class="export-preview-table">
+                          <thead><tr><th>{et.tableHeaderName}</th><th>{et.tableHeaderEmail}</th><th>{et.tableHeaderStatus}</th></tr></thead>
+                          <tbody>
+                            <tr><td>Acme Corp</td><td>info@acme.com</td><td>{et.statusActive}</td></tr>
+                            <tr><td>Globex Inc</td><td>hello@globex.com</td><td>{et.statusActive}</td></tr>
+                            <tr><td>Initech</td><td>contact@initech.com</td><td>{et.statusLead}</td></tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Footer (mode-specific buttons, cross-faded by scroll script) -->
+            <div class="export-preview-footer">
+              <button class="mp-btn-secondary-outline">{et.mockClose}</button>
+              <div id="preview-footer-html" class="preview-footer-btn" style="opacity:1">
+                <button class="mp-btn-primary">{et.mockCopyHtml}</button>
+              </div>
+              <div id="preview-footer-pdf" class="preview-footer-btn" style="opacity:0">
+                <button class="mp-btn-primary">{et.mockDownloadPdf}</button>
+              </div>
+              <div id="preview-footer-email" class="preview-footer-btn" style="opacity:0">
+                <button class="mp-btn-primary">{et.mockCopyEmailHtml}</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== Annotation cards ===== -->
+      <div class="ann-label" id="ann-export-buttons"><div class="ann-card"><div class="ann-title">{et.annExportButtonsTitle}</div><div class="ann-desc">{et.annExportButtonsDesc}</div></div></div>
+      <div class="ann-label" id="ann-export-dialog"><div class="ann-card"><div class="ann-title">{et.annExportDialogTitle}</div><div class="ann-desc">{et.annExportDialogDesc}</div></div></div>
+      <div class="ann-label" id="ann-export-choicebox"><div class="ann-card"><div class="ann-title">{et.annExportChoiceboxTitle}</div><div class="ann-desc">{et.annExportChoiceboxDesc}</div></div></div>
+      <div class="ann-label" id="ann-export-choicebox-rbac"><div class="ann-card"><div class="ann-title">{et.annExportChoiceboxRbacTitle}</div><div class="ann-desc">{et.annExportChoiceboxRbacDesc}</div></div></div>
+      <div class="ann-label" id="ann-export-cta-real"><div class="ann-card"><div class="ann-title">{et.annExportCtaRealTitle}</div><div class="ann-desc">{et.annExportCtaRealDesc}</div></div></div>
+      <div class="ann-label" id="ann-html-dialog"><div class="ann-card"><div class="ann-title">{et.annHtmlDialogTitle}</div><div class="ann-desc">{et.annHtmlDialogDesc}</div></div></div>
+      <div class="ann-label" id="ann-preview-html"><div class="ann-card"><div class="ann-title">{et.annPreviewHtmlTitle}</div><div class="ann-desc">{et.annPreviewHtmlDesc}</div></div></div>
+      <div class="ann-label" id="ann-preview-pdf"><div class="ann-card"><div class="ann-title">{et.annPreviewPdfTitle}</div><div class="ann-desc">{et.annPreviewPdfDesc}</div></div></div>
+      <div class="ann-label" id="ann-preview-email"><div class="ann-card"><div class="ann-title">{et.annPreviewEmailTitle}</div><div class="ann-desc">{et.annPreviewEmailDesc}</div></div></div>
+
+      <!-- ===== SVG connectors ===== -->
+      <svg class="connector-svg" id="connectors">
+        <line class="conn-line" id="line-export-buttons" /><circle class="conn-dot" id="dot-export-buttons" r="4" />
+        <line class="conn-line" id="line-export-choicebox-rbac" /><circle class="conn-dot" id="dot-export-choicebox-rbac" r="4" />
+        <line class="conn-line" id="line-export-cta-real" /><circle class="conn-dot" id="dot-export-cta-real" r="4" />
+        <line class="conn-line" id="line-export-dialog" /><circle class="conn-dot" id="dot-export-dialog" r="4" />
+        <line class="conn-line" id="line-export-choicebox" /><circle class="conn-dot" id="dot-export-choicebox" r="4" />
+        <line class="conn-line" id="line-html-dialog" /><circle class="conn-dot" id="dot-html-dialog" r="4" />
+        <line class="conn-line" id="line-html-dialog-cta" /><circle class="conn-dot" id="dot-html-dialog-cta" r="4" />
+        <line class="conn-line" id="line-preview-html" /><circle class="conn-dot" id="dot-preview-html" r="4" />
+        <line class="conn-line" id="line-preview-pdf" /><circle class="conn-dot" id="dot-preview-pdf" r="4" />
+        <line class="conn-line" id="line-preview-email" /><circle class="conn-dot" id="dot-preview-email" r="4" />
+      </svg>
+
+    </div>
+  </div>
+</div>
+
+<!-- ===== Inline SVG icons not in icons.js ===== -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="i-eye" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0"/><circle cx="12" cy="12" r="3"/></symbol>
+    <symbol id="i-eye-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.733 5.076a10.744 10.744 0 0 1 11.205 6.575 1 1 0 0 1 0 .7 10.823 10.823 0 0 1-1.355 2.282m-3.858 1.859A10.77 10.77 0 0 1 12 17.546a10.77 10.77 0 0 1-7.5-3.046m-2.7-2.54A10.823 10.823 0 0 1 1.062 12.65a1 1 0 0 1 0-.7 10.744 10.744 0 0 1 4.335-5.187M2 2l20 20M9.88 9.88a3 3 0 1 0 4.24 4.24"/></symbol>
+    <symbol id="i-more-vertical" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="5" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="12" cy="19" r="1"/></symbol>
+    <symbol id="i-panel-right-open" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M15 3v18"/></symbol>
+    <linearGradient id="ai-cta-gradient" x1="0" y1="0" x2="24" y2="24" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#0ea5e9" />
+      <stop offset="100%" stop-color="#6366f1" />
+    </linearGradient>
+  </defs>
+</svg>
+</div><!-- /.demo-scope -->
+
+    <!-- Website footer -->
+    <footer class="relative z-10 border-t border-slate-800/50 px-6 py-8">
+      <div class="mx-auto flex max-w-7xl items-center justify-between text-sm text-slate-500">
+        <span>&copy; 2026 {t.footer.copyright}</span>
+        <div class="flex items-center gap-4">
+          <span class="text-xs text-slate-600">v{version}</span>
+          <a
+            href="https://github.com/michaelsogos/primebrick-v3-website"
+            class="inline-flex items-center gap-1.5 hover:text-sky-400 transition-colors"
+            target="_blank"
+            rel="noopener"
+          >
+            <GitHubIcon class="h-4 w-4" />
+            GitHub®
+          </a>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      import { renderAllIcons } from '../../../scripts/demo/icons';
+      import { initExportsScroll } from '../../../scripts/demo/exports-scroll';
+      renderAllIcons();
+      initExportsScroll();
+    </script>
+  </body>
+</html>
