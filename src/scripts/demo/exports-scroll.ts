@@ -39,45 +39,40 @@ export function initExportsScroll(): void {
       { name: 'Export buttons',     start: 0.130, end: 0.220 },  // Toolbar extracts + annotation
       { name: 'Export dialog',      start: 0.220, end: 0.290 },  // Dialog appears (toolbar still held)
       { name: 'HTML export',        start: 0.290, end: 0.370 },  // HTML confirm dialog
-      { name: 'Preview dock',       start: 0.370, end: 0.490 },
-      { name: 'Email preview',      start: 0.490, end: 0.610 },
-      { name: 'Reassembly',         start: 0.610, end: 0.720 },
-      { name: 'Zoom back',          start: 0.720, end: 0.870 },
-      { name: 'Conclusion',         start: 0.870, end: 1.000 },
+      { name: 'Preview modes',      start: 0.370, end: 0.570 },  // One dialog, 3 mode transitions (HTML→PDF→Email)
+      { name: 'Reassembly',         start: 0.570, end: 0.640 },
+      { name: 'Zoom back',          start: 0.640, end: 0.720 },
+      { name: 'Conclusion',         start: 0.720, end: 0.820 },
     ];
 
     // Section ranges (for section-claim opacity): [startPhaseIdx, endPhaseIdx]
     const SECTIONS = [
       { id: 'claim-1', start: 1, end: 1 },  // Scope selection (modal preview) — "Selected or all"
       { id: 'claim-2', start: 2, end: 3 },  // Export buttons + dialog — "Real files, built server-side"
-      { id: 'claim-3', start: 4, end: 4 },  // HTML export — "HTML first"
-      { id: 'claim-4', start: 5, end: 5 },  // Preview dock — "Live preview"
-      { id: 'claim-5', start: 6, end: 6 },  // Email preview — "Email-ready"
+      { id: 'claim-3', start: 4, end: 4 },  // HTML export — "Visual export, not data export"
+      { id: 'claim-4', start: 5, end: 5 },  // Preview modes — "One source, three formats"
     ];
 
     // Sub-extractions: each {id, exId, annId, lineId, dotId, phaseIdx, side}
     // phaseIdx 2+ = disassembly starts AFTER mock is settled at 0.82 scale
     const SUBS = [
       { id: 'export-buttons',  exId: 'ex-export-buttons',  annId: 'ann-export-buttons',  lineId: 'line-export-buttons',  dotId: 'dot-export-buttons',  phaseIdx: 2, side: 'top' as AnnotationSide, special: 'bulk-mock' as any },
-      { id: 'html-dialog',     exId: 'ex-html-dialog',     annId: 'ann-html-dialog',     lineId: 'line-html-dialog',     dotId: 'dot-html-dialog',     phaseIdx: 4, side: 'center' as AnnotationSide },
-      { id: 'preview-dock',    exId: 'ex-preview-dialog',  annId: 'ann-preview-dock',    lineId: 'line-preview-dock',    dotId: 'dot-preview-dock',    phaseIdx: 5, side: 'center' as AnnotationSide },
-      { id: 'preview-html',    exId: 'ex-preview-dialog',  annId: 'ann-preview-html',    lineId: 'line-preview-html',    dotId: 'dot-preview-html',    phaseIdx: 5, side: 'right' as AnnotationSide },
-      { id: 'email-mailbox',   exId: 'ex-preview-dialog',  annId: 'ann-email-mailbox',   lineId: 'line-email-mailbox',   dotId: 'dot-email-mailbox',   phaseIdx: 6, side: 'center' as AnnotationSide },
-      { id: 'email-content',   exId: 'ex-preview-dialog',  annId: 'ann-email-content',   lineId: 'line-email-content',   dotId: 'dot-email-content',   phaseIdx: 6, side: 'right' as AnnotationSide },
+      { id: 'html-dialog',     exId: 'ex-html-dialog',     annId: 'ann-html-dialog',     lineId: 'line-html-dialog',     dotId: 'dot-html-dialog',     phaseIdx: 4, side: 'left' as AnnotationSide, special: 'html-dialog' as any },
+      { id: 'preview-html',    exId: 'ex-preview-dialog',  annId: 'ann-preview-html',    lineId: 'line-preview-html',    dotId: 'dot-preview-html',    phaseIdx: 5, side: 'right' as AnnotationSide, special: 'preview-mode' as any, mode: 'html' as any },
+      { id: 'preview-pdf',     exId: 'ex-preview-dialog',  annId: 'ann-preview-pdf',     lineId: 'line-preview-pdf',     dotId: 'dot-preview-pdf',     phaseIdx: 5, side: 'right' as AnnotationSide, special: 'preview-mode' as any, mode: 'pdf' as any },
+      { id: 'preview-email',   exId: 'ex-preview-dialog',  annId: 'ann-preview-email',   lineId: 'line-preview-email',   dotId: 'dot-preview-email',   phaseIdx: 5, side: 'right' as AnnotationSide, special: 'preview-mode' as any, mode: 'email' as any },
     ];
 
     // Build scene dots
     if (dotsContainer) {
       buildSceneDots(dotsContainer as HTMLElement, track as HTMLElement, [
         { label: 'Start', target: 0.0 },
-        { label: 'Scope', target: 0.10 },
-        { label: 'Buttons', target: 0.18 },
-        { label: 'Dialog', target: 0.27 },
-        { label: 'Progress', target: 0.35 },
-        { label: 'HTML', target: 0.43 },
-        { label: 'Preview', target: 0.53 },
-        { label: 'Email', target: 0.65 },
-        { label: 'Conclusion', target: 1.0 },
+        { label: 'Scope', target: 0.09 },
+        { label: 'Buttons', target: 0.17 },
+        { label: 'Dialog', target: 0.25 },
+        { label: 'HTML', target: 0.33 },
+        { label: 'Preview', target: 0.48 },
+        { label: 'Conclusion', target: 0.74 },
       ], reducedMotion);
     }
 
@@ -168,7 +163,7 @@ export function initExportsScroll(): void {
       if (claimFinalEl) {
         const lastPh = PHASES[PHASES.length - 1];
         const lastDur = lastPh.end - lastPh.start;
-        claimFinalEl.style.opacity = smoothstep(lastPh.start + lastDur * 0.92, lastPh.end, progress);
+        claimFinalEl.style.opacity = smoothstep(lastPh.start + lastDur * 0.3, lastPh.start + lastDur * 0.7, progress);
       }
 
       // ===== Phase tracking =====
@@ -179,7 +174,14 @@ export function initExportsScroll(): void {
       if (phaseIdx !== currentPhaseIdx) {
         currentPhaseIdx = phaseIdx;
         if (dotsContainer) {
-          const dotIdx = phaseIdx >= 9 ? 8 : (phaseIdx >= 7 ? 7 : (phaseIdx >= 6 ? 6 : (phaseIdx >= 5 ? 5 : (phaseIdx >= 4 ? 4 : (phaseIdx >= 3 ? 3 : (phaseIdx >= 2 ? 2 : (phaseIdx >= 1 ? 1 : 0)))))));
+          // Map phaseIdx to bullet dot index.
+          // Bullets: 0=Start, 1=Scope, 2=Buttons, 3=Dialog, 4=HTML, 5=Preview, 6=Conclusion
+          // Phases: 0=Export System, 1=Scope, 2=Buttons, 3=Dialog, 4=HTML export, 5=Preview modes, 6=Reassembly, 7=Zoom back, 8=Conclusion
+          let dotIdx;
+          if (phaseIdx <= 3) dotIdx = phaseIdx;
+          else if (phaseIdx === 4) dotIdx = 4; // HTML export → HTML bullet
+          else if (phaseIdx === 5) dotIdx = 5; // Preview modes → Preview bullet
+          else dotIdx = 6; // Reassembly, Zoom back, Conclusion → Conclusion bullet
           dotsContainer.querySelectorAll('.scene-dot').forEach((d, i) => d.classList.toggle('active', i === dotIdx));
         }
         if (phaseLabel) phaseLabel.textContent = PHASES[phaseIdx].name;
@@ -200,7 +202,7 @@ export function initExportsScroll(): void {
       // Shrink to features size at end of phase 1
       const pShrinkFeatures = smoothstep(ph1.start + ph1Dur * 0.80, ph1.end, progress);
       // Zoom back during phase 9 (Zoom back)
-      const zoomPh = PHASES[8];
+      const zoomPh = PHASES[7];
       const zoomDur = zoomPh.end - zoomPh.start;
       const pZoomBack = smoothstep(zoomPh.start, zoomPh.end - zoomDur * 0.1, progress);
       // Scale: 1.0 → 0.95 (modal phase) → 0.82 (features) → 1.0 (zoom back)
@@ -392,7 +394,7 @@ export function initExportsScroll(): void {
       }
 
       // ===== Reassembly: reset mock toolbar to filters mode during reassembly phase =====
-      const reassemblyPh = PHASES[7];
+      const reassemblyPh = PHASES[6];
       const reassemblyDur = reassemblyPh.end - reassemblyPh.start;
       const pReassembleAll = smoothstep(reassemblyPh.start, reassemblyPh.start + reassemblyDur * 0.5, progress);
       const toolbarFiltersReset = document.getElementById('src-toolbar-filters');
@@ -420,20 +422,20 @@ export function initExportsScroll(): void {
 
         // For shared overlays (same exId, different annotation), handle specially
         // export-choicebox shares ex-export-dialog with export-dialog
-        // preview-html, email-mailbox, email-content share ex-preview-dialog
+        // preview-html, preview-pdf, preview-email share ex-preview-dialog (3 mode transitions)
 
         const pExtract = smoothstep(ph.start, ph.start + phaseDur * 0.4, progress);
 
         // Reassembly phase: fade everything out
-        const pReassemble = smoothstep(PHASES[7].start, PHASES[7].start + (PHASES[7].end - PHASES[7].start) * 0.5, progress);
+        const pReassemble = smoothstep(PHASES[6].start, PHASES[6].start + (PHASES[6].end - PHASES[6].start) * 0.5, progress);
 
         // For phases before reassembly: hold through end of phase
         // For phases during/after reassembly: fade out
         // Shared overlays (export-dialog, preview-dock) hold through reassembly
         // because later phases reuse the same exEl with different annotations.
-        const holdThroughReassembly = sub.id === 'export-dialog' || sub.id === 'preview-dock';
+        const holdThroughReassembly = sub.id === 'export-dialog' || sub.id === 'preview-html';
         let amount: number;
-        if (sub.phaseIdx >= 7 || holdThroughReassembly) {
+        if (sub.phaseIdx >= 6 || holdThroughReassembly) {
           amount = pExtract * (1 - pReassemble);
         } else {
           // Hold until the next phase starts, then fade out quickly
@@ -465,34 +467,176 @@ export function initExportsScroll(): void {
           return;
         }
 
-        if (sub.id === 'preview-html' || sub.id === 'email-mailbox' || sub.id === 'email-content') {
-          // Shares ex-preview-dialog — only show annotation during respective phase
+        if (sub.special === 'preview-mode') {
+          // Shares ex-preview-dialog — 3 mode transitions within one phase
+          // Each sub handles its own mode's annotation + dock icon + content visibility
           if (progress < ph.start - 0.001 || progress > ph.end + 0.001) {
             annEl.style.opacity = '0';
             if (line) line.classList.remove('visible');
             if (dot) dot.classList.remove('visible');
+            // Reset dialog opacity when outside the phase
+            if (sub.id === 'preview-html') {
+              exEl.style.opacity = '0';
+              const dockIcons = exEl.querySelectorAll('.export-dock-icon');
+              if (dockIcons.length >= 3) {
+                dockIcons[0].classList.add('selected');
+                dockIcons[1].classList.remove('selected');
+                dockIcons[2].classList.remove('selected');
+              }
+              const htmlContent = exEl.querySelector('#preview-html-content');
+              const pdfContent = exEl.querySelector('#preview-pdf-content');
+              const emailContent = exEl.querySelector('#preview-email-content');
+              if (htmlContent) (htmlContent as HTMLElement).style.opacity = '1';
+              if (pdfContent) (pdfContent as HTMLElement).style.opacity = '0';
+              if (emailContent) (emailContent as HTMLElement).style.opacity = '0';
+              const footerHtml = exEl.querySelector('#preview-footer-html') as HTMLElement;
+              const footerPdf = exEl.querySelector('#preview-footer-pdf') as HTMLElement;
+              const footerEmail = exEl.querySelector('#preview-footer-email') as HTMLElement;
+              if (footerHtml) { footerHtml.style.opacity = '1'; footerHtml.style.display = 'inline-flex'; }
+              if (footerPdf) { footerPdf.style.opacity = '0'; footerPdf.style.display = 'none'; }
+              if (footerEmail) { footerEmail.style.opacity = '0'; footerEmail.style.display = 'none'; }
+            }
             return;
           }
-          const pAnnIn = smoothstep(ph.start + phaseDur * 0.3, ph.start + phaseDur * 0.5, progress);
-          const pAnnOut = smoothstep(ph.end - phaseDur * 0.2, ph.end, progress);
+
+          // Mode transitions: HTML (0-33%), PDF (33-66%), Email (66-100%) of phase
+          const modeStart = ph.start + phaseDur * (sub.mode === 'html' ? 0.0 : sub.mode === 'pdf' ? 0.33 : 0.66);
+          const modeEnd = ph.start + phaseDur * (sub.mode === 'html' ? 0.33 : sub.mode === 'pdf' ? 0.66 : 1.0);
+
+          // Annotation fades in/out within its mode window
+          const pAnnIn = smoothstep(modeStart + (modeEnd - modeStart) * 0.1, modeStart + (modeEnd - modeStart) * 0.3, progress);
+          const pAnnOut = smoothstep(modeEnd - (modeEnd - modeStart) * 0.2, modeEnd, progress);
           const annOpacity = pAnnIn * (1 - pAnnOut);
           annEl.style.opacity = String(annOpacity);
           if (line) line.classList.toggle('visible', annOpacity > 0.5);
           if (dot) dot.classList.toggle('visible', annOpacity > 0.5);
+
+          // Only the first preview sub (preview-html) controls the dialog extraction + mode transitions
+          if (sub.id === 'preview-html') {
+            // Extract the preview dialog — centered on canvas (near-fullscreen)
+            const pExtractLocal = smoothstep(ph.start, ph.start + phaseDur * 0.15, progress);
+            exEl.style.opacity = String(pExtractLocal);
+
+            // Center the dialog on the canvas, pushed down a bit for annotation spacing
+            const natW = exEl.offsetWidth || 1400;
+            const natH = exEl.offsetHeight || 820;
+            const cw = canvasRect.width, ch = canvasRect.height;
+            exEl.style.left = (cw * 0.5 - natW / 2) + 'px';
+            exEl.style.top = (ch * 0.5 - natH / 2 + 40) + 'px';
+            exEl.style.width = natW + 'px';
+            exEl.style.transform = 'scale(1)';
+            exEl.style.transformOrigin = 'center center';
+            exEl.classList.toggle('detached', pExtractLocal > 0.1);
+
+            if (pExtractLocal > 0.05) {
+              positionAnnotation(sub, exEl, annEl);
+            }
+
+            // Mode transitions: update dock icons, content visibility, footer buttons
+            const pModeHtml = 1 - smoothstep(ph.start + phaseDur * 0.28, ph.start + phaseDur * 0.38, progress);
+            const pModePdf = smoothstep(ph.start + phaseDur * 0.28, ph.start + phaseDur * 0.38, progress) * (1 - smoothstep(ph.start + phaseDur * 0.61, ph.start + phaseDur * 0.71, progress));
+            const pModeEmail = smoothstep(ph.start + phaseDur * 0.61, ph.start + phaseDur * 0.71, progress);
+
+            // Dock icon selection
+            const dockIcons = exEl.querySelectorAll('.export-dock-icon');
+            if (dockIcons.length >= 3) {
+              dockIcons[0].classList.toggle('selected', pModeHtml > 0.5);
+              dockIcons[1].classList.toggle('selected', pModePdf > 0.5);
+              dockIcons[2].classList.toggle('selected', pModeEmail > 0.5);
+            }
+
+            // Content mode visibility
+            const htmlContent = exEl.querySelector('#preview-html-content');
+            const pdfContent = exEl.querySelector('#preview-pdf-content');
+            const emailContent = exEl.querySelector('#preview-email-content');
+            if (htmlContent) (htmlContent as HTMLElement).style.opacity = String(pModeHtml);
+            if (pdfContent) (pdfContent as HTMLElement).style.opacity = String(pModePdf);
+            if (emailContent) (emailContent as HTMLElement).style.opacity = String(pModeEmail);
+
+            // Footer button visibility — hide non-active CTAs completely (display:none)
+            // so they don't take space and the active CTA sits at the right edge
+            const footerHtml = exEl.querySelector('#preview-footer-html') as HTMLElement;
+            const footerPdf = exEl.querySelector('#preview-footer-pdf') as HTMLElement;
+            const footerEmail = exEl.querySelector('#preview-footer-email') as HTMLElement;
+            if (footerHtml) {
+              footerHtml.style.opacity = String(pModeHtml);
+              footerHtml.style.display = pModeHtml > 0.1 ? 'inline-flex' : 'none';
+            }
+            if (footerPdf) {
+              footerPdf.style.opacity = String(pModePdf);
+              footerPdf.style.display = pModePdf > 0.1 ? 'inline-flex' : 'none';
+            }
+            if (footerEmail) {
+              footerEmail.style.opacity = String(pModeEmail);
+              footerEmail.style.display = pModeEmail > 0.1 ? 'inline-flex' : 'none';
+            }
+          }
+
+          // Position annotation ABOVE the dock, connected with vertical line to dock icon
           if (annOpacity > 0.05) {
-            positionAnnotation(sub, exEl, annEl);
-            updateConnector(sub, exEl, annEl);
+            const exRect = exEl.getBoundingClientRect();
+            const canvasRect2 = canvas.getBoundingClientRect();
+            const dock = exEl.querySelector('.export-dock');
+            const dockIcons = exEl.querySelectorAll('.export-dock-icon');
+            // Find the currently selected dock icon as the target
+            let targetIcon = null;
+            dockIcons.forEach(ic => { if (ic.classList.contains('selected')) targetIcon = ic; });
+            if (!targetIcon && dockIcons.length > 0) targetIcon = dockIcons[0];
+            const iconR = targetIcon ? targetIcon.getBoundingClientRect() : dock?.getBoundingClientRect();
+
+            const annW = 240;
+            const annH = annEl.offsetHeight || 90;
+            // Center annotation horizontally above the target dock icon
+            const annCenterX = iconR.left + iconR.width / 2;
+            let leftPx = annCenterX - canvasRect2.left - annW / 2;
+            // Clamp to dialog bounds
+            const dialogLeft = exRect.left - canvasRect2.left + 16;
+            const dialogRight = exRect.right - canvasRect2.left - 16 - annW;
+            leftPx = Math.max(dialogLeft, Math.min(dialogRight, leftPx));
+            // Position above the dock with more gap so annotation is clearly separated from dialog
+            const topPx = (iconR.top - canvasRect2.top) - annH - 30;
+
+            annEl.style.left = leftPx + 'px';
+            annEl.style.top = topPx + 'px';
+            annEl.style.width = annW + 'px';
+            annEl.style.zIndex = '20';
+            const card = annEl.querySelector('.ann-card');
+            if (card) {
+              (card as HTMLElement).style.width = annW + 'px';
+              (card as HTMLElement).classList.add('ann-overlay');
+            }
+
+            // Draw vertical connector line from annotation bottom-center to dock icon top-center
+            if (line && dot) {
+              const annBottomX = leftPx + canvasRect2.left + annW / 2;
+              const annBottomY = topPx + canvasRect2.top + annH;
+              const iconTopX = iconR.left + iconR.width / 2;
+              const iconTopY = iconR.top;
+              const svgX = annBottomX - canvasRect2.left;
+              const svgY1 = annBottomY - canvasRect2.top;
+              const svgY2 = iconTopY - canvasRect2.top;
+              line.setAttribute('x1', String(svgX));
+              line.setAttribute('y1', String(svgY1));
+              line.setAttribute('x2', String(svgX));
+              line.setAttribute('y2', String(svgY2));
+              line.classList.add('visible');
+              dot.setAttribute('cx', String(svgX));
+              dot.setAttribute('cy', String(svgY2));
+              dot.classList.add('visible');
+            }
           }
           return;
         }
 
-        // ===== Special case: bulk-mock (toolbar extracts in phase 2, HOLDS through phase 3) =====
+        // ===== Special case: bulk-mock (toolbar extracts in phase 2, HOLDS through phases 3-5) =====
+        // Toolbar stays extracted and in BULK MODE until reassembly phase (phase 6)
         if (sub.special === 'bulk-mock') {
-          const ph3 = PHASES[3]; // Export dialog phase — toolbar HOLDS through this
-          const ph3End = ph3.end;
+          const ph3 = PHASES[3]; // Export dialog phase
+          const phReassembly = PHASES[6]; // Reassembly phase — toolbar reassembles here
+          const phHoldEnd = phReassembly.start; // Hold until reassembly begins
 
-          // Reset when before phase 2 or after phase 3
-          if (progress < ph.start - 0.001 || progress > ph3End + 0.001) {
+          // Reset when before phase 2 or when reassembly is done
+          if (progress < ph.start - 0.001 || progress > phReassembly.end + 0.001) {
             const toolbarFilters0 = document.getElementById('src-toolbar-filters');
             const toolbarBulk0 = document.getElementById('src-toolbar-bulk');
             if (toolbarFilters0) { toolbarFilters0.style.display = 'flex'; toolbarFilters0.style.opacity = 1; }
@@ -523,10 +667,10 @@ export function initExportsScroll(): void {
           const endLeft = visLeft + visW / 2 - endW / 2;
           const endTop = visTop - 30 - natHReal * (1 - scale) / 2;
 
-          // Amount: extract during phase 2, HOLD at 1.0 through phase 3
+          // Amount: extract during phase 2, HOLD at 1.0 through phases 3-5, reassemble in phase 6
           const pExtractLocal = smoothstep(ph.start, ph.start + phaseDur * 0.4, progress);
-          const pHoldThrough3 = smoothstep(ph3.end - (ph3.end - ph3.start) * 0.2, ph3.end, progress);
-          const bulkAmount = pExtractLocal * (1 - pHoldThrough3);
+          const pReassembleToolbar = smoothstep(phReassembly.start, phReassembly.start + (phReassembly.end - phReassembly.start) * 0.5, progress);
+          const bulkAmount = pExtractLocal * (1 - pReassembleToolbar);
 
           const curLeft = lerp(startLeft, endLeft, bulkAmount);
           const curTop = lerp(startTop, endTop, bulkAmount);
@@ -599,6 +743,120 @@ export function initExportsScroll(): void {
             drawConnector(line, dot, dot1X, dot1Y, target1X, target1Y);
           }
 
+          return;
+        }
+
+        // ===== Special case: html-dialog (phase 4 — HTML confirm dialog) =====
+        // Dialog is positioned lower to avoid overlapping the held bulk toolbar.
+        // Annotation is on the LEFT of the dialog with a horizontal connector to dialog.
+        // A second vertical connector goes from annotation bottom to the EXPORT HTML CTA in toolbar.
+        if (sub.special === 'html-dialog') {
+          if (amount < 0.01) {
+            exEl.style.opacity = '0';
+            annEl.style.opacity = '0';
+            if (line) line.classList.remove('visible');
+            if (dot) dot.classList.remove('visible');
+            const ctaLine = document.getElementById('line-html-dialog-cta');
+            const ctaDot = document.getElementById('dot-html-dialog-cta');
+            if (ctaLine) ctaLine.classList.remove('visible');
+            if (ctaDot) ctaDot.classList.remove('visible');
+            exEl.classList.remove('detached', 'glow-border');
+            return;
+          }
+
+          activeExIds.add(sub.exId);
+
+          // Position dialog: pushed DOWN by 80px to clear toolbar, and pushed RIGHT
+          // so the annotation (centered on CTA's X) fits to the left without overlap
+          const centerSub = { ...sub, side: 'center' as AnnotationSide };
+          const target = getExtractionTarget(centerSub, contentRect, canvasRect);
+          const exScale = lerp(scale, 1.0, amount);
+          const dialogOffsetY = 80; // push dialog down to avoid toolbar overlap
+          const dialogOffsetX = 180; // push dialog right so annotation fits on left
+
+          exEl.style.opacity = String(amount);
+          exEl.style.left = (target.left + dialogOffsetX) + 'px';
+          exEl.style.top = (target.top + dialogOffsetY) + 'px';
+          exEl.style.width = target.width + 'px';
+          exEl.style.transform = `scale(${exScale})`;
+          exEl.style.transformOrigin = 'center center';
+          exEl.classList.toggle('detached', amount > 0.1);
+          exEl.classList.toggle('glow-border', amount > 0.9);
+
+          // Annotation on LEFT of dialog, moved down by same offset
+          const pAnnIn = smoothstep(ph.start + phaseDur * 0.35, ph.start + phaseDur * 0.45, progress);
+          const pAnnOut = smoothstep(ph.end - phaseDur * 0.2, ph.end, progress);
+          const annOpacity = pAnnIn * (1 - pAnnOut);
+          annEl.style.opacity = String(annOpacity);
+
+          // Connector 1: horizontal line from annotation to dialog
+          if (line) line.classList.toggle('visible', annOpacity > 0.5);
+          if (dot) dot.classList.toggle('visible', annOpacity > 0.5);
+
+          // Connector 2: vertical line from annotation to EXPORT HTML CTA in toolbar
+          const ctaLine = document.getElementById('line-html-dialog-cta') as SVGLineElement | null;
+          const ctaDot = document.getElementById('dot-html-dialog-cta') as SVGCircleElement | null;
+          if (ctaLine) ctaLine.classList.toggle('visible', annOpacity > 0.5);
+          if (ctaDot) ctaDot.classList.toggle('visible', annOpacity > 0.5);
+
+          if (annOpacity > 0.05) {
+            // Position annotation to the LEFT of the dialog, centered on CTA's X for vertical connector
+            const exRect = exEl.getBoundingClientRect();
+            const canvasRect2 = canvas.getBoundingClientRect();
+            const annW = 210;
+            const annH = annEl.offsetHeight || 90;
+            const gap = 24;
+
+            // Get CTA button from EXTRACTED toolbar (#ex-export-buttons), not the mock
+            // Export HTML is the 3rd button (idx=2) in the bulk toolbar
+            const exToolbar = document.getElementById('ex-export-buttons');
+            const exBtns = exToolbar ? exToolbar.querySelectorAll('button') : [];
+            const ctaBtnEl = exBtns.length > 2 ? exBtns[2] : null;
+            const ctaRect = ctaBtnEl ? ctaBtnEl.getBoundingClientRect() : null;
+            const ctaCenterX = ctaRect ? (ctaRect.left + ctaRect.width / 2 - canvasRect2.left) : (exRect.left - canvasRect2.left - annW / 2 - gap);
+
+            // Center annotation horizontally on CTA's center X
+            let leftPx = ctaCenterX - annW / 2;
+            let topPx = exRect.top + exRect.height / 2 - canvasRect2.top - annH / 2;
+            // Clamp: keep left of dialog with gap, and within canvas
+            const maxLeft = exRect.left - canvasRect2.left - gap;
+            leftPx = Math.min(leftPx, maxLeft);
+            leftPx = Math.max(10, leftPx);
+            if (topPx < 10) topPx = 10;
+            if (topPx > canvasRect2.height - annH - 10) topPx = canvasRect2.height - annH - 10;
+
+            annEl.style.left = leftPx + 'px';
+            annEl.style.top = topPx + 'px';
+            annEl.style.width = annW + 'px';
+            const card = annEl.querySelector('.ann-card');
+            if (card) (card as HTMLElement).style.width = annW + 'px';
+
+            // Connector 1: horizontal line from annotation right-center to dialog left-center
+            if (line && dot) {
+              const dot1X = leftPx + annW;
+              const dot1Y = topPx + annH / 2;
+              const target1X = exRect.left - canvasRect2.left;
+              const target1Y = exRect.top + exRect.height / 2 - canvasRect2.top;
+              drawConnector(line, dot, dot1X, dot1Y, target1X, target1Y);
+            }
+
+            // Connector 2: VERTICAL line from annotation TOP-center to EXPORT HTML CTA BOTTOM in EXTRACTED toolbar
+            // Line comes from below (annotation), so it targets the BOTTOM of the CTA button
+            // drawConnector places the dot at fromX/fromY, so we pass CTA bottom as "from" to put dot on CTA
+            if (ctaLine && ctaDot) {
+              const exToolbar = document.getElementById('ex-export-buttons');
+              const exBtns = exToolbar ? exToolbar.querySelectorAll('button') : [];
+              // Export HTML is the 3rd button (idx=2) in the bulk toolbar
+              const ctaBtnEl = exBtns.length > 2 ? exBtns[2] : null;
+              const ctaRect = ctaBtnEl ? ctaBtnEl.getBoundingClientRect() : null;
+              if (ctaRect) {
+                const ctaCenterX = ctaRect.left + ctaRect.width / 2 - canvasRect2.left;
+                const ctaBottomY = ctaRect.bottom - canvasRect2.top;
+                const annTopY = topPx; // TOP of annotation
+                drawConnector(ctaLine, ctaDot, ctaCenterX, ctaBottomY, ctaCenterX, annTopY);
+              }
+            }
+          }
           return;
         }
 

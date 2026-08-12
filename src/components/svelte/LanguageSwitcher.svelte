@@ -25,7 +25,7 @@
 
 <svelte:window onclick={close} />
 
-<div class="relative" onclick={(e) => e.stopPropagation()}>
+<div class="relative" role="presentation" onclick={(e) => e.stopPropagation()} onkeydown={(e) => e.stopPropagation()}>
   <button
     onclick={toggle}
     class="flex items-center gap-1.5 text-sm text-slate-300 hover:text-sky-400 transition-colors"

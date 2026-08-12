@@ -198,12 +198,6 @@ const demoHref = isEn ? '/en/demo/' : `/${langCode}/demo/`;
   <div class="claim-title" set:html={et.claim4Title} />
   <div class="claim-subtitle">{et.claim4Subtitle}</div>
 </div>
-<!-- Claim 5: Email-Ready (left) -->
-<div class="section-claim left" id="claim-5">
-  <div class="claim-eyebrow">{et.claim5Eyebrow}</div>
-  <div class="claim-title" set:html={et.claim5Title} />
-  <div class="claim-subtitle">{et.claim5Subtitle}</div>
-</div>
 
 <!-- Final conclusion claim -->
 <div class="section-claim-final" id="claim-final">
@@ -216,7 +210,7 @@ const demoHref = isEn ? '/en/demo/' : `/${langCode}/demo/`;
 <div class="phase-label" id="phase-label">Intro</div>
 
 <!-- Scroll track -->
-<div class="scroll-track" style="height: 2800vh" id="track">
+<div class="scroll-track" style="height: 2000vh" id="track">
   <div class="scroll-stage" id="stage">
     <div class="scroll-canvas" id="canvas">
 
@@ -552,84 +546,130 @@ const demoHref = isEn ? '/en/demo/' : `/${langCode}/demo/`;
         </div>
       </div>
 
-      <!-- #5 Preview dialog (near-fullscreen with macOS dock) -->
-      <div class="extracted no-pad" id="ex-preview-dialog" style="width:900px;height:500px">
-        <div class="export-preview-dialog" style="transform:none;width:100%;height:100%;border-radius:10px">
-          <div class="export-preview-header">
-            <div style="display:flex;align-items:center;justify-content:space-between">
-              <div class="export-preview-title">{et.mockHtmlPreviewTitle}</div>
-              <button class="pb-btn-soft-icon" title={et.mockClose}><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button>
+      <!-- #5 Preview dialog (near-fullscreen, matches FE ExportPreviewDialog.svelte: DialogBordered severity="primary", 95vw x 95vh) -->
+      <div class="extracted no-pad" id="ex-preview-dialog" style="width:1200px;height:620px">
+        <div class="mp-content" style="position:relative;width:100%;height:100%;display:flex;flex-direction:column">
+          <div class="mp-top-strip mp-top-strip-primary"></div>
+          <div class="mp-inner" style="flex:1;display:flex;flex-direction:column;min-height:0;padding:1rem">
+            <!-- Header -->
+            <div class="mp-header" style="padding-bottom:0.5rem;flex-shrink:0">
+              <div class="mp-title">{et.mockHtmlPreviewTitle}</div>
             </div>
-          </div>
-          <div class="export-dock-container">
-            <div class="export-dock">
-              <div class="export-dock-icon selected" title="HTML"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M10 12v4"/><path d="M12 14h-4"/></svg></div>
-              <div class="export-dock-icon" title="PDF"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7z"/><path d="M14 2v5h5"/></svg></div>
-              <div class="export-dock-icon" title="Email"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v16H4z"/><path d="m4 4 8 8 8-8"/></svg></div>
+            <!-- Dock navigation (floating above content, centered) -->
+            <div class="export-dock-container">
+              <div class="export-dock">
+                <div class="export-dock-icon selected" title="HTML">
+                  <svg width="20" height="20" viewBox="0 0 16 16" fill="currentColor"><path fill-rule="evenodd" d="M14 1.5V14H2V1.5h12zM5.5 7.25a.25.25 0 0 1 .25-.25h4a.25.25 0 0 1 .25.25v1a.25.25 0 0 1-.25.25h-4a.25.25 0 0 1-.25-.25v-1zm.25 2a.25.25 0 0 0-.25.25v1c0 .138.112.25.25.25h4a.25.25 0 0 0 .25-.25v-1a.25.25 0 0 0-.25-.25h-4z"/></svg>
+                </div>
+                <div class="export-dock-icon" title="PDF">
+                  <svg width="20" height="20" viewBox="0 0 16 16" fill="currentColor"><path fill-rule="evenodd" d="M14 14V4.5L9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2zM9.5 3A1.5 1.5 0 0 0 11 4.5h2V9H3V3h6.5zM3 10v3h10v-3H3z"/></svg>
+                </div>
+                <div class="export-dock-icon" title="Email">
+                  <svg width="20" height="20" viewBox="0 0 16 16" fill="currentColor"><path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V4zm2-1a1 1 0 0 0-1 1v.217l7 4.2 7-4.2V4a1 1 0 0 0-1-1H2zm13 2.383-4.708 2.825L15 11.105V5.383zm-.034 6.876-5.348-3.221L8 9.717l-1.618-.979L1.034 12.26A1 1 0 0 0 2 13h12a1 1 0 0 0 .966-.741zM1 11.105l4.708-2.897L1 5.383v5.722z"/></svg>
+                </div>
+              </div>
             </div>
-          </div>
-          <div class="export-preview-content">
-            <!-- HTML preview content (default) -->
-            <div id="preview-html-content" style="width:100%;height:100%;background:white;overflow:auto;padding:1rem">
-              <table class="export-preview-table">
-                <thead><tr><th>{et.tableHeaderName}</th><th>{et.tableHeaderEmail}</th><th>{et.tableHeaderStatus}</th><th>{et.tableHeaderCreated}</th></tr></thead>
-                <tbody>
-                  <tr><td>Acme Corp</td><td>info@acme.com</td><td>{et.statusActive}</td><td>15 Mar 2024</td></tr>
-                  <tr><td>Globex Inc</td><td>hello@globex.com</td><td>{et.statusActive}</td><td>02 Apr 2024</td></tr>
-                  <tr><td>Initech</td><td>contact@initech.com</td><td>{et.statusLead}</td><td>10 May 2024</td></tr>
-                </tbody>
-              </table>
-            </div>
-            <!-- Email preview content (hidden by default) -->
-            <div id="preview-email-content" style="display:none;width:100%;height:100%">
-              <div class="export-email-split">
-                <div class="export-email-mailbox">
-                  <div class="export-email-mailbox-title">{et.mockMailbox}</div>
-                  <div class="export-email-mailbox-list">
-                    <div class="export-email-mailbox-item active">
-                      <div class="export-email-skeleton medium"></div>
-                      <div class="export-email-skeleton short"></div>
+            <!-- Preview content area (3 modes, cross-faded by scroll script) -->
+            <div class="export-preview-content">
+              <!-- HTML mode -->
+              <div id="preview-html-content" class="preview-mode-content" style="opacity:1">
+                <div style="padding:1rem;background:white;height:100%;overflow:auto">
+                  <table class="export-preview-table">
+                    <thead><tr><th>{et.tableHeaderName}</th><th>{et.tableHeaderEmail}</th><th>{et.tableHeaderStatus}</th><th>{et.tableHeaderCreated}</th></tr></thead>
+                    <tbody>
+                      <tr><td>Acme Corp</td><td>info@acme.com</td><td>{et.statusActive}</td><td>15 Mar 2024</td></tr>
+                      <tr><td>Globex Inc</td><td>hello@globex.com</td><td>{et.statusActive}</td><td>02 Apr 2024</td></tr>
+                      <tr><td>Initech</td><td>contact@initech.com</td><td>{et.statusLead}</td><td>10 May 2024</td></tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+              <!-- PDF mode — looks like a real PDF viewer (dark gray bg, centered A4 page) -->
+              <div id="preview-pdf-content" class="preview-mode-content" style="opacity:0">
+                <div class="pdf-viewer-bg">
+                  <div class="pdf-a4-page">
+                    <div class="pdf-a4-header">
+                      <div class="pdf-a4-logo">Primebrick</div>
+                      <div class="pdf-a4-meta">Customer Export — 3 records</div>
                     </div>
-                    <div class="export-email-mailbox-item faded">
-                      <div class="export-email-skeleton medium"></div>
-                      <div class="export-email-skeleton short"></div>
-                    </div>
-                    <div class="export-email-mailbox-item faded">
-                      <div class="export-email-skeleton medium"></div>
-                      <div class="export-email-skeleton short"></div>
+                    <div class="pdf-a4-date">Generated {new Date().toISOString().split('T')[0]}</div>
+                    <table class="pdf-a4-table">
+                      <thead>
+                        <tr><th>Name</th><th>Email</th><th>Status</th><th>Created</th></tr>
+                      </thead>
+                      <tbody>
+                        <tr><td>Acme Corp</td><td>info@acme.com</td><td>Active</td><td>15 Mar 2024</td></tr>
+                        <tr><td>Globex Inc</td><td>hello@globex.com</td><td>Active</td><td>02 Apr 2024</td></tr>
+                        <tr><td>Initech</td><td>contact@initech.com</td><td>Lead</td><td>10 May 2024</td></tr>
+                      </tbody>
+                    </table>
+                    <div class="pdf-a4-footer">
+                      <span>Page 1 of 1</span>
+                      <span>Primebrick — primebrick.dev</span>
                     </div>
                   </div>
                 </div>
-                <div class="export-email-content">
-                  <div class="export-email-header">
-                    <div class="export-email-header-row">
-                      <span class="export-email-header-label">{et.mockTo}</span>
-                      <span class="export-email-header-recipient">{et.mockRecipient}</span>
-                    </div>
-                    <div class="export-email-header-row">
-                      <span class="export-email-header-label">{et.mockSubject}</span>
-                      <span>Customer Export — 3 records</span>
+              </div>
+              <!-- Email mode (split pane: mailbox + email preview) -->
+              <div id="preview-email-content" class="preview-mode-content" style="opacity:0">
+                <div class="export-email-split">
+                  <div class="export-email-mailbox">
+                    <div class="export-email-mailbox-title">{et.mockMailbox}</div>
+                    <div class="export-email-mailbox-list">
+                      <div class="export-email-mailbox-item active">
+                        <div class="export-email-skeleton medium"></div>
+                        <div class="export-email-skeleton short"></div>
+                      </div>
+                      <div class="export-email-mailbox-item faded">
+                        <div class="export-email-skeleton medium"></div>
+                        <div class="export-email-skeleton short"></div>
+                      </div>
+                      <div class="export-email-mailbox-item faded">
+                        <div class="export-email-skeleton medium"></div>
+                        <div class="export-email-skeleton short"></div>
+                      </div>
                     </div>
                   </div>
-                  <div class="export-email-iframe-wrap">
-                    <div style="padding:1rem;background:white;height:100%;overflow:auto">
-                      <table class="export-preview-table">
-                        <thead><tr><th>{et.tableHeaderName}</th><th>{et.tableHeaderEmail}</th><th>{et.tableHeaderStatus}</th></tr></thead>
-                        <tbody>
-                          <tr><td>Acme Corp</td><td>info@acme.com</td><td>{et.statusActive}</td></tr>
-                          <tr><td>Globex Inc</td><td>hello@globex.com</td><td>{et.statusActive}</td></tr>
-                          <tr><td>Initech</td><td>contact@initech.com</td><td>{et.statusLead}</td></tr>
-                        </tbody>
-                      </table>
+                  <div class="export-email-content">
+                    <div class="export-email-header">
+                      <div class="export-email-header-row">
+                        <span class="export-email-header-label">{et.mockTo}</span>
+                        <span class="export-email-header-recipient">{et.mockRecipient}</span>
+                      </div>
+                      <div class="export-email-header-row">
+                        <span class="export-email-header-label">{et.mockSubject}</span>
+                        <span>Customer Export — 3 records</span>
+                      </div>
+                    </div>
+                    <div class="export-email-iframe-wrap">
+                      <div style="padding:1rem;background:white;height:100%;overflow:auto">
+                        <table class="export-preview-table">
+                          <thead><tr><th>{et.tableHeaderName}</th><th>{et.tableHeaderEmail}</th><th>{et.tableHeaderStatus}</th></tr></thead>
+                          <tbody>
+                            <tr><td>Acme Corp</td><td>info@acme.com</td><td>{et.statusActive}</td></tr>
+                            <tr><td>Globex Inc</td><td>hello@globex.com</td><td>{et.statusActive}</td></tr>
+                            <tr><td>Initech</td><td>contact@initech.com</td><td>{et.statusLead}</td></tr>
+                          </tbody>
+                        </table>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
-          <div class="export-preview-footer">
-            <button class="pb-btn-soft">{et.mockCopyHtml}</button>
-            <button class="pb-btn-primary-gradient">{et.mockDownloadPdf}</button>
+            <!-- Footer (mode-specific buttons, cross-faded by scroll script) -->
+            <div class="export-preview-footer">
+              <button class="mp-btn-secondary-outline">{et.mockClose}</button>
+              <div id="preview-footer-html" class="preview-footer-btn" style="opacity:1">
+                <button class="mp-btn-primary">{et.mockCopyHtml}</button>
+              </div>
+              <div id="preview-footer-pdf" class="preview-footer-btn" style="opacity:0">
+                <button class="mp-btn-primary">{et.mockDownloadPdf}</button>
+              </div>
+              <div id="preview-footer-email" class="preview-footer-btn" style="opacity:0">
+                <button class="mp-btn-primary">{et.mockCopyEmailHtml}</button>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -641,10 +681,9 @@ const demoHref = isEn ? '/en/demo/' : `/${langCode}/demo/`;
       <div class="ann-label" id="ann-export-choicebox-rbac"><div class="ann-card"><div class="ann-title">{et.annExportChoiceboxRbacTitle}</div><div class="ann-desc">{et.annExportChoiceboxRbacDesc}</div></div></div>
       <div class="ann-label" id="ann-export-cta-real"><div class="ann-card"><div class="ann-title">{et.annExportCtaRealTitle}</div><div class="ann-desc">{et.annExportCtaRealDesc}</div></div></div>
       <div class="ann-label" id="ann-html-dialog"><div class="ann-card"><div class="ann-title">{et.annHtmlDialogTitle}</div><div class="ann-desc">{et.annHtmlDialogDesc}</div></div></div>
-      <div class="ann-label" id="ann-preview-dock"><div class="ann-card"><div class="ann-title">{et.annPreviewDockTitle}</div><div class="ann-desc">{et.annPreviewDockDesc}</div></div></div>
       <div class="ann-label" id="ann-preview-html"><div class="ann-card"><div class="ann-title">{et.annPreviewHtmlTitle}</div><div class="ann-desc">{et.annPreviewHtmlDesc}</div></div></div>
-      <div class="ann-label" id="ann-email-mailbox"><div class="ann-card"><div class="ann-title">{et.annEmailMailboxTitle}</div><div class="ann-desc">{et.annEmailMailboxDesc}</div></div></div>
-      <div class="ann-label" id="ann-email-content"><div class="ann-card"><div class="ann-title">{et.annEmailContentTitle}</div><div class="ann-desc">{et.annEmailContentDesc}</div></div></div>
+      <div class="ann-label" id="ann-preview-pdf"><div class="ann-card"><div class="ann-title">{et.annPreviewPdfTitle}</div><div class="ann-desc">{et.annPreviewPdfDesc}</div></div></div>
+      <div class="ann-label" id="ann-preview-email"><div class="ann-card"><div class="ann-title">{et.annPreviewEmailTitle}</div><div class="ann-desc">{et.annPreviewEmailDesc}</div></div></div>
 
       <!-- ===== SVG connectors ===== -->
       <svg class="connector-svg" id="connectors">
@@ -654,10 +693,10 @@ const demoHref = isEn ? '/en/demo/' : `/${langCode}/demo/`;
         <line class="conn-line" id="line-export-dialog" /><circle class="conn-dot" id="dot-export-dialog" r="4" />
         <line class="conn-line" id="line-export-choicebox" /><circle class="conn-dot" id="dot-export-choicebox" r="4" />
         <line class="conn-line" id="line-html-dialog" /><circle class="conn-dot" id="dot-html-dialog" r="4" />
-        <line class="conn-line" id="line-preview-dock" /><circle class="conn-dot" id="dot-preview-dock" r="4" />
+        <line class="conn-line" id="line-html-dialog-cta" /><circle class="conn-dot" id="dot-html-dialog-cta" r="4" />
         <line class="conn-line" id="line-preview-html" /><circle class="conn-dot" id="dot-preview-html" r="4" />
-        <line class="conn-line" id="line-email-mailbox" /><circle class="conn-dot" id="dot-email-mailbox" r="4" />
-        <line class="conn-line" id="line-email-content" /><circle class="conn-dot" id="dot-email-content" r="4" />
+        <line class="conn-line" id="line-preview-pdf" /><circle class="conn-dot" id="dot-preview-pdf" r="4" />
+        <line class="conn-line" id="line-preview-email" /><circle class="conn-dot" id="dot-preview-email" r="4" />
       </svg>
 
     </div>
