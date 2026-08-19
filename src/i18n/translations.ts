@@ -16,7 +16,7 @@ export type LangCode = (typeof LANGUAGES)[number]['code'];
 
 export const translations = {
   en: {
-    nav: { home: 'Home', features: 'Features', docs: 'Docs', apiCatalog: 'API Catalog', github: 'GitHub®', license: 'MIT License', contact: 'Contact', thankyou: 'Thank You', virtualTour: 'Virtual Tour' },
+    nav: { home: 'Home', features: 'Features', docs: 'Docs', apiCatalog: 'API Catalog', github: 'GitHub®', license: 'MIT License', contact: 'Contact', thankyou: 'Thank You', virtualTour: 'Virtual Tour', useCases: 'Use Cases' },
     hero: {
       badge: 'MIT Licensed • Open Source • Multi-Cloud',
       headlinePrefix: 'The opinionated backoffice framework for',
@@ -340,7 +340,7 @@ export const translations = {
   },
 
   it: {
-    nav: { home: 'Home', features: 'Funzionalità', docs: 'Docs', apiCatalog: 'API Catalog', github: 'GitHub®', license: 'Licenza MIT', contact: 'Contatti', thankyou: 'Grazie', virtualTour: 'Tour Virtuale' },
+    nav: { home: 'Home', features: 'Funzionalità', docs: 'Docs', apiCatalog: 'API Catalog', github: 'GitHub®', license: 'Licenza MIT', contact: 'Contatti', thankyou: 'Grazie', virtualTour: 'Tour Virtuale', useCases: 'Casi d\'Uso' },
     hero: {
       badge: 'Licenza MIT • Open Source • Multi-Cloud',
       headlinePrefix: 'Il framework backoffice opinionato per',
@@ -664,7 +664,7 @@ export const translations = {
   },
 
   de: {
-    nav: { home: 'Startseite', features: 'Funktionen', docs: 'Doku', apiCatalog: 'API Catalog', github: 'GitHub®', license: 'MIT-Lizenz', contact: 'Kontakt', thankyou: 'Danke', virtualTour: 'Virtuelle Tour' },
+    nav: { home: 'Startseite', features: 'Funktionen', docs: 'Doku', apiCatalog: 'API Catalog', github: 'GitHub®', license: 'MIT-Lizenz', contact: 'Kontakt', thankyou: 'Danke', virtualTour: 'Virtuelle Tour', useCases: 'Anwendungsfälle' },
     hero: {
       badge: 'MIT-Lizenziert • Open Source • Multi-Cloud',
       headlinePrefix: 'Das Opinionated Backoffice-Framework für',
@@ -988,7 +988,7 @@ export const translations = {
   },
 
   es: {
-    nav: { home: 'Inicio', features: 'Características', docs: 'Docs', apiCatalog: 'API Catalog', github: 'GitHub®', license: 'Licencia MIT', contact: 'Contacto', thankyou: 'Gracias', virtualTour: 'Tour Virtual' },
+    nav: { home: 'Inicio', features: 'Características', docs: 'Docs', apiCatalog: 'API Catalog', github: 'GitHub®', license: 'Licencia MIT', contact: 'Contacto', thankyou: 'Gracias', virtualTour: 'Tour Virtual', useCases: 'Casos de Uso' },
     hero: {
       badge: 'Licencia MIT • Open Source • Multi-Cloud',
       headlinePrefix: 'El framework backoffice opinionated para',
@@ -1312,7 +1312,7 @@ export const translations = {
   },
 
   pt: {
-    nav: { home: 'Início', features: 'Funcionalidades', docs: 'Docs', apiCatalog: 'API Catalog', github: 'GitHub®', license: 'Licença MIT', contact: 'Contato', thankyou: 'Obrigado', virtualTour: 'Tour Virtual' },
+    nav: { home: 'Início', features: 'Funcionalidades', docs: 'Docs', apiCatalog: 'API Catalog', github: 'GitHub®', license: 'Licença MIT', contact: 'Contato', thankyou: 'Obrigado', virtualTour: 'Tour Virtual', useCases: 'Casos de Uso' },
     hero: {
       badge: 'Licença MIT • Open Source • Multi-Cloud',
       headlinePrefix: 'O framework backoffice opinionated para',
@@ -1636,7 +1636,7 @@ export const translations = {
   },
 
   fr: {
-    nav: { home: 'Accueil', features: 'Fonctionnalités', docs: 'Docs', apiCatalog: 'API Catalog', github: 'GitHub®', license: 'Licence MIT', contact: 'Contact', thankyou: 'Merci', virtualTour: 'Tour Virtuel' },
+    nav: { home: 'Accueil', features: 'Fonctionnalités', docs: 'Docs', apiCatalog: 'API Catalog', github: 'GitHub®', license: 'Licence MIT', contact: 'Contact', thankyou: 'Merci', virtualTour: 'Tour Virtuel', useCases: 'Cas d\'Usage' },
     hero: {
       badge: 'Licence MIT • Open Source • Multi-Cloud',
       headlinePrefix: 'Le framework backoffice opinionated pour',

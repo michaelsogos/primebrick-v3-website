@@ -1,0 +1,287 @@
+---
+import { translations, LANGUAGES, type LangCode } from '../../../i18n/translations';
+import LanguageSwitcher from '../../../components/svelte/LanguageSwitcher.svelte';
+import GitHubDropdown from '../../../components/svelte/GitHubDropdown.svelte';
+import VirtualTourMegaMenu from '../../../components/svelte/VirtualTourMegaMenu.svelte';
+import UseCasesMegaMenu from '../../../components/svelte/UseCasesMegaMenu.svelte';
+import TopBanner from '../../../components/astro/TopBanner.astro';
+import '../../../styles/global.css';
+
+export const prerender = true;
+
+export function getStaticPaths() {
+  return LANGUAGES.map((lang) => ({
+    params: { lang: lang.code === 'en' ? 'en' : lang.code },
+  }));
+}
+
+const { lang } = Astro.params;
+const langCode = (lang ?? 'en') as LangCode;
+const t = translations[langCode] ?? translations.en;
+const isEn = langCode === 'en';
+const docsPath = 'https://docs.primebrick.dev';
+const homeHref = isEn ? '/en/' : `/${langCode}/`;
+const contactHref = isEn ? '/en/contact' : `/${langCode}/contact`;
+const useCasesHref = isEn ? '/en/use-cases/' : `/${langCode}/use-cases/`;
+const nextPersonaHref = `${useCasesHref}soc-team`;
+---
+
+<!doctype html>
+<html lang={langCode}>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Primebrick for Visionary Entrepreneurs: turn the idea into infrastructure. AI-native backoffice, multi-tenant SaaS, MIT license, own the stack." />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+    <link rel="icon" type="image/png" sizes="512x512" href="/favicon-512.png" />
+    <link rel="icon" sizes="any" href="/favicon.ico" />
+    <link rel="apple-touch-icon" href="/favicon-512.png" />
+    <title>PrimeBrick — Use Cases: Visionary Entrepreneur</title>
+    {LANGUAGES.map((l) => (
+      <link rel="alternate" hreflang={l.hreflang} href={`https://primebrick.dev${l.code === 'en' ? '/en/use-cases/visionary-entrepreneur' : `/${l.code}/use-cases/visionary-entrepreneur`}`} />
+    ))}
+    <link rel="alternate" hreflang="x-default" href="https://primebrick.dev/en/use-cases/visionary-entrepreneur" />
+  </head>
+  <body class="min-h-screen bg-slate-950 text-slate-100 antialiased">
+    <div class="pointer-events-none fixed inset-0 overflow-hidden">
+      <div class="absolute -top-40 left-1/2 h-[500px] w-[800px] -translate-x-1/2 rounded-full bg-amber-500/10 blur-[120px]"></div>
+      <div class="absolute top-1/3 -right-40 h-[400px] w-[400px] rounded-full bg-amber-500/10 blur-[100px]"></div>
+      <div class="absolute bottom-0 -left-40 h-[400px] w-[400px] rounded-full bg-orange-500/10 blur-[100px]"></div>
+    </div>
+
+    <TopBanner text={t.banner.text} href={contactHref} />
+
+    <nav id="site-nav" class="sticky top-9 z-50 border-b border-slate-800/50 bg-slate-950/40 backdrop-blur-sm transition-all duration-300">
+      <div id="nav-inner" class="mx-auto flex max-w-7xl items-center justify-between px-6 py-4 transition-all duration-300">
+        <a href={isEn ? '/' : `/${langCode}/`} class="flex items-center gap-2" aria-label="PrimeBrick home">
+          <img src="/logo-full-dark.svg" alt="PrimeBrick" width="170" height="32" class="h-7 w-auto" />
+        </a>
+        <div class="flex items-center gap-6 text-sm">
+          <a href={homeHref} class="text-slate-300 hover:text-sky-400 transition-colors">{t.nav.home}</a>
+          <VirtualTourMegaMenu client:load currentLang={langCode} />
+          <UseCasesMegaMenu client:load currentLang={langCode} activePersona="visionary-entrepreneur" />
+          <a href={docsPath} class="text-slate-300 hover:text-sky-400 transition-colors" target="_blank" rel="noopener">{t.nav.docs}</a>
+          <a href={contactHref} class="text-slate-300 hover:text-sky-400 transition-colors">{t.nav.contact}</a>
+          <GitHubDropdown client:load />
+          <LanguageSwitcher client:load currentLang={langCode} />
+        </div>
+      </div>
+    </nav>
+    <script>
+      (() => {
+        const nav = document.getElementById('site-nav');
+        const inner = document.getElementById('nav-inner');
+        if (!nav || !inner) return;
+        const onScroll = () => {
+          const scrolled = window.scrollY > 20;
+          if (scrolled) {
+            inner.classList.replace('py-4', 'py-2');
+            nav.classList.add('bg-slate-950/80', 'backdrop-blur-md', 'shadow-lg', 'border-slate-800/80');
+            nav.classList.remove('bg-slate-950/40', 'border-slate-800/50');
+          } else {
+            inner.classList.replace('py-2', 'py-4');
+            nav.classList.remove('bg-slate-950/80', 'backdrop-blur-md', 'shadow-lg', 'border-slate-800/80');
+            nav.classList.add('bg-slate-950/40', 'border-slate-800/50');
+          }
+        };
+        window.addEventListener('scroll', onScroll, { passive: true });
+        onScroll();
+      })();
+    </script>
+
+    <main class="relative z-10">
+      <section class="px-6 pt-20 pb-12">
+        <div class="mx-auto max-w-5xl">
+          <div class="mb-4 inline-flex items-center gap-2 rounded-full border border-amber-500/30 bg-amber-500/10 px-4 py-1.5 text-xs font-medium text-amber-300">
+            <svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+            Persona 05 / 06
+          </div>
+          <h1 class="text-4xl font-bold tracking-tight text-white sm:text-5xl lg:text-6xl">Visionary Entrepreneur</h1>
+          <p class="mt-3 text-xl font-medium text-amber-400">Turn the idea into infrastructure.</p>
+          <p class="mt-4 max-w-2xl text-lg text-slate-400">You need to validate fast and scale faster. Primebrick turns your backoffice from a cost center into a competitive edge: private AI, multi-tenant SaaS readiness, and an architecture that grows with your ambition — without license fees eating your runway.</p>
+          <div class="mt-6 flex flex-wrap gap-3">
+            <a href={contactHref} class="rounded-xl bg-gradient-to-r from-amber-500 to-orange-600 px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-amber-500/20 transition-all hover:scale-105">Get in touch</a>
+            <a href={docsPath} class="rounded-xl border border-slate-700 bg-slate-900/50 px-5 py-2.5 text-sm font-semibold text-slate-200 transition-all hover:border-amber-500 hover:text-amber-400" target="_blank" rel="noopener">Read the docs</a>
+          </div>
+        </div>
+      </section>
+
+      <section class="px-6 pb-16">
+        <div class="mx-auto max-w-5xl">
+          <div class="overflow-hidden rounded-2xl border border-slate-800/50 bg-slate-950/80 shadow-2xl backdrop-blur-sm p-6">
+            <div class="text-xs font-mono text-amber-400 mb-4">// From idea to scale — Primebrick trajectory</div>
+            <div class="grid grid-cols-2 sm:grid-cols-5 gap-4">
+              <div class="rounded-xl border border-amber-500/30 bg-amber-500/5 p-4 text-center"><div class="text-xs font-mono text-amber-400">Day 1</div><div class="mt-1 text-sm font-semibold text-white">Idea</div></div>
+              <div class="rounded-xl border border-slate-800/50 bg-slate-900/30 p-4 text-center"><div class="text-xs font-mono text-amber-400">Day 3</div><div class="mt-1 text-sm font-semibold text-white">MVP</div></div>
+              <div class="rounded-xl border border-slate-800/50 bg-slate-900/30 p-4 text-center"><div class="text-xs font-mono text-amber-400">Week 2</div><div class="mt-1 text-sm font-semibold text-white">AI features</div></div>
+              <div class="rounded-xl border border-slate-800/50 bg-slate-900/30 p-4 text-center"><div class="text-xs font-mono text-amber-400">Month 2</div><div class="mt-1 text-sm font-semibold text-white">Multi-tenant SaaS</div></div>
+              <div class="rounded-xl border border-emerald-500/30 bg-emerald-500/5 p-4 text-center"><div class="text-xs font-mono text-emerald-400">Scale</div><div class="mt-1 text-sm font-semibold text-white">Enterprise</div></div>
+            </div>
+            <div class="mt-4 text-center text-xs text-emerald-400">License cost at every step: $0 (MIT)</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="px-6 py-16 border-t border-slate-800/30">
+        <div class="mx-auto max-w-5xl">
+          <h2 class="text-2xl font-bold text-white sm:text-3xl">What changes for you</h2>
+          <div class="mt-10 grid gap-6 sm:grid-cols-2">
+            <div class="rounded-2xl border border-slate-800/50 bg-slate-900/30 p-6 backdrop-blur-sm">
+              <div class="mb-3 flex h-10 w-10 items-center justify-center rounded-xl bg-amber-500/20 text-amber-400"><svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 1v6m0 6v6m11-7h-6m-6 0H1"/></svg></div>
+              <h3 class="text-lg font-semibold text-white">Launch an AI-native backoffice in days</h3>
+              <p class="mt-2 text-sm text-slate-400">Private LLM container, vector search and agentic development mean your product can be AI-first from day one — without sending customer data to third-party APIs. Your AI features are a competitive moat, not a privacy liability.</p>
+            </div>
+            <div class="rounded-2xl border border-slate-800/50 bg-slate-900/30 p-6 backdrop-blur-sm">
+              <div class="mb-3 flex h-10 w-10 items-center justify-center rounded-xl bg-amber-500/20 text-amber-400"><svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5"/></svg></div>
+              <h3 class="text-lg font-semibold text-white">Own the stack end to end</h3>
+              <p class="mt-2 text-sm text-slate-400">Open source, self-hostable and multi-cloud. Your IP, your data, and your infrastructure decisions stay under your control. No vendor can change pricing, deprecate a feature, or cut off access. Your runway is yours.</p>
+            </div>
+            <div class="rounded-2xl border border-slate-800/50 bg-slate-900/30 p-6 backdrop-blur-sm">
+              <div class="mb-3 flex h-10 w-10 items-center justify-center rounded-xl bg-amber-500/20 text-amber-400"><svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg></div>
+              <h3 class="text-lg font-semibold text-white">Scale to multi-tenant SaaS</h3>
+              <p class="mt-2 text-sm text-slate-400">Built-in logical and physical tenant isolation, plus a ConfigTable that renders settings automatically for every organization. Go from single-tenant MVP to multi-tenant SaaS without rewriting your data layer.</p>
+            </div>
+            <div class="rounded-2xl border border-slate-800/50 bg-slate-900/30 p-6 backdrop-blur-sm">
+              <div class="mb-3 flex h-10 w-10 items-center justify-center rounded-xl bg-amber-500/20 text-amber-400"><svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8"/></svg></div>
+              <h3 class="text-lg font-semibold text-white">Fund product, not license fees</h3>
+              <p class="mt-2 text-sm text-slate-400">MIT license: use, modify, redistribute and embed in commercial products with no royalties and no surprise pricing. Every dollar you raise goes into product, not into per-seat SaaS subscriptions that scale with your headcount.</p>
+            </div>
+            <div class="rounded-2xl border border-slate-800/50 bg-slate-900/30 p-6 backdrop-blur-sm">
+              <div class="mb-3 flex h-10 w-10 items-center justify-center rounded-xl bg-amber-500/20 text-amber-400"><svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></div>
+              <h3 class="text-lg font-semibold text-white">Validate with real users, not with infrastructure</h3>
+              <p class="mt-2 text-sm text-slate-400">The backoffice ships on day one. Auth, RBAC, CRUD, admin UI — all running before lunch. You spend your first week talking to users and iterating on the product, not configuring Kubernetes and writing Dockerfiles.</p>
+            </div>
+            <div class="rounded-2xl border border-slate-800/50 bg-slate-900/30 p-6 backdrop-blur-sm">
+              <div class="mb-3 flex h-10 w-10 items-center justify-center rounded-xl bg-amber-500/20 text-amber-400"><svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg></div>
+              <h3 class="text-lg font-semibold text-white">Your AI is a moat, not a liability</h3>
+              <p class="mt-2 text-sm text-slate-400">A private LLM container and pgvector mean your AI features run on your infrastructure, trained on your data, with no data leaving your servers. In a world where every competitor is calling the same OpenAI API, your AI that actually knows your customers' data is a differentiator.</p>
+            </div>
+            <div class="rounded-2xl border border-slate-800/50 bg-slate-900/30 p-6 backdrop-blur-sm">
+              <div class="mb-3 flex h-10 w-10 items-center justify-center rounded-xl bg-amber-500/20 text-amber-400"><svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4"/></svg></div>
+              <h3 class="text-lg font-semibold text-white">Pitch with a working product, not a slide deck</h3>
+              <p class="mt-2 text-sm text-slate-400">Investors see a running product, not a Figma mockup. You can demo real auth, real data, real AI features, real compliance reports — in week one. The gap between "I have an idea" and "I can show you a working product" collapses from months to days.</p>
+            </div>
+            <div class="rounded-2xl border border-slate-800/50 bg-slate-900/30 p-6 backdrop-blur-sm">
+              <div class="mb-3 flex h-10 w-10 items-center justify-center rounded-xl bg-amber-500/20 text-amber-400"><svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg></div>
+              <h3 class="text-lg font-semibold text-white">Pivot without re-platforming</h3>
+              <p class="mt-2 text-sm text-slate-400">The same codebase runs from MVP to enterprise. If you pivot your product, you keep your infrastructure. If you change your target market, you keep your compliance. If you go from self-hosted to SaaS, you flip a config. The framework absorbs the pivots.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="px-6 py-16 border-t border-slate-800/30">
+        <div class="mx-auto max-w-5xl">
+          <h2 class="text-2xl font-bold text-white sm:text-3xl">The launch playbook</h2>
+          <div class="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            <div class="rounded-2xl border border-slate-800/50 bg-slate-900/30 p-5 backdrop-blur-sm"><div class="text-xs font-mono text-amber-400">Phase 1 · Days 1–3</div><h3 class="mt-2 text-sm font-semibold text-white">Scaffold and ship MVP</h3><ul class="mt-2 space-y-1 text-xs text-slate-400"><li>• Scaffold the app</li><li>• Add your first entity + CRUD</li><li>• Ship to beta users on day 3</li></ul></div>
+            <div class="rounded-2xl border border-slate-800/50 bg-slate-900/30 p-5 backdrop-blur-sm"><div class="text-xs font-mono text-amber-400">Phase 2 · Weeks 1–4</div><h3 class="mt-2 text-sm font-semibold text-white">Add AI and polish</h3><ul class="mt-2 space-y-1 text-xs text-slate-400"><li>• Spin up the private LLM container</li><li>• Add pgvector-powered search</li><li>• Open to public signups</li></ul></div>
+            <div class="rounded-2xl border border-slate-800/50 bg-slate-900/30 p-5 backdrop-blur-sm"><div class="text-xs font-mono text-amber-400">Phase 3 · Months 2–4</div><h3 class="mt-2 text-sm font-semibold text-white">Go multi-tenant</h3><ul class="mt-2 space-y-1 text-xs text-slate-400"><li>• Enable logical tenant isolation</li><li>• Add ConfigTable per-tenant settings</li><li>• Onboard your first enterprise customer</li></ul></div>
+            <div class="rounded-2xl border border-slate-800/50 bg-slate-900/30 p-5 backdrop-blur-sm"><div class="text-xs font-mono text-amber-400">Phase 4 · Months 6+</div><h3 class="mt-2 text-sm font-semibold text-white">Multi-region and beyond</h3><ul class="mt-2 space-y-1 text-xs text-slate-400"><li>• Terraform multi-region deploy</li><li>• Data residency per tenant</li><li>• Same codebase, new config</li></ul></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="px-6 py-16 border-t border-slate-800/30">
+        <div class="mx-auto max-w-5xl">
+          <h2 class="text-2xl font-bold text-white sm:text-3xl">The funding math</h2>
+          <div class="mt-8 grid gap-4 sm:grid-cols-2">
+            <div class="rounded-2xl border border-rose-500/30 bg-rose-500/5 p-6">
+              <div class="text-sm font-semibold text-rose-400">With a proprietary SaaS stack</div>
+              <div class="mt-4 space-y-2 text-sm text-slate-400">
+                <div class="flex justify-between"><span>Admin panel SaaS (10 seats)</span><span class="text-rose-400">$100–$1,000/mo</span></div>
+                <div class="flex justify-between"><span>Auth provider</span><span class="text-rose-400">$500/mo</span></div>
+                <div class="flex justify-between"><span>OpenAI API (AI features)</span><span class="text-rose-400">$2,000/mo</span></div>
+                <div class="flex justify-between"><span>Platform engineer (1 FTE)</span><span class="text-rose-400">$100k–$200k/yr (US) · €50k–€100k (EU)</span></div>
+                <div class="flex justify-between"><span>Infrastructure forecast</span><span class="text-rose-400">$50–$300/mo <span class="text-slate-500">(on top)</span></span></div>
+                <div class="flex justify-between"><span>Time to market</span><span class="text-rose-400">8–12 weeks</span></div>
+                <div class="border-t border-slate-800/50 pt-2 flex justify-between font-semibold"><span>Year-1 cost</span><span class="text-rose-400">~$131k–$242k</span></div>
+              </div>
+            </div>
+            <div class="rounded-2xl border border-emerald-500/30 bg-emerald-500/5 p-6">
+              <div class="text-sm font-semibold text-emerald-400">With Primebrick</div>
+              <div class="mt-4 space-y-2 text-sm text-slate-400">
+                <div class="flex justify-between"><span>License fee</span><span class="text-emerald-400">$0</span></div>
+                <div class="flex justify-between"><span>Auth (OIDC, passkeys, MFA)</span><span class="text-emerald-400">$0 — built in</span></div>
+                <div class="flex justify-between"><span>AI (private LLM container)</span><span class="text-emerald-400">$0 — self-hosted</span></div>
+                <div class="flex justify-between"><span>Platform engineer</span><span class="text-emerald-400">$0 — not needed</span></div>
+                <div class="flex justify-between"><span>Infrastructure forecast</span><span class="text-emerald-400">$50–$300/mo <span class="text-slate-500">(only cost)</span></span></div>
+                <div class="flex justify-between"><span>Time to market</span><span class="text-emerald-400">2–5 days</span></div>
+                <div class="border-t border-slate-800/50 pt-2 flex justify-between font-semibold"><span>Year-1 cost</span><span class="text-emerald-400">$600–$3,600/yr</span></div>
+              </div>
+            </div>
+          </div>
+          <p class="mt-4 text-center text-sm text-slate-400">With Primebrick your only cost is infrastructure — the servers you choose to run on. No software licenses, no per-seat fees, no platform engineer. That's ~$131k–$242k of runway redirected from SaaS bills to hiring your first product engineer.</p>
+        </div>
+      </section>
+
+      <section class="px-6 py-16 border-t border-slate-800/30">
+        <div class="mx-auto max-w-5xl">
+          <h2 class="text-2xl font-bold text-white sm:text-3xl">Capabilities you'll use</h2>
+          <div class="mt-6 flex flex-wrap gap-3">
+            <span class="rounded-full border border-amber-500/30 bg-amber-500/10 px-4 py-2 text-sm text-amber-300">Private LLM container</span>
+            <span class="rounded-full border border-amber-500/30 bg-amber-500/10 px-4 py-2 text-sm text-amber-300">pgvector</span>
+            <span class="rounded-full border border-amber-500/30 bg-amber-500/10 px-4 py-2 text-sm text-amber-300">Agentic GUI</span>
+            <span class="rounded-full border border-amber-500/30 bg-amber-500/10 px-4 py-2 text-sm text-amber-300">Multi-tenant isolation</span>
+            <span class="rounded-full border border-amber-500/30 bg-amber-500/10 px-4 py-2 text-sm text-amber-300">ConfigTable</span>
+            <span class="rounded-full border border-amber-500/30 bg-amber-500/10 px-4 py-2 text-sm text-amber-300">MIT License</span>
+            <span class="rounded-full border border-amber-500/30 bg-amber-500/10 px-4 py-2 text-sm text-amber-300">Self-hostable</span>
+            <span class="rounded-full border border-amber-500/30 bg-amber-500/10 px-4 py-2 text-sm text-amber-300">Multi-cloud</span>
+            <span class="rounded-full border border-amber-500/30 bg-amber-500/10 px-4 py-2 text-sm text-amber-300">Passkeys / MFA</span>
+            <span class="rounded-full border border-amber-500/30 bg-amber-500/10 px-4 py-2 text-sm text-amber-300">Docker / K8s</span>
+            <span class="rounded-full border border-amber-500/30 bg-amber-500/10 px-4 py-2 text-sm text-amber-300">Terraform</span>
+            <span class="rounded-full border border-amber-500/30 bg-amber-500/10 px-4 py-2 text-sm text-amber-300">OpenAPI</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="px-6 py-16 border-t border-slate-800/30">
+        <div class="mx-auto max-w-3xl text-center">
+          <svg class="mx-auto h-10 w-10 text-amber-500/40" viewBox="0 0 24 24" fill="currentColor"><path d="M9.983 3v7.391c0 5.704-3.731 9.57-8.983 10.609l-.995-2.151c2.432-.917 3.995-3.638 3.995-5.849h-4v-10h9.983zm14.017 0v7.391c0 5.704-3.748 9.571-9 10.609l-.996-2.151c2.433-.917 3.996-3.638 3.996-5.849h-3.983v-10h9.983z"/></svg>
+          <blockquote class="mt-4 text-xl font-medium text-slate-200">We launched our MVP in three days. The AI features were running by week two. When we raised our seed round, investors saw a working product with real auth, real AI, and real compliance — not a slide deck. Primebrick bought us six months of runway we would have spent building infrastructure.</blockquote>
+          <div class="mt-4 text-sm text-slate-500">— Founder, AI-native SaaS startup</div>
+        </div>
+      </section>
+
+      <section class="px-6 py-16 border-t border-slate-800/30">
+        <div class="mx-auto max-w-3xl">
+          <h2 class="text-2xl font-bold text-white sm:text-3xl">Visionary Entrepreneur FAQ</h2>
+          <div class="mt-8 space-y-4">
+            <details class="group rounded-xl border border-slate-800/50 bg-slate-900/30 p-5 backdrop-blur-sm"><summary class="cursor-pointer list-none text-sm font-semibold text-white">Can I really build a commercial product on an MIT-licensed framework?<span class="float-right text-slate-500 group-open:rotate-180 transition-transform">▾</span></summary><p class="mt-3 text-sm text-slate-400">Yes. The MIT license explicitly allows commercial use, modification, and redistribution. You can build a product on Primebrick, sell it, and keep 100% of the revenue. Your product code is your IP. Primebrick is the foundation, like React or Express — you don't pay royalties to use it in a commercial product.</p></details>
+            <details class="group rounded-xl border border-slate-800/50 bg-slate-900/30 p-5 backdrop-blur-sm"><summary class="cursor-pointer list-none text-sm font-semibold text-white">What if I need AI features but don't want to send data to OpenAI?<span class="float-right text-slate-500 group-open:rotate-180 transition-transform">▾</span></summary><p class="mt-3 text-sm text-slate-400">That's exactly what the private LLM container is for. It runs a model on your own infrastructure, so your data never leaves your servers. You get AI features — semantic search, summarization, chat — without the privacy concerns, the API costs, or the dependency on a third-party API's uptime and pricing.</p></details>
+            <details class="group rounded-xl border border-slate-800/50 bg-slate-900/30 p-5 backdrop-blur-sm"><summary class="cursor-pointer list-none text-sm font-semibold text-white">How fast can I really go from idea to working backoffice?<span class="float-right text-slate-500 group-open:rotate-180 transition-transform">▾</span></summary><p class="mt-3 text-sm text-slate-400">Days, not weeks. The scaffold command gives you a running backoffice with auth, RBAC, CRUD and an admin UI in minutes. Add your first entity, generate the CRUD, and you have a working product. The timeline in the trajectory diagram is what teams actually experience, not a marketing best-case scenario.</p></details>
+            <details class="group rounded-xl border border-slate-800/50 bg-slate-900/30 p-5 backdrop-blur-sm"><summary class="cursor-pointer list-none text-sm font-semibold text-white">What happens when I need to scale to multiple tenants?<span class="float-right text-slate-500 group-open:rotate-180 transition-transform">▾</span></summary><p class="mt-3 text-sm text-slate-400">You enable tenant isolation in the framework config. The data layer already supports tenant context — you don't rewrite your entities or your services. The ConfigTable component renders per-tenant settings automatically. Going from single-tenant to multi-tenant is a configuration change and a deployment, not a rewrite.</p></details>
+            <details class="group rounded-xl border border-slate-800/50 bg-slate-900/30 p-5 backdrop-blur-sm"><summary class="cursor-pointer list-none text-sm font-semibold text-white">Do I need to hire a platform team to run this?<span class="float-right text-slate-500 group-open:rotate-180 transition-transform">▾</span></summary><p class="mt-3 text-sm text-slate-400">No. Primebrick is designed to be run by product engineers, not by a dedicated platform team. The Docker Compose dev environment, the Terraform production templates, and the CI pipelines are all included. You can start on a single VPS and move to Kubernetes when you need to — and the move is a config change, not a re-platform.</p></details>
+          </div>
+        </div>
+      </section>
+
+      <section class="px-6 py-20 border-t border-slate-800/30">
+        <div class="mx-auto max-w-5xl">
+          <div class="grid gap-6 lg:grid-cols-2">
+            <a href={nextPersonaHref} class="group rounded-2xl border border-slate-800/50 bg-slate-900/30 p-6 backdrop-blur-sm transition-all hover:border-rose-500/40 hover:bg-slate-900/50">
+              <div class="text-xs text-slate-500">Next persona →</div>
+              <div class="mt-2 flex items-center gap-3"><div class="flex h-10 w-10 items-center justify-center rounded-xl bg-rose-500/20 text-rose-400"><svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><circle cx="12" cy="12" r="3"/></svg></div><div><h3 class="text-lg font-semibold text-white">SOC Team</h3><p class="text-sm text-rose-400">Evidence, not promises.</p></div></div>
+            </a>
+            <div class="rounded-2xl border border-slate-800/50 bg-gradient-to-b from-slate-900/50 to-slate-950/50 p-6 backdrop-blur-sm">
+              <h3 class="text-lg font-semibold text-white">Ready to build your edge?</h3>
+              <p class="mt-2 text-sm text-slate-400">Let's talk about how Primebrick can power your vision from day one — and keep it powered as you scale.</p>
+              <div class="mt-4 flex flex-wrap gap-3">
+                <a href={contactHref} class="rounded-xl bg-gradient-to-r from-amber-500 to-orange-600 px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-amber-500/20 transition-all hover:scale-105">Get in touch</a>
+                <a href={docsPath} class="rounded-xl border border-slate-700 bg-slate-900/50 px-5 py-2.5 text-sm font-semibold text-slate-200 transition-all hover:border-amber-500 hover:text-amber-400" target="_blank" rel="noopener">Read the docs</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="relative z-10 border-t border-slate-800/50 px-6 py-8">
+      <div class="mx-auto flex max-w-7xl items-center justify-between text-sm text-slate-500">
+        <span>&copy; 2026 PrimeBrick. MIT License.</span>
+        <a href="https://github.com/primebrick" class="hover:text-sky-400 transition-colors" target="_blank" rel="noopener">GitHub</a>
+      </div>
+    </footer>
+  </body>
+</html>
