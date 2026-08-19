@@ -1,0 +1,306 @@
+---
+import { translations, LANGUAGES, type LangCode } from '../../../i18n/translations';
+import LanguageSwitcher from '../../../components/svelte/LanguageSwitcher.svelte';
+import GitHubDropdown from '../../../components/svelte/GitHubDropdown.svelte';
+import VirtualTourMegaMenu from '../../../components/svelte/VirtualTourMegaMenu.svelte';
+import UseCasesMegaMenu from '../../../components/svelte/UseCasesMegaMenu.svelte';
+import TopBanner from '../../../components/astro/TopBanner.astro';
+import '../../../styles/global.css';
+
+export const prerender = true;
+
+export function getStaticPaths() {
+  return LANGUAGES.map((lang) => ({
+    params: { lang: lang.code === 'en' ? 'en' : lang.code },
+  }));
+}
+
+const { lang } = Astro.params;
+const langCode = (lang ?? 'en') as LangCode;
+const t = translations[langCode] ?? translations.en;
+const isEn = langCode === 'en';
+const docsPath = 'https://docs.primebrick.dev';
+const homeHref = isEn ? '/en/' : `/${langCode}/`;
+const contactHref = isEn ? '/en/contact' : `/${langCode}/contact`;
+const useCasesHref = isEn ? '/en/use-cases/' : `/${langCode}/use-cases/`;
+const nextPersonaHref = `${useCasesHref}developer`;
+---
+
+<!doctype html>
+<html lang={langCode}>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Primebrick for SOC Teams: evidence, not promises. Tamper-evident audit logs, field-level access reviews, real-time security signals, downloadable compliance evidence." />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+    <link rel="icon" type="image/png" sizes="512x512" href="/favicon-512.png" />
+    <link rel="icon" sizes="any" href="/favicon.ico" />
+    <link rel="apple-touch-icon" href="/favicon-512.png" />
+    <title>PrimeBrick — Use Cases: SOC Team</title>
+    {LANGUAGES.map((l) => (
+      <link rel="alternate" hreflang={l.hreflang} href={`https://primebrick.dev${l.code === 'en' ? '/en/use-cases/soc-team' : `/${l.code}/use-cases/soc-team`}`} />
+    ))}
+    <link rel="alternate" hreflang="x-default" href="https://primebrick.dev/en/use-cases/soc-team" />
+  </head>
+  <body class="min-h-screen bg-slate-950 text-slate-100 antialiased">
+    <div class="pointer-events-none fixed inset-0 overflow-hidden">
+      <div class="absolute -top-40 left-1/2 h-[500px] w-[800px] -translate-x-1/2 rounded-full bg-rose-500/10 blur-[120px]"></div>
+      <div class="absolute top-1/3 -right-40 h-[400px] w-[400px] rounded-full bg-rose-500/10 blur-[100px]"></div>
+      <div class="absolute bottom-0 -left-40 h-[400px] w-[400px] rounded-full bg-red-500/10 blur-[100px]"></div>
+    </div>
+
+    <TopBanner text={t.banner.text} href={contactHref} />
+
+    <nav id="site-nav" class="sticky top-9 z-50 border-b border-slate-800/50 bg-slate-950/40 backdrop-blur-sm transition-all duration-300">
+      <div id="nav-inner" class="mx-auto flex max-w-7xl items-center justify-between px-6 py-4 transition-all duration-300">
+        <a href={isEn ? '/' : `/${langCode}/`} class="flex items-center gap-2" aria-label="PrimeBrick home">
+          <img src="/logo-full-dark.svg" alt="PrimeBrick" width="170" height="32" class="h-7 w-auto" />
+        </a>
+        <div class="flex items-center gap-6 text-sm">
+          <a href={homeHref} class="text-slate-300 hover:text-sky-400 transition-colors">{t.nav.home}</a>
+          <VirtualTourMegaMenu client:load currentLang={langCode} />
+          <UseCasesMegaMenu client:load currentLang={langCode} activePersona="soc-team" />
+          <a href={docsPath} class="text-slate-300 hover:text-sky-400 transition-colors" target="_blank" rel="noopener">{t.nav.docs}</a>
+          <a href={contactHref} class="text-slate-300 hover:text-sky-400 transition-colors">{t.nav.contact}</a>
+          <GitHubDropdown client:load />
+          <LanguageSwitcher client:load currentLang={langCode} />
+        </div>
+      </div>
+    </nav>
+    <script>
+      (() => {
+        const nav = document.getElementById('site-nav');
+        const inner = document.getElementById('nav-inner');
+        if (!nav || !inner) return;
+        const onScroll = () => {
+          const scrolled = window.scrollY > 20;
+          if (scrolled) {
+            inner.classList.replace('py-4', 'py-2');
+            nav.classList.add('bg-slate-950/80', 'backdrop-blur-md', 'shadow-lg', 'border-slate-800/80');
+            nav.classList.remove('bg-slate-950/40', 'border-slate-800/50');
+          } else {
+            inner.classList.replace('py-2', 'py-4');
+            nav.classList.remove('bg-slate-950/80', 'backdrop-blur-md', 'shadow-lg', 'border-slate-800/80');
+            nav.classList.add('bg-slate-950/40', 'border-slate-800/50');
+          }
+        };
+        window.addEventListener('scroll', onScroll, { passive: true });
+        onScroll();
+      })();
+    </script>
+
+    <main class="relative z-10">
+      <section class="px-6 pt-20 pb-12">
+        <div class="mx-auto max-w-5xl">
+          <div class="mb-4 inline-flex items-center gap-2 rounded-full border border-rose-500/30 bg-rose-500/10 px-4 py-1.5 text-xs font-medium text-rose-300">
+            <svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><circle cx="12" cy="12" r="3"/></svg>
+            Persona 06 / 06
+          </div>
+          <h1 class="text-4xl font-bold tracking-tight text-white sm:text-5xl lg:text-6xl">SOC Team</h1>
+          <p class="mt-3 text-xl font-medium text-rose-400">Evidence, not promises.</p>
+          <p class="mt-4 max-w-2xl text-lg text-slate-400">You watch the system, investigate incidents, and answer to auditors. Primebrick gives you a tamper-evident audit trail, field-level access reviews, real-time security signals, and downloadable compliance evidence with file:line references — not marketing claims.</p>
+          <div class="mt-6 flex flex-wrap gap-3">
+            <a href={contactHref} class="rounded-xl bg-gradient-to-r from-rose-500 to-red-600 px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-rose-500/20 transition-all hover:scale-105">Get in touch</a>
+            <a href={docsPath} class="rounded-xl border border-slate-700 bg-slate-900/50 px-5 py-2.5 text-sm font-semibold text-slate-200 transition-all hover:border-rose-500 hover:text-rose-400" target="_blank" rel="noopener">Read the docs</a>
+          </div>
+        </div>
+      </section>
+
+      <section class="px-6 pb-16">
+        <div class="mx-auto max-w-5xl">
+          <div class="overflow-hidden rounded-2xl border border-slate-800/50 bg-slate-950/80 shadow-2xl backdrop-blur-sm">
+            <div class="flex items-center gap-2 border-b border-slate-800/50 px-4 py-3">
+              <div class="flex gap-1.5"><span class="h-3 w-3 rounded-full bg-red-500/70"></span><span class="h-3 w-3 rounded-full bg-yellow-500/70"></span><span class="h-3 w-3 rounded-full bg-green-500/70"></span></div>
+              <span class="ml-2 text-xs text-slate-500 font-mono">Audit Log · Live Security Signals</span>
+              <span class="ml-auto flex items-center gap-1.5 text-xs text-emerald-400"><span class="h-2 w-2 rounded-full bg-emerald-400 animate-pulse"></span>live</span>
+            </div>
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 p-5">
+              <div class="lg:col-span-2 rounded-xl border border-slate-800/50 bg-slate-900/50 p-4">
+                <div class="text-xs font-semibold text-rose-400 mb-3">TAMPER-EVIDENT AUDIT LOG</div>
+                <div class="space-y-2 font-mono text-xs">
+                  <div class="flex items-start gap-2 text-slate-400"><span class="text-slate-600">2026-08-19 14:32:11</span><span class="text-emerald-400">UPDATE</span><span class="text-slate-300">customers[42].creditLimit</span></div>
+                  <div class="pl-24 text-slate-500">actor: admin@acme · before: 5000 → after: 25000 · trace: a1b2c3</div>
+                  <div class="flex items-start gap-2 text-slate-400"><span class="text-slate-600">2026-08-19 14:28:03</span><span class="text-sky-400">RBAC</span><span class="text-slate-300">role[editor] permissions removed</span></div>
+                  <div class="pl-24 text-slate-500">actor: sec-officer@acme · fields: 3 revoked · trace: d4e5f6</div>
+                  <div class="flex items-start gap-2 text-slate-400"><span class="text-slate-600">2026-08-19 14:15:47</span><span class="text-amber-400">MFA</span><span class="text-slate-300">step-up auth · password change</span></div>
+                  <div class="pl-24 text-slate-500">actor: cto@acme · fresh MFA verified · trace: g7h8i9</div>
+                  <div class="flex items-start gap-2 text-slate-400"><span class="text-slate-600">2026-08-19 13:58:22</span><span class="text-rose-400">ALERT</span><span class="text-slate-300">failed login ×5 · IP blocked</span></div>
+                  <div class="pl-24 text-slate-500">source: 203.0.113.42 · auto-blocked · trace: j0k1l2</div>
+                </div>
+              </div>
+              <div class="space-y-4">
+                <div class="rounded-xl border border-slate-800/50 bg-slate-900/50 p-4">
+                  <div class="text-xs font-semibold text-rose-400 mb-3">SECURITY SIGNALS</div>
+                  <div class="space-y-3">
+                    <div class="flex items-center justify-between"><span class="text-xs text-slate-400">OpenTelemetry traces</span><span class="text-xs text-emerald-400">live</span></div>
+                    <div class="flex items-center justify-between"><span class="text-xs text-slate-400">Structured logs</span><span class="text-xs text-emerald-400">streaming</span></div>
+                    <div class="flex items-center justify-between"><span class="text-xs text-slate-400">Health checks</span><span class="text-xs text-emerald-400">healthy</span></div>
+                    <div class="flex items-center justify-between"><span class="text-xs text-slate-400">Anomaly alerts</span><span class="text-xs text-amber-400">2 watching</span></div>
+                  </div>
+                </div>
+                <div class="rounded-xl border border-emerald-500/30 bg-emerald-500/5 p-4">
+                  <div class="text-xs font-semibold text-emerald-400 mb-2">COMPLIANCE REPORT</div>
+                  <div class="text-xs text-slate-400">ISO 27001 · NIS2 · OWASP</div>
+                  <div class="mt-2 text-xs text-emerald-300">17 controls · file:line evidence</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="px-6 py-16 border-t border-slate-800/30">
+        <div class="mx-auto max-w-5xl">
+          <h2 class="text-2xl font-bold text-white sm:text-3xl">What changes for you</h2>
+          <div class="mt-10 grid gap-6 sm:grid-cols-2">
+            <div class="rounded-2xl border border-slate-800/50 bg-slate-900/30 p-6 backdrop-blur-sm">
+              <div class="mb-3 flex h-10 w-10 items-center justify-center rounded-xl bg-rose-500/20 text-rose-400"><svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div>
+              <h3 class="text-lg font-semibold text-white">Tamper-evident audit logs</h3>
+              <p class="mt-2 text-sm text-slate-400">Every entity change is logged with actor, timestamp, before/after values, trace ID and session ID. Audit fields are enforced by the framework's <code class="rounded bg-slate-800 px-1 text-rose-300">@Auditable</code> decorator, not by a developer's memory. The log is append-only and hash-chained, so tampering is detectable.</p>
+            </div>
+            <div class="rounded-2xl border border-slate-800/50 bg-slate-900/30 p-6 backdrop-blur-sm">
+              <div class="mb-3 flex h-10 w-10 items-center justify-center rounded-xl bg-rose-500/20 text-rose-400"><svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></div>
+              <h3 class="text-lg font-semibold text-white">Field-level access reviews</h3>
+              <p class="mt-2 text-sm text-slate-400">RBAC and schema-level permissions are discoverable and reviewable. See exactly who can read and write which field, and remove access with confidence, not guesswork. The RBAC map is generated from the <code class="rounded bg-slate-800 px-1 text-rose-300">@RBAC</code> decorators in the code — not maintained in a separate spreadsheet that drifts from reality.</p>
+            </div>
+            <div class="rounded-2xl border border-slate-800/50 bg-slate-900/30 p-6 backdrop-blur-sm">
+              <div class="mb-3 flex h-10 w-10 items-center justify-center rounded-xl bg-rose-500/20 text-rose-400"><svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 10V3L4 14h7v7l9-11h-7z"/></svg></div>
+              <h3 class="text-lg font-semibold text-white">Real-time security signals</h3>
+              <p class="mt-2 text-sm text-slate-400">OpenTelemetry traces, structured logs and health checks give the SOC team live visibility into what the system is doing. Correlate a user action across frontend, backend, microservices and database in one trace — no log stitching, no timestamp correlation.</p>
+            </div>
+            <div class="rounded-2xl border border-slate-800/50 bg-slate-900/30 p-6 backdrop-blur-sm">
+              <div class="mb-3 flex h-10 w-10 items-center justify-center rounded-xl bg-rose-500/20 text-rose-400"><svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+              <h3 class="text-lg font-semibold text-white">Downloadable compliance evidence</h3>
+              <p class="mt-2 text-sm text-slate-400">ISO 27001, NIS2 and OWASP mappings ship with file:line references as PDF reports — ready for auditors. Generated from real scan data on every build, not from a self-assessment spreadsheet someone updated last quarter. The report is reproducible: same code, same report.</p>
+            </div>
+            <div class="rounded-2xl border border-slate-800/50 bg-slate-900/30 p-6 backdrop-blur-sm">
+              <div class="mb-3 flex h-10 w-10 items-center justify-center rounded-xl bg-rose-500/20 text-rose-400"><svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 7a2 2 0 012 2m4 0a6 6 0 01-6 6m0 0v4m0-4H9m6 0a6 6 0 006-6V7a6 6 0 00-6-6H9a6 6 0 00-6 6v2"/></svg></div>
+              <h3 class="text-lg font-semibold text-white">Step-up authentication for sensitive operations</h3>
+              <p class="mt-2 text-sm text-slate-400">MFA and passkeys are built in, and privileged actions can require step-up authentication — a fresh MFA challenge before the operation is allowed. Password changes, RBAC modifications, credit limit increases: all gated by a fresh factor, not just the session cookie.</p>
+            </div>
+            <div class="rounded-2xl border border-slate-800/50 bg-slate-900/30 p-6 backdrop-blur-sm">
+              <div class="mb-3 flex h-10 w-10 items-center justify-center rounded-xl bg-rose-500/20 text-rose-400"><svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg></div>
+              <h3 class="text-lg font-semibold text-white">Anomaly detection and alerting</h3>
+              <p class="mt-2 text-sm text-slate-400">Failed logins, unusual access patterns, privilege escalations and geographic anomalies are detected and flagged automatically. Repeated failures trigger an auto-block. The SOC team sees alerts in real time, with the full trace context attached.</p>
+            </div>
+            <div class="rounded-2xl border border-slate-800/50 bg-slate-900/30 p-6 backdrop-blur-sm">
+              <div class="mb-3 flex h-10 w-10 items-center justify-center rounded-xl bg-rose-500/20 text-rose-400"><svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg></div>
+              <h3 class="text-lg font-semibold text-white">Incident response with full context</h3>
+              <p class="mt-2 text-sm text-slate-400">A single trace ID follows an incident from the browser alert through the API, the database query, and the audit log entry. No log stitching across servers, no timestamp correlation across time zones. You open the trace, you see the whole story, you write the postmortem.</p>
+            </div>
+            <div class="rounded-2xl border border-slate-800/50 bg-slate-900/30 p-6 backdrop-blur-sm">
+              <div class="mb-3 flex h-10 w-10 items-center justify-center rounded-xl bg-rose-500/20 text-rose-400"><svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 10h16M4 14h16M4 18h16"/></svg></div>
+              <h3 class="text-lg font-semibold text-white">Access reviews without a spreadsheet</h3>
+              <p class="mt-2 text-sm text-slate-400">The RBAC map is generated from the code, so it's always current. When the auditor asks "who can change the credit limit field?", you open the RBAC review panel and show them. No spreadsheet to maintain, no "I'll update it next week," no drift.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="px-6 py-16 border-t border-slate-800/30">
+        <div class="mx-auto max-w-5xl">
+          <h2 class="text-2xl font-bold text-white sm:text-3xl">Incident response workflow</h2>
+          <div class="mt-8 grid gap-4 sm:grid-cols-5">
+            <div class="rounded-2xl border border-slate-800/50 bg-slate-900/30 p-5 backdrop-blur-sm text-center"><div class="mx-auto mb-3 flex h-10 w-10 items-center justify-center rounded-xl bg-rose-500/20 text-rose-400"><svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg></div><div class="text-xs font-mono text-rose-400">Step 1</div><h3 class="mt-1 text-sm font-semibold text-white">Detect</h3><p class="mt-1 text-xs text-slate-400">Anomaly alert fires. Auto-block kicks in for repeated failures.</p></div>
+            <div class="rounded-2xl border border-slate-800/50 bg-slate-900/30 p-5 backdrop-blur-sm text-center"><div class="mx-auto mb-3 flex h-10 w-10 items-center justify-center rounded-xl bg-rose-500/20 text-rose-400"><svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg></div><div class="text-xs font-mono text-rose-400">Step 2</div><h3 class="mt-1 text-sm font-semibold text-white">Trace</h3><p class="mt-1 text-xs text-slate-400">Open the trace ID from the alert. See browser → API → DB in one view.</p></div>
+            <div class="rounded-2xl border border-slate-800/50 bg-slate-900/30 p-5 backdrop-blur-sm text-center"><div class="mx-auto mb-3 flex h-10 w-10 items-center justify-center rounded-xl bg-rose-500/20 text-rose-400"><svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2"/></svg></div><div class="text-xs font-mono text-rose-400">Step 3</div><h3 class="mt-1 text-sm font-semibold text-white">Investigate</h3><p class="mt-1 text-xs text-slate-400">Cross-reference the audit log entry with the same trace ID. Full context.</p></div>
+            <div class="rounded-2xl border border-slate-800/50 bg-slate-900/30 p-5 backdrop-blur-sm text-center"><div class="mx-auto mb-3 flex h-10 w-10 items-center justify-center rounded-xl bg-rose-500/20 text-rose-400"><svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/></svg></div><div class="text-xs font-mono text-rose-400">Step 4</div><h3 class="mt-1 text-sm font-semibold text-white">Remediate</h3><p class="mt-1 text-xs text-slate-400">Revoke access, rotate keys, block IP. All actions are themselves audited.</p></div>
+            <div class="rounded-2xl border border-slate-800/50 bg-slate-900/30 p-5 backdrop-blur-sm text-center"><div class="mx-auto mb-3 flex h-10 w-10 items-center justify-center rounded-xl bg-rose-500/20 text-rose-400"><svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg></div><div class="text-xs font-mono text-rose-400">Step 5</div><h3 class="mt-1 text-sm font-semibold text-white">Report</h3><p class="mt-1 text-xs text-slate-400">Export the trace, the audit entries and the compliance status as a single PDF.</p></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="px-6 py-16 border-t border-slate-800/30">
+        <div class="mx-auto max-w-5xl">
+          <h2 class="text-2xl font-bold text-white sm:text-3xl">Compliance report sample</h2>
+          <div class="mt-8 rounded-2xl border border-slate-800/50 bg-slate-950/80 p-5">
+            <div class="text-xs font-mono text-slate-500 mb-3">// Compliance report — build #4827 — 2026-08-19T09:42:11Z</div>
+            <pre class="text-xs font-mono leading-relaxed text-slate-300 overflow-x-auto"><span class="text-violet-400">ISO 27001 · Annex A.5.15 — Access control</span>
+  Status:   <span class="text-emerald-400">PASS</span>
+  Evidence: src/modules/customers/customer.entity.ts:14
+            @RBAC(&lbrace; read: ['admin', 'sales'], write: ['admin'] &rbrace;)
+
+<span class="text-violet-400">NIS2 · Art. 21(2)(d) — Access control & management</span>
+  Status:   <span class="text-emerald-400">PASS</span>
+  Evidence: src/modules/auth/rbac.guard.ts:8
+            MFA enforced on privileged roles
+
+<span class="text-violet-400">OWASP · A01:2021 — Broken Access Control</span>
+  Status:   <span class="text-emerald-400">PASS</span>
+  Evidence: src/sdk/permissions.check.ts:22
+            Every route guarded by RBAC decorator</pre>
+          </div>
+        </div>
+      </section>
+
+      <section class="px-6 py-16 border-t border-slate-800/30">
+        <div class="mx-auto max-w-5xl">
+          <h2 class="text-2xl font-bold text-white sm:text-3xl">Capabilities you'll use</h2>
+          <div class="mt-6 flex flex-wrap gap-3">
+            <span class="rounded-full border border-rose-500/30 bg-rose-500/10 px-4 py-2 text-sm text-rose-300">Tamper-evident audit</span>
+            <span class="rounded-full border border-rose-500/30 bg-rose-500/10 px-4 py-2 text-sm text-rose-300">RBAC reviews</span>
+            <span class="rounded-full border border-rose-500/30 bg-rose-500/10 px-4 py-2 text-sm text-rose-300">Step-up auth</span>
+            <span class="rounded-full border border-rose-500/30 bg-rose-500/10 px-4 py-2 text-sm text-rose-300">OpenTelemetry</span>
+            <span class="rounded-full border border-rose-500/30 bg-rose-500/10 px-4 py-2 text-sm text-rose-300">Structured logs</span>
+            <span class="rounded-full border border-rose-500/30 bg-rose-500/10 px-4 py-2 text-sm text-rose-300">ISO 27001 reports</span>
+            <span class="rounded-full border border-rose-500/30 bg-rose-500/10 px-4 py-2 text-sm text-rose-300">NIS2 mapping</span>
+            <span class="rounded-full border border-rose-500/30 bg-rose-500/10 px-4 py-2 text-sm text-rose-300">OWASP scanner</span>
+            <span class="rounded-full border border-rose-500/30 bg-rose-500/10 px-4 py-2 text-sm text-rose-300">Passkeys / MFA</span>
+            <span class="rounded-full border border-rose-500/30 bg-rose-500/10 px-4 py-2 text-sm text-rose-300">Anomaly detection</span>
+            <span class="rounded-full border border-rose-500/30 bg-rose-500/10 px-4 py-2 text-sm text-rose-300">Auto-block</span>
+            <span class="rounded-full border border-rose-500/30 bg-rose-500/10 px-4 py-2 text-sm text-rose-300">Trace IDs</span>
+            <span class="rounded-full border border-rose-500/30 bg-rose-500/10 px-4 py-2 text-sm text-rose-300">PDF reports</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="px-6 py-16 border-t border-slate-800/30">
+        <div class="mx-auto max-w-3xl text-center">
+          <svg class="mx-auto h-10 w-10 text-rose-500/40" viewBox="0 0 24 24" fill="currentColor"><path d="M9.983 3v7.391c0 5.704-3.731 9.57-8.983 10.609l-.995-2.151c2.432-.917 3.995-3.638 3.995-5.849h-4v-10h9.983zm14.017 0v7.391c0 5.704-3.748 9.571-9 10.609l-.996-2.151c2.433-.917 3.996-3.638 3.996-5.849h-3.983v-10h9.983z"/></svg>
+          <blockquote class="mt-4 text-xl font-medium text-slate-200">We used to spend two weeks before every audit updating spreadsheets that were already out of date. Now we download a PDF from the last build and forward it. The first time I handed the auditor a file:line report, they asked me if it was real.</blockquote>
+          <div class="mt-4 text-sm text-slate-500">— SOC lead, regulated fintech</div>
+        </div>
+      </section>
+
+      <section class="px-6 py-16 border-t border-slate-800/30">
+        <div class="mx-auto max-w-3xl">
+          <h2 class="text-2xl font-bold text-white sm:text-3xl">SOC Team FAQ</h2>
+          <div class="mt-8 space-y-4">
+            <details class="group rounded-xl border border-slate-800/50 bg-slate-900/30 p-5 backdrop-blur-sm"><summary class="cursor-pointer list-none text-sm font-semibold text-white">How tamper-evident are the audit logs really?<span class="float-right text-slate-500 group-open:rotate-180 transition-transform">▾</span></summary><p class="mt-3 text-sm text-slate-400">Each audit entry includes a hash of the previous entry, forming a chain. Changing an old entry breaks the chain and is immediately detectable. The log is append-only — no UPDATE or DELETE is allowed on the audit table, enforced at the database level. You can verify the chain integrity at any time with a built-in command.</p></details>
+            <details class="group rounded-xl border border-slate-800/50 bg-slate-900/30 p-5 backdrop-blur-sm"><summary class="cursor-pointer list-none text-sm font-semibold text-white">Can we export the audit log to our SIEM?<span class="float-right text-slate-500 group-open:rotate-180 transition-transform">▾</span></summary><p class="mt-3 text-sm text-slate-400">Yes. The audit log is a standard Postgres table, and entries are also emitted as structured JSON logs that any SIEM (Splunk, Elastic, Datadog, Loki) can ingest. The trace IDs in the audit entries match the trace IDs in OpenTelemetry, so you can correlate audit events with distributed traces.</p></details>
+            <details class="group rounded-xl border border-slate-800/50 bg-slate-900/30 p-5 backdrop-blur-sm"><summary class="cursor-pointer list-none text-sm font-semibold text-white">What compliance frameworks are supported out of the box?<span class="float-right text-slate-500 group-open:rotate-180 transition-transform">▾</span></summary><p class="mt-3 text-sm text-slate-400">ISO 27001 (Annex A controls), NIS2 (Article 21(2) measures), OWASP Top 10 and OWASP ASVS Level 2 ship with the scanner. GDPR data subject rights are supported via the audit log. The control catalog is extensible — you can add your own internal policies.</p></details>
+            <details class="group rounded-xl border border-slate-800/50 bg-slate-900/30 p-5 backdrop-blur-sm"><summary class="cursor-pointer list-none text-sm font-semibold text-white">How does step-up authentication work for sensitive operations?<span class="float-right text-slate-500 group-open:rotate-180 transition-transform">▾</span></summary><p class="mt-3 text-sm text-slate-400">You mark an operation as "sensitive" in the entity or route definition. When a user attempts it, the framework checks whether they have completed an MFA challenge within a configurable window. If not, it issues a step-up challenge — a passkey or TOTP prompt — before allowing the operation. The challenge and the operation are both logged in the audit trail.</p></details>
+            <details class="group rounded-xl border border-slate-800/50 bg-slate-900/30 p-5 backdrop-blur-sm"><summary class="cursor-pointer list-none text-sm font-semibold text-white">Can we customize the anomaly detection rules?<span class="float-right text-slate-500 group-open:rotate-180 transition-transform">▾</span></summary><p class="mt-3 text-sm text-slate-400">Yes. The default rules cover failed login bursts, geographic anomalies, privilege escalations and unusual access patterns. You can add custom rules based on your business logic. Rules are defined in code, versioned, and visible in the compliance report.</p></details>
+          </div>
+        </div>
+      </section>
+
+      <section class="px-6 py-20 border-t border-slate-800/30">
+        <div class="mx-auto max-w-5xl">
+          <div class="grid gap-6 lg:grid-cols-2">
+            <a href={nextPersonaHref} class="group rounded-2xl border border-slate-800/50 bg-slate-900/30 p-6 backdrop-blur-sm transition-all hover:border-sky-500/40 hover:bg-slate-900/50">
+              <div class="text-xs text-slate-500">Back to start →</div>
+              <div class="mt-2 flex items-center gap-3"><div class="flex h-10 w-10 items-center justify-center rounded-xl bg-sky-500/20 text-sky-400"><svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 18l6-6-6-6"/><path d="M8 6l-6 6 6 6"/></svg></div><div><h3 class="text-lg font-semibold text-white">Developer</h3><p class="text-sm text-sky-400">Ship code, not ceremony.</p></div></div>
+            </a>
+            <div class="rounded-2xl border border-slate-800/50 bg-gradient-to-b from-slate-900/50 to-slate-950/50 p-6 backdrop-blur-sm">
+              <h3 class="text-lg font-semibold text-white">Want the evidence package?</h3>
+              <p class="mt-2 text-sm text-slate-400">See the audit, compliance and observability docs in detail. Or book a session — we'll run the scanner on a sample app live.</p>
+              <div class="mt-4 flex flex-wrap gap-3">
+                <a href={contactHref} class="rounded-xl bg-gradient-to-r from-rose-500 to-red-600 px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-rose-500/20 transition-all hover:scale-105">Get in touch</a>
+                <a href={docsPath} class="rounded-xl border border-slate-700 bg-slate-900/50 px-5 py-2.5 text-sm font-semibold text-slate-200 transition-all hover:border-rose-500 hover:text-rose-400" target="_blank" rel="noopener">Read the docs</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="relative z-10 border-t border-slate-800/50 px-6 py-8">
+      <div class="mx-auto flex max-w-7xl items-center justify-between text-sm text-slate-500">
+        <span>&copy; 2026 PrimeBrick. MIT License.</span>
+        <a href="https://github.com/primebrick" class="hover:text-sky-400 transition-colors" target="_blank" rel="noopener">GitHub</a>
+      </div>
+    </footer>
+  </body>
+</html>

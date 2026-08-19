@@ -1,0 +1,647 @@
+---
+import { translations, LANGUAGES, type LangCode } from '../../../i18n/translations';
+import { versionsTranslations } from '../../../i18n/versions-translations';
+import LanguageSwitcher from '../../../components/svelte/LanguageSwitcher.svelte';
+import GitHubDropdown from '../../../components/svelte/GitHubDropdown.svelte';
+import VirtualTourMegaMenu from '../../../components/svelte/VirtualTourMegaMenu.svelte';
+import GitHubIcon from '../../../components/GitHubIcon.astro';
+import TopBanner from '../../../components/astro/TopBanner.astro';
+import DemoHero from '../../../components/astro/DemoHero.astro';
+import pkg from '../../../../package.json';
+import '../../../styles/global.css';
+import '../../../styles/demo/demo.css';
+import '../../../styles/demo/versions.css';
+
+const version = pkg.version;
+
+export const prerender = true;
+
+export function getStaticPaths() {
+  return LANGUAGES.map((lang) => ({
+    params: { lang: lang.code === 'en' ? 'en' : lang.code },
+  }));
+}
+
+const { lang } = Astro.params;
+const langCode = (lang ?? 'en') as LangCode;
+const t = translations[langCode] ?? translations.en;
+const vt = versionsTranslations[langCode] ?? versionsTranslations.en;
+const isEn = langCode === 'en';
+const docsPath = 'https://docs.primebrick.dev';
+const homeHref = isEn ? '/en/' : `/${langCode}/`;
+const contactHref = isEn ? '/en/contact' : `/${langCode}/contact`;
+const thankyouHref = isEn ? '/en/thank-you' : `/${langCode}/thank-you`;
+const demoHref = isEn ? '/en/demo/' : `/${langCode}/demo/`;
+---
+
+<!doctype html>
+<html lang={langCode}>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={vt.pageSubtitle.slice(0, 160)} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+    <link rel="icon" type="image/png" sizes="512x512" href="/favicon-512.png" />
+    <link rel="icon" sizes="any" href="/favicon.ico" />
+    <link rel="apple-touch-icon" href="/favicon-512.png" />
+    <title>Primebrick — {t.demo.card.versions.title}</title>
+    {LANGUAGES.map((l) => (
+      <link rel="alternate" hreflang={l.hreflang} href={`https://primebrick.dev${l.code === 'en' ? '/en/demo/versions' : `/${l.code}/demo/versions`}`} />
+    ))}
+    <link rel="alternate" hreflang="x-default" href="https://primebrick.dev/en/demo/versions" />
+  </head>
+  <body class="min-h-screen bg-slate-950 text-slate-100 antialiased">
+    <!-- Ambient gradient background (website) -->
+    <div class="pointer-events-none fixed inset-0 overflow-hidden">
+      <div class="absolute -top-40 left-1/2 h-[500px] w-[800px] -translate-x-1/2 rounded-full bg-rose-500/10 blur-[120px]"></div>
+      <div class="absolute top-1/3 -right-40 h-[400px] w-[400px] rounded-full bg-pink-500/10 blur-[100px]"></div>
+      <div class="absolute bottom-0 -left-40 h-[400px] w-[400px] rounded-full bg-red-500/10 blur-[100px]"></div>
+    </div>
+
+    <!-- Top banner (sticky, non-dismissible) -->
+    <TopBanner text={t.banner.text} href={contactHref} />
+
+    <!-- Navigation (sticky, condensing on scroll) -->
+    <nav id="site-nav" class="sticky top-9 z-50 border-b border-slate-800/50 bg-slate-950/40 backdrop-blur-sm transition-all duration-300">
+      <div id="nav-inner" class="mx-auto flex max-w-7xl items-center justify-between px-6 py-4 transition-all duration-300">
+        <a href={homeHref} class="flex items-center gap-2 transition-all duration-300" id="nav-logo" aria-label="PrimeBrick home">
+          <img src="/logo-full-dark.svg" alt="PrimeBrick" width="170" height="32" class="h-7 w-auto" />
+        </a>
+        <div class="flex items-center gap-6 text-sm">
+          <a href={homeHref} class="text-slate-300 hover:text-sky-400 transition-colors">{t.nav.home}</a>
+          <VirtualTourMegaMenu client:load currentLang={langCode} activeDemo="versions" />
+          <a href={docsPath} class="text-slate-300 hover:text-sky-400 transition-colors" target="_blank" rel="noopener">{t.nav.docs}</a>
+          <a href={contactHref} class="text-slate-300 hover:text-sky-400 transition-colors">{t.nav.contact}</a>
+          <a href={thankyouHref} class="text-slate-300 hover:text-sky-400 transition-colors">{t.nav.thankyou}</a>
+          <a
+            href="https://opensource.org/license/MIT"
+            class="text-slate-300 hover:text-sky-400 transition-colors"
+            target="_blank"
+            rel="noopener"
+          >
+            {t.nav.license}
+          </a>
+          <GitHubDropdown client:load />
+          <LanguageSwitcher client:load currentLang={langCode} />
+        </div>
+      </div>
+    </nav>
+    <script>
+      (() => {
+        const nav = document.getElementById('site-nav');
+        const inner = document.getElementById('nav-inner');
+        const logo = document.getElementById('nav-logo');
+        if (!nav || !inner) return;
+        const onScroll = () => {
+          const scrolled = window.scrollY > 20;
+          if (scrolled) {
+            inner.classList.replace('py-4', 'py-2');
+            nav.classList.add('bg-slate-950/80', 'backdrop-blur-md', 'shadow-lg', 'border-slate-800/80');
+            nav.classList.remove('bg-slate-950/40', 'border-slate-800/50');
+            logo?.classList.replace('text-xl', 'text-lg');
+          } else {
+            inner.classList.replace('py-2', 'py-4');
+            nav.classList.remove('bg-slate-950/80', 'backdrop-blur-md', 'shadow-lg', 'border-slate-800/80');
+            nav.classList.add('bg-slate-950/40', 'border-slate-800/50');
+            logo?.classList.replace('text-lg', 'text-xl');
+          }
+        };
+        window.addEventListener('scroll', onScroll, { passive: true });
+        onScroll();
+      })();
+    </script>
+
+    <!-- ===== Demo body (scoped) ===== -->
+
+<div class="demo-scope">
+
+<!-- Hero (badge + gradient h1 + subtitle) -->
+<DemoHero badge={vt.pageBadge} title={vt.pageTitle} subtitle={vt.pageSubtitle} badgeColor="bg-rose-400" gradientVia="via-rose-200" />
+
+<!-- Scroll hint -->
+<div class="demo-scroll-hint" id="scroll-hint">{vt.scrollHint}</div>
+
+<!-- ===== Section claims (5, alternating right/left) ===== -->
+<!-- Claim 0: The Audit Trail (right) -->
+<div class="section-claim" id="claim-0">
+  <div class="claim-eyebrow">{vt.claim0Eyebrow}</div>
+  <div class="claim-title" set:html={vt.claim0Title} />
+  <div class="claim-subtitle">{vt.claim0Subtitle}</div>
+</div>
+<!-- Claim 1: Always Accessible (left — persistent across phases 1-2) -->
+<div class="section-claim left" id="claim-1">
+  <div class="claim-eyebrow">{vt.claim1Eyebrow}</div>
+  <div class="claim-title" set:html={vt.claim1Title} />
+  <div class="claim-subtitle">{vt.claim1Subtitle}</div>
+</div>
+<!-- Claim 2: Field by Field (right) -->
+<div class="section-claim" id="claim-2">
+  <div class="claim-eyebrow">{vt.claim2Eyebrow}</div>
+  <div class="claim-title" set:html={vt.claim2Title} />
+  <div class="claim-subtitle">{vt.claim2Subtitle}</div>
+</div>
+<!-- Claim 3: Centralized Errors (left) -->
+<div class="section-claim left" id="claim-3">
+  <div class="claim-eyebrow">{vt.claim3Eyebrow}</div>
+  <div class="claim-title" set:html={vt.claim3Title} />
+  <div class="claim-subtitle">{vt.claim3Subtitle}</div>
+</div>
+
+<!-- Final conclusion claim -->
+<div class="section-claim-final" id="claim-final">
+  <div class="claim-title-final" set:html={vt.claimFinalTitle} />
+</div>
+
+<!-- Progress rail + dots + phase label -->
+<div class="progress-rail"><div class="progress-rail-fill" id="rail-fill" style="height:0%"></div></div>
+<div class="scene-dots" id="dots"></div>
+<div class="phase-label" id="phase-label">Intro</div>
+
+<!-- Scroll track -->
+<div class="scroll-track" style="height: 2000vh" id="track">
+  <div class="scroll-stage" id="stage">
+    <div class="scroll-canvas" id="canvas">
+
+      <!-- ===== Mock A — Entity List Table (phases 0-1, 8-10) ===== -->
+      <div class="screen-mock" id="screen-mock-a">
+        <div class="browser-bar">
+          <div class="browser-dots"><span class="browser-dot red"></span><span class="browser-dot yellow"></span><span class="browser-dot green"></span></div>
+          <div class="browser-url"><span class="url-lock">🔒</span>https://backoffice.acme.org/customers</div>
+        </div>
+        <div class="app-body">
+          <div class="pb-sidebar">
+            <div class="sb-rail-avatar">AC</div>
+            <div class="sb-rail-icon"><i data-icon="settings"></i></div>
+            <div class="sb-rail-icon active"><i data-icon="users"></i></div>
+            <div class="sb-rail-spacer"></div>
+            <div class="sb-rail-profile">JD</div>
+            <div class="sb-rail-health"></div>
+          </div>
+          <div class="pb-main">
+            <div class="pb-header" id="topbar-a">
+              <div class="pb-header-left">
+                <button class="pb-header-toggle"><i data-icon="panelLeft"></i></button>
+                <div class="pb-header-search"><i data-icon="search"></i>{vt.searchPlaceholder}<span class="kbd">{vt.searchShortcut}</span></div>
+                <button class="pb-header-btn pb-ai-cta" title="AI Assistant"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z"/><path d="M20 2v4"/><path d="M22 4h-4"/><path d="M6 20a2 2 0 1 1-4 0 2 2 0 0 1 4 0"/></svg></button>
+              </div>
+              <div class="pb-header-right">
+                <div class="pb-header-tz"><i data-icon="globe"></i>Europe/Rome</div>
+                <button class="pb-header-lang">IT<i data-icon="chevronDown"></i></button>
+                <button class="pb-header-btn" id="topbar-errors-btn" title="Errors"><i data-icon="triangleAlert"></i><span class="btn-badge error-badge">4</span></button>
+                <button class="pb-header-btn" title="Notifications"><i data-icon="bell"></i><span class="btn-badge">3</span></button>
+                <button class="pb-header-btn" title="Theme"><i data-icon="moon"></i></button>
+              </div>
+            </div>
+            <div class="pb-content" id="content-area-a">
+              <div class="pb-breadcrumb">{vt.breadcrumbSystem} / {vt.breadcrumbSettings} / <span class="crumb-current">{vt.breadcrumbCustomers}</span></div>
+              <div class="pb-toolbar" style="border-bottom:1px solid var(--pb-border);padding:0.5rem 0.75rem">
+                <div class="pb-search-input" style="max-width:240px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg><input placeholder={vt.toolbarSearchPlaceholder}><button class="pb-search-scope">{vt.searchScopeAllFields}</button></div>
+                <div style="margin-left:auto;display:flex;align-items:center;gap:0.375rem">
+                  <div class="pb-soft-gradient-group">
+                    <div class="sg-btn active" title="Table"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3H5a2 2 0 0 0-2 2v4m6-6h10a2 2 0 0 1 2 2v4M9 3v18m0 0h10a2 2 0 0 0 2-2V9M9 21H5a2 2 0 0 1-2-2V9m0 0h18"/></svg></div>
+                    <div class="sg-btn" title="Cards"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="7" x="3" y="3" rx="1"/><rect width="7" height="7" x="14" y="3" rx="1"/><rect width="7" height="7" x="14" y="14" rx="1"/><rect width="7" height="7" x="3" y="14" rx="1"/></svg></div>
+                    <div class="sg-btn" title="Cards list"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="7" x="3" y="3" rx="1"/><rect width="7" height="7" x="3" y="14" rx="1"/><path d="M14 4h7"/><path d="M14 9h7"/><path d="M14 15h7"/><path d="M14 20h7"/></svg></div>
+                  </div>
+                  <button class="pb-btn-soft-icon" title="Refresh"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/></svg></button>
+                  <button class="pb-btn-soft"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M9 3v18"/><path d="M15 3v18"/></svg>{vt.toolbarColumns}</button>
+                  <button class="pb-btn-soft"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 5H3"/><path d="M12 19H3"/><path d="M14 3v4"/><path d="M16 17v4"/><path d="M21 12h-9"/><path d="M21 19h-5"/><path d="M21 5h-7"/><path d="M8 10v4"/><path d="M8 12H3"/></svg>{vt.toolbarFilters}</button>
+                  <div class="pb-gradient-divider"></div>
+                  <button class="pb-btn-primary-gradient">{vt.toolbarNew}</button>
+                </div>
+              </div>
+              <div class="pb-toolbar-second">
+                <div style="display:flex;align-items:center;gap:0.5rem;flex-wrap:wrap">
+                  <button class="pb-btn-outline"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 5H3"/><path d="M16 12H3"/><path d="M11 19H3"/><path d="m15 18 2 2 4-4"/></svg>{vt.toolbarBulkActions}</button>
+                  <div class="pb-gradient-divider"></div>
+                  <button class="pb-btn-soft-xs"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>{vt.toolbarClearAll}</button>
+                </div>
+              </div>
+              <div class="pb-table-wrap" id="src-table-scroll-a">
+                <table class="pb-table" id="src-table-a">
+                  <thead><tr>
+                    <th class="sticky-col first-col" style="width:40px"><div class="pb-checkbox"></div></th>
+                    <th class="sticky-col">{vt.tableHeaderName}</th>
+                    <th>{vt.tableHeaderEmail}</th>
+                    <th>{vt.tableHeaderStatus}</th>
+                    <th>{vt.tableHeaderOnboardedAt}</th>
+                    <th>{vt.tableHeaderCreated}</th>
+                    <th class="act-col"></th>
+                  </tr></thead>
+                  <tbody id="src-tbody-a">
+                    <tr><td class="sticky-col"><div class="pb-checkbox"></div></td><td class="sticky-col">Acme Corp</td><td>info@acme.com</td><td><span class="pb-badge green">{vt.statusActive}</span></td><td class="onboarded-cell">16 May 2026, 19:00</td><td>15 Mar 2024</td><td class="act-col"><button class="pb-act-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-more-vertical"/></svg></button></td></tr>
+                    <tr><td class="sticky-col"><div class="pb-checkbox"></div></td><td class="sticky-col">Globex Inc</td><td>hello@globex.com</td><td><span class="pb-badge green">{vt.statusActive}</span></td><td class="onboarded-cell">16 May 2026, 19:00</td><td>02 Apr 2024</td><td class="act-col"><button class="pb-act-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-more-vertical"/></svg></button></td></tr>
+                    <tr id="src-row-3-a"><td class="sticky-col"><div class="pb-checkbox"></div></td><td class="sticky-col">Initech</td><td>contact@initech.com</td><td><span class="pb-badge amber">{vt.statusLead}</span></td><td class="onboarded-cell">16 May 2026, 19:00</td><td>10 May 2024</td><td class="act-col"><button class="pb-act-btn" id="src-act-btn-3-a"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-more-vertical"/></svg></button></td></tr>
+                    <tr><td class="sticky-col"><div class="pb-checkbox"></div></td><td class="sticky-col">Umbrella Co</td><td>admin@umbrella.com</td><td><span class="pb-badge gray">{vt.statusInactive}</span></td><td class="onboarded-cell"></td><td>20 Jun 2024</td><td class="act-col"><button class="pb-act-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-more-vertical"/></svg></button></td></tr>
+                    <tr><td class="sticky-col"><div class="pb-checkbox"></div></td><td class="sticky-col">Stark Industries</td><td>tony@stark.com</td><td><span class="pb-badge green">{vt.statusActive}</span></td><td class="onboarded-cell"></td><td>01 Jul 2024</td><td class="act-col"><button class="pb-act-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-more-vertical"/></svg></button></td></tr>
+                  </tbody>
+                </table>
+              </div>
+              <div class="pb-pagination">
+                <div style="display:flex;align-items:center;gap:0.75rem;flex-wrap:wrap">
+                  <div class="pag-range">1-5 / 247</div>
+                </div>
+                <div class="pag-controls">
+                  <div class="pag-size"><span>{vt.paginationPageSize}</span><button class="pag-size-btn">25</button></div>
+                  <div class="pag-divider"></div>
+                  <button class="pag-btn" disabled><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m11 17-5-5 5-5"/><path d="m18 17-5-5 5-5"/></svg></button>
+                  <button class="pag-btn" disabled><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg></button>
+                  <span class="pag-status">1 / 50</span>
+                  <button class="pag-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg></button>
+                  <button class="pag-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m13 17 5-5-5-5"/><path d="m6 17 5-5-5-5"/></svg></button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== Mock B — Entity Form Page (phases 2-7) ===== -->
+      <div class="screen-mock" id="screen-mock-b" style="opacity:0">
+        <div class="browser-bar">
+          <div class="browser-dots"><span class="browser-dot red"></span><span class="browser-dot yellow"></span><span class="browser-dot green"></span></div>
+          <div class="browser-url"><span class="url-lock">🔒</span>https://backoffice.acme.org/customers/acme-corp</div>
+        </div>
+        <div class="app-body">
+          <div class="pb-sidebar">
+            <div class="sb-rail-avatar">AC</div>
+            <div class="sb-rail-icon"><i data-icon="settings"></i></div>
+            <div class="sb-rail-icon active"><i data-icon="users"></i></div>
+            <div class="sb-rail-spacer"></div>
+            <div class="sb-rail-profile">JD</div>
+            <div class="sb-rail-health"></div>
+          </div>
+          <div class="pb-main">
+            <div class="pb-header" id="topbar-b">
+              <div class="pb-header-left">
+                <button class="pb-header-toggle"><i data-icon="panelLeft"></i></button>
+                <div class="pb-header-search"><i data-icon="search"></i>{vt.searchPlaceholder}<span class="kbd">{vt.searchShortcut}</span></div>
+                <button class="pb-header-btn pb-ai-cta" title="AI Assistant"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z"/><path d="M20 2v4"/><path d="M22 4h-4"/><path d="M6 20a2 2 0 1 1-4 0 2 2 0 0 1 4 0"/></svg></button>
+              </div>
+              <div class="pb-header-right">
+                <div class="pb-header-tz"><i data-icon="globe"></i>Europe/Rome</div>
+                <button class="pb-header-lang">IT<i data-icon="chevronDown"></i></button>
+                <button class="pb-header-btn" id="topbar-errors-btn-b" title="Errors"><i data-icon="triangleAlert"></i><span class="btn-badge error-badge">4</span></button>
+                <button class="pb-header-btn" title="Notifications"><i data-icon="bell"></i><span class="btn-badge">3</span></button>
+                <button class="pb-header-btn" title="Theme"><i data-icon="moon"></i></button>
+              </div>
+            </div>
+            <div class="pb-content" id="content-area-b">
+              <div class="pb-breadcrumb">{vt.formBreadcrumb}<span style="color:var(--pb-fg)">{vt.formBreadcrumbCurrent}</span></div>
+              <h2 class="pb-page-title">{vt.formPageTitle}</h2>
+              <div style="display:flex;flex-direction:column;gap:1.25rem;max-width:560px">
+                <div style="display:flex;align-items:center;gap:1rem">
+                  <div style="width:64px;height:64px;clip-path:polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);background:linear-gradient(135deg,#0ea5e9,#6366f1);display:grid;place-items:center;color:white;font-size:1.125rem;font-weight:700">JD</div>
+                  <div style="display:flex;flex-direction:column;gap:0.25rem">
+                    <div style="font-size:0.875rem;font-weight:600;color:var(--pb-fg)">John Doe</div>
+                    <button class="pb-btn-soft" style="font-size:0.6875rem"><i data-icon="upload"></i>Change photo</button>
+                  </div>
+                </div>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
+                  <div style="display:flex;flex-direction:column;gap:0.3125rem">
+                    <label style="font-size:0.6875rem;font-weight:500;color:var(--pb-muted-fg)">{vt.formFirstName}</label>
+                    <div style="padding:0.4375rem 0.625rem;border:1px solid var(--pb-border);border-radius:var(--pb-radius);font-size:0.75rem;color:var(--pb-fg);background:var(--pb-bg)">John</div>
+                  </div>
+                  <div style="display:flex;flex-direction:column;gap:0.3125rem">
+                    <label style="font-size:0.6875rem;font-weight:500;color:var(--pb-muted-fg)">{vt.formLastName}</label>
+                    <div style="padding:0.4375rem 0.625rem;border:1px solid var(--pb-border);border-radius:var(--pb-radius);font-size:0.75rem;color:var(--pb-fg);background:var(--pb-bg)">Doe</div>
+                  </div>
+                </div>
+                <div style="display:flex;flex-direction:column;gap:0.3125rem">
+                  <label style="font-size:0.6875rem;font-weight:500;color:var(--pb-muted-fg)">{vt.formEmail}</label>
+                  <div style="padding:0.4375rem 0.625rem;border:1px solid var(--pb-border);border-radius:var(--pb-radius);font-size:0.75rem;color:var(--pb-muted-fg);background:var(--pb-bg)">john.doe@acme.com</div>
+                </div>
+                <div style="display:flex;flex-direction:column;gap:0.3125rem">
+                  <label style="font-size:0.6875rem;font-weight:500;color:var(--pb-muted-fg)">{vt.formLanguage}</label>
+                  <div style="padding:0.4375rem 0.625rem;border:1px solid var(--pb-border);border-radius:var(--pb-radius);font-size:0.75rem;color:var(--pb-fg);background:var(--pb-bg);display:flex;align-items:center;justify-content:space-between">{vt.formLanguageValue} <i data-icon="chevronDown" style="width:14px;height:14px;color:var(--pb-muted-fg)"></i></div>
+                </div>
+                <div style="display:flex;flex-direction:column;gap:0.3125rem">
+                  <label style="font-size:0.6875rem;font-weight:500;color:var(--pb-muted-fg)">{vt.formTimezone}</label>
+                  <div style="padding:0.4375rem 0.625rem;border:1px solid var(--pb-border);border-radius:var(--pb-radius);font-size:0.75rem;color:var(--pb-fg);background:var(--pb-bg);display:flex;align-items:center;justify-content:space-between">{vt.formTimezoneValue} <i data-icon="chevronDown" style="width:14px;height:14px;color:var(--pb-muted-fg)"></i></div>
+                </div>
+              </div>
+            </div>
+            <!-- Footer: 50/50 split (audit box + actions) -->
+            <div class="pb-content-footer" id="form-footer">
+              <div class="pb-content-footer-audit">
+                <span class="pb-version-badge" id="form-version-badge">{vt.formVersionBadge}</span>
+                <div class="pb-audit-grid">
+                  <div><span class="pb-audit-label">{vt.formUpdated}</span> <span class="pb-audit-value">{vt.formUpdatedValue}</span></div>
+                  <div><span class="pb-audit-label">{vt.formCreated}</span> <span class="pb-audit-value">{vt.formCreatedValue}</span></div>
+                  <div><span class="pb-audit-label">{vt.formId}</span> <span class="pb-audit-value">{vt.formIdValue}</span></div>
+                  <div><span class="pb-audit-label">{vt.formBy}</span> <span class="pb-audit-value">{vt.formByValue}</span></div>
+                  <div><span class="pb-audit-label">{vt.formBy}</span> <span class="pb-audit-value">{vt.formByEmailValue}</span></div>
+                  <div><span class="pb-audit-label">{vt.formSynced}</span> <span class="pb-audit-value">{vt.formSyncedValue}</span></div>
+                </div>
+              </div>
+              <div class="pb-content-footer-actions">
+                <button class="pb-btn-primary">{vt.formSave}</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== Extracted overlays ===== -->
+
+      <!-- #1 Row action dropdown (from Mock A) -->
+      <div class="extracted" id="ex-row-action" style="width:200px">
+        <div class="row-action-dropdown">
+          <div class="row-action-item highlighted" id="row-action-vh">
+            <i data-icon="history" style="width:16px;height:16px"></i>
+            <span>{vt.rowActionVersionHistory}</span>
+          </div>
+          <div class="row-action-item">
+            <i data-icon="pencil" style="width:16px;height:16px"></i>
+            <span>{vt.rowActionEdit}</span>
+          </div>
+          <div class="row-action-item">
+            <i data-icon="copy" style="width:16px;height:16px"></i>
+            <span>{vt.rowActionDuplicate}</span>
+          </div>
+          <div class="row-action-item danger">
+            <i data-icon="trash2" style="width:16px;height:16px"></i>
+            <span>{vt.rowActionDelete}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- #2 Form footer version badge (from Mock B) -->
+      <div class="extracted" id="ex-form-footer" style="width:auto">
+        <div class="pb-content-footer" style="border-radius:10px;box-shadow:0 0 0 1px rgba(2,8,23,0.1),0 25px 50px -12px rgba(0,0,0,0.25)">
+          <div class="pb-content-footer-audit">
+            <span class="pb-version-badge" style="font-size:0.875rem;padding:0.25rem 0.75rem">{vt.formVersionBadge}</span>
+            <div class="pb-audit-grid">
+              <div><span class="pb-audit-label">{vt.formUpdated}</span> <span class="pb-audit-value">{vt.formUpdatedValue}</span></div>
+              <div><span class="pb-audit-label">{vt.formCreated}</span> <span class="pb-audit-value">{vt.formCreatedValue}</span></div>
+              <div><span class="pb-audit-label">{vt.formId}</span> <span class="pb-audit-value">{vt.formIdValue}</span></div>
+              <div><span class="pb-audit-label">{vt.formBy}</span> <span class="pb-audit-value">{vt.formByValue}</span></div>
+            </div>
+          </div>
+          <div class="pb-content-footer-actions">
+            <button class="pb-btn-primary">{vt.formSave}</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- #3 Version history panel (right-side sheet) -->
+      <div class="extracted" id="ex-version-panel" style="width:420px">
+        <div class="sheet-panel">
+          <div class="sheet-header">
+            <div class="sheet-title">{vt.versionPanelTitle}</div>
+            <button class="sheet-close"><i data-icon="x" style="width:18px;height:18px"></i></button>
+          </div>
+          <div class="sheet-body">
+            <div class="timeline">
+              <div class="timeline-entry">
+                <div class="timeline-icon create"><i data-icon="circleCheckBig" style="width:16px;height:16px"></i></div>
+                <div class="timeline-content">
+                  <div class="timeline-header">
+                    <span class="version-badge">v1</span>
+                    <span class="timeline-action">{vt.versionEntryCreate}</span>
+                  </div>
+                  <div class="timeline-meta">
+                    <span class="timeline-user">{vt.versionEntryUser1}</span>
+                    <span class="timeline-time">{vt.versionEntryTime1}</span>
+                  </div>
+                </div>
+              </div>
+              <div class="timeline-entry">
+                <div class="timeline-icon update"><i data-icon="info" style="width:16px;height:16px"></i></div>
+                <div class="timeline-content">
+                  <div class="timeline-header">
+                    <span class="version-badge">v2</span>
+                    <span class="timeline-action">{vt.versionEntryUpdate}</span>
+                  </div>
+                  <div class="timeline-meta">
+                    <span class="timeline-user">{vt.versionEntryUser2}</span>
+                    <span class="timeline-time">{vt.versionEntryTime2}</span>
+                  </div>
+                </div>
+              </div>
+              <div class="timeline-entry">
+                <div class="timeline-icon delete"><i data-icon="alertCircle" style="width:16px;height:16px"></i></div>
+                <div class="timeline-content">
+                  <div class="timeline-header">
+                    <span class="version-badge">v3</span>
+                    <span class="timeline-action">{vt.versionEntryDelete}</span>
+                  </div>
+                  <div class="timeline-meta">
+                    <span class="timeline-user">{vt.versionEntryUser3}</span>
+                    <span class="timeline-time">{vt.versionEntryTime3}</span>
+                  </div>
+                </div>
+              </div>
+              <div class="timeline-entry">
+                <div class="timeline-icon restore"><i data-icon="alertTriangle" style="width:16px;height:16px"></i></div>
+                <div class="timeline-content">
+                  <div class="timeline-header">
+                    <span class="version-badge">v4</span>
+                    <span class="timeline-action">{vt.versionEntryRestore}</span>
+                  </div>
+                  <div class="timeline-meta">
+                    <span class="timeline-user">{vt.versionEntryUser1}</span>
+                    <span class="timeline-time">{vt.versionEntryTime4}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="sheet-footer">
+            <button class="sheet-view-more">{vt.versionPanelViewMore}</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- #4 Action icons (extracted from timeline) -->
+      <div class="extracted" id="ex-action-icons" style="width:280px">
+        <div class="action-icons-grid">
+          <div class="action-icon-item">
+            <div class="action-icon-circle create"><i data-icon="circleCheckBig" style="width:20px;height:20px"></i></div>
+            <span class="action-icon-label">{vt.actionCreate}</span>
+          </div>
+          <div class="action-icon-item">
+            <div class="action-icon-circle update"><i data-icon="info" style="width:20px;height:20px"></i></div>
+            <span class="action-icon-label">{vt.actionUpdate}</span>
+          </div>
+          <div class="action-icon-item">
+            <div class="action-icon-circle delete"><i data-icon="alertCircle" style="width:20px;height:20px"></i></div>
+            <span class="action-icon-label">{vt.actionDelete}</span>
+          </div>
+          <div class="action-icon-item">
+            <div class="action-icon-circle restore"><i data-icon="alertTriangle" style="width:20px;height:20px"></i></div>
+            <span class="action-icon-label">{vt.actionRestore}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- #5 Field diff (expanded from a timeline entry) -->
+      <div class="extracted" id="ex-field-diff" style="width:380px">
+        <div class="field-diff-card">
+          <div class="field-diff-header">
+            <span class="version-badge">v2</span>
+            <span class="timeline-action">{vt.versionEntryUpdate}</span>
+          </div>
+          <div class="field-diff-body">
+            <div class="field-diff-row">
+              <div class="field-diff-name">{vt.fieldDiffName}</div>
+              <div class="field-diff-change">
+                <span class="field-diff-old">{vt.fieldDiffNameOld}</span>
+                <span class="field-diff-arrow">→</span>
+                <span class="field-diff-new">{vt.fieldDiffNameNew}</span>
+              </div>
+            </div>
+            <div class="field-diff-row">
+              <div class="field-diff-name">{vt.fieldDiffStatus}</div>
+              <div class="field-diff-change">
+                <span class="field-diff-old">{vt.fieldDiffStatusOld}</span>
+                <span class="field-diff-arrow">→</span>
+                <span class="field-diff-new">{vt.fieldDiffStatusNew}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- #6 Error panel (right-side sheet) -->
+      <div class="extracted" id="ex-error-panel" style="width:420px">
+        <div class="sheet-panel">
+          <div class="sheet-header">
+            <div class="sheet-title">{vt.errorPanelTitle}</div>
+            <div class="sheet-header-actions">
+              <button class="sheet-clear"><i data-icon="trash2" style="width:16px;height:16px"></i></button>
+              <button class="sheet-close"><i data-icon="x" style="width:18px;height:18px"></i></button>
+            </div>
+          </div>
+          <div class="sheet-body">
+            <div class="error-cards">
+              <div class="error-card critical">
+                <div class="error-card-indicator"></div>
+                <div class="error-card-body">
+                  <div class="error-card-label">{vt.errorCriticalLabel}</div>
+                  <div class="error-card-scope">{vt.errorCriticalScope}</div>
+                  <div class="error-card-message">{vt.errorCriticalMessage}</div>
+                  <div class="error-card-time"><i data-icon="clock" style="width:12px;height:12px"></i>{vt.errorTime1}</div>
+                </div>
+              </div>
+              <div class="error-card high">
+                <div class="error-card-indicator"></div>
+                <div class="error-card-body">
+                  <div class="error-card-label">{vt.errorHighLabel}</div>
+                  <div class="error-card-scope">{vt.errorHighScope}</div>
+                  <div class="error-card-message">{vt.errorHighMessage}</div>
+                  <div class="error-card-time"><i data-icon="clock" style="width:12px;height:12px"></i>{vt.errorTime2}</div>
+                </div>
+              </div>
+              <div class="error-card medium">
+                <div class="error-card-indicator"></div>
+                <div class="error-card-body">
+                  <div class="error-card-label">{vt.errorMediumLabel}</div>
+                  <div class="error-card-scope">{vt.errorMediumScope}</div>
+                  <div class="error-card-message">{vt.errorMediumMessage}</div>
+                  <div class="error-card-time"><i data-icon="clock" style="width:12px;height:12px"></i>{vt.errorTime3}</div>
+                </div>
+              </div>
+              <div class="error-card low">
+                <div class="error-card-indicator"></div>
+                <div class="error-card-body">
+                  <div class="error-card-label">{vt.errorLowLabel}</div>
+                  <div class="error-card-scope">{vt.errorLowScope}</div>
+                  <div class="error-card-message">{vt.errorLowMessage}</div>
+                  <div class="error-card-time"><i data-icon="clock" style="width:12px;height:12px"></i>{vt.errorTime4}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- #7 Impact cards (extracted from error panel) -->
+      <div class="extracted" id="ex-impact-cards" style="width:520px">
+        <div class="impact-cards-grid">
+          <div class="impact-card critical">
+            <div class="impact-card-indicator"></div>
+            <div class="impact-card-icon"><i data-icon="alertCircle" style="width:20px;height:20px"></i></div>
+            <div class="impact-card-label">{vt.errorCriticalLabel}</div>
+          </div>
+          <div class="impact-card high">
+            <div class="impact-card-indicator"></div>
+            <div class="impact-card-icon"><i data-icon="alertCircle" style="width:20px;height:20px"></i></div>
+            <div class="impact-card-label">{vt.errorHighLabel}</div>
+          </div>
+          <div class="impact-card medium">
+            <div class="impact-card-indicator"></div>
+            <div class="impact-card-icon"><i data-icon="alertTriangle" style="width:20px;height:20px"></i></div>
+            <div class="impact-card-label">{vt.errorMediumLabel}</div>
+          </div>
+          <div class="impact-card low">
+            <div class="impact-card-indicator"></div>
+            <div class="impact-card-icon"><i data-icon="info" style="width:20px;height:20px"></i></div>
+            <div class="impact-card-label">{vt.errorLowLabel}</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== Annotation cards ===== -->
+      <div class="ann-label" id="ann-row-action"><div class="ann-card"><div class="ann-title">{vt.annRowActionTitle}</div><div class="ann-desc">{vt.annRowActionDesc}</div></div></div>
+      <div class="ann-label" id="ann-form-footer"><div class="ann-card"><div class="ann-title">{vt.annFormFooterTitle}</div><div class="ann-desc">{vt.annFormFooterDesc}</div></div></div>
+      <div class="ann-label" id="ann-version-panel"><div class="ann-card"><div class="ann-title">{vt.annVersionPanelTitle}</div><div class="ann-desc">{vt.annVersionPanelDesc}</div></div></div>
+      <div class="ann-label" id="ann-action-icons"><div class="ann-card"><div class="ann-title">{vt.annActionIconsTitle}</div><div class="ann-desc">{vt.annActionIconsDesc}</div></div></div>
+      <div class="ann-label" id="ann-field-diff"><div class="ann-card"><div class="ann-title">{vt.annFieldDiffTitle}</div><div class="ann-desc">{vt.annFieldDiffDesc}</div></div></div>
+      <div class="ann-label" id="ann-error-panel"><div class="ann-card"><div class="ann-title">{vt.annErrorPanelTitle}</div><div class="ann-desc">{vt.annErrorPanelDesc}</div></div></div>
+      <div class="ann-label" id="ann-impact-cards"><div class="ann-card"><div class="ann-title">{vt.annImpactCardsTitle}</div><div class="ann-desc">{vt.annImpactCardsDesc}</div></div></div>
+
+      <!-- ===== SVG connectors ===== -->
+      <svg class="connector-svg" id="connectors">
+        <line class="conn-line" id="line-row-action" /><circle class="conn-dot" id="dot-row-action" r="4" />
+        <line class="conn-line" id="line-form-footer" /><circle class="conn-dot" id="dot-form-footer" r="4" />
+        <line class="conn-line" id="line-version-panel" /><circle class="conn-dot" id="dot-version-panel" r="4" />
+        <line class="conn-line" id="line-action-icons" /><circle class="conn-dot" id="dot-action-icons" r="4" />
+        <line class="conn-line" id="line-field-diff" /><circle class="conn-dot" id="dot-field-diff" r="4" />
+        <line class="conn-line" id="line-error-panel" /><circle class="conn-dot" id="dot-error-panel" r="4" />
+        <line class="conn-line" id="line-impact-cards" /><circle class="conn-dot" id="dot-impact-cards" r="4" />
+      </svg>
+
+    </div>
+  </div>
+</div>
+
+<!-- ===== Inline SVG icons not in icons.js ===== -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="i-more-vertical" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="5" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="12" cy="19" r="1"/></symbol>
+    <linearGradient id="ai-cta-gradient" x1="0" y1="0" x2="24" y2="24" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#0ea5e9" />
+      <stop offset="100%" stop-color="#6366f1" />
+    </linearGradient>
+  </defs>
+</svg>
+</div><!-- /.demo-scope -->
+
+    <!-- Website footer -->
+    <footer class="relative z-10 border-t border-slate-800/50 px-6 py-8">
+      <div class="mx-auto flex max-w-7xl items-center justify-between text-sm text-slate-500">
+        <span>&copy; 2026 {t.footer.copyright}</span>
+        <div class="flex items-center gap-4">
+          <span class="text-xs text-slate-600">v{version}</span>
+          <a
+            href="https://github.com/michaelsogos/primebrick-v3-website"
+            class="inline-flex items-center gap-1.5 hover:text-sky-400 transition-colors"
+            target="_blank"
+            rel="noopener"
+          >
+            <GitHubIcon class="h-4 w-4" />
+            GitHub®
+          </a>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      import { renderAllIcons } from '../../../scripts/demo/icons';
+      import { initVersionsScroll } from '../../../scripts/demo/versions-scroll';
+      renderAllIcons();
+      initVersionsScroll();
+    </script>
+  </body>
+</html>

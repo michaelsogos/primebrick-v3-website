@@ -1,0 +1,281 @@
+---
+import { translations, LANGUAGES, type LangCode } from '../../../i18n/translations';
+import LanguageSwitcher from '../../../components/svelte/LanguageSwitcher.svelte';
+import GitHubDropdown from '../../../components/svelte/GitHubDropdown.svelte';
+import VirtualTourMegaMenu from '../../../components/svelte/VirtualTourMegaMenu.svelte';
+import UseCasesMegaMenu from '../../../components/svelte/UseCasesMegaMenu.svelte';
+import TopBanner from '../../../components/astro/TopBanner.astro';
+import '../../../styles/global.css';
+
+export const prerender = true;
+
+export function getStaticPaths() {
+  return LANGUAGES.map((lang) => ({
+    params: { lang: lang.code === 'en' ? 'en' : lang.code },
+  }));
+}
+
+const { lang } = Astro.params;
+const langCode = (lang ?? 'en') as LangCode;
+const t = translations[langCode] ?? translations.en;
+const isEn = langCode === 'en';
+const docsPath = 'https://docs.primebrick.dev';
+const homeHref = isEn ? '/en/' : `/${langCode}/`;
+const contactHref = isEn ? '/en/contact' : `/${langCode}/contact`;
+const useCasesHref = isEn ? '/en/use-cases/' : `/${langCode}/use-cases/`;
+const nextPersonaHref = `${useCasesHref}tech-leader`;
+---
+
+<!doctype html>
+<html lang={langCode}>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Primebrick for Developers: ship code, not ceremony. Scaffold entities, generate CRUD, write business logic — the framework handles the rest." />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+    <link rel="icon" type="image/png" sizes="512x512" href="/favicon-512.png" />
+    <link rel="icon" sizes="any" href="/favicon.ico" />
+    <link rel="apple-touch-icon" href="/favicon-512.png" />
+    <title>PrimeBrick — Use Cases: Developer</title>
+    {LANGUAGES.map((l) => (
+      <link rel="alternate" hreflang={l.hreflang} href={`https://primebrick.dev${l.code === 'en' ? '/en/use-cases/developer' : `/${l.code}/use-cases/developer`}`} />
+    ))}
+    <link rel="alternate" hreflang="x-default" href="https://primebrick.dev/en/use-cases/developer" />
+  </head>
+  <body class="min-h-screen bg-slate-950 text-slate-100 antialiased">
+    <div class="pointer-events-none fixed inset-0 overflow-hidden">
+      <div class="absolute -top-40 left-1/2 h-[500px] w-[800px] -translate-x-1/2 rounded-full bg-sky-500/10 blur-[120px]"></div>
+      <div class="absolute top-1/3 -right-40 h-[400px] w-[400px] rounded-full bg-sky-500/10 blur-[100px]"></div>
+      <div class="absolute bottom-0 -left-40 h-[400px] w-[400px] rounded-full bg-cyan-500/10 blur-[100px]"></div>
+    </div>
+
+    <TopBanner text={t.banner.text} href={contactHref} />
+
+    <nav id="site-nav" class="sticky top-9 z-50 border-b border-slate-800/50 bg-slate-950/40 backdrop-blur-sm transition-all duration-300">
+      <div id="nav-inner" class="mx-auto flex max-w-7xl items-center justify-between px-6 py-4 transition-all duration-300">
+        <a href={isEn ? '/' : `/${langCode}/`} class="flex items-center gap-2" aria-label="PrimeBrick home">
+          <img src="/logo-full-dark.svg" alt="PrimeBrick" width="170" height="32" class="h-7 w-auto" />
+        </a>
+        <div class="flex items-center gap-6 text-sm">
+          <a href={homeHref} class="text-slate-300 hover:text-sky-400 transition-colors">{t.nav.home}</a>
+          <VirtualTourMegaMenu client:load currentLang={langCode} />
+          <UseCasesMegaMenu client:load currentLang={langCode} activePersona="developer" />
+          <a href={docsPath} class="text-slate-300 hover:text-sky-400 transition-colors" target="_blank" rel="noopener">{t.nav.docs}</a>
+          <a href={contactHref} class="text-slate-300 hover:text-sky-400 transition-colors">{t.nav.contact}</a>
+          <GitHubDropdown client:load />
+          <LanguageSwitcher client:load currentLang={langCode} />
+        </div>
+      </div>
+    </nav>
+    <script>
+      (() => {
+        const nav = document.getElementById('site-nav');
+        const inner = document.getElementById('nav-inner');
+        if (!nav || !inner) return;
+        const onScroll = () => {
+          const scrolled = window.scrollY > 20;
+          if (scrolled) {
+            inner.classList.replace('py-4', 'py-2');
+            nav.classList.add('bg-slate-950/80', 'backdrop-blur-md', 'shadow-lg', 'border-slate-800/80');
+            nav.classList.remove('bg-slate-950/40', 'border-slate-800/50');
+          } else {
+            inner.classList.replace('py-2', 'py-4');
+            nav.classList.remove('bg-slate-950/80', 'backdrop-blur-md', 'shadow-lg', 'border-slate-800/80');
+            nav.classList.add('bg-slate-950/40', 'border-slate-800/50');
+          }
+        };
+        window.addEventListener('scroll', onScroll, { passive: true });
+        onScroll();
+      })();
+    </script>
+
+    <main class="relative z-10">
+      <section class="px-6 pt-20 pb-12">
+        <div class="mx-auto max-w-5xl">
+          <div class="mb-4 inline-flex items-center gap-2 rounded-full border border-sky-500/30 bg-sky-500/10 px-4 py-1.5 text-xs font-medium text-sky-300">
+            <svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 18l6-6-6-6"/><path d="M8 6l-6 6 6 6"/></svg>
+            Persona 01 / 06
+          </div>
+          <h1 class="text-4xl font-bold tracking-tight text-white sm:text-5xl lg:text-6xl">Developer</h1>
+          <p class="mt-3 text-xl font-medium text-sky-400">Ship code, not ceremony.</p>
+          <p class="mt-4 max-w-2xl text-lg text-slate-400">You write business logic. The framework handles auth, RBAC, caching, audit logs, multi-tenancy, and the admin UI. Scaffold an entity, generate CRUD, ship a feature — all before lunch. The boring infrastructure is already done; your job is the interesting part.</p>
+          <div class="mt-6 flex flex-wrap gap-3">
+            <a href={docsPath} class="rounded-xl bg-gradient-to-r from-sky-500 to-cyan-600 px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-sky-500/20 transition-all hover:scale-105" target="_blank" rel="noopener">Read the docs</a>
+            <a href={contactHref} class="rounded-xl border border-slate-700 bg-slate-900/50 px-5 py-2.5 text-sm font-semibold text-slate-200 transition-all hover:border-sky-500 hover:text-sky-400">Get in touch</a>
+          </div>
+        </div>
+      </section>
+
+      <section class="px-6 pb-16">
+        <div class="mx-auto max-w-5xl">
+          <div class="overflow-hidden rounded-2xl border border-slate-800/50 bg-slate-950/80 shadow-2xl backdrop-blur-sm">
+            <div class="flex items-center gap-2 border-b border-slate-800/50 px-4 py-2">
+              <div class="flex gap-1.5"><span class="h-2.5 w-2.5 rounded-full bg-red-500/70"></span><span class="h-2.5 w-2.5 rounded-full bg-yellow-500/70"></span><span class="h-2.5 w-2.5 rounded-full bg-green-500/70"></span></div>
+              <span class="ml-2 text-xs text-slate-500 font-mono">customer.entity.ts — Primebrick SDK</span>
+            </div>
+            <pre class="p-4 text-xs font-mono leading-relaxed text-slate-300 overflow-x-auto"><span class="text-violet-400">import</span> &lbrace; Entity, Field, Auditable, Cached, RBAC &rbrace; <span class="text-violet-400">from</span> <span class="text-emerald-400">'@primebrick/sdk'</span>;
+
+<span class="text-violet-400">@Entity</span>(&lbrace; name: <span class="text-emerald-400">'customers'</span> &rbrace;)
+<span class="text-violet-400">@Auditable</span>()
+<span class="text-violet-400">@Cached</span>(&lbrace; ttl: <span class="text-amber-400">300</span> &rbrace;)
+<span class="text-violet-400">export class</span> <span class="text-sky-400">Customer</span> &lbrace;
+  <span class="text-violet-400">@Field</span>(&lbrace; type: <span class="text-emerald-400">'uuid'</span>, primary: <span class="text-amber-400">true</span> &rbrace;)
+  id<span class="text-slate-500">:</span> <span class="text-sky-400">string</span>;
+
+  <span class="text-violet-400">@Field</span>(&lbrace; type: <span class="text-emerald-400">'string'</span> &rbrace;)
+  <span class="text-violet-400">@RBAC</span>(&lbrace; read: [<span class="text-emerald-400">'admin'</span>, <span class="text-emerald-400">'sales'</span>], write: [<span class="text-emerald-400">'admin'</span>] &rbrace;)
+  name<span class="text-slate-500">:</span> <span class="text-sky-400">string</span>;
+
+  <span class="text-violet-400">@Field</span>(&lbrace; type: <span class="text-emerald-400">'email'</span>, unique: <span class="text-amber-400">true</span> &rbrace;)
+  email<span class="text-slate-500">:</span> <span class="text-sky-400">string</span>;
+&rbrace;
+
+<span class="text-slate-500">// One command generates CRUD, API routes, admin UI, tests, migrations:</span>
+<span class="text-slate-500">// $ pnpm primebrick generate-crud Customer</span></pre>
+          </div>
+        </div>
+      </section>
+
+      <section class="px-6 py-16 border-t border-slate-800/30">
+        <div class="mx-auto max-w-5xl">
+          <h2 class="text-2xl font-bold text-white sm:text-3xl">What changes for you</h2>
+          <div class="mt-10 grid gap-6 sm:grid-cols-2">
+            <div class="rounded-2xl border border-slate-800/50 bg-slate-900/30 p-6 backdrop-blur-sm">
+              <div class="mb-3 flex h-10 w-10 items-center justify-center rounded-xl bg-sky-500/20 text-sky-400"><svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 10V3L4 14h7v7l9-11h-7z"/></svg></div>
+              <h3 class="text-lg font-semibold text-white">Scaffold in minutes, not sprints</h3>
+              <p class="mt-2 text-sm text-slate-400">Define an entity with decorators. Run one command. Get CRUD, API routes, admin UI, tests and migrations — all generated, all type-safe, all passing CI. No boilerplate, no copy-paste from the last project, no "I'll fix the tests later."</p>
+            </div>
+            <div class="rounded-2xl border border-slate-800/50 bg-slate-900/30 p-6 backdrop-blur-sm">
+              <div class="mb-3 flex h-10 w-10 items-center justify-center rounded-xl bg-sky-500/20 text-sky-400"><svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div>
+              <h3 class="text-lg font-semibold text-white">Auth, RBAC and audit are built in</h3>
+              <p class="mt-2 text-sm text-slate-400">OIDC, passkeys, MFA, role-based access control, and tamper-evident audit logs ship with the framework. Annotate a field with <code class="rounded bg-slate-800 px-1 text-sky-300">@RBAC</code> and access is enforced everywhere — API, UI, exports. No hand-rolled auth middleware, no "did we remember to check permissions?"</p>
+            </div>
+            <div class="rounded-2xl border border-slate-800/50 bg-slate-900/30 p-6 backdrop-blur-sm">
+              <div class="mb-3 flex h-10 w-10 items-center justify-center rounded-xl bg-sky-500/20 text-sky-400"><svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7h16M4 12h16M4 17h10"/></svg></div>
+              <h3 class="text-lg font-semibold text-white">Type-safe end to end</h3>
+              <p class="mt-2 text-sm text-slate-400">Entities, API routes, DTOs, and the admin UI are all generated from the same schema. Change a field type and the compiler tells you everywhere that breaks — before your users do. No runtime surprises, no "it worked in dev but prod has different data."</p>
+            </div>
+            <div class="rounded-2xl border border-slate-800/50 bg-slate-900/30 p-6 backdrop-blur-sm">
+              <div class="mb-3 flex h-10 w-10 items-center justify-center rounded-xl bg-sky-500/20 text-sky-400"><svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/></svg></div>
+              <h3 class="text-lg font-semibold text-white">Open source, inspectable, forkable</h3>
+              <p class="mt-2 text-sm text-slate-400">MIT-licensed. Read the source, understand the magic, fix it if you need to. No black-box framework, no "trust us, it works." If a decorator doesn't do what you expect, you can read the code that implements it — and change it.</p>
+            </div>
+            <div class="rounded-2xl border border-slate-800/50 bg-slate-900/30 p-6 backdrop-blur-sm">
+              <div class="mb-3 flex h-10 w-10 items-center justify-center rounded-xl bg-sky-500/20 text-sky-400"><svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></div>
+              <h3 class="text-lg font-semibold text-white">AI-assisted development</h3>
+              <p class="mt-2 text-sm text-slate-400">Describe a feature in natural language. The agentic GUI writes the entity, the service, the route, the tests — all following your project's conventions. You approve the plan, the agent writes the code, CI runs, you ship. It's pair programming with an AI that actually knows your codebase.</p>
+            </div>
+            <div class="rounded-2xl border border-slate-800/50 bg-slate-900/30 p-6 backdrop-blur-sm">
+              <div class="mb-3 flex h-10 w-10 items-center justify-center rounded-xl bg-sky-500/20 text-sky-400"><svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"/></svg></div>
+              <h3 class="text-lg font-semibold text-white">No per-seat license, no vendor lock-in</h3>
+              <p class="mt-2 text-sm text-slate-400">MIT license. Use it, fork it, modify it, ship a commercial product with it. No per-seat fees, no per-request fees, no "contact sales for enterprise pricing." Your build is your build.</p>
+            </div>
+            <div class="rounded-2xl border border-slate-800/50 bg-slate-900/30 p-6 backdrop-blur-sm">
+              <div class="mb-3 flex h-10 w-10 items-center justify-center rounded-xl bg-sky-500/20 text-sky-400"><svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3"/></svg></div>
+              <h3 class="text-lg font-semibold text-white">Deploy anywhere</h3>
+              <p class="mt-2 text-sm text-slate-400">Docker, Kubernetes, AWS (ECS/EKS), Azure Container Apps, GCP Cloud Run, Alibaba Cloud ACK, or a single VPS. The same codebase runs everywhere. No vendor-specific adapters, no lock-in. Move when you want, stay where you want.</p>
+            </div>
+            <div class="rounded-2xl border border-slate-800/50 bg-slate-900/30 p-6 backdrop-blur-sm">
+              <div class="mb-3 flex h-10 w-10 items-center justify-center rounded-xl bg-sky-500/20 text-sky-400"><svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg></div>
+              <h3 class="text-lg font-semibold text-white">Onboarding in hours, not weeks</h3>
+              <p class="mt-2 text-sm text-slate-400">Conventions are enforced by the framework, not by a 50-page wiki. A new developer reads the entity, sees the decorators, and understands the access rules, the audit trail, and the caching strategy — all in one file. No archaeology, no "ask Bob, he wrote that in 2019."</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="px-6 py-16 border-t border-slate-800/30">
+        <div class="mx-auto max-w-5xl">
+          <h2 class="text-2xl font-bold text-white sm:text-3xl">A day in the life</h2>
+          <div class="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            <div class="rounded-2xl border border-slate-800/50 bg-slate-900/30 p-5 backdrop-blur-sm"><div class="text-xs font-mono text-sky-400">09:00</div><h3 class="mt-1 text-sm font-semibold text-white">Scaffold</h3><p class="mt-1 text-xs text-slate-400">Define a Customer entity with decorators. Run generate-crud. 14 files created.</p></div>
+            <div class="rounded-2xl border border-slate-800/50 bg-slate-900/30 p-5 backdrop-blur-sm"><div class="text-xs font-mono text-sky-400">10:30</div><h3 class="mt-1 text-sm font-semibold text-white">Customize</h3><p class="mt-1 text-xs text-slate-400">Add a custom validation rule and a computed field. Type-safe, compiler-checked.</p></div>
+            <div class="rounded-2xl border border-slate-800/50 bg-slate-900/30 p-5 backdrop-blur-sm"><div class="text-xs font-mono text-sky-400">11:00</div><h3 class="mt-1 text-sm font-semibold text-white">Test</h3><p class="mt-1 text-xs text-slate-400">12 scaffolded tests pass. Add 3 edge-case tests for the validation rule. All green.</p></div>
+            <div class="rounded-2xl border border-slate-800/50 bg-slate-900/30 p-5 backdrop-blur-sm"><div class="text-xs font-mono text-sky-400">11:30</div><h3 class="mt-1 text-sm font-semibold text-white">Ship</h3><p class="mt-1 text-xs text-slate-400">Push to CI. Compliance scanner runs. PR merged before lunch.</p></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="px-6 py-16 border-t border-slate-800/30">
+        <div class="mx-auto max-w-5xl">
+          <h2 class="text-2xl font-bold text-white sm:text-3xl">Before vs. with Primebrick</h2>
+          <div class="mt-8 overflow-hidden rounded-2xl border border-slate-800/50">
+            <div class="grid grid-cols-2 bg-slate-900/50 text-xs font-semibold text-slate-400"><div class="p-4 text-rose-400">Before (DIY)</div><div class="border-l border-slate-800/50 p-4 text-sky-400">With Primebrick</div></div>
+            <div class="grid grid-cols-2 border-t border-slate-800/50 text-sm"><div class="p-4 text-slate-400">Write auth middleware, RBAC checks, audit logger</div><div class="border-l border-slate-800/50 p-4 text-slate-300">Annotate with @RBAC, @Auditable — done</div></div>
+            <div class="grid grid-cols-2 border-t border-slate-800/50 text-sm bg-slate-900/20"><div class="p-4 text-slate-400">Build CRUD UI by hand for every entity</div><div class="border-l border-slate-800/50 p-4 text-slate-300">Generated from schema, type-safe, consistent</div></div>
+            <div class="grid grid-cols-2 border-t border-slate-800/50 text-sm"><div class="p-4 text-slate-400">Write migrations, seed data, test fixtures</div><div class="border-l border-slate-800/50 p-4 text-slate-300">Generated, versioned, reproducible</div></div>
+            <div class="grid grid-cols-2 border-t border-slate-800/50 text-sm bg-slate-900/20"><div class="p-4 text-slate-400">Hope the cache invalidation is correct</div><div class="border-l border-slate-800/50 p-4 text-slate-300">@Cached decorator, framework-managed invalidation</div></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="px-6 py-16 border-t border-slate-800/30">
+        <div class="mx-auto max-w-5xl">
+          <h2 class="text-2xl font-bold text-white sm:text-3xl">Capabilities you'll use</h2>
+          <div class="mt-6 flex flex-wrap gap-3">
+            <span class="rounded-full border border-sky-500/30 bg-sky-500/10 px-4 py-2 text-sm text-sky-300">@Entity decorators</span>
+            <span class="rounded-full border border-sky-500/30 bg-sky-500/10 px-4 py-2 text-sm text-sky-300">generate-crud CLI</span>
+            <span class="rounded-full border border-sky-500/30 bg-sky-500/10 px-4 py-2 text-sm text-sky-300">@RBAC</span>
+            <span class="rounded-full border border-sky-500/30 bg-sky-500/10 px-4 py-2 text-sm text-sky-300">@Auditable</span>
+            <span class="rounded-full border border-sky-500/30 bg-sky-500/10 px-4 py-2 text-sm text-sky-300">@Cached</span>
+            <span class="rounded-full border border-sky-500/30 bg-sky-500/10 px-4 py-2 text-sm text-sky-300">Type-safe SDK</span>
+            <span class="rounded-full border border-sky-500/30 bg-sky-500/10 px-4 py-2 text-sm text-sky-300">OpenAPI auto-gen</span>
+            <span class="rounded-full border border-sky-500/30 bg-sky-500/10 px-4 py-2 text-sm text-sky-300">Agentic GUI</span>
+            <span class="rounded-full border border-sky-500/30 bg-sky-500/10 px-4 py-2 text-sm text-sky-300">Passkeys / MFA</span>
+            <span class="rounded-full border border-sky-500/30 bg-sky-500/10 px-4 py-2 text-sm text-sky-300">Docker / K8s</span>
+            <span class="rounded-full border border-sky-500/30 bg-sky-500/10 px-4 py-2 text-sm text-sky-300">MIT License</span>
+            <span class="rounded-full border border-sky-500/30 bg-sky-500/10 px-4 py-2 text-sm text-sky-300">OpenTelemetry</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="px-6 py-16 border-t border-slate-800/30">
+        <div class="mx-auto max-w-3xl text-center">
+          <svg class="mx-auto h-10 w-10 text-sky-500/40" viewBox="0 0 24 24" fill="currentColor"><path d="M9.983 3v7.391c0 5.704-3.731 9.57-8.983 10.609l-.995-2.151c2.432-.917 3.995-3.638 3.995-5.849h-4v-10h9.983zm14.017 0v7.391c0 5.704-3.748 9.571-9 10.609l-.996-2.151c2.433-.917 3.996-3.638 3.996-5.849h-3.983v-10h9.983z"/></svg>
+          <blockquote class="mt-4 text-xl font-medium text-slate-200">I stopped writing boilerplate and started writing features. The first time I ran generate-crud and got 14 passing files, I thought it was a mistake. It wasn't.</blockquote>
+          <div class="mt-4 text-sm text-slate-500">— Senior developer, SaaS startup</div>
+        </div>
+      </section>
+
+      <section class="px-6 py-16 border-t border-slate-800/30">
+        <div class="mx-auto max-w-3xl">
+          <h2 class="text-2xl font-bold text-white sm:text-3xl">Developer FAQ</h2>
+          <div class="mt-8 space-y-4">
+            <details class="group rounded-xl border border-slate-800/50 bg-slate-900/30 p-5 backdrop-blur-sm"><summary class="cursor-pointer list-none text-sm font-semibold text-white">Is the generated code readable and editable?<span class="float-right text-slate-500 group-open:rotate-180 transition-transform">▾</span></summary><p class="mt-3 text-sm text-slate-400">Yes. The generated code follows the same conventions as hand-written code in the project. You can read it, modify it, and delete what you don't need. The generator is a starting point, not a black box. If you regenerate after changing the schema, the tool respects your customizations in protected regions.</p></details>
+            <details class="group rounded-xl border border-slate-800/50 bg-slate-900/30 p-5 backdrop-blur-sm"><summary class="cursor-pointer list-none text-sm font-semibold text-white">Can I use my own auth provider?<span class="float-right text-slate-500 group-open:rotate-180 transition-transform">▾</span></summary><p class="mt-3 text-sm text-slate-400">Yes. The built-in auth uses OIDC and supports passkeys/MFA. If you have an existing Identity Provider (Keycloak, Auth0, Azure AD), you can configure it as the OIDC issuer. The @RBAC decorator works regardless of where the roles come from.</p></details>
+            <details class="group rounded-xl border border-slate-800/50 bg-slate-900/30 p-5 backdrop-blur-sm"><summary class="cursor-pointer list-none text-sm font-semibold text-white">What databases are supported?<span class="float-right text-slate-500 group-open:rotate-180 transition-transform">▾</span></summary><p class="mt-3 text-sm text-slate-400">PostgreSQL is the primary target, with pgvector support for AI features. The DAL layer is abstracted, so other databases can be supported — but Postgres gives you the full feature set including JSONB, full-text search, and vector embeddings.</p></details>
+            <details class="group rounded-xl border border-slate-800/50 bg-slate-900/30 p-5 backdrop-blur-sm"><summary class="cursor-pointer list-none text-sm font-semibold text-white">How does the agentic GUI know my project's conventions?<span class="float-right text-slate-500 group-open:rotate-180 transition-transform">▾</span></summary><p class="mt-3 text-sm text-slate-400">The agent reads your existing entities, services, and routes to learn the patterns. It also reads the framework's convention rules. When it generates code, it follows the same decorator patterns, file structure, and naming conventions as the rest of your project. You approve the plan before it writes anything.</p></details>
+            <details class="group rounded-xl border border-slate-800/50 bg-slate-900/30 p-5 backdrop-blur-sm"><summary class="cursor-pointer list-none text-sm font-semibold text-white">Can I contribute to the framework?<span class="float-right text-slate-500 group-open:rotate-180 transition-transform">▾</span></summary><p class="mt-3 text-sm text-slate-400">Yes — it's MIT-licensed open source. PRs are welcome. The repo has contributing guidelines, ADRs for architectural decisions, and public issue tracking. You can also fork it and maintain your own version if you prefer.</p></details>
+          </div>
+        </div>
+      </section>
+
+      <section class="px-6 py-20 border-t border-slate-800/30">
+        <div class="mx-auto max-w-5xl">
+          <div class="grid gap-6 lg:grid-cols-2">
+            <a href={nextPersonaHref} class="group rounded-2xl border border-slate-800/50 bg-slate-900/30 p-6 backdrop-blur-sm transition-all hover:border-indigo-500/40 hover:bg-slate-900/50">
+              <div class="text-xs text-slate-500">Next persona →</div>
+              <div class="mt-2 flex items-center gap-3"><div class="flex h-10 w-10 items-center justify-center rounded-xl bg-indigo-500/20 text-indigo-400"><svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg></div><div><h3 class="text-lg font-semibold text-white">Tech Leader</h3><p class="text-sm text-indigo-400">Conventions, not meetings.</p></div></div>
+            </a>
+            <div class="rounded-2xl border border-slate-800/50 bg-gradient-to-b from-slate-900/50 to-slate-950/50 p-6 backdrop-blur-sm">
+              <h3 class="text-lg font-semibold text-white">Ready to ship code, not ceremony?</h3>
+              <p class="mt-2 text-sm text-slate-400">Read the docs or get in touch — we'll show you how to scaffold your first entity in minutes.</p>
+              <div class="mt-4 flex flex-wrap gap-3">
+                <a href={docsPath} class="rounded-xl bg-gradient-to-r from-sky-500 to-cyan-600 px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-sky-500/20 transition-all hover:scale-105" target="_blank" rel="noopener">Read the docs</a>
+                <a href={contactHref} class="rounded-xl border border-slate-700 bg-slate-900/50 px-5 py-2.5 text-sm font-semibold text-slate-200 transition-all hover:border-sky-500 hover:text-sky-400">Get in touch</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="relative z-10 border-t border-slate-800/50 px-6 py-8">
+      <div class="mx-auto flex max-w-7xl items-center justify-between text-sm text-slate-500">
+        <span>&copy; 2026 PrimeBrick. MIT License.</span>
+        <a href="https://github.com/primebrick" class="hover:text-sky-400 transition-colors" target="_blank" rel="noopener">GitHub</a>
+      </div>
+    </footer>
+  </body>
+</html>

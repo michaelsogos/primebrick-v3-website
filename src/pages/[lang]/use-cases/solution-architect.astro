@@ -1,0 +1,282 @@
+---
+import { translations, LANGUAGES, type LangCode } from '../../../i18n/translations';
+import LanguageSwitcher from '../../../components/svelte/LanguageSwitcher.svelte';
+import GitHubDropdown from '../../../components/svelte/GitHubDropdown.svelte';
+import VirtualTourMegaMenu from '../../../components/svelte/VirtualTourMegaMenu.svelte';
+import UseCasesMegaMenu from '../../../components/svelte/UseCasesMegaMenu.svelte';
+import TopBanner from '../../../components/astro/TopBanner.astro';
+import '../../../styles/global.css';
+
+export const prerender = true;
+
+export function getStaticPaths() {
+  return LANGUAGES.map((lang) => ({
+    params: { lang: lang.code === 'en' ? 'en' : lang.code },
+  }));
+}
+
+const { lang } = Astro.params;
+const langCode = (lang ?? 'en') as LangCode;
+const t = translations[langCode] ?? translations.en;
+const isEn = langCode === 'en';
+const docsPath = 'https://docs.primebrick.dev';
+const homeHref = isEn ? '/en/' : `/${langCode}/`;
+const contactHref = isEn ? '/en/contact' : `/${langCode}/contact`;
+const useCasesHref = isEn ? '/en/use-cases/' : `/${langCode}/use-cases/`;
+const nextPersonaHref = `${useCasesHref}cto`;
+---
+
+<!doctype html>
+<html lang={langCode}>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Primebrick for Solution Architects: layered modular architecture, multi-cloud deployment, compliance from code to auditor." />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+    <link rel="icon" type="image/png" sizes="512x512" href="/favicon-512.png" />
+    <link rel="icon" sizes="any" href="/favicon.ico" />
+    <link rel="apple-touch-icon" href="/favicon-512.png" />
+    <title>PrimeBrick — Use Cases: Solution Architect</title>
+    {LANGUAGES.map((l) => (
+      <link rel="alternate" hreflang={l.hreflang} href={`https://primebrick.dev${l.code === 'en' ? '/en/use-cases/solution-architect' : `/${l.code}/use-cases/solution-architect`}`} />
+    ))}
+    <link rel="alternate" hreflang="x-default" href="https://primebrick.dev/en/use-cases/solution-architect" />
+  </head>
+  <body class="min-h-screen bg-slate-950 text-slate-100 antialiased">
+    <div class="pointer-events-none fixed inset-0 overflow-hidden">
+      <div class="absolute -top-40 left-1/2 h-[500px] w-[800px] -translate-x-1/2 rounded-full bg-violet-500/10 blur-[120px]"></div>
+      <div class="absolute top-1/3 -right-40 h-[400px] w-[400px] rounded-full bg-violet-500/10 blur-[100px]"></div>
+      <div class="absolute bottom-0 -left-40 h-[400px] w-[400px] rounded-full bg-fuchsia-500/10 blur-[100px]"></div>
+    </div>
+
+    <TopBanner text={t.banner.text} href={contactHref} />
+
+    <nav id="site-nav" class="sticky top-9 z-50 border-b border-slate-800/50 bg-slate-950/40 backdrop-blur-sm transition-all duration-300">
+      <div id="nav-inner" class="mx-auto flex max-w-7xl items-center justify-between px-6 py-4 transition-all duration-300">
+        <a href={isEn ? '/' : `/${langCode}/`} class="flex items-center gap-2" aria-label="PrimeBrick home">
+          <img src="/logo-full-dark.svg" alt="PrimeBrick" width="170" height="32" class="h-7 w-auto" />
+        </a>
+        <div class="flex items-center gap-6 text-sm">
+          <a href={homeHref} class="text-slate-300 hover:text-sky-400 transition-colors">{t.nav.home}</a>
+          <VirtualTourMegaMenu client:load currentLang={langCode} />
+          <UseCasesMegaMenu client:load currentLang={langCode} activePersona="solution-architect" />
+          <a href={docsPath} class="text-slate-300 hover:text-sky-400 transition-colors" target="_blank" rel="noopener">{t.nav.docs}</a>
+          <a href={contactHref} class="text-slate-300 hover:text-sky-400 transition-colors">{t.nav.contact}</a>
+          <GitHubDropdown client:load />
+          <LanguageSwitcher client:load currentLang={langCode} />
+        </div>
+      </div>
+    </nav>
+    <script>
+      (() => {
+        const nav = document.getElementById('site-nav');
+        const inner = document.getElementById('nav-inner');
+        if (!nav || !inner) return;
+        const onScroll = () => {
+          const scrolled = window.scrollY > 20;
+          if (scrolled) {
+            inner.classList.replace('py-4', 'py-2');
+            nav.classList.add('bg-slate-950/80', 'backdrop-blur-md', 'shadow-lg', 'border-slate-800/80');
+            nav.classList.remove('bg-slate-950/40', 'border-slate-800/50');
+          } else {
+            inner.classList.replace('py-2', 'py-4');
+            nav.classList.remove('bg-slate-950/80', 'backdrop-blur-md', 'shadow-lg', 'border-slate-800/80');
+            nav.classList.add('bg-slate-950/40', 'border-slate-800/50');
+          }
+        };
+        window.addEventListener('scroll', onScroll, { passive: true });
+        onScroll();
+      })();
+    </script>
+
+    <main class="relative z-10">
+      <section class="px-6 pt-20 pb-12">
+        <div class="mx-auto max-w-5xl">
+          <div class="mb-4 inline-flex items-center gap-2 rounded-full border border-violet-500/30 bg-violet-500/10 px-4 py-1.5 text-xs font-medium text-violet-300">
+            <svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+            Persona 03 / 06
+          </div>
+          <h1 class="text-4xl font-bold tracking-tight text-white sm:text-5xl lg:text-6xl">Solution Architect</h1>
+          <p class="mt-3 text-xl font-medium text-violet-400">Architecture that survives.</p>
+          <p class="mt-4 max-w-2xl text-lg text-slate-400">You design systems that last. Primebrick gives you a layered, modular architecture with clear boundaries, multi-cloud deployment, and compliance built into the build pipeline. No rewrites when you scale, no re-platforming when you change clouds, no audit panic when the regulator calls.</p>
+          <div class="mt-6 flex flex-wrap gap-3">
+            <a href={docsPath} class="rounded-xl bg-gradient-to-r from-violet-500 to-fuchsia-600 px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-violet-500/20 transition-all hover:scale-105" target="_blank" rel="noopener">Read the docs</a>
+            <a href={contactHref} class="rounded-xl border border-slate-700 bg-slate-900/50 px-5 py-2.5 text-sm font-semibold text-slate-200 transition-all hover:border-violet-500 hover:text-violet-400">Get in touch</a>
+          </div>
+        </div>
+      </section>
+
+      <section class="px-6 pb-16">
+        <div class="mx-auto max-w-5xl">
+          <div class="overflow-hidden rounded-2xl border border-slate-800/50 bg-slate-950/80 shadow-2xl backdrop-blur-sm p-6">
+            <div class="text-xs font-mono text-violet-400 mb-4">// Architecture overview — 5 layers</div>
+            <div class="space-y-3">
+              <div class="rounded-xl border border-violet-500/30 bg-violet-500/5 p-4"><div class="text-sm font-semibold text-white">Presentation Layer</div><div class="mt-1 text-xs text-slate-400">SvelteKit + Shadcn-Svelte admin UI, generated from entities. Type-safe with Zod, accessible, responsive.</div></div>
+              <div class="rounded-xl border border-slate-800/50 bg-slate-900/30 p-4"><div class="text-sm font-semibold text-white">API Layer</div><div class="mt-1 text-xs text-slate-400">REST + OpenAPI, auto-generated from schema. RBAC enforced on every route.</div></div>
+              <div class="rounded-xl border border-slate-800/50 bg-slate-900/30 p-4"><div class="text-sm font-semibold text-white">Domain Layer</div><div class="mt-1 text-xs text-slate-400">Entities, services, business logic. Decorators for audit, caching, RBAC.</div></div>
+              <div class="rounded-xl border border-slate-800/50 bg-slate-900/30 p-4"><div class="text-sm font-semibold text-white">Data Layer</div><div class="mt-1 text-xs text-slate-400">PostgreSQL + pgvector. DAL abstraction, migrations, multi-tenancy.</div></div>
+              <div class="rounded-xl border border-slate-800/50 bg-slate-900/30 p-4"><div class="text-sm font-semibold text-white">Infrastructure Layer</div><div class="mt-1 text-xs text-slate-400">Docker, K8s on AWS (ECS/EKS), Azure Container Apps, GCP Cloud Run, Alibaba Cloud ACK. OpenTelemetry, health checks, compliance scanner.</div></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="px-6 py-16 border-t border-slate-800/30">
+        <div class="mx-auto max-w-5xl">
+          <h2 class="text-2xl font-bold text-white sm:text-3xl">What changes for you</h2>
+          <div class="mt-10 grid gap-6 sm:grid-cols-2">
+            <div class="rounded-2xl border border-slate-800/50 bg-slate-900/30 p-6 backdrop-blur-sm">
+              <div class="mb-3 flex h-10 w-10 items-center justify-center rounded-xl bg-violet-500/20 text-violet-400"><svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></div>
+              <h3 class="text-lg font-semibold text-white">Layered architecture with clear boundaries</h3>
+              <p class="mt-2 text-sm text-slate-400">Presentation, API, Domain, Data, Infrastructure — each layer has a clear contract. Dependencies point inward. You can swap any layer without rewriting the others. The architecture is documented, enforced by the framework, and visible in the code structure.</p>
+            </div>
+            <div class="rounded-2xl border border-slate-800/50 bg-slate-900/30 p-6 backdrop-blur-sm">
+              <div class="mb-3 flex h-10 w-10 items-center justify-center rounded-xl bg-violet-500/20 text-violet-400"><svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3"/></svg></div>
+              <h3 class="text-lg font-semibold text-white">Multi-cloud, multi-region, no rewrites</h3>
+              <p class="mt-2 text-sm text-slate-400">Deploy to Docker, Kubernetes, AWS (ECS/EKS), Azure Container Apps, GCP Cloud Run, or Alibaba Cloud ACK. The same codebase runs on a laptop, a single VPS, or a multi-region Kubernetes cluster. Move clouds without rewriting application code — change the deployment config, not the architecture.</p>
+            </div>
+            <div class="rounded-2xl border border-slate-800/50 bg-slate-900/30 p-6 backdrop-blur-sm">
+              <div class="mb-3 flex h-10 w-10 items-center justify-center rounded-xl bg-violet-500/20 text-violet-400"><svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+              <h3 class="text-lg font-semibold text-white">Compliance from code to auditor</h3>
+              <p class="mt-2 text-sm text-slate-400">ISO 27001, NIS2, OWASP mappings are generated from scan data on every build. The reports include file:line evidence — not self-assessment. Hand the PDF to the auditor, point to the source. Reproducible, verifiable, always current.</p>
+            </div>
+            <div class="rounded-2xl border border-slate-800/50 bg-slate-900/30 p-6 backdrop-blur-sm">
+              <div class="mb-3 flex h-10 w-10 items-center justify-center rounded-xl bg-violet-500/20 text-violet-400"><svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg></div>
+              <h3 class="text-lg font-semibold text-white">Multi-tenancy without re-platforming</h3>
+              <p class="mt-2 text-sm text-slate-400">Logical and physical tenant isolation built into the data layer. Go from single-tenant to multi-tenant by changing a config, not by rewriting your entities. Per-tenant settings via ConfigTable. Data residency per tenant for multi-region deployments.</p>
+            </div>
+            <div class="rounded-2xl border border-slate-800/50 bg-slate-900/30 p-6 backdrop-blur-sm">
+              <div class="mb-3 flex h-10 w-10 items-center justify-center rounded-xl bg-violet-500/20 text-violet-400"><svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></div>
+              <h3 class="text-lg font-semibold text-white">AI-native architecture</h3>
+              <p class="mt-2 text-sm text-slate-400">Private LLM container, pgvector for embeddings, agentic development GUI. The AI stack is part of the architecture, not a bolt-on. Your AI features run on your infrastructure, with no data sent to third-party APIs. Design for AI from day one.</p>
+            </div>
+            <div class="rounded-2xl border border-slate-800/50 bg-slate-900/30 p-6 backdrop-blur-sm">
+              <div class="mb-3 flex h-10 w-10 items-center justify-center rounded-xl bg-violet-500/20 text-violet-400"><svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7h16M4 12h16M4 17h10"/></svg></div>
+              <h3 class="text-lg font-semibold text-white">Open architecture, open source</h3>
+              <p class="mt-2 text-sm text-slate-400">MIT-licensed, public ADRs, public code. Every architectural decision is documented and reversible. No black-box framework, no "trust us." You can read, modify, and fork every layer. The architecture is transparent by design.</p>
+            </div>
+            <div class="rounded-2xl border border-slate-800/50 bg-slate-900/30 p-6 backdrop-blur-sm">
+              <div class="mb-3 flex h-10 w-10 items-center justify-center rounded-xl bg-violet-500/20 text-violet-400"><svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div>
+              <h3 class="text-lg font-semibold text-white">Observability built in</h3>
+              <p class="mt-2 text-sm text-slate-400">OpenTelemetry traces, structured logs, health checks — all wired into the framework. A single trace ID follows a request from the browser through the API, the domain logic, and the database. No log stitching, no timestamp correlation across servers.</p>
+            </div>
+            <div class="rounded-2xl border border-slate-800/50 bg-slate-900/30 p-6 backdrop-blur-sm">
+              <div class="mb-3 flex h-10 w-10 items-center justify-center rounded-xl bg-violet-500/20 text-violet-400"><svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8"/></svg></div>
+              <h3 class="text-lg font-semibold text-white">No vendor lock-in</h3>
+              <p class="mt-2 text-sm text-slate-400">MIT license, self-hostable, multi-cloud. You own the architecture, the code, and the deployment. No vendor can change pricing, deprecate a feature, or cut off access. Your architecture decisions are yours, not your vendor's.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="px-6 py-16 border-t border-slate-800/30">
+        <div class="mx-auto max-w-5xl">
+          <h2 class="text-2xl font-bold text-white sm:text-3xl">Deployment matrix</h2>
+          <div class="mt-8 overflow-hidden rounded-2xl border border-slate-800/50">
+            <div class="grid grid-cols-4 bg-slate-900/50 text-xs font-semibold text-slate-400"><div class="p-4">Target</div><div class="border-l border-slate-800/50 p-4">When</div><div class="border-l border-slate-800/50 p-4">Config</div><div class="border-l border-slate-800/50 p-4">Code changes</div></div>
+            <div class="grid grid-cols-4 border-t border-slate-800/50 text-sm"><div class="p-4 text-slate-300">Single VPS / Docker</div><div class="border-l border-slate-800/50 p-4 text-slate-400">MVP, low traffic</div><div class="border-l border-slate-800/50 p-4 text-slate-400">docker-compose.yml</div><div class="border-l border-slate-800/50 p-4 text-emerald-400">None</div></div>
+            <div class="grid grid-cols-4 border-t border-slate-800/50 text-sm bg-slate-900/20"><div class="p-4 text-slate-300">Kubernetes</div><div class="border-l border-slate-800/50 p-4 text-slate-400">Scale, multi-instance</div><div class="border-l border-slate-800/50 p-4 text-slate-400">Helm chart / K8s manifests</div><div class="border-l border-slate-800/50 p-4 text-emerald-400">None</div></div>
+            <div class="grid grid-cols-4 border-t border-slate-800/50 text-sm"><div class="p-4 text-slate-300">Azure Container Apps</div><div class="border-l border-slate-800/50 p-4 text-slate-400">Serverless containers, auto-scale</div><div class="border-l border-slate-800/50 p-4 text-slate-400">Bicep / ARM templates</div><div class="border-l border-slate-800/50 p-4 text-emerald-400">None</div></div>
+            <div class="grid grid-cols-4 border-t border-slate-800/50 text-sm bg-slate-900/20"><div class="p-4 text-slate-300">AWS ECS / EKS</div><div class="border-l border-slate-800/50 p-4 text-slate-400">Managed containers, scale</div><div class="border-l border-slate-800/50 p-4 text-slate-400">CloudFormation / Terraform</div><div class="border-l border-slate-800/50 p-4 text-emerald-400">None</div></div>
+            <div class="grid grid-cols-4 border-t border-slate-800/50 text-sm"><div class="p-4 text-slate-300">GCP Cloud Run</div><div class="border-l border-slate-800/50 p-4 text-slate-400">Serverless containers, pay-per-use</div><div class="border-l border-slate-800/50 p-4 text-slate-400">Terraform / gcloud deploy</div><div class="border-l border-slate-800/50 p-4 text-emerald-400">None</div></div>
+            <div class="grid grid-cols-4 border-t border-slate-800/50 text-sm bg-slate-900/20"><div class="p-4 text-slate-300">Alibaba Cloud ACK</div><div class="border-l border-slate-800/50 p-4 text-slate-400">APAC regions, compliance</div><div class="border-l border-slate-800/50 p-4 text-slate-400">ROS / Terraform</div><div class="border-l border-slate-800/50 p-4 text-emerald-400">None</div></div>
+            <div class="grid grid-cols-4 border-t border-slate-800/50 text-sm"><div class="p-4 text-slate-300">Multi-region K8s</div><div class="border-l border-slate-800/50 p-4 text-slate-400">Enterprise, data residency</div><div class="border-l border-slate-800/50 p-4 text-slate-400">Terraform templates</div><div class="border-l border-slate-800/50 p-4 text-emerald-400">None</div></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="px-6 py-16 border-t border-slate-800/30">
+        <div class="mx-auto max-w-5xl">
+          <h2 class="text-2xl font-bold text-white sm:text-3xl">Compliance from code to auditor</h2>
+          <div class="mt-8 rounded-2xl border border-slate-800/50 bg-slate-950/80 p-5">
+            <div class="text-xs font-mono text-slate-500 mb-3">// Compliance report — build #4827</div>
+            <pre class="text-xs font-mono leading-relaxed text-slate-300 overflow-x-auto"><span class="text-violet-400">ISO 27001 · Annex A.5.15 — Access control</span>
+  Status:   <span class="text-emerald-400">PASS</span>
+  Evidence: src/modules/customers/customer.entity.ts:14
+            @RBAC(&lbrace; read: ['admin', 'sales'], write: ['admin'] &rbrace;)
+
+<span class="text-violet-400">NIS2 · Art. 21(2)(d) — Access control & management</span>
+  Status:   <span class="text-emerald-400">PASS</span>
+  Evidence: src/modules/auth/rbac.guard.ts:8
+            MFA enforced on privileged roles
+
+<span class="text-violet-400">OWASP · A01:2021 — Broken Access Control</span>
+  Status:   <span class="text-emerald-400">PASS</span>
+  Evidence: src/sdk/permissions.check.ts:22
+            Every route guarded by RBAC decorator</pre>
+          </div>
+        </div>
+      </section>
+
+      <section class="px-6 py-16 border-t border-slate-800/30">
+        <div class="mx-auto max-w-5xl">
+          <h2 class="text-2xl font-bold text-white sm:text-3xl">Capabilities you'll use</h2>
+          <div class="mt-6 flex flex-wrap gap-3">
+            <span class="rounded-full border border-violet-500/30 bg-violet-500/10 px-4 py-2 text-sm text-violet-300">Layered architecture</span>
+            <span class="rounded-full border border-violet-500/30 bg-violet-500/10 px-4 py-2 text-sm text-violet-300">Multi-tenancy</span>
+            <span class="rounded-full border border-violet-500/30 bg-violet-500/10 px-4 py-2 text-sm text-violet-300">Multi-cloud deploy</span>
+            <span class="rounded-full border border-violet-500/30 bg-violet-500/10 px-4 py-2 text-sm text-violet-300">Docker / K8s / Multi-cloud</span>
+            <span class="rounded-full border border-violet-500/30 bg-violet-500/10 px-4 py-2 text-sm text-violet-300">Terraform templates</span>
+            <span class="rounded-full border border-violet-500/30 bg-violet-500/10 px-4 py-2 text-sm text-violet-300">OpenTelemetry</span>
+            <span class="rounded-full border border-violet-500/30 bg-violet-500/10 px-4 py-2 text-sm text-violet-300">Compliance scanner</span>
+            <span class="rounded-full border border-violet-500/30 bg-violet-500/10 px-4 py-2 text-sm text-violet-300">ISO 27001 / NIS2 / OWASP</span>
+            <span class="rounded-full border border-violet-500/30 bg-violet-500/10 px-4 py-2 text-sm text-violet-300">pgvector</span>
+            <span class="rounded-full border border-violet-500/30 bg-violet-500/10 px-4 py-2 text-sm text-violet-300">Private LLM</span>
+            <span class="rounded-full border border-violet-500/30 bg-violet-500/10 px-4 py-2 text-sm text-violet-300">ConfigTable</span>
+            <span class="rounded-full border border-violet-500/30 bg-violet-500/10 px-4 py-2 text-sm text-violet-300">Public ADRs</span>
+            <span class="rounded-full border border-violet-500/30 bg-violet-500/10 px-4 py-2 text-sm text-violet-300">MIT License</span>
+            <span class="rounded-full border border-violet-500/30 bg-violet-500/10 px-4 py-2 text-sm text-violet-300">Redis scaling</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="px-6 py-16 border-t border-slate-800/30">
+        <div class="mx-auto max-w-3xl text-center">
+          <svg class="mx-auto h-10 w-10 text-violet-500/40" viewBox="0 0 24 24" fill="currentColor"><path d="M9.983 3v7.391c0 5.704-3.731 9.57-8.983 10.609l-.995-2.151c2.432-.917 3.995-3.638 3.995-5.849h-4v-10h9.983zm14.017 0v7.391c0 5.704-3.748 9.571-9 10.609l-.996-2.151c2.433-.917 3.996-3.638 3.996-5.849h-3.983v-10h9.983z"/></svg>
+          <blockquote class="mt-4 text-xl font-medium text-slate-200">We moved from a single VPS to multi-region Kubernetes without changing a line of application code. The compliance reports are a build artifact now — I forward them to the auditor without reading them.</blockquote>
+          <div class="mt-4 text-sm text-slate-500">— Principal Architect, enterprise SaaS</div>
+        </div>
+      </section>
+
+      <section class="px-6 py-16 border-t border-slate-800/30">
+        <div class="mx-auto max-w-3xl">
+          <h2 class="text-2xl font-bold text-white sm:text-3xl">Solution Architect FAQ</h2>
+          <div class="mt-8 space-y-4">
+            <details class="group rounded-xl border border-slate-800/50 bg-slate-900/30 p-5 backdrop-blur-sm"><summary class="cursor-pointer list-none text-sm font-semibold text-white">Can I customize the layer boundaries for my domain?<span class="float-right text-slate-500 group-open:rotate-180 transition-transform">▾</span></summary><p class="mt-3 text-sm text-slate-400">Yes. The framework's layer boundaries are the default, not a constraint. You can add layers (e.g., a dedicated integration layer for external APIs), split the domain layer into bounded contexts, or merge layers for simpler projects. The decorators and generators work regardless of how you organize the code.</p></details>
+            <details class="group rounded-xl border border-slate-800/50 bg-slate-900/30 p-5 backdrop-blur-sm"><summary class="cursor-pointer list-none text-sm font-semibold text-white">How does multi-tenancy work at the data layer?<span class="float-right text-slate-500 group-open:rotate-180 transition-transform">▾</span></summary><p class="mt-3 text-sm text-slate-400">Primebrick supports both logical (shared database, tenant_id column) and physical (separate schema or database per tenant) isolation. The DAL handles tenant context automatically — you don't write tenant_id filters by hand. Per-tenant settings are stored in config_entries and rendered by ConfigTable.</p></details>
+            <details class="group rounded-xl border border-slate-800/50 bg-slate-900/30 p-5 backdrop-blur-sm"><summary class="cursor-pointer list-none text-sm font-semibold text-white">How do I handle data residency requirements?<span class="float-right text-slate-500 group-open:rotate-180 transition-transform">▾</span></summary><p class="mt-3 text-sm text-slate-400">For multi-region deployments, Primebrick supports per-tenant region pinning. Each tenant's data stays in the region you specify (e.g., EU tenants in EU regions, US tenants in US regions). The Terraform templates include multi-region configurations with data residency rules.</p></details>
+            <details class="group rounded-xl border border-slate-800/50 bg-slate-900/30 p-5 backdrop-blur-sm"><summary class="cursor-pointer list-none text-sm font-semibold text-white">What's the observability story?<span class="float-right text-slate-500 group-open:rotate-180 transition-transform">▾</span></summary><p class="mt-3 text-sm text-slate-400">OpenTelemetry is wired into every layer. Traces, metrics, and structured logs are emitted automatically. A single trace ID follows a request from the browser through the API, domain logic, and database. You can export to any OTLP-compatible backend (Jaeger, Tempo, Datadog, Honeycomb). Health checks are exposed on a standard endpoint.</p></details>
+            <details class="group rounded-xl border border-slate-800/50 bg-slate-900/30 p-5 backdrop-blur-sm"><summary class="cursor-pointer list-none text-sm font-semibold text-white">How extensible is the compliance scanner?<span class="float-right text-slate-500 group-open:rotate-180 transition-transform">▾</span></summary><p class="mt-3 text-sm text-slate-400">The scanner ships with ISO 27001, NIS2, and OWASP mappings. You can add custom control catalogs — internal policies, industry-specific regulations, customer-specific requirements. Each control maps to file:line evidence in the source. The report format is extensible and can be customized for specific auditors.</p></details>
+          </div>
+        </div>
+      </section>
+
+      <section class="px-6 py-20 border-t border-slate-800/30">
+        <div class="mx-auto max-w-5xl">
+          <div class="grid gap-6 lg:grid-cols-2">
+            <a href={nextPersonaHref} class="group rounded-2xl border border-slate-800/50 bg-slate-900/30 p-6 backdrop-blur-sm transition-all hover:border-emerald-500/40 hover:bg-slate-900/50">
+              <div class="text-xs text-slate-500">Next persona →</div>
+              <div class="mt-2 flex items-center gap-3"><div class="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-500/20 text-emerald-400"><svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div><div><h3 class="text-lg font-semibold text-white">CTO</h3><p class="text-sm text-emerald-400">Speed without lock-in.</p></div></div>
+            </a>
+            <div class="rounded-2xl border border-slate-800/50 bg-gradient-to-b from-slate-900/50 to-slate-950/50 p-6 backdrop-blur-sm">
+              <h3 class="text-lg font-semibold text-white">Ready to design architecture that survives?</h3>
+              <p class="mt-2 text-sm text-slate-400">Read the architecture docs or get in touch — we'll walk you through the layers.</p>
+              <div class="mt-4 flex flex-wrap gap-3">
+                <a href={docsPath} class="rounded-xl bg-gradient-to-r from-violet-500 to-fuchsia-600 px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-violet-500/20 transition-all hover:scale-105" target="_blank" rel="noopener">Read the docs</a>
+                <a href={contactHref} class="rounded-xl border border-slate-700 bg-slate-900/50 px-5 py-2.5 text-sm font-semibold text-slate-200 transition-all hover:border-violet-500 hover:text-violet-400">Get in touch</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="relative z-10 border-t border-slate-800/50 px-6 py-8">
+      <div class="mx-auto flex max-w-7xl items-center justify-between text-sm text-slate-500">
+        <span>&copy; 2026 PrimeBrick. MIT License.</span>
+        <a href="https://github.com/primebrick" class="hover:text-sky-400 transition-colors" target="_blank" rel="noopener">GitHub</a>
+      </div>
+    </footer>
+  </body>
+</html>
