@@ -15,7 +15,19 @@ export const prerender = true;
 const SITE_URL = 'https://primebrick.dev';
 
 /** Page paths (without locale prefix) that exist for every locale. */
-const PAGE_PATHS = ['', 'contact', 'thank-you'] as const;
+const PAGE_PATHS = [
+  '',
+  'contact',
+  'thank-you',
+  'use-cases/',
+  'use-cases/developer',
+  'use-cases/tech-leader',
+  'use-cases/solution-architect',
+  'use-cases/cto',
+  'use-cases/visionary-entrepreneur',
+  'use-cases/soc-team',
+  'demo/versions',
+] as const;
 
 /** Last-modified date for the sitemap entries. Update when content changes
  *  significantly. Using a fixed date avoids non-reproducible builds. */

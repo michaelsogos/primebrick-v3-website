@@ -1,0 +1,281 @@
+---
+import { translations, LANGUAGES, type LangCode } from '../../../i18n/translations';
+import LanguageSwitcher from '../../../components/svelte/LanguageSwitcher.svelte';
+import GitHubDropdown from '../../../components/svelte/GitHubDropdown.svelte';
+import VirtualTourMegaMenu from '../../../components/svelte/VirtualTourMegaMenu.svelte';
+import UseCasesMegaMenu from '../../../components/svelte/UseCasesMegaMenu.svelte';
+import TopBanner from '../../../components/astro/TopBanner.astro';
+import '../../../styles/global.css';
+
+export const prerender = true;
+
+export function getStaticPaths() {
+  return LANGUAGES.map((lang) => ({
+    params: { lang: lang.code === 'en' ? 'en' : lang.code },
+  }));
+}
+
+const { lang } = Astro.params;
+const langCode = (lang ?? 'en') as LangCode;
+const t = translations[langCode] ?? translations.en;
+const isEn = langCode === 'en';
+const docsPath = 'https://docs.primebrick.dev';
+const homeHref = isEn ? '/en/' : `/${langCode}/`;
+const contactHref = isEn ? '/en/contact' : `/${langCode}/contact`;
+const useCasesHref = isEn ? '/en/use-cases/' : `/${langCode}/use-cases/`;
+const nextPersonaHref = `${useCasesHref}visionary-entrepreneur`;
+---
+
+<!doctype html>
+<html lang={langCode}>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Primebrick for CTOs: speed without lock-in. MIT-licensed, auditable, deployable anywhere. Ship faster, pass audits, scale from MVP to enterprise." />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+    <link rel="icon" type="image/png" sizes="512x512" href="/favicon-512.png" />
+    <link rel="icon" sizes="any" href="/favicon.ico" />
+    <link rel="apple-touch-icon" href="/favicon-512.png" />
+    <title>PrimeBrick — Use Cases: CTO</title>
+    {LANGUAGES.map((l) => (
+      <link rel="alternate" hreflang={l.hreflang} href={`https://primebrick.dev${l.code === 'en' ? '/en/use-cases/cto' : `/${l.code}/use-cases/cto`}`} />
+    ))}
+    <link rel="alternate" hreflang="x-default" href="https://primebrick.dev/en/use-cases/cto" />
+  </head>
+  <body class="min-h-screen bg-slate-950 text-slate-100 antialiased">
+    <div class="pointer-events-none fixed inset-0 overflow-hidden">
+      <div class="absolute -top-40 left-1/2 h-[500px] w-[800px] -translate-x-1/2 rounded-full bg-emerald-500/10 blur-[120px]"></div>
+      <div class="absolute top-1/3 -right-40 h-[400px] w-[400px] rounded-full bg-emerald-500/10 blur-[100px]"></div>
+      <div class="absolute bottom-0 -left-40 h-[400px] w-[400px] rounded-full bg-teal-500/10 blur-[100px]"></div>
+    </div>
+
+    <TopBanner text={t.banner.text} href={contactHref} />
+
+    <nav id="site-nav" class="sticky top-9 z-50 border-b border-slate-800/50 bg-slate-950/40 backdrop-blur-sm transition-all duration-300">
+      <div id="nav-inner" class="mx-auto flex max-w-7xl items-center justify-between px-6 py-4 transition-all duration-300">
+        <a href={isEn ? '/' : `/${langCode}/`} class="flex items-center gap-2" aria-label="PrimeBrick home">
+          <img src="/logo-full-dark.svg" alt="PrimeBrick" width="170" height="32" class="h-7 w-auto" />
+        </a>
+        <div class="flex items-center gap-6 text-sm">
+          <a href={homeHref} class="text-slate-300 hover:text-sky-400 transition-colors">{t.nav.home}</a>
+          <VirtualTourMegaMenu client:load currentLang={langCode} />
+          <UseCasesMegaMenu client:load currentLang={langCode} activePersona="cto" />
+          <a href={docsPath} class="text-slate-300 hover:text-sky-400 transition-colors" target="_blank" rel="noopener">{t.nav.docs}</a>
+          <a href={contactHref} class="text-slate-300 hover:text-sky-400 transition-colors">{t.nav.contact}</a>
+          <GitHubDropdown client:load />
+          <LanguageSwitcher client:load currentLang={langCode} />
+        </div>
+      </div>
+    </nav>
+    <script>
+      (() => {
+        const nav = document.getElementById('site-nav');
+        const inner = document.getElementById('nav-inner');
+        if (!nav || !inner) return;
+        const onScroll = () => {
+          const scrolled = window.scrollY > 20;
+          if (scrolled) {
+            inner.classList.replace('py-4', 'py-2');
+            nav.classList.add('bg-slate-950/80', 'backdrop-blur-md', 'shadow-lg', 'border-slate-800/80');
+            nav.classList.remove('bg-slate-950/40', 'border-slate-800/50');
+          } else {
+            inner.classList.replace('py-2', 'py-4');
+            nav.classList.remove('bg-slate-950/80', 'backdrop-blur-md', 'shadow-lg', 'border-slate-800/80');
+            nav.classList.add('bg-slate-950/40', 'border-slate-800/50');
+          }
+        };
+        window.addEventListener('scroll', onScroll, { passive: true });
+        onScroll();
+      })();
+    </script>
+
+    <main class="relative z-10">
+      <section class="px-6 pt-20 pb-12">
+        <div class="mx-auto max-w-5xl">
+          <div class="mb-4 inline-flex items-center gap-2 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-4 py-1.5 text-xs font-medium text-emerald-300">
+            <svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            Persona 04 / 06
+          </div>
+          <h1 class="text-4xl font-bold tracking-tight text-white sm:text-5xl lg:text-6xl">CTO</h1>
+          <p class="mt-3 text-xl font-medium text-emerald-400">Speed without lock-in.</p>
+          <p class="mt-4 max-w-2xl text-lg text-slate-400">You own speed, cost, and risk. Primebrick is MIT-licensed, inspectable, deployable anywhere, and ships with the security and compliance features your auditors will ask for — without a platform team to build and maintain them. You get the velocity of a startup with the posture of an enterprise.</p>
+          <div class="mt-6 flex flex-wrap gap-3">
+            <a href={contactHref} class="rounded-xl bg-gradient-to-r from-emerald-500 to-teal-600 px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-emerald-500/20 transition-all hover:scale-105">Get in touch</a>
+            <a href={docsPath} class="rounded-xl border border-slate-700 bg-slate-900/50 px-5 py-2.5 text-sm font-semibold text-slate-200 transition-all hover:border-emerald-500 hover:text-emerald-400" target="_blank" rel="noopener">Read the docs</a>
+          </div>
+        </div>
+      </section>
+
+      <section class="px-6 pb-16">
+        <div class="mx-auto max-w-5xl">
+          <div class="overflow-hidden rounded-2xl border border-slate-800/50 bg-slate-950/80 shadow-2xl backdrop-blur-sm p-6">
+            <div class="text-xs font-mono text-emerald-400 mb-4">// Executive overview</div>
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+              <div class="rounded-xl border border-slate-800/50 bg-slate-900/50 p-4"><div class="text-xs text-slate-500">Time to first deploy</div><div class="mt-1 text-2xl font-bold text-emerald-400">2 days</div><div class="text-xs text-slate-500">vs. industry avg 6 weeks</div></div>
+              <div class="rounded-xl border border-slate-800/50 bg-slate-900/50 p-4"><div class="text-xs text-slate-500">License cost</div><div class="mt-1 text-2xl font-bold text-emerald-400">$0</div><div class="text-xs text-slate-500">MIT, no royalties</div></div>
+              <div class="rounded-xl border border-slate-800/50 bg-slate-900/50 p-4"><div class="text-xs text-slate-500">Compliance coverage</div><div class="mt-1 text-2xl font-bold text-emerald-400">ISO + NIS2</div><div class="text-xs text-slate-500">auto-scanned</div></div>
+              <div class="rounded-xl border border-slate-800/50 bg-slate-900/50 p-4"><div class="text-xs text-slate-500">Vendor lock-in</div><div class="mt-1 text-2xl font-bold text-emerald-400">Zero</div><div class="text-xs text-slate-500">self-hostable</div></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="px-6 py-16 border-t border-slate-800/30">
+        <div class="mx-auto max-w-5xl">
+          <h2 class="text-2xl font-bold text-white sm:text-3xl">What changes for you</h2>
+          <div class="mt-10 grid gap-6 sm:grid-cols-2">
+            <div class="rounded-2xl border border-slate-800/50 bg-slate-900/30 p-6 backdrop-blur-sm">
+              <div class="mb-3 flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-500/20 text-emerald-400"><svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></div>
+              <h3 class="text-lg font-semibold text-white">Ship faster without a platform team</h3>
+              <p class="mt-2 text-sm text-slate-400">Auth, RBAC, multi-tenancy, observability and compliance scanning are already built. Your product team ships features from day one, not infrastructure. No need to hire a dedicated platform team before you can ship product.</p>
+            </div>
+            <div class="rounded-2xl border border-slate-800/50 bg-slate-900/30 p-6 backdrop-blur-sm">
+              <div class="mb-3 flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-500/20 text-emerald-400"><svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+              <h3 class="text-lg font-semibold text-white">De-risk vendor choices</h3>
+              <p class="mt-2 text-sm text-slate-400">MIT-licensed open source. Public code, documented decisions, and no per-seat or per-request fees. You can audit, modify, and host it yourself. If the project disappears tomorrow, you still have the code and the right to use it.</p>
+            </div>
+            <div class="rounded-2xl border border-slate-800/50 bg-slate-900/30 p-6 backdrop-blur-sm">
+              <div class="mb-3 flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-500/20 text-emerald-400"><svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div>
+              <h3 class="text-lg font-semibold text-white">Pass audits with generated reports</h3>
+              <p class="mt-2 text-sm text-slate-400">Security, accessibility and compliance posture reports are generated from real scan data, not self-assessment spreadsheets. Hand the PDF to your auditor and point to the file:line evidence. ISO 27001, NIS2, OWASP and VPAT accessibility reports all update on every build.</p>
+            </div>
+            <div class="rounded-2xl border border-slate-800/50 bg-slate-900/30 p-6 backdrop-blur-sm">
+              <div class="mb-3 flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-500/20 text-emerald-400"><svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3"/></svg></div>
+              <h3 class="text-lg font-semibold text-white">Scale from MVP to enterprise</h3>
+              <p class="mt-2 text-sm text-slate-400">Start with a single container on a laptop. Move to multi-instance, multi-region, or on-prem without changing application code. The same codebase runs at every stage of your company's growth. You never face a "we outgrew our framework" rewrite.</p>
+            </div>
+            <div class="rounded-2xl border border-slate-800/50 bg-slate-900/30 p-6 backdrop-blur-sm">
+              <div class="mb-3 flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-500/20 text-emerald-400"><svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7h16M4 12h16M4 17h10"/></svg></div>
+              <h3 class="text-lg font-semibold text-white">Own your data, own your IP</h3>
+              <p class="mt-2 text-sm text-slate-400">Self-host on your own infrastructure. No vendor has access to your data, your logs, or your customer information. Your IP stays yours — the MIT license explicitly allows commercial use, modification, and redistribution.</p>
+            </div>
+            <div class="rounded-2xl border border-slate-800/50 bg-slate-900/30 p-6 backdrop-blur-sm">
+              <div class="mb-3 flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-500/20 text-emerald-400"><svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg></div>
+              <h3 class="text-lg font-semibold text-white">Hire for potential, not for internal framework knowledge</h3>
+              <p class="mt-2 text-sm text-slate-400">Onboarding in hours, not weeks, means you can hire for business knowledge and engineering judgment, not for "has memorized our internal framework." You expand the talent pool instead of narrowing it.</p>
+            </div>
+            <div class="rounded-2xl border border-slate-800/50 bg-slate-900/30 p-6 backdrop-blur-sm">
+              <div class="mb-3 flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-500/20 text-emerald-400"><svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8"/></svg></div>
+              <h3 class="text-lg font-semibold text-white">Budget predictability</h3>
+              <p class="mt-2 text-sm text-slate-400">No per-seat, no per-request, no surprise pricing. The MIT license means your cost is the infrastructure you choose to run it on, and that's it. As you scale from 10 users to 10,000, your license cost stays at zero.</p>
+            </div>
+            <div class="rounded-2xl border border-slate-800/50 bg-slate-900/30 p-6 backdrop-blur-sm">
+              <div class="mb-3 flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-500/20 text-emerald-400"><svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg></div>
+              <h3 class="text-lg font-semibold text-white">Open source means the community fixes things</h3>
+              <p class="mt-2 text-sm text-slate-400">Public code, public issues, public ADRs. Security vulnerabilities are found and fixed in the open, not hidden behind a vendor's support ticket SLA. You benefit from every team that uses Primebrick before you.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="px-6 py-16 border-t border-slate-800/30">
+        <div class="mx-auto max-w-5xl">
+          <h2 class="text-2xl font-bold text-white sm:text-3xl">ROI breakdown</h2>
+          <div class="mt-8 overflow-hidden rounded-2xl border border-slate-800/50">
+            <div class="grid grid-cols-3 bg-slate-900/50 text-xs font-semibold text-slate-400"><div class="p-4">Item</div><div class="border-l border-slate-800/50 p-4 text-rose-400">Before (DIY or proprietary)</div><div class="border-l border-slate-800/50 p-4 text-emerald-400">With Primebrick</div></div>
+            <div class="grid grid-cols-3 border-t border-slate-800/50 text-sm"><div class="p-4 text-slate-300">Platform team (2 FTE)</div><div class="border-l border-slate-800/50 p-4 text-slate-400">$200k–$400k / year (US)<br>€100k–€200k / year (EU)</div><div class="border-l border-slate-800/50 p-4 text-slate-300">$0 — not needed</div></div>
+            <div class="grid grid-cols-3 border-t border-slate-800/50 text-sm bg-slate-900/20"><div class="p-4 text-slate-300">License fees</div><div class="border-l border-slate-800/50 p-4 text-slate-400">$10–$100 / user / month<br>(10–100 users = $1k–$10k / mo)</div><div class="border-l border-slate-800/50 p-4 text-slate-300">$0 — MIT license</div></div>
+            <div class="grid grid-cols-3 border-t border-slate-800/50 text-sm"><div class="p-4 text-slate-300">Auth + RBAC build</div><div class="border-l border-slate-800/50 p-4 text-slate-400">2–4 sprints</div><div class="border-l border-slate-800/50 p-4 text-slate-300">0 — ships with framework</div></div>
+            <div class="grid grid-cols-3 border-t border-slate-800/50 text-sm bg-slate-900/20"><div class="p-4 text-slate-300">Compliance prep</div><div class="border-l border-slate-800/50 p-4 text-slate-400">4–8 weeks consultant</div><div class="border-l border-slate-800/50 p-4 text-slate-300">0 — auto-generated</div></div>
+            <div class="grid grid-cols-3 border-t border-slate-800/50 text-sm"><div class="p-4 text-slate-300">Time to market</div><div class="border-l border-slate-800/50 p-4 text-slate-400">8–16 weeks</div><div class="border-l border-slate-800/50 p-4 text-slate-300">2–5 days</div></div>
+            <div class="grid grid-cols-3 border-t border-slate-800/50 text-sm bg-slate-900/20 font-semibold"><div class="p-4 text-white">Year-1 savings</div><div class="border-l border-slate-800/50 p-4 text-rose-400">~$212k–$520k + 3 months delay</div><div class="border-l border-slate-800/50 p-4 text-emerald-400">~$212k–$520k saved, ship in days</div></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="px-6 py-16 border-t border-slate-800/30">
+        <div class="mx-auto max-w-5xl">
+          <h2 class="text-2xl font-bold text-white sm:text-3xl">Risk matrix</h2>
+          <div class="mt-8 grid gap-4 sm:grid-cols-2">
+            <div class="rounded-2xl border border-slate-800/50 bg-slate-900/30 p-5 backdrop-blur-sm"><div class="text-sm font-semibold text-white">Vendor lock-in risk</div><div class="mt-2 text-xs text-rose-400">Before: Proprietary SaaS can raise prices, deprecate features, or shut down.</div><div class="mt-1 text-xs text-emerald-400">With Primebrick: MIT license, you own the code, self-hostable. Zero lock-in.</div></div>
+            <div class="rounded-2xl border border-slate-800/50 bg-slate-900/30 p-5 backdrop-blur-sm"><div class="text-sm font-semibold text-white">Compliance risk</div><div class="mt-2 text-xs text-rose-400">Before: Self-assessment spreadsheets, consultant rounds, audit surprises.</div><div class="mt-1 text-xs text-emerald-400">With Primebrick: Auto-scanned ISO 27001, NIS2, OWASP with file:line evidence.</div></div>
+            <div class="rounded-2xl border border-slate-800/50 bg-slate-900/30 p-5 backdrop-blur-sm"><div class="text-sm font-semibold text-white">Scaling risk</div><div class="mt-2 text-xs text-rose-400">Before: Rewrite when you outgrow the framework or the vendor's plan.</div><div class="mt-1 text-xs text-emerald-400">With Primebrick: Same code from laptop to K8s to multi-region. Config change, not rewrite.</div></div>
+            <div class="rounded-2xl border border-slate-800/50 bg-slate-900/30 p-5 backdrop-blur-sm"><div class="text-sm font-semibold text-white">Talent risk</div><div class="mt-2 text-xs text-rose-400">Before: Hiring people who know your internal framework narrows the pool.</div><div class="mt-1 text-xs text-emerald-400">With Primebrick: Documented conventions, onboarding in hours, wider talent pool.</div></div>
+            <div class="rounded-2xl border border-slate-800/50 bg-slate-900/30 p-5 backdrop-blur-sm"><div class="text-sm font-semibold text-white">Data sovereignty risk</div><div class="mt-2 text-xs text-rose-400">Before: Vendor stores your data in their region, you can't control it.</div><div class="mt-1 text-xs text-emerald-400">With Primebrick: Self-host, pin data to your region, no vendor access.</div></div>
+            <div class="rounded-2xl border border-slate-800/50 bg-slate-900/30 p-5 backdrop-blur-sm"><div class="text-sm font-semibold text-white">Roadmap risk</div><div class="mt-2 text-xs text-rose-400">Before: Your roadmap depends on a vendor's roadmap and their priorities.</div><div class="mt-1 text-xs text-emerald-400">With Primebrick: You own the roadmap. The framework is a foundation, not a dependency.</div></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="px-6 py-16 border-t border-slate-800/30">
+        <div class="mx-auto max-w-5xl">
+          <h2 class="text-2xl font-bold text-white sm:text-3xl">From code to auditor</h2>
+          <div class="mt-8 grid gap-4 sm:grid-cols-4">
+            <div class="rounded-2xl border border-slate-800/50 bg-slate-900/30 p-5 backdrop-blur-sm text-center"><div class="mx-auto mb-3 flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-500/20 text-emerald-400"><svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 18l6-6-6-6"/><path d="M8 6l-6 6 6 6"/></svg></div><div class="text-xs font-mono text-emerald-400">Step 1</div><h3 class="mt-1 text-sm font-semibold text-white">Build</h3><p class="mt-1 text-xs text-slate-400">Developer commits code. CI runs lint, types, tests, and the compliance scanner.</p></div>
+            <div class="rounded-2xl border border-slate-800/50 bg-slate-900/30 p-5 backdrop-blur-sm text-center"><div class="mx-auto mb-3 flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-500/20 text-emerald-400"><svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div><div class="text-xs font-mono text-emerald-400">Step 2</div><h3 class="mt-1 text-sm font-semibold text-white">Scan</h3><p class="mt-1 text-xs text-slate-400">Scanner maps ISO 27001, NIS2, OWASP controls to file:line evidence in the source.</p></div>
+            <div class="rounded-2xl border border-slate-800/50 bg-slate-900/30 p-5 backdrop-blur-sm text-center"><div class="mx-auto mb-3 flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-500/20 text-emerald-400"><svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg></div><div class="text-xs font-mono text-emerald-400">Step 3</div><h3 class="mt-1 text-sm font-semibold text-white">Report</h3><p class="mt-1 text-xs text-slate-400">PDF generated with control text, evidence, status, and scan timestamp. Reproducible.</p></div>
+            <div class="rounded-2xl border border-slate-800/50 bg-slate-900/30 p-5 backdrop-blur-sm text-center"><div class="mx-auto mb-3 flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-500/20 text-emerald-400"><svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div><div class="text-xs font-mono text-emerald-400">Step 4</div><h3 class="mt-1 text-sm font-semibold text-white">Audit</h3><p class="mt-1 text-xs text-slate-400">Forward the PDF. Auditor verifies evidence at file:line. No spreadsheet round-trip.</p></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="px-6 py-16 border-t border-slate-800/30">
+        <div class="mx-auto max-w-5xl">
+          <h2 class="text-2xl font-bold text-white sm:text-3xl">Capabilities you'll use</h2>
+          <div class="mt-6 flex flex-wrap gap-3">
+            <span class="rounded-full border border-emerald-500/30 bg-emerald-500/10 px-4 py-2 text-sm text-emerald-300">MIT License</span>
+            <span class="rounded-full border border-emerald-500/30 bg-emerald-500/10 px-4 py-2 text-sm text-emerald-300">Multi-tenancy</span>
+            <span class="rounded-full border border-emerald-500/30 bg-emerald-500/10 px-4 py-2 text-sm text-emerald-300">Compliance scanner</span>
+            <span class="rounded-full border border-emerald-500/30 bg-emerald-500/10 px-4 py-2 text-sm text-emerald-300">VPAT accessibility</span>
+            <span class="rounded-full border border-emerald-500/30 bg-emerald-500/10 px-4 py-2 text-sm text-emerald-300">Passkeys / MFA</span>
+            <span class="rounded-full border border-emerald-500/30 bg-emerald-500/10 px-4 py-2 text-sm text-emerald-300">Self-hostable</span>
+            <span class="rounded-full border border-emerald-500/30 bg-emerald-500/10 px-4 py-2 text-sm text-emerald-300">Multi-cloud deploy</span>
+            <span class="rounded-full border border-emerald-500/30 bg-emerald-500/10 px-4 py-2 text-sm text-emerald-300">OpenTelemetry</span>
+            <span class="rounded-full border border-emerald-500/30 bg-emerald-500/10 px-4 py-2 text-sm text-emerald-300">ADRs</span>
+            <span class="rounded-full border border-emerald-500/30 bg-emerald-500/10 px-4 py-2 text-sm text-emerald-300">Terraform templates</span>
+            <span class="rounded-full border border-emerald-500/30 bg-emerald-500/10 px-4 py-2 text-sm text-emerald-300">Docker / K8s</span>
+            <span class="rounded-full border border-emerald-500/30 bg-emerald-500/10 px-4 py-2 text-sm text-emerald-300">pgvector</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="px-6 py-16 border-t border-slate-800/30">
+        <div class="mx-auto max-w-3xl text-center">
+          <svg class="mx-auto h-10 w-10 text-emerald-500/40" viewBox="0 0 24 24" fill="currentColor"><path d="M9.983 3v7.391c0 5.704-3.731 9.57-8.983 10.609l-.995-2.151c2.432-.917 3.995-3.638 3.995-5.849h-4v-10h9.983zm14.017 0v7.391c0 5.704-3.748 9.571-9 10.609l-.996-2.151c2.433-.917 3.996-3.638 3.996-5.849h-3.983v-10h9.983z"/></svg>
+          <blockquote class="mt-4 text-xl font-medium text-slate-200">We stopped budgeting for a platform team and started budgeting for product. The compliance reports alone saved us a quarter of consultant time. The MIT license means I never have to have the "what if they raise prices" conversation with my board.</blockquote>
+          <div class="mt-4 text-sm text-slate-500">— CTO, Series B SaaS</div>
+        </div>
+      </section>
+
+      <section class="px-6 py-16 border-t border-slate-800/30">
+        <div class="mx-auto max-w-3xl">
+          <h2 class="text-2xl font-bold text-white sm:text-3xl">CTO FAQ</h2>
+          <div class="mt-8 space-y-4">
+            <details class="group rounded-xl border border-slate-800/50 bg-slate-900/30 p-5 backdrop-blur-sm"><summary class="cursor-pointer list-none text-sm font-semibold text-white">How does the MIT license affect our IP?<span class="float-right text-slate-500 group-open:rotate-180 transition-transform">▾</span></summary><p class="mt-3 text-sm text-slate-400">The MIT license applies to the Primebrick framework itself, not to the code you write on top of it. Your product code, your entities, your business logic — that's your IP, under whatever license you choose. The MIT license just says you can use, modify, and distribute Primebrick freely, including in commercial products.</p></details>
+            <details class="group rounded-xl border border-slate-800/50 bg-slate-900/30 p-5 backdrop-blur-sm"><summary class="cursor-pointer list-none text-sm font-semibold text-white">What if Primebrick the project disappears?<span class="float-right text-slate-500 group-open:rotate-180 transition-transform">▾</span></summary><p class="mt-3 text-sm text-slate-400">You still have the code. The MIT license is irrevocable — once it's published under MIT, it stays MIT. If the maintainers stop working on it, you can fork it, maintain it yourself, or hire someone to maintain it. The code it generated for your app still runs.</p></details>
+            <details class="group rounded-xl border border-slate-800/50 bg-slate-900/30 p-5 backdrop-blur-sm"><summary class="cursor-pointer list-none text-sm font-semibold text-white">How do you handle accessibility compliance?<span class="float-right text-slate-500 group-open:rotate-180 transition-transform">▾</span></summary><p class="mt-3 text-sm text-slate-400">Primebrick ships with a VPAT and the admin UI is built to WCAG 2.1 AA. The compliance scanner checks for common accessibility issues in the generated components. You get the VPAT as a PDF, ready to hand to procurement or legal.</p></details>
+            <details class="group rounded-xl border border-slate-800/50 bg-slate-900/30 p-5 backdrop-blur-sm"><summary class="cursor-pointer list-none text-sm font-semibold text-white">Can we get a support contract, or is it community-only?<span class="float-right text-slate-500 group-open:rotate-180 transition-transform">▾</span></summary><p class="mt-3 text-sm text-slate-400">The framework is community-supported via GitHub issues. Commercial support, training, and implementation help are available — contact us for details. The code itself is fully open and inspectable, so your team can debug and fix issues independently.</p></details>
+            <details class="group rounded-xl border border-slate-800/50 bg-slate-900/30 p-5 backdrop-blur-sm"><summary class="cursor-pointer list-none text-sm font-semibold text-white">How does this compare to buying a proprietary admin panel SaaS?<span class="float-right text-slate-500 group-open:rotate-180 transition-transform">▾</span></summary><p class="mt-3 text-sm text-slate-400">Proprietary admin SaaS is faster to start but slower to customize, and it comes with per-seat pricing ($10–$100 / month / user), data residency concerns, and vendor lock-in. At 100 users that's $12k–$120k / year in license fees alone. Primebrick takes a day to set up instead of an hour, but after that day you own the code, you host it where you want, you pay $0 in license fees, and you can customize anything.</p></details>
+          </div>
+        </div>
+      </section>
+
+      <section class="px-6 py-20 border-t border-slate-800/30">
+        <div class="mx-auto max-w-5xl">
+          <div class="grid gap-6 lg:grid-cols-2">
+            <a href={nextPersonaHref} class="group rounded-2xl border border-slate-800/50 bg-slate-900/30 p-6 backdrop-blur-sm transition-all hover:border-amber-500/40 hover:bg-slate-900/50">
+              <div class="text-xs text-slate-500">Next persona →</div>
+              <div class="mt-2 flex items-center gap-3"><div class="flex h-10 w-10 items-center justify-center rounded-xl bg-amber-500/20 text-amber-400"><svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></div><div><h3 class="text-lg font-semibold text-white">Visionary Entrepreneur</h3><p class="text-sm text-amber-400">Turn the idea into infrastructure.</p></div></div>
+            </a>
+            <div class="rounded-2xl border border-slate-800/50 bg-gradient-to-b from-slate-900/50 to-slate-950/50 p-6 backdrop-blur-sm">
+              <h3 class="text-lg font-semibold text-white">Ready to de-risk your roadmap?</h3>
+              <p class="mt-2 text-sm text-slate-400">Let's talk about how Primebrick fits your timeline, your budget, and your audit calendar.</p>
+              <div class="mt-4 flex flex-wrap gap-3">
+                <a href={contactHref} class="rounded-xl bg-gradient-to-r from-emerald-500 to-teal-600 px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-emerald-500/20 transition-all hover:scale-105">Get in touch</a>
+                <a href={docsPath} class="rounded-xl border border-slate-700 bg-slate-900/50 px-5 py-2.5 text-sm font-semibold text-slate-200 transition-all hover:border-emerald-500 hover:text-emerald-400" target="_blank" rel="noopener">Read the docs</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="relative z-10 border-t border-slate-800/50 px-6 py-8">
+      <div class="mx-auto flex max-w-7xl items-center justify-between text-sm text-slate-500">
+        <span>&copy; 2026 PrimeBrick. MIT License.</span>
+        <a href="https://github.com/primebrick" class="hover:text-sky-400 transition-colors" target="_blank" rel="noopener">GitHub</a>
+      </div>
+    </footer>
+  </body>
+</html>

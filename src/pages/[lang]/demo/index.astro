@@ -32,6 +32,7 @@ const demoHref = isEn ? '/en/demo/' : `/${langCode}/demo/`;
 const shellHref = `${demoHref}shell`;
 const entityListTableHref = `${demoHref}entity-list-table`;
 const exportsHref = `${demoHref}exports`;
+const versionsHref = `${demoHref}versions`;
 ---
 
 <!doctype html>
@@ -160,7 +161,7 @@ const exportsHref = `${demoHref}exports`;
           <div class="card-arrow"><i data-icon="arrowUpRight"></i></div>
         </a>
 
-        <a href="#" class="hub-card coming-soon" aria-disabled="true">
+        <a href={versionsHref} class="hub-card">
           <div class="card-icon"><i data-icon="history"></i></div>
           <div class="card-title">{t.demo.card.versions.title}</div>
           <div class="card-desc">{t.demo.card.versions.desc}</div>

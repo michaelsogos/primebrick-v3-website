@@ -126,6 +126,17 @@ for registry packages.
 See [.devin/rules/package-versioning.md](./.devin/rules/package-versioning.md)
 for the full rule and upgrade procedure.
 
+## Chunked editing (avoid heap OOM)
+
+When editing or creating files — especially during long sessions with many
+large files — follow the chunked-editing rule to avoid out-of-memory crashes.
+Prefer small `edit` calls over full-file `write` calls, avoid read-then-write
+loops on the same file, and delegate very large multi-file tasks to background
+subagents.
+
+See [.devin/rules/chunked-editing.md](./.devin/rules/chunked-editing.md) for
+the full rule and size budgets.
+
 ## Further documentation
 
 - [.devin/rules/](./.devin/rules/) — always-on rules for Devin agents

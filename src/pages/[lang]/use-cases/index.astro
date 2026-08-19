@@ -1,0 +1,251 @@
+---
+import { translations, LANGUAGES, type LangCode } from '../../../i18n/translations';
+import LanguageSwitcher from '../../../components/svelte/LanguageSwitcher.svelte';
+import GitHubDropdown from '../../../components/svelte/GitHubDropdown.svelte';
+import VirtualTourMegaMenu from '../../../components/svelte/VirtualTourMegaMenu.svelte';
+import UseCasesMegaMenu from '../../../components/svelte/UseCasesMegaMenu.svelte';
+import GitHubIcon from '../../../components/GitHubIcon.astro';
+import TopBanner from '../../../components/astro/TopBanner.astro';
+import pkg from '../../../../package.json';
+import '../../../styles/global.css';
+
+const version = pkg.version;
+
+export const prerender = true;
+
+export function getStaticPaths() {
+  return LANGUAGES.map((lang) => ({
+    params: { lang: lang.code === 'en' ? 'en' : lang.code },
+  }));
+}
+
+const { lang } = Astro.params;
+const langCode = (lang ?? 'en') as LangCode;
+const t = translations[langCode] ?? translations.en;
+const isEn = langCode === 'en';
+const docsPath = 'https://docs.primebrick.dev';
+const homeHref = isEn ? '/en/' : `/${langCode}/`;
+const contactHref = isEn ? '/en/contact' : `/${langCode}/contact`;
+const thankyouHref = isEn ? '/en/thank-you' : `/${langCode}/thank-you`;
+const useCasesHref = isEn ? '/en/use-cases/' : `/${langCode}/use-cases/`;
+
+const personas = [
+  {
+    key: 'developer',
+    accent: 'sky',
+    tagline: 'Ship code, not ceremony.',
+    description: 'Scaffold entities, generate CRUD, ship features. The framework handles auth, RBAC, caching and audit — you write business logic.',
+    icon: '<path d="M16 18l6-6-6-6"/><path d="M8 6l-6 6 6 6"/>',
+  },
+  {
+    key: 'tech-leader',
+    accent: 'indigo',
+    tagline: 'Conventions, not meetings.',
+    description: 'Onboard new developers in hours, not weeks. Standards are enforced by the framework, not by code review comments.',
+    icon: '<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/>',
+  },
+  {
+    key: 'solution-architect',
+    accent: 'violet',
+    tagline: 'Architecture that survives.',
+    description: 'A layered, modular architecture that scales from a single container to multi-region enterprise without rewrites.',
+    icon: '<rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>',
+  },
+  {
+    key: 'cto',
+    accent: 'emerald',
+    tagline: 'Speed without lock-in.',
+    description: 'MIT-licensed, inspectable, deployable anywhere. Ship faster, pass audits, scale from MVP to enterprise — no platform team required.',
+    icon: '<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>',
+  },
+  {
+    key: 'visionary-entrepreneur',
+    accent: 'amber',
+    tagline: 'Turn ideas into infrastructure.',
+    description: 'AI-native backoffice, multi-tenant SaaS readiness, and an architecture that grows with your ambition — without license fees eating your runway.',
+    icon: '<path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>',
+  },
+  {
+    key: 'soc-team',
+    accent: 'rose',
+    tagline: 'Evidence, not promises.',
+    description: 'Tamper-evident audit logs, field-level access reviews, real-time security signals, and downloadable compliance evidence with file:line references.',
+    icon: '<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><circle cx="12" cy="12" r="3"/>',
+  },
+];
+
+const personaNames: Record<string, string> = {
+  developer: 'Developer',
+  'tech-leader': 'Tech Leader',
+  'solution-architect': 'Solution Architect',
+  cto: 'CTO',
+  'visionary-entrepreneur': 'Visionary Entrepreneur',
+  'soc-team': 'SOC Team',
+};
+
+const accentMap: Record<string, { text: string; bg: string; border: string; gradient: string }> = {
+  sky: { text: 'text-sky-400', bg: 'bg-sky-500/10', border: 'border-sky-500/30', gradient: 'from-sky-500 to-cyan-600' },
+  indigo: { text: 'text-indigo-400', bg: 'bg-indigo-500/10', border: 'border-indigo-500/30', gradient: 'from-indigo-500 to-purple-600' },
+  violet: { text: 'text-violet-400', bg: 'bg-violet-500/10', border: 'border-violet-500/30', gradient: 'from-violet-500 to-fuchsia-600' },
+  emerald: { text: 'text-emerald-400', bg: 'bg-emerald-500/10', border: 'border-emerald-500/30', gradient: 'from-emerald-500 to-teal-600' },
+  amber: { text: 'text-amber-400', bg: 'bg-amber-500/10', border: 'border-amber-500/30', gradient: 'from-amber-500 to-orange-600' },
+  rose: { text: 'text-rose-400', bg: 'bg-rose-500/10', border: 'border-rose-500/30', gradient: 'from-rose-500 to-red-600' },
+};
+---
+
+<!doctype html>
+<html lang={langCode}>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Primebrick use cases by persona — Developer, Tech Leader, Solution Architect, CTO, Visionary Entrepreneur, SOC Team." />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+    <link rel="icon" type="image/png" sizes="512x512" href="/favicon-512.png" />
+    <link rel="icon" sizes="any" href="/favicon.ico" />
+    <link rel="apple-touch-icon" href="/favicon-512.png" />
+    <title>PrimeBrick — Use Cases</title>
+    {LANGUAGES.map((l) => (
+      <link rel="alternate" hreflang={l.hreflang} href={`https://primebrick.dev${l.code === 'en' ? '/en/use-cases/' : `/${l.code}/use-cases/`}`} />
+    ))}
+    <link rel="alternate" hreflang="x-default" href="https://primebrick.dev/en/use-cases/" />
+  </head>
+  <body class="min-h-screen bg-slate-950 text-slate-100 antialiased">
+    <!-- Ambient gradient background -->
+    <div class="pointer-events-none fixed inset-0 overflow-hidden">
+      <div class="absolute -top-40 left-1/2 h-[500px] w-[800px] -translate-x-1/2 rounded-full bg-sky-500/10 blur-[120px]"></div>
+      <div class="absolute top-1/3 -right-40 h-[400px] w-[400px] rounded-full bg-indigo-500/10 blur-[100px]"></div>
+      <div class="absolute bottom-0 -left-40 h-[400px] w-[400px] rounded-full bg-cyan-500/10 blur-[100px]"></div>
+    </div>
+
+    <TopBanner text={t.banner.text} href={contactHref} />
+
+    <nav id="site-nav" class="sticky top-9 z-50 border-b border-slate-800/50 bg-slate-950/40 backdrop-blur-sm transition-all duration-300">
+      <div id="nav-inner" class="mx-auto flex max-w-7xl items-center justify-between px-6 py-4 transition-all duration-300">
+        <a href={isEn ? '/' : `/${langCode}/`} class="flex items-center gap-2" aria-label="PrimeBrick home">
+          <img src="/logo-full-dark.svg" alt="PrimeBrick" width="170" height="32" class="h-7 w-auto" />
+        </a>
+        <div class="flex items-center gap-6 text-sm">
+          <a href={homeHref} class="text-slate-300 hover:text-sky-400 transition-colors">{t.nav.home}</a>
+          <VirtualTourMegaMenu client:load currentLang={langCode} />
+          <UseCasesMegaMenu client:load currentLang={langCode} />
+          <a href={docsPath} class="text-slate-300 hover:text-sky-400 transition-colors" target="_blank" rel="noopener">{t.nav.docs}</a>
+          <a href={contactHref} class="text-slate-300 hover:text-sky-400 transition-colors">{t.nav.contact}</a>
+          <a
+            href="https://opensource.org/license/MIT"
+            class="text-slate-300 hover:text-sky-400 transition-colors"
+            target="_blank"
+            rel="noopener"
+          >
+            {t.nav.license}
+          </a>
+          <GitHubDropdown client:load />
+          <LanguageSwitcher client:load currentLang={langCode} />
+        </div>
+      </div>
+    </nav>
+    <script>
+      (() => {
+        const nav = document.getElementById('site-nav');
+        const inner = document.getElementById('nav-inner');
+        if (!nav || !inner) return;
+        const onScroll = () => {
+          const scrolled = window.scrollY > 20;
+          if (scrolled) {
+            inner.classList.replace('py-4', 'py-2');
+            nav.classList.add('bg-slate-950/80', 'backdrop-blur-md', 'shadow-lg', 'border-slate-800/80');
+            nav.classList.remove('bg-slate-950/40', 'border-slate-800/50');
+          } else {
+            inner.classList.replace('py-2', 'py-4');
+            nav.classList.remove('bg-slate-950/80', 'backdrop-blur-md', 'shadow-lg', 'border-slate-800/80');
+            nav.classList.add('bg-slate-950/40', 'border-slate-800/50');
+          }
+        };
+        window.addEventListener('scroll', onScroll, { passive: true });
+        onScroll();
+      })();
+    </script>
+
+    <main class="relative z-10">
+      <!-- Hero -->
+      <section class="px-6 pt-20 pb-12">
+        <div class="mx-auto max-w-5xl">
+          <div class="mb-4 inline-flex items-center gap-2 rounded-full border border-sky-500/30 bg-sky-500/10 px-4 py-1.5 text-xs font-medium text-sky-300">
+            <svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+            Use Cases
+          </div>
+          <h1 class="text-4xl font-bold tracking-tight text-white sm:text-5xl lg:text-6xl">Who builds with Primebrick?</h1>
+          <p class="mt-4 max-w-2xl text-lg text-slate-400">Six personas, one framework. Whether you're writing the code, leading the team, designing the architecture, owning the budget, chasing the vision, or watching the logs — Primebrick meets you where you are.</p>
+        </div>
+      </section>
+
+      <!-- Persona cards -->
+      <section class="px-6 pb-16">
+        <div class="mx-auto max-w-5xl">
+          <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {personas.map((p) => {
+              const a = accentMap[p.accent];
+              return (
+                <a href={`${useCasesHref}${p.key}`} class={`group rounded-2xl border border-slate-800/50 bg-slate-900/30 p-6 backdrop-blur-sm transition-all hover:border-${p.accent}-500/40 hover:bg-slate-900/50`}>
+                  <div class={`mb-4 flex h-12 w-12 items-center justify-center rounded-xl ${a.bg} ${a.text}`}>
+                    <svg class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" set:html={p.icon} />
+                  </div>
+                  <h2 class="text-lg font-semibold text-white">{personaNames[p.key]}</h2>
+                  <p class={`mt-1 text-sm font-medium ${a.text}`}>{p.tagline}</p>
+                  <p class="mt-3 text-sm text-slate-400">{p.description}</p>
+                  <div class={`mt-4 inline-flex items-center gap-1 text-xs font-semibold ${a.text} group-hover:gap-2 transition-all`}>
+                    Explore
+                    <svg class="h-3 w-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                  </div>
+                </a>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      <!-- How it works strip -->
+      <section class="px-6 py-16 border-t border-slate-800/30">
+        <div class="mx-auto max-w-5xl">
+          <h2 class="text-2xl font-bold text-white sm:text-3xl">How it works</h2>
+          <div class="mt-8 grid gap-4 sm:grid-cols-3">
+            <div class="rounded-2xl border border-slate-800/50 bg-slate-900/30 p-6 backdrop-blur-sm">
+              <div class="text-xs font-mono text-sky-400 mb-2">01</div>
+              <h3 class="text-sm font-semibold text-white">Scaffold</h3>
+              <p class="mt-2 text-sm text-slate-400">Generate your app with one command. Auth, RBAC, multi-tenancy, observability and compliance scanning are already wired in.</p>
+            </div>
+            <div class="rounded-2xl border border-slate-800/50 bg-slate-900/30 p-6 backdrop-blur-sm">
+              <div class="text-xs font-mono text-indigo-400 mb-2">02</div>
+              <h3 class="text-sm font-semibold text-white">Build</h3>
+              <p class="mt-2 text-sm text-slate-400">Define entities with decorators. The framework generates CRUD, API routes, admin UI, tests and migrations. You write business logic.</p>
+            </div>
+            <div class="rounded-2xl border border-slate-800/50 bg-slate-900/30 p-6 backdrop-blur-sm">
+              <div class="text-xs font-mono text-emerald-400 mb-2">03</div>
+              <h3 class="text-sm font-semibold text-white">Ship</h3>
+              <p class="mt-2 text-sm text-slate-400">Deploy to Docker, Kubernetes, AWS, Azure Container Apps, GCP Cloud Run, or Alibaba Cloud ACK. The compliance scanner generates audit-ready PDFs on every build.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- CTA -->
+      <section class="px-6 py-20 border-t border-slate-800/30">
+        <div class="mx-auto max-w-3xl text-center">
+          <h2 class="text-2xl font-bold text-white sm:text-3xl">Ready to see your persona?</h2>
+          <p class="mt-3 text-slate-400">Pick the role that matches yours and dive into the details — benefits, workflows, comparisons and FAQs.</p>
+          <div class="mt-6 flex flex-wrap justify-center gap-3">
+            <a href={`${useCasesHref}developer`} class="rounded-xl bg-gradient-to-r from-sky-500 to-cyan-600 px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-sky-500/20 transition-all hover:scale-105">Start with Developer</a>
+            <a href={contactHref} class="rounded-xl border border-slate-700 bg-slate-900/50 px-5 py-2.5 text-sm font-semibold text-slate-200 transition-all hover:border-sky-500 hover:text-sky-400">Get in touch</a>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="relative z-10 border-t border-slate-800/50 px-6 py-8">
+      <div class="mx-auto flex max-w-7xl items-center justify-between text-sm text-slate-500">
+        <span>&copy; 2026 PrimeBrick. MIT License.</span>
+        <a href="https://github.com/primebrick" class="hover:text-sky-400 transition-colors" target="_blank" rel="noopener">GitHub</a>
+      </div>
+    </footer>
+  </body>
+</html>
