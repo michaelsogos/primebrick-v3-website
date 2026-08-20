@@ -4,6 +4,7 @@ import { entityListTableTranslations } from '../../../i18n/entity-list-table-tra
 import LanguageSwitcher from '../../../components/svelte/LanguageSwitcher.svelte';
 import GitHubDropdown from '../../../components/svelte/GitHubDropdown.svelte';
 import VirtualTourMegaMenu from '../../../components/svelte/VirtualTourMegaMenu.svelte';
+import UseCasesMegaMenu from '../../../components/svelte/UseCasesMegaMenu.svelte';
 import GitHubIcon from '../../../components/GitHubIcon.astro';
 import TopBanner from '../../../components/astro/TopBanner.astro';
 import DemoHero from '../../../components/astro/DemoHero.astro';
@@ -91,6 +92,7 @@ const jsonSnippetHtml = `<div class="j-line"><span class="j-lineno">1</span><spa
         <div class="flex items-center gap-6 text-sm">
           <a href={homeHref} class="text-slate-300 hover:text-sky-400 transition-colors">{t.nav.home}</a>
           <VirtualTourMegaMenu client:load currentLang={langCode} activeDemo="entity-list-table" />
+          <UseCasesMegaMenu client:load currentLang={langCode} />
           <a href={docsPath} class="text-slate-300 hover:text-sky-400 transition-colors" target="_blank" rel="noopener">{t.nav.docs}</a>
           <a href={contactHref} class="text-slate-300 hover:text-sky-400 transition-colors">{t.nav.contact}</a>
           <a href={thankyouHref} class="text-slate-300 hover:text-sky-400 transition-colors">{t.nav.thankyou}</a>
