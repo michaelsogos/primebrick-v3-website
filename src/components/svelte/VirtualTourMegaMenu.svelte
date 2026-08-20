@@ -9,12 +9,23 @@
   let open = $state(false);
 
   function toggle() {
-    open = !open;
+    const willOpen = !open;
+    if (willOpen) window.dispatchEvent(new CustomEvent('megamenu-open'));
+    open = willOpen;
   }
 
   function close() {
     open = false;
   }
+
+  function closeOnOtherOpen(e: Event) {
+    if (open) open = false;
+  }
+
+  $effect(() => {
+    window.addEventListener('megamenu-open', closeOnOtherOpen);
+    return () => window.removeEventListener('megamenu-open', closeOnOtherOpen);
+  });
 
   const langCode = $derived((currentLang as LangCode) ?? 'en');
   const isEn = $derived(langCode === 'en');

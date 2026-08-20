@@ -1,18 +1,12 @@
 ﻿---
 import { translations, LANGUAGES, type LangCode } from '../../../i18n/translations';
-import LanguageSwitcher from '../../../components/svelte/LanguageSwitcher.svelte';
-import GitHubDropdown from '../../../components/svelte/GitHubDropdown.svelte';
-import VirtualTourMegaMenu from '../../../components/svelte/VirtualTourMegaMenu.svelte';
-import UseCasesMegaMenu from '../../../components/svelte/UseCasesMegaMenu.svelte';
-import GitHubIcon from '../../../components/GitHubIcon.astro';
 import TopBanner from '../../../components/astro/TopBanner.astro';
+import Nav from '../../../components/astro/Nav.astro';
+import Footer from '../../../components/astro/Footer.astro';
 import DemoHero from '../../../components/astro/DemoHero.astro';
-import pkg from '../../../../package.json';
 import '../../../styles/global.css';
 import '../../../styles/demo/demo.css';
 import '../../../styles/demo/shell.css';
-
-const version = pkg.version;
 
 export const prerender = true;
 
@@ -62,56 +56,7 @@ const shellHref = `${demoHref}shell`;
     <!-- Top banner (sticky, non-dismissible) -->
     <TopBanner text={t.banner.text} href={contactHref} />
 
-    <!-- Navigation (sticky, condensing on scroll) -->
-    <nav id="site-nav" class="sticky top-9 z-50 border-b border-slate-800/50 bg-slate-950/40 backdrop-blur-sm transition-all duration-300">
-      <div id="nav-inner" class="mx-auto flex max-w-7xl items-center justify-between px-6 py-4 transition-all duration-300">
-        <a href={homeHref} class="flex items-center gap-2 transition-all duration-300" id="nav-logo" aria-label="PrimeBrick home">
-          <img src="/logo-full-dark.svg" alt="PrimeBrick" width="170" height="32" class="h-7 w-auto" />
-        </a>
-        <div class="flex items-center gap-6 text-sm">
-          <a href={homeHref} class="text-slate-300 hover:text-sky-400 transition-colors">{t.nav.home}</a>
-          <VirtualTourMegaMenu client:load currentLang={langCode} activeDemo="shell" />
-          <UseCasesMegaMenu client:load currentLang={langCode} />
-          <a href={docsPath} class="text-slate-300 hover:text-sky-400 transition-colors" target="_blank" rel="noopener">{t.nav.docs}</a>
-          <a href={contactHref} class="text-slate-300 hover:text-sky-400 transition-colors">{t.nav.contact}</a>
-          <a href={thankyouHref} class="text-slate-300 hover:text-sky-400 transition-colors">{t.nav.thankyou}</a>
-          <a
-            href="https://opensource.org/license/MIT"
-            class="text-slate-300 hover:text-sky-400 transition-colors"
-            target="_blank"
-            rel="noopener"
-          >
-            {t.nav.license}
-          </a>
-          <GitHubDropdown client:load />
-          <LanguageSwitcher client:load currentLang={langCode} />
-        </div>
-      </div>
-    </nav>
-    <script>
-      (() => {
-        const nav = document.getElementById('site-nav');
-        const inner = document.getElementById('nav-inner');
-        const logo = document.getElementById('nav-logo');
-        if (!nav || !inner) return;
-        const onScroll = () => {
-          const scrolled = window.scrollY > 20;
-          if (scrolled) {
-            inner.classList.replace('py-4', 'py-2');
-            nav.classList.add('bg-slate-950/80', 'backdrop-blur-md', 'shadow-lg', 'border-slate-800/80');
-            nav.classList.remove('bg-slate-950/40', 'border-slate-800/50');
-            logo?.classList.replace('text-xl', 'text-lg');
-          } else {
-            inner.classList.replace('py-2', 'py-4');
-            nav.classList.remove('bg-slate-950/80', 'backdrop-blur-md', 'shadow-lg', 'border-slate-800/80');
-            nav.classList.add('bg-slate-950/40', 'border-slate-800/50');
-            logo?.classList.replace('text-lg', 'text-xl');
-          }
-        };
-        window.addEventListener('scroll', onScroll, { passive: true });
-        onScroll();
-      })();
-    </script>
+    <Nav currentLang={langCode} activeDemo="shell" />
 
     <!-- ===== Demo body (from shell-v2.html, scoped) ===== -->
 
@@ -500,24 +445,7 @@ const shellHref = `${demoHref}shell`;
 
 </div><!-- /.demo-scope -->
 
-    <!-- Website footer -->
-    <footer class="relative z-10 border-t border-slate-800/50 px-6 py-8">
-      <div class="mx-auto flex max-w-7xl items-center justify-between text-sm text-slate-500">
-        <span>&copy; 2026 {t.footer.copyright}</span>
-        <div class="flex items-center gap-4">
-          <span class="text-xs text-slate-600">v{version}</span>
-          <a
-            href="https://github.com/michaelsogos/primebrick-v3-website"
-            class="inline-flex items-center gap-1.5 hover:text-sky-400 transition-colors"
-            target="_blank"
-            rel="noopener"
-          >
-            <GitHubIcon class="h-4 w-4" />
-            GitHub®
-          </a>
-        </div>
-      </div>
-    </footer>
+    <Footer currentLang={langCode} />
 
     <script>
       import { renderAllIcons } from '../../../scripts/demo/icons';

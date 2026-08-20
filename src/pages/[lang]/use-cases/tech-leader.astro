@@ -1,10 +1,8 @@
 ---
 import { translations, LANGUAGES, type LangCode } from '../../../i18n/translations';
-import LanguageSwitcher from '../../../components/svelte/LanguageSwitcher.svelte';
-import GitHubDropdown from '../../../components/svelte/GitHubDropdown.svelte';
-import VirtualTourMegaMenu from '../../../components/svelte/VirtualTourMegaMenu.svelte';
-import UseCasesMegaMenu from '../../../components/svelte/UseCasesMegaMenu.svelte';
 import TopBanner from '../../../components/astro/TopBanner.astro';
+import Nav from '../../../components/astro/Nav.astro';
+import Footer from '../../../components/astro/Footer.astro';
 import '../../../styles/global.css';
 
 export const prerender = true;
@@ -22,8 +20,10 @@ const isEn = langCode === 'en';
 const docsPath = 'https://docs.primebrick.dev';
 const homeHref = isEn ? '/en/' : `/${langCode}/`;
 const contactHref = isEn ? '/en/contact' : `/${langCode}/contact`;
+const thankyouHref = isEn ? '/en/thank-you' : `/${langCode}/thank-you`;
 const useCasesHref = isEn ? '/en/use-cases/' : `/${langCode}/use-cases/`;
 const nextPersonaHref = `${useCasesHref}solution-architect`;
+const prevPersonaHref = `${useCasesHref}developer`;
 ---
 
 <!doctype html>
@@ -52,49 +52,13 @@ const nextPersonaHref = `${useCasesHref}solution-architect`;
 
     <TopBanner text={t.banner.text} href={contactHref} />
 
-    <nav id="site-nav" class="sticky top-9 z-50 border-b border-slate-800/50 bg-slate-950/40 backdrop-blur-sm transition-all duration-300">
-      <div id="nav-inner" class="mx-auto flex max-w-7xl items-center justify-between px-6 py-4 transition-all duration-300">
-        <a href={isEn ? '/' : `/${langCode}/`} class="flex items-center gap-2" aria-label="PrimeBrick home">
-          <img src="/logo-full-dark.svg" alt="PrimeBrick" width="170" height="32" class="h-7 w-auto" />
-        </a>
-        <div class="flex items-center gap-6 text-sm">
-          <a href={homeHref} class="text-slate-300 hover:text-sky-400 transition-colors">{t.nav.home}</a>
-          <VirtualTourMegaMenu client:load currentLang={langCode} />
-          <UseCasesMegaMenu client:load currentLang={langCode} activePersona="tech-leader" />
-          <a href={docsPath} class="text-slate-300 hover:text-sky-400 transition-colors" target="_blank" rel="noopener">{t.nav.docs}</a>
-          <a href={contactHref} class="text-slate-300 hover:text-sky-400 transition-colors">{t.nav.contact}</a>
-          <GitHubDropdown client:load />
-          <LanguageSwitcher client:load currentLang={langCode} />
-        </div>
-      </div>
-    </nav>
-    <script>
-      (() => {
-        const nav = document.getElementById('site-nav');
-        const inner = document.getElementById('nav-inner');
-        if (!nav || !inner) return;
-        const onScroll = () => {
-          const scrolled = window.scrollY > 20;
-          if (scrolled) {
-            inner.classList.replace('py-4', 'py-2');
-            nav.classList.add('bg-slate-950/80', 'backdrop-blur-md', 'shadow-lg', 'border-slate-800/80');
-            nav.classList.remove('bg-slate-950/40', 'border-slate-800/50');
-          } else {
-            inner.classList.replace('py-2', 'py-4');
-            nav.classList.remove('bg-slate-950/80', 'backdrop-blur-md', 'shadow-lg', 'border-slate-800/80');
-            nav.classList.add('bg-slate-950/40', 'border-slate-800/50');
-          }
-        };
-        window.addEventListener('scroll', onScroll, { passive: true });
-        onScroll();
-      })();
-    </script>
+    <Nav currentLang={langCode} activePersona="tech-leader" />
 
     <main class="relative z-10">
       <section class="px-6 pt-20 pb-12">
         <div class="mx-auto max-w-5xl">
           <div class="mb-4 inline-flex items-center gap-2 rounded-full border border-indigo-500/30 bg-indigo-500/10 px-4 py-1.5 text-xs font-medium text-indigo-300">
-            <svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+            <svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
             Persona 02 / 06
           </div>
           <h1 class="text-4xl font-bold tracking-tight text-white sm:text-5xl lg:text-6xl">Tech Leader</h1>
@@ -239,11 +203,11 @@ const nextPersonaHref = `${useCasesHref}solution-architect`;
         <div class="mx-auto max-w-3xl">
           <h2 class="text-2xl font-bold text-white sm:text-3xl">Tech Leader FAQ</h2>
           <div class="mt-8 space-y-4">
-            <details class="group rounded-xl border border-slate-800/50 bg-slate-900/30 p-5 backdrop-blur-sm"><summary class="cursor-pointer list-none text-sm font-semibold text-white">How do we enforce team-specific conventions on top of the framework?<span class="float-right text-slate-500 group-open:rotate-180 transition-transform">▾</span></summary><p class="mt-3 text-sm text-slate-400">The framework's decorators are the baseline. You can add ESLint rules, custom decorators, and CI checks for team-specific patterns. The agentic GUI also respects your custom conventions when generating code. Your team's standards layer on top of the framework's standards.</p></details>
-            <details class="group rounded-xl border border-slate-800/50 bg-slate-900/30 p-5 backdrop-blur-sm"><summary class="cursor-pointer list-none text-sm font-semibold text-white">Can we migrate incrementally from an existing codebase?<span class="float-right text-slate-500 group-open:rotate-180 transition-transform">▾</span></summary><p class="mt-3 text-sm text-slate-400">Yes. The migration path is designed for coexistence: run Primebrick alongside your legacy stack, move entities one at a time, and decommission the old code when ready. No big-bang rewrite, no freeze on new features during migration.</p></details>
-            <details class="group rounded-xl border border-slate-800/50 bg-slate-900/30 p-5 backdrop-blur-sm"><summary class="cursor-pointer list-none text-sm font-semibold text-white">How does the agentic GUI handle team conventions?<span class="float-right text-slate-500 group-open:rotate-180 transition-transform">▾</span></summary><p class="mt-3 text-sm text-slate-400">The agent reads your existing codebase to learn patterns before generating new code. It follows your decorator usage, file structure, and naming conventions. You approve every plan before code is written, so you can reject anything that doesn't match your standards.</p></details>
-            <details class="group rounded-xl border border-slate-800/50 bg-slate-900/30 p-5 backdrop-blur-sm"><summary class="cursor-pointer list-none text-sm font-semibold text-white">What's the learning curve for developers new to the framework?<span class="float-right text-slate-500 group-open:rotate-180 transition-transform">▾</span></summary><p class="mt-3 text-sm text-slate-400">Developers familiar with TypeScript and decorators pick it up in hours. The conventions page and the entity files are the documentation — read one entity and you understand the pattern. No week-long training, no certification program. The framework is designed to be readable, not magical.</p></details>
-            <details class="group rounded-xl border border-slate-800/50 bg-slate-900/30 p-5 backdrop-blur-sm"><summary class="cursor-pointer list-none text-sm font-semibold text-white">How do we handle framework upgrades?<span class="float-right text-slate-500 group-open:rotate-180 transition-transform">▾</span></summary><p class="mt-3 text-sm text-slate-400">The SDK is published to npm with semantic versioning. Breaking changes come with migration guides and codemods where possible. Since the framework is open source, you can also pin a version and upgrade on your own schedule. ADRs document every architectural decision and its rationale.</p></details>
+            <details class="group rounded-xl border border-slate-800/50 bg-slate-900/30 p-5 backdrop-blur-sm"><summary class="cursor-pointer list-none text-sm font-semibold text-white">How do we enforce team-specific conventions on top of the framework?<span class="float-right text-slate-500 group-open:rotate-180 transition-transform"><svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></span></summary><p class="mt-3 text-sm text-slate-400">The framework's decorators are the baseline. You can add ESLint rules, custom decorators, and CI checks for team-specific patterns. The agentic GUI also respects your custom conventions when generating code. Your team's standards layer on top of the framework's standards.</p></details>
+            <details class="group rounded-xl border border-slate-800/50 bg-slate-900/30 p-5 backdrop-blur-sm"><summary class="cursor-pointer list-none text-sm font-semibold text-white">Can we migrate incrementally from an existing codebase?<span class="float-right text-slate-500 group-open:rotate-180 transition-transform"><svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></span></summary><p class="mt-3 text-sm text-slate-400">Yes. The migration path is designed for coexistence: run Primebrick alongside your legacy stack, move entities one at a time, and decommission the old code when ready. No big-bang rewrite, no freeze on new features during migration.</p></details>
+            <details class="group rounded-xl border border-slate-800/50 bg-slate-900/30 p-5 backdrop-blur-sm"><summary class="cursor-pointer list-none text-sm font-semibold text-white">How does the agentic GUI handle team conventions?<span class="float-right text-slate-500 group-open:rotate-180 transition-transform"><svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></span></summary><p class="mt-3 text-sm text-slate-400">The agent reads your existing codebase to learn patterns before generating new code. It follows your decorator usage, file structure, and naming conventions. You approve every plan before code is written, so you can reject anything that doesn't match your standards.</p></details>
+            <details class="group rounded-xl border border-slate-800/50 bg-slate-900/30 p-5 backdrop-blur-sm"><summary class="cursor-pointer list-none text-sm font-semibold text-white">What's the learning curve for developers new to the framework?<span class="float-right text-slate-500 group-open:rotate-180 transition-transform"><svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></span></summary><p class="mt-3 text-sm text-slate-400">Developers familiar with TypeScript and decorators pick it up in hours. The conventions page and the entity files are the documentation — read one entity and you understand the pattern. No week-long training, no certification program. The framework is designed to be readable, not magical.</p></details>
+            <details class="group rounded-xl border border-slate-800/50 bg-slate-900/30 p-5 backdrop-blur-sm"><summary class="cursor-pointer list-none text-sm font-semibold text-white">How do we handle framework upgrades?<span class="float-right text-slate-500 group-open:rotate-180 transition-transform"><svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></span></summary><p class="mt-3 text-sm text-slate-400">The SDK is published to npm with semantic versioning. Breaking changes come with migration guides and codemods where possible. Since the framework is open source, you can also pin a version and upgrade on your own schedule. ADRs document every architectural decision and its rationale.</p></details>
           </div>
         </div>
       </section>
@@ -251,28 +215,29 @@ const nextPersonaHref = `${useCasesHref}solution-architect`;
       <section class="px-6 py-20 border-t border-slate-800/30">
         <div class="mx-auto max-w-5xl">
           <div class="grid gap-6 lg:grid-cols-2">
+            <a href={prevPersonaHref} class="group rounded-2xl border border-slate-800/50 bg-slate-900/30 p-6 backdrop-blur-sm transition-all hover:border-sky-500/40 hover:bg-slate-900/50">
+              <div class="flex items-center gap-1.5 text-xs text-slate-500"><svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>Previous persona</div>
+              <div class="mt-2 flex items-center gap-3"><div class="flex h-10 w-10 items-center justify-center rounded-xl bg-sky-500/20 text-sky-400"><svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 18l6-6-6-6"/><path d="M8 6l-6 6 6 6"/></svg></div><div><h3 class="text-lg font-semibold text-white">Developer</h3><p class="text-sm text-sky-400">Ship code, not ceremony.</p></div></div>
+            </a>
             <a href={nextPersonaHref} class="group rounded-2xl border border-slate-800/50 bg-slate-900/30 p-6 backdrop-blur-sm transition-all hover:border-violet-500/40 hover:bg-slate-900/50">
-              <div class="text-xs text-slate-500">Next persona →</div>
+              <div class="flex items-center gap-1.5 text-xs text-slate-500">Next persona<svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></div>
               <div class="mt-2 flex items-center gap-3"><div class="flex h-10 w-10 items-center justify-center rounded-xl bg-violet-500/20 text-violet-400"><svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></div><div><h3 class="text-lg font-semibold text-white">Solution Architect</h3><p class="text-sm text-violet-400">Architecture that survives.</p></div></div>
             </a>
-            <div class="rounded-2xl border border-slate-800/50 bg-gradient-to-b from-slate-900/50 to-slate-950/50 p-6 backdrop-blur-sm">
+          </div>
+          <div class="mt-6 flex flex-col items-start justify-between gap-4 rounded-2xl border border-slate-800/50 bg-gradient-to-b from-slate-900/50 to-slate-950/50 p-6 backdrop-blur-sm sm:flex-row sm:items-center">
+            <div>
               <h3 class="text-lg font-semibold text-white">Ready to enforce standards without meetings?</h3>
-              <p class="mt-2 text-sm text-slate-400">Read the docs or get in touch — we'll show you how to onboard a developer in hours.</p>
-              <div class="mt-4 flex flex-wrap gap-3">
-                <a href={docsPath} class="rounded-xl bg-gradient-to-r from-indigo-500 to-purple-600 px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-indigo-500/20 transition-all hover:scale-105" target="_blank" rel="noopener">Read the docs</a>
-                <a href={contactHref} class="rounded-xl border border-slate-700 bg-slate-900/50 px-5 py-2.5 text-sm font-semibold text-slate-200 transition-all hover:border-indigo-500 hover:text-indigo-400">Get in touch</a>
-              </div>
+              <p class="mt-1 text-sm text-slate-400">Read the docs or get in touch — we'll show you how to onboard a developer in hours.</p>
+            </div>
+            <div class="flex flex-shrink-0 flex-wrap gap-3">
+              <a href={docsPath} class="rounded-xl bg-gradient-to-r from-indigo-500 to-purple-600 px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-indigo-500/20 transition-all hover:scale-105" target="_blank" rel="noopener">Read the docs</a>
+              <a href={contactHref} class="rounded-xl border border-slate-700 bg-slate-900/50 px-5 py-2.5 text-sm font-semibold text-slate-200 transition-all hover:border-indigo-500 hover:text-indigo-400">Get in touch</a>
             </div>
           </div>
         </div>
       </section>
     </main>
 
-    <footer class="relative z-10 border-t border-slate-800/50 px-6 py-8">
-      <div class="mx-auto flex max-w-7xl items-center justify-between text-sm text-slate-500">
-        <span>&copy; 2026 PrimeBrick. MIT License.</span>
-        <a href="https://github.com/primebrick" class="hover:text-sky-400 transition-colors" target="_blank" rel="noopener">GitHub</a>
-      </div>
-    </footer>
+    <Footer currentLang={langCode} />
   </body>
 </html>

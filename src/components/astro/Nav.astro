@@ -1,0 +1,83 @@
+---
+import { translations, type LangCode } from '../../i18n/translations';
+import LanguageSwitcher from '../svelte/LanguageSwitcher.svelte';
+import GitHubDropdown from '../svelte/GitHubDropdown.svelte';
+import VirtualTourMegaMenu from '../svelte/VirtualTourMegaMenu.svelte';
+import UseCasesMegaMenu from '../svelte/UseCasesMegaMenu.svelte';
+
+interface Props {
+  currentLang: LangCode;
+  activeDemo?: 'hub' | 'shell' | 'entity-list-table' | 'exports' | 'versions' | null;
+  activePersona?: 'developer' | 'tech-leader' | 'solution-architect' | 'cto' | 'visionary-entrepreneur' | 'soc-team' | null;
+  activePage?: 'home' | 'contact' | 'thank-you' | null;
+}
+
+const { currentLang, activeDemo = null, activePersona = null, activePage = null } = Astro.props;
+
+const langCode = currentLang;
+const t = translations[langCode] ?? translations.en;
+const isEn = langCode === 'en';
+const docsPath = 'https://docs.primebrick.dev';
+const homeHref = isEn ? '/en/' : `/${langCode}/`;
+const contactHref = isEn ? '/en/contact' : `/${langCode}/contact`;
+const thankyouHref = isEn ? '/en/thank-you' : `/${langCode}/thank-you`;
+---
+
+<nav id="site-nav" class="sticky top-9 z-50 border-b border-slate-800/50 bg-slate-950/40 backdrop-blur-sm transition-all duration-300">
+  <div id="nav-inner" class="mx-auto flex max-w-7xl items-center justify-between px-6 py-4 transition-all duration-300">
+    <a href={homeHref} class="flex items-center gap-2 transition-all duration-300" id="nav-logo" aria-label="PrimeBrick home">
+      <img src="/logo-full-dark.svg" alt="PrimeBrick" width="170" height="32" class="h-7 w-auto" />
+    </a>
+    <div class="flex items-center gap-6 text-sm">
+      <a
+        href={homeHref}
+        class={activePage === 'home' ? 'text-sky-400 transition-colors' : 'text-slate-300 hover:text-sky-400 transition-colors'}
+        aria-current={activePage === 'home' ? 'page' : undefined}
+      >{t.nav.home}</a>
+      <VirtualTourMegaMenu client:load currentLang={langCode} activeDemo={activeDemo} />
+      <UseCasesMegaMenu client:load currentLang={langCode} activePersona={activePersona} />
+      <a href={docsPath} class="text-slate-300 hover:text-sky-400 transition-colors" target="_blank" rel="noopener">{t.nav.docs}</a>
+      <a
+        href={contactHref}
+        class={activePage === 'contact' ? 'text-sky-400 transition-colors' : 'text-slate-300 hover:text-sky-400 transition-colors'}
+        aria-current={activePage === 'contact' ? 'page' : undefined}
+      >{t.nav.contact}</a>
+      <a
+        href={thankyouHref}
+        class={activePage === 'thank-you' ? 'text-sky-400 transition-colors' : 'text-slate-300 hover:text-sky-400 transition-colors'}
+        aria-current={activePage === 'thank-you' ? 'page' : undefined}
+      >{t.nav.thankyou}</a>
+      <a
+        href="https://opensource.org/license/MIT"
+        class="text-slate-300 hover:text-sky-400 transition-colors"
+        target="_blank"
+        rel="noopener"
+      >
+        {t.nav.license}
+      </a>
+      <GitHubDropdown client:load />
+      <LanguageSwitcher client:load currentLang={langCode} />
+    </div>
+  </div>
+</nav>
+<script>
+  (() => {
+    const nav = document.getElementById('site-nav');
+    const inner = document.getElementById('nav-inner');
+    if (!nav || !inner) return;
+    const onScroll = () => {
+      const scrolled = window.scrollY > 20;
+      if (scrolled) {
+        inner.classList.replace('py-4', 'py-2');
+        nav.classList.add('bg-slate-950/80', 'backdrop-blur-md', 'shadow-lg', 'border-slate-800/80');
+        nav.classList.remove('bg-slate-950/40', 'border-slate-800/50');
+      } else {
+        inner.classList.replace('py-2', 'py-4');
+        nav.classList.remove('bg-slate-950/80', 'backdrop-blur-md', 'shadow-lg', 'border-slate-800/80');
+        nav.classList.add('bg-slate-950/40', 'border-slate-800/50');
+      }
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+  })();
+</script>
