@@ -12,12 +12,23 @@
   let open = $state(false);
 
   function toggle() {
-    open = !open;
+    const willOpen = !open;
+    if (willOpen) window.dispatchEvent(new CustomEvent('megamenu-open'));
+    open = willOpen;
   }
 
   function close() {
     open = false;
   }
+
+  function closeOnOtherOpen(e: Event) {
+    if (open) open = false;
+  }
+
+  $effect(() => {
+    window.addEventListener('megamenu-open', closeOnOtherOpen);
+    return () => window.removeEventListener('megamenu-open', closeOnOtherOpen);
+  });
 
   const langCode = $derived((currentLang as LangCode) ?? 'en');
   const isEn = $derived(langCode === 'en');
@@ -35,7 +46,7 @@
     {
       key: 'tech-leader',
       color: 'indigo',
-      icon: '<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/>',
+      icon: '<path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>',
       tagline: 'Conventions, not meetings.',
     },
     {
@@ -178,7 +189,8 @@
 
   .uc-panel {
     position: absolute;
-    right: 0;
+    left: 50%;
+    transform: translateX(-50%);
     top: 100%;
     margin-top: 0.5rem;
     width: 560px;
@@ -271,7 +283,8 @@
   @media (max-width: 768px) {
     .uc-panel {
       width: calc(100vw - 3rem);
-      right: 0;
+      left: 0;
+      transform: none;
     }
     .uc-grid {
       grid-template-columns: repeat(2, 1fr);
