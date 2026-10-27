@@ -14,20 +14,25 @@ export const prerender = true;
 
 const SITE_URL = 'https://primebrick.dev';
 
-/** Page paths (without locale prefix) that exist for every locale. */
-const PAGE_PATHS = [
-  '',
-  'contact',
-  'thank-you',
-  'use-cases/',
-  'use-cases/developer',
-  'use-cases/tech-leader',
-  'use-cases/solution-architect',
-  'use-cases/cto',
-  'use-cases/visionary-entrepreneur',
-  'use-cases/soc-team',
-  'demo/versions',
-] as const;
+/** Page paths (without locale prefix) to exclude from the sitemap even though
+ *  a matching `src/pages/[lang]/` file exists — e.g. future pages carrying
+ *  their own noindex. Deliberate, visible opt-out; default is include-all. */
+const EXCLUDE_PATHS: readonly string[] = [];
+
+/** Page paths (without locale prefix) that exist for every locale — derived
+ *  from the `.astro` files under `src/pages/[lang]` at build time so the
+ *  sitemap can never drift from the real route set. `index.astro` maps to
+ *  its directory (trailing slash), matching the canonical URL shape. */
+const PAGE_PATHS: readonly string[] = Object.keys(import.meta.glob('./**/*.astro'))
+  .filter((key) => key.startsWith('./[lang]/'))
+  .map((key) => {
+    const rel = key.slice('./[lang]/'.length).replace(/\.astro$/, '');
+    if (rel === 'index') return '';
+    if (rel.endsWith('/index')) return rel.slice(0, rel.length - 'index'.length);
+    return rel;
+  })
+  .filter((p) => !EXCLUDE_PATHS.includes(p))
+  .sort();
 
 /** Last-modified date for the sitemap entries. Update when content changes
  *  significantly. Using a fixed date avoids non-reproducible builds. */
