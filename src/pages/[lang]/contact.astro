@@ -23,9 +23,9 @@ const langCode = (lang ?? 'en') as LangCode;
 const t = translations[langCode] ?? translations.en;
 const isEn = langCode === 'en';
 const docsPath = 'https://docs.primebrick.dev';
-const contactHref = isEn ? '/en/contact' : `/${langCode}/contact`;
+const contactHref = isEn ? '/en/contact/' : `/${langCode}/contact/`;
 const homeHref = isEn ? '/en/' : `/${langCode}/`;
-const thankyouHref = isEn ? '/en/thank-you' : `/${langCode}/thank-you`;
+const thankyouHref = isEn ? '/en/thank-you/' : `/${langCode}/thank-you/`;
 const turnstileSitekey = import.meta.env.PUBLIC_TURNSTILE_SITEKEY ?? '';
 ---
 
@@ -42,9 +42,11 @@ const turnstileSitekey = import.meta.env.PUBLIC_TURNSTILE_SITEKEY ?? '';
     <link rel="apple-touch-icon" href="/favicon-512.png" />
     <title>PrimeBrick — {t.contact.title}</title>
     {LANGUAGES.map((l) => (
-      <link rel="alternate" hreflang={l.hreflang} href={`https://primebrick.dev${l.code === 'en' ? '/en/contact' : `/${l.code}/contact`}`} />
+      <link rel="alternate" hreflang={l.hreflang} href={`https://primebrick.dev${l.code === 'en' ? '/en/contact/' : `/${l.code}/contact/`}`} />
     ))}
-    <link rel="alternate" hreflang="x-default" href="https://primebrick.dev/en/contact" />
+    <link rel="canonical" href={new URL(Astro.url.pathname.replace(/\/?$/, '/'), Astro.site).href} />
+
+    <link rel="alternate" hreflang="x-default" href="https://primebrick.dev/en/contact/" />
   </head>
   <body class="min-h-screen bg-slate-950 text-slate-100 antialiased">
     <!-- Ambient gradient background -->

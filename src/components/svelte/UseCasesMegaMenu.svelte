@@ -86,7 +86,7 @@
   };
 
   function personaHref(key: string): string {
-    return `${useCasesHref}${key}`;
+    return `${useCasesHref}${key}/`;
   }
 
   // Color map: bg + text + border for each color
