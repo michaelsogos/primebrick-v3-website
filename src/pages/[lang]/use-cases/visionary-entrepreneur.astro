@@ -1,5 +1,6 @@
 ---
 import { translations, LANGUAGES, type LangCode } from '../../../i18n/translations';
+import Head from '../../../components/astro/Head.astro';
 import TopBanner from '../../../components/astro/TopBanner.astro';
 import Nav from '../../../components/astro/Nav.astro';
 import Footer from '../../../components/astro/Footer.astro';
@@ -29,21 +30,12 @@ const prevPersonaHref = `${useCasesHref}cto/`;
 <!doctype html>
 <html lang={langCode}>
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Primebrick for Visionary Entrepreneurs: turn the idea into infrastructure. AI-native backoffice, multi-tenant SaaS, MIT license, own the stack." />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
-    <link rel="icon" type="image/png" sizes="512x512" href="/favicon-512.png" />
-    <link rel="icon" sizes="any" href="/favicon.ico" />
-    <link rel="apple-touch-icon" href="/favicon-512.png" />
-    <title>PrimeBrick — Use Cases: Visionary Entrepreneur</title>
-    {LANGUAGES.map((l) => (
-      <link rel="alternate" hreflang={l.hreflang} href={`https://primebrick.dev${l.code === 'en' ? '/en/use-cases/visionary-entrepreneur/' : `/${l.code}/use-cases/visionary-entrepreneur/`}`} />
-    ))}
-    <link rel="canonical" href={new URL(Astro.url.pathname.replace(/\/?$/, '/'), Astro.site).href} />
-
-    <link rel="alternate" hreflang="x-default" href="https://primebrick.dev/en/use-cases/visionary-entrepreneur/" />
+    <Head
+      lang={langCode}
+      title={`PrimeBrick — Use Cases: Visionary Entrepreneur`}
+      description={"Primebrick for Visionary Entrepreneurs: turn the idea into infrastructure. AI-native backoffice, multi-tenant SaaS, MIT license, own the stack."}
+      pagePath="use-cases/visionary-entrepreneur"
+    />
   </head>
   <body class="min-h-screen bg-slate-950 text-slate-100 antialiased">
     <div class="pointer-events-none fixed inset-0 overflow-hidden">

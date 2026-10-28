@@ -36,7 +36,8 @@ const PAGE_PATHS: readonly string[] = Object.keys(import.meta.glob('./**/*.astro
 
 /** Last-modified date for the sitemap entries. Update when content changes
  *  significantly. Using a fixed date avoids non-reproducible builds. */
-const LASTMOD = '2026-07-27';
+// Evaluated at prerender = CI build date; a deploy IS a content change.
+const LASTMOD = new Date().toISOString().slice(0, 10);
 
 function escapeXml(value: string): string {
   return value
