@@ -26,9 +26,9 @@ const langCode = (lang ?? 'en') as LangCode;
 const t = translations[langCode] ?? translations.en;
 const isEn = langCode === 'en';
 const docsPath = 'https://docs.primebrick.dev';
-const contactHref = isEn ? '/en/contact' : `/${langCode}/contact`;
+const contactHref = isEn ? '/en/contact/' : `/${langCode}/contact/`;
 const homeHref = isEn ? '/en/' : `/${langCode}/`;
-const thankyouHref = isEn ? '/en/thank-you' : `/${langCode}/thank-you`;
+const thankyouHref = isEn ? '/en/thank-you/' : `/${langCode}/thank-you/`;
 
 // Localized section labels for the credits sections.
 const sectionLabels: Record<string, string> = {
@@ -61,9 +61,11 @@ const sectionLabels: Record<string, string> = {
     <link rel="apple-touch-icon" href="/favicon-512.png" />
     <title>PrimeBrick — {t.thankyou.title}</title>
     {LANGUAGES.map((l) => (
-      <link rel="alternate" hreflang={l.hreflang} href={`https://primebrick.dev${l.code === 'en' ? '/en/thank-you' : `/${l.code}/thank-you`}`} />
+      <link rel="alternate" hreflang={l.hreflang} href={`https://primebrick.dev${l.code === 'en' ? '/en/thank-you/' : `/${l.code}/thank-you/`}`} />
     ))}
-    <link rel="alternate" hreflang="x-default" href="https://primebrick.dev/en/thank-you" />
+    <link rel="canonical" href={new URL(Astro.url.pathname.replace(/\/?$/, '/'), Astro.site).href} />
+
+    <link rel="alternate" hreflang="x-default" href="https://primebrick.dev/en/thank-you/" />
   </head>
   <body class="min-h-screen bg-slate-950 text-slate-100 antialiased">
     <!-- Top banner (sticky, non-dismissible) -->

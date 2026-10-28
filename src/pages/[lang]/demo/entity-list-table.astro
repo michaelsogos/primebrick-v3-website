@@ -24,10 +24,10 @@ const et = entityListTableTranslations[langCode] ?? entityListTableTranslations.
 const isEn = langCode === 'en';
 const docsPath = 'https://docs.primebrick.dev';
 const homeHref = isEn ? '/en/' : `/${langCode}/`;
-const contactHref = isEn ? '/en/contact' : `/${langCode}/contact`;
-const thankyouHref = isEn ? '/en/thank-you' : `/${langCode}/thank-you`;
+const contactHref = isEn ? '/en/contact/' : `/${langCode}/contact/`;
+const thankyouHref = isEn ? '/en/thank-you/' : `/${langCode}/thank-you/`;
 const demoHref = isEn ? '/en/demo/' : `/${langCode}/demo/`;
-const entityListTableHref = `${demoHref}entity-list-table`;
+const entityListTableHref = `${demoHref}entity-list-table/`;
 
 const jsonSnippetHtml = `<div class="j-line"><span class="j-lineno">1</span><span class="j-content"><span class="j-punct">{</span></span></div>
     <div class="j-line"><span class="j-lineno">2</span><span class="j-content">  <span class="j-key">"entity"</span><span class="j-punct">:</span> <span class="j-string">"customers"</span><span class="j-punct">,</span></span></div>
@@ -62,9 +62,11 @@ const jsonSnippetHtml = `<div class="j-line"><span class="j-lineno">1</span><spa
     <link rel="apple-touch-icon" href="/favicon-512.png" />
     <title>Primebrick — {et.pageTitle}</title>
     {LANGUAGES.map((l) => (
-      <link rel="alternate" hreflang={l.hreflang} href={`https://primebrick.dev${l.code === 'en' ? '/en/demo/entity-list-table' : `/${l.code}/demo/entity-list-table`}`} />
+      <link rel="alternate" hreflang={l.hreflang} href={`https://primebrick.dev${l.code === 'en' ? '/en/demo/entity-list-table/' : `/${l.code}/demo/entity-list-table/`}`} />
     ))}
-    <link rel="alternate" hreflang="x-default" href="https://primebrick.dev/en/demo/entity-list-table" />
+    <link rel="canonical" href={new URL(Astro.url.pathname.replace(/\/?$/, '/'), Astro.site).href} />
+
+    <link rel="alternate" hreflang="x-default" href="https://primebrick.dev/en/demo/entity-list-table/" />
   </head>
   <body class="min-h-screen bg-slate-950 text-slate-100 antialiased">
     <!-- Ambient gradient background (website) -->
