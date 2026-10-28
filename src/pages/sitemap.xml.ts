@@ -48,9 +48,10 @@ function escapeXml(value: string): string {
 }
 
 function urlForPath(langCode: string, pagePath: string): string {
-  return pagePath === ''
-    ? `${SITE_URL}/${langCode}/`
-    : `${SITE_URL}/${langCode}/${pagePath}`;
+  // Canonical URL form is trailing-slash: the site 307s bare paths to it,
+  // so sitemap/hreflang targets must already carry the slash.
+  const path = pagePath === '' || pagePath.endsWith('/') ? pagePath : `${pagePath}/`;
+  return `${SITE_URL}/${langCode}/${path}`;
 }
 
 export async function GET(): Promise<Response> {

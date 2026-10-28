@@ -19,11 +19,11 @@ const t = translations[langCode] ?? translations.en;
 const isEn = langCode === 'en';
 const docsPath = 'https://docs.primebrick.dev';
 const homeHref = isEn ? '/en/' : `/${langCode}/`;
-const contactHref = isEn ? '/en/contact' : `/${langCode}/contact`;
-const thankyouHref = isEn ? '/en/thank-you' : `/${langCode}/thank-you`;
+const contactHref = isEn ? '/en/contact/' : `/${langCode}/contact/`;
+const thankyouHref = isEn ? '/en/thank-you/' : `/${langCode}/thank-you/`;
 const useCasesHref = isEn ? '/en/use-cases/' : `/${langCode}/use-cases/`;
-const nextPersonaHref = `${useCasesHref}cto`;
-const prevPersonaHref = `${useCasesHref}tech-leader`;
+const nextPersonaHref = `${useCasesHref}cto/`;
+const prevPersonaHref = `${useCasesHref}tech-leader/`;
 ---
 
 <!doctype html>
@@ -39,9 +39,11 @@ const prevPersonaHref = `${useCasesHref}tech-leader`;
     <link rel="apple-touch-icon" href="/favicon-512.png" />
     <title>PrimeBrick — Use Cases: Solution Architect</title>
     {LANGUAGES.map((l) => (
-      <link rel="alternate" hreflang={l.hreflang} href={`https://primebrick.dev${l.code === 'en' ? '/en/use-cases/solution-architect' : `/${l.code}/use-cases/solution-architect`}`} />
+      <link rel="alternate" hreflang={l.hreflang} href={`https://primebrick.dev${l.code === 'en' ? '/en/use-cases/solution-architect/' : `/${l.code}/use-cases/solution-architect/`}`} />
     ))}
-    <link rel="alternate" hreflang="x-default" href="https://primebrick.dev/en/use-cases/solution-architect" />
+    <link rel="canonical" href={new URL(Astro.url.pathname.replace(/\/?$/, '/'), Astro.site).href} />
+
+    <link rel="alternate" hreflang="x-default" href="https://primebrick.dev/en/use-cases/solution-architect/" />
   </head>
   <body class="min-h-screen bg-slate-950 text-slate-100 antialiased">
     <div class="pointer-events-none fixed inset-0 overflow-hidden">

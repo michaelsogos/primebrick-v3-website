@@ -30,10 +30,10 @@
   const langCode = $derived((currentLang as LangCode) ?? 'en');
   const isEn = $derived(langCode === 'en');
   const demoHref = $derived(isEn ? '/en/demo/' : `/${langCode}/demo/`);
-  const shellHref = $derived(`${demoHref}shell`);
-  const entityListTableHref = $derived(`${demoHref}entity-list-table`);
-  const exportsHref = $derived(`${demoHref}exports`);
-  const versionsHref = $derived(`${demoHref}versions`);
+  const shellHref = $derived(`${demoHref}shell/`);
+  const entityListTableHref = $derived(`${demoHref}entity-list-table/`);
+  const exportsHref = $derived(`${demoHref}exports/`);
+  const versionsHref = $derived(`${demoHref}versions/`);
   const t = $derived(translations[langCode] ?? translations.en);
 
   // 9 demo entries: key, href (or null = coming soon), color, icon SVG inner content

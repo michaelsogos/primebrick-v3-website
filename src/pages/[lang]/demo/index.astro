@@ -21,13 +21,13 @@ const t = translations[langCode] ?? translations.en;
 const isEn = langCode === 'en';
 const docsPath = 'https://docs.primebrick.dev';
 const homeHref = isEn ? '/en/' : `/${langCode}/`;
-const contactHref = isEn ? '/en/contact' : `/${langCode}/contact`;
-const thankyouHref = isEn ? '/en/thank-you' : `/${langCode}/thank-you`;
+const contactHref = isEn ? '/en/contact/' : `/${langCode}/contact/`;
+const thankyouHref = isEn ? '/en/thank-you/' : `/${langCode}/thank-you/`;
 const demoHref = isEn ? '/en/demo/' : `/${langCode}/demo/`;
-const shellHref = `${demoHref}shell`;
-const entityListTableHref = `${demoHref}entity-list-table`;
-const exportsHref = `${demoHref}exports`;
-const versionsHref = `${demoHref}versions`;
+const shellHref = `${demoHref}shell/`;
+const entityListTableHref = `${demoHref}entity-list-table/`;
+const exportsHref = `${demoHref}exports/`;
+const versionsHref = `${demoHref}versions/`;
 ---
 
 <!doctype html>
@@ -45,6 +45,8 @@ const versionsHref = `${demoHref}versions`;
     {LANGUAGES.map((l) => (
       <link rel="alternate" hreflang={l.hreflang} href={`https://primebrick.dev${l.code === 'en' ? '/en/demo/' : `/${l.code}/demo/`}`} />
     ))}
+    <link rel="canonical" href={new URL(Astro.url.pathname.replace(/\/?$/, '/'), Astro.site).href} />
+
     <link rel="alternate" hreflang="x-default" href="https://primebrick.dev/en/demo/" />
   </head>
   <body class="min-h-screen bg-slate-950 text-slate-100 antialiased">
