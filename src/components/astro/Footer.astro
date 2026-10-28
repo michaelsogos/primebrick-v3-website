@@ -12,22 +12,73 @@ const { currentLang } = Astro.props;
 const langCode = currentLang;
 const t = translations[langCode] ?? translations.en;
 const version = pkg.version;
+
+const isEn = langCode === 'en';
+const demoHref = isEn ? '/en/demo/' : `/${langCode}/demo/`;
+const useCasesHref = isEn ? '/en/use-cases/' : `/${langCode}/use-cases/`;
+const contactHref = isEn ? '/en/contact/' : `/${langCode}/contact/`;
+
+// Internal-link surface — keeps every indexable page reachable from every
+// page's footer (SEO: sitemap URLs must also be crawlable via links).
+const demoLinks = [
+  { href: `${demoHref}shell/`, label: t.demo.card.shell.title },
+  { href: `${demoHref}entity-list-table/`, label: t.demo.card.entities.title },
+  { href: `${demoHref}exports/`, label: t.demo.card.exports.title },
+  { href: `${demoHref}versions/`, label: t.demo.card.versions.title },
+];
+
+// Persona display names are role titles — language-invariant by design.
+const personaLinks = [
+  { href: `${useCasesHref}developer/`, label: 'Developer' },
+  { href: `${useCasesHref}tech-leader/`, label: 'Tech Leader' },
+  { href: `${useCasesHref}solution-architect/`, label: 'Solution Architect' },
+  { href: `${useCasesHref}cto/`, label: 'CTO' },
+  { href: `${useCasesHref}visionary-entrepreneur/`, label: 'Visionary Entrepreneur' },
+  { href: `${useCasesHref}soc-team/`, label: 'SOC Team' },
+];
 ---
 
 <footer class="relative z-10 border-t border-slate-800/50 px-6 py-8">
-  <div class="mx-auto flex max-w-7xl items-center justify-between text-sm text-slate-500">
-    <span>&copy; 2026 {t.footer.copyright}</span>
-    <div class="flex items-center gap-4">
-      <span class="text-xs text-slate-600">v{version}</span>
-      <a
-        href="https://github.com/michaelsogos/primebrick-v3-website"
-        class="inline-flex items-center gap-1.5 hover:text-sky-400 transition-colors"
-        target="_blank"
-        rel="noopener"
-      >
-        <GitHubIcon class="h-4 w-4" />
-        GitHub®
-      </a>
+  <div class="mx-auto max-w-7xl">
+    <nav class="mb-8 grid grid-cols-2 gap-8 sm:grid-cols-3" aria-label="Footer">
+      <div>
+        <h3 class="mb-3 text-xs font-semibold uppercase tracking-wider text-slate-400">{t.nav.virtualTour}</h3>
+        <ul class="space-y-2 text-sm text-slate-500">
+          <li><a href={demoHref} class="transition-colors hover:text-sky-400">{t.demo.megaAllLink}</a></li>
+          {demoLinks.map((l) => (
+            <li><a href={l.href} class="transition-colors hover:text-sky-400">{l.label}</a></li>
+          ))}
+        </ul>
+      </div>
+      <div>
+        <h3 class="mb-3 text-xs font-semibold uppercase tracking-wider text-slate-400">{t.nav.useCases}</h3>
+        <ul class="space-y-2 text-sm text-slate-500">
+          {personaLinks.map((l) => (
+            <li><a href={l.href} class="transition-colors hover:text-sky-400">{l.label}</a></li>
+          ))}
+        </ul>
+      </div>
+      <div>
+        <h3 class="mb-3 text-xs font-semibold uppercase tracking-wider text-slate-400">{t.nav.contact}</h3>
+        <ul class="space-y-2 text-sm text-slate-500">
+          <li><a href={contactHref} class="transition-colors hover:text-sky-400">{t.nav.contact}</a></li>
+        </ul>
+      </div>
+    </nav>
+    <div class="flex items-center justify-between border-t border-slate-800/50 pt-6 text-sm text-slate-500">
+      <span>&copy; 2026 {t.footer.copyright}</span>
+      <div class="flex items-center gap-4">
+        <span class="text-xs text-slate-600">v{version}</span>
+        <a
+          href="https://github.com/michaelsogos/primebrick-v3-website"
+          class="inline-flex items-center gap-1.5 hover:text-sky-400 transition-colors"
+          target="_blank"
+          rel="noopener"
+        >
+          <GitHubIcon class="h-4 w-4" />
+          GitHub®
+        </a>
+      </div>
     </div>
   </div>
 </footer>

@@ -17,7 +17,7 @@ const SITE_URL = 'https://primebrick.dev';
 /** Page paths (without locale prefix) to exclude from the sitemap even though
  *  a matching `src/pages/[lang]/` file exists — e.g. future pages carrying
  *  their own noindex. Deliberate, visible opt-out; default is include-all. */
-const EXCLUDE_PATHS: readonly string[] = [];
+const EXCLUDE_PATHS: readonly string[] = ['thank-you'];
 
 /** Page paths (without locale prefix) that exist for every locale — derived
  *  from the `.astro` files under `src/pages/[lang]` at build time so the
