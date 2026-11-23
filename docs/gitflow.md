@@ -147,9 +147,10 @@ build and deployment. The deployment flow is:
 
 ## Commit rules
 
-- NEVER commit automatically - wait for explicit user instruction
-- DO NOT ask user to approve commit messages
-- Write appropriate commit messages directly when instructed
+- COMMIT AT EVERY MODIFICATION TURN — standing authorization, no per-commit
+  approval needed (workspace-wide cadence)
+- Every commit is PUSHED immediately — see "COMMIT ⇒ PUSH" above
+- DO NOT ask user to approve commit messages — write them directly
 - DO NOT open editor for commit approval
 
 ## Commit and Push Guidelines
